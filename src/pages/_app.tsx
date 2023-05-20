@@ -4,13 +4,17 @@ import { AppProps } from 'next/app';
 import '@/styles/globals.css';
 
 import { useInitDisplayPref } from '@/hooks/useDarkMode';
+import { Provider } from 'react-redux';
+import { store } from '@/store';
 
 function MyApp({ Component, pageProps }: AppProps) {
   useInitDisplayPref();
   return (
-    <Windmill>
-      <Component {...pageProps} />
-    </Windmill>
+    <Provider store={store}>
+      <Windmill>
+        <Component {...pageProps} />
+      </Windmill>
+    </Provider>
   );
 }
 

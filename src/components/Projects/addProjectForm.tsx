@@ -1,103 +1,80 @@
+import { Button } from '@windmill/react-ui';
+import { useFormik } from 'formik';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import * as Yup from 'yup';
+
+import { TDetailValues } from '@/components/Projects/projectDetailType';
 import { TextInput } from '@/components/ui-blocks';
 import { SelectOption, TextInputArea } from '@/components/ui-blocks/input';
+
+import { setProjectinfo } from '@/store/projectSlices/projectDetail';
+
 import { ProjectFormTypes } from '@/pages/admin/realEstateProjects/add';
-import { Button } from '@windmill/react-ui';
-import React, { useEffect, useState } from 'react';
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
 
 type formProps = {
   onComplete: (type: ProjectFormTypes) => void;
 };
 
-interface projectDetailProps {
-  projectName: string;
-  ownerName: string;
-  parentProject: string;
-  area: number | undefined | string;
-  pincode: number | undefined;
-  state: string;
-  dist: string;
-  projectStatus: string;
-  address1?: string | undefined;
-  address2?: string | undefined;
-  desc?: string | undefined;
-}
-
 const validationSchema = Yup.object().shape({
-  projectName: Yup.string().required('Project Name is required'),
+  name: Yup.string().required('Project Name is required'),
   // parentProject: Yup.string().required('Parent Project is required'),
   // status: Yup.string().required('status is required'),
   ownerName: Yup.string().required('Owner Name is required'),
   area: Yup.number().required('Area must be in number'),
   // projectStatus: Yup.string().required('Project Status is required'),
-  pincode: Yup.number().required('Pincode is required'),
+  pincode: Yup.string().required('Pincode is required'),
   state: Yup.string().required('state is required'),
   dist: Yup.string().required('district is required'),
   address1: Yup.string().required('address is required'),
 });
 
-const Status = ['Pending', 'In-Progress', 'Completed'];
+const Status = ['ACTIVE', 'COMPLETED', 'UPCOMING'];
 const ParentProjects = ['pp1', 'pp2', 'pp3'];
 
 function AddProjectForm({ onComplete }: formProps) {
+  const dispatch = useDispatch();
+
   const [projectDetails, setProjectDetails] = useState<any>([]);
-  // const [isAreaOpen, setAreaOpen] = useState<boolean>(false);
-
-  // const handleAreaDropDown = () => {
-  //   setAreaOpen(!isAreaOpen);
-  // };
-
-  const handleForm = () => {
-    console.log('called', Object.keys(formik.errors));
-    formik.handleSubmit();
-
-    // if (Object.keys(formik.errors).length === 0) {
-    //   onComplete('image');
-    // }
-  };
 
   const formik = useFormik({
     initialValues: {
-      projectName: '',
+      name: '',
       ownerName: '',
       parentProject: 'none',
-      projectStatus: 'upcomming',
       area: undefined,
       pincode: undefined,
+      unit: 'meter',
       state: '',
       dist: '',
-      address1: '',
-      address2: '',
-      desc: '',
+      description: '',
+      status: 'upcomming',
+      address1: undefined,
     },
     validationSchema,
-    onSubmit: (values: projectDetailProps, { setSubmitting }) => {
-      console.log(values, 'called');
-      // onComplete('image');
+    onSubmit: (values: TDetailValues, { setSubmitting }) => {
       setProjectDetails(values);
-
+      dispatch(setProjectinfo(values));
+      if (Object.keys(formik.errors).length === 0) {
+        onComplete('image');
+      }
       setSubmitting(false);
     },
   });
-
-  useEffect(() => {
-    console.log(projectDetails);
-  }, []);
 
   return (
     <div className='mx-auto  flex w-1/2 flex-col gap-2'>
       <TextInput
         onChange={formik.handleChange}
-        value={formik.values.projectName}
-        name='projectName'
+        value={formik.values.name}
+        name='name'
         containerClassName='flex-1'
         label='Project Name'
-        // valid={errors.projectName && touched.projectName}
+        // valid={errors.name && touched.name}
       />
 
-      {formik.touched.projectName && formik.errors.projectName && (
-        <div className='text-red-400'>{formik.errors.projectName}</div>
+      {formik.touched.name && formik.errors.name && (
+        <div className='text-red-400'>{formik.errors.name}</div>
       )}
 
       <TextInput
@@ -111,26 +88,36 @@ function AddProjectForm({ onComplete }: formProps) {
       {formik.touched.ownerName && formik.errors.ownerName && (
         <div className='text-red-400'>{formik.errors.ownerName}</div>
       )}
-      <SelectOption
-        onChange={formik.handleChange}
-        title='Parent Project'
-        options={ParentProjects}
-        containerClassName='flex-1 mt-1 w-full'
-        name='parentProject'
-      />
+      <div className='flex w-full flex-col'>
+        <TextInput
+          onChange={formik.handleChange}
+          value={formik.values.area}
+          name='area'
+          containerClassName='w-full'
+          label='Area'
+        />
+        {formik.touched.area && formik.errors.area && (
+          <div className='text-red-400'>{formik.errors.area}</div>
+        )}
+        {/* 
+        <SelectOption
+          onChange={formik.handleChange}
+          title='Parent Project'
+          options={ParentProjects}
+          containerClassName='mt-1 w-[50%]'
+          name='parentProject'
+        /> */}
+      </div>
 
       <div className='flex w-full items-center justify-between gap-4'>
         <div className='flex w-1/2 flex-col'>
-          <TextInput
+          <SelectOption
             onChange={formik.handleChange}
-            value={formik.values.area}
-            name='area'
-            containerClassName='w-full'
-            label='Area'
+            title='Parent Project'
+            options={ParentProjects}
+            containerClassName='flex-1 mt-1 w-full'
+            name='parentProject'
           />
-          {formik.touched.area && formik.errors.area && (
-            <div className='text-red-400'>{formik.errors.area}</div>
-          )}
         </div>
         <div className='w-1/2'>
           <SelectOption
@@ -139,7 +126,7 @@ function AddProjectForm({ onComplete }: formProps) {
             options={Status}
             containerClassName='mt-1'
             labelClassName='w-full'
-            name='projectStatus'
+            name='status'
           />
         </div>
       </div>
@@ -204,8 +191,8 @@ function AddProjectForm({ onComplete }: formProps) {
       />
 
       <TextInputArea
-        value={formik.values.desc}
-        name='desc'
+        value={formik.values.description}
+        name='description'
         containerClassName='flex-1 '
         label='Description'
         rows='3'
@@ -215,10 +202,10 @@ function AddProjectForm({ onComplete }: formProps) {
       <Button
         size='regular'
         // onClick={() => onComplete('image')}
-        onClick={handleForm}
-        className='col-span-2 ml-auto'
+        onClick={() => formik.handleSubmit()}
+        className='col-span-2 ml-auto mt-3'
       >
-        Add Images
+        Proceed
       </Button>
     </div>
   );

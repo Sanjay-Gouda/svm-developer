@@ -20,6 +20,11 @@ export const AdminSidebarTabs: AdminTabsProps[] = [
     icon: MdInventory2,
   },
   {
+    name: 'Customers',
+    to: 'customers',
+    icon: FaUsers,
+  },
+  {
     name: 'Sellers',
     to: 'sellers',
     icon: FaUsers,

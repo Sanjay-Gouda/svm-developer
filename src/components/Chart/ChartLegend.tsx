@@ -1,6 +1,6 @@
 import React from 'react';
 
-function ChartLegend({ legends }) {
+function ChartLegend(legends: { title: string; color: string }[]) {
   return (
     <div className='mt-4 flex justify-center space-x-3 text-sm text-gray-600 dark:text-gray-400'>
       {legends.map((legend) => (

@@ -1,11 +1,10 @@
-import SectionTitle from '@/components/Typography/SectionTitle';
-import AddProjectAddress from '@/components/svmprojects/addProjectAddress';
-import AddProjectForm from '@/components/svmprojects/addProjectForm';
-import ProjectImages from '@/components/svmprojects/projectImages';
-import SiteImages from '@/components/svmprojects/siteImages';
-import Layout from '@/containers/Layout';
 import { Card, CardBody } from '@windmill/react-ui';
 import React, { useState } from 'react';
+
+import AddProjectForm from '@/components/Projects/addProjectForm';
+import ProjectImages from '@/components/Projects/projectImages';
+import SiteImages from '@/components/Projects/siteImages';
+import Layout from '@/containers/Layout';
 
 export type ProjectFormTypes = 'form' | 'image' | 'siteImages';
 
@@ -19,7 +18,7 @@ const PhaseComponent: Record<
 };
 
 function SvmProjects() {
-  const [phase, setPhase] = useState<ProjectFormTypes>('image');
+  const [phase, setPhase] = useState<ProjectFormTypes>('form');
 
   const Component = PhaseComponent[phase];
 
@@ -27,7 +26,7 @@ function SvmProjects() {
     <Layout>
       <Card className='mx-auto  w-full p-2'>
         <CardBody>
-          <SectionTitle>Add Project Details</SectionTitle>
+          {/* <SectionTitle>Add Project Details</SectionTitle> */}
           <Component onComplete={setPhase} />
         </CardBody>
       </Card>
