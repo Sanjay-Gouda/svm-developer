@@ -1,7 +1,7 @@
 import { Card, CardBody } from '@windmill/react-ui';
 import React from 'react';
 
-import CustomerForm from '@/components/Customers/CustomerForm';
+import CustomerForm from '@/components/Customers/customerForm';
 import Layout from '@/containers/Layout';
 
 const AddCustomers = () => {

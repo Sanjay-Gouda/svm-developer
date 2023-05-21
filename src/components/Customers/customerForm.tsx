@@ -6,7 +6,8 @@ import * as Yup from 'yup';
 import { TextInput } from '@/components/ui-blocks';
 
 const validationSchema = Yup.object().shape({
-  name: Yup.string().required('Customer Name is required '),
+  firstName: Yup.string().required('First Name is required '),
+  lastName: Yup.string().required('Last Name is required '),
   mobileNo: Yup.string()
     .matches(/^[0-9]{10}$/, 'Invalid Mobile number')
     .required('Customer Mobile Number is required'),
@@ -17,23 +18,18 @@ const validationSchema = Yup.object().shape({
 });
 
 type formProps = {
-  name: string;
+  firstName: string;
+  lastName: string;
   mobileNo: string;
   aadharNo: string;
   email: string;
 };
 
-// const initialValues:formProps = {
-//   name: '',
-//   mobileno: '',
-//   aadharNo: '',
-//   email: '',
-// };
-
-const CustomerForm = () => {
+function CustomerForm() {
   const formik = useFormik({
     initialValues: {
-      name: '',
+      firstName: '',
+      lastName: '',
       mobileNo: '',
       aadharNo: '',
       email: '',
@@ -41,6 +37,7 @@ const CustomerForm = () => {
     validationSchema,
     onSubmit: (values: formProps, { setSubmitting }) => {
       console.log(values);
+      setSubmitting(true);
     },
   });
 
@@ -49,13 +46,25 @@ const CustomerForm = () => {
       <div className='flex flex-col'>
         <TextInput
           type='text'
-          name='name'
-          label='Name'
+          name='firstName'
+          label='FirstName'
           onChange={formik.handleChange}
-          value={formik.values.name}
+          value={formik.values.firstName}
         />
-        {formik.touched.name && formik.errors.name && (
-          <div className='text-red-400'>{formik.errors.name}</div>
+        {formik.touched.firstName && formik.errors.firstName && (
+          <div className='text-red-400'>{formik.errors.firstName}</div>
+        )}
+      </div>
+      <div className='flex flex-col'>
+        <TextInput
+          type='text'
+          name='lastName'
+          label='LastName'
+          onChange={formik.handleChange}
+          value={formik.values.lastName}
+        />
+        {formik.touched.lastName && formik.errors.lastName && (
+          <div className='text-red-400'>{formik.errors.lastName}</div>
         )}
       </div>
       <div className='flex flex-col'>
@@ -105,6 +114,6 @@ const CustomerForm = () => {
       </Button>
     </div>
   );
-};
+}
 
 export default CustomerForm;
