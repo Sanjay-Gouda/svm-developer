@@ -1,14 +1,22 @@
 import { Button } from '@windmill/react-ui';
+import axios from 'axios';
 import { useFormik } from 'formik';
-import React from 'react';
+import { useRouter } from 'next/router';
+import React, { useState } from 'react';
+import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 
+import 'react-toastify/dist/ReactToastify.css';
+
+import { SvmProjectToast } from '@/components/Toast/Toast';
 import { TextInput } from '@/components/ui-blocks';
+
+import { API_ENDPOINT } from '@/const/APIRoutes';
 
 const validationSchema = Yup.object().shape({
   firstName: Yup.string().required('First Name is required '),
   lastName: Yup.string().required('Last Name is required '),
-  mobileNo: Yup.string()
+  phone: Yup.string()
     .matches(/^[0-9]{10}$/, 'Invalid Mobile number')
     .required('Customer Mobile Number is required'),
   aadharNo: Yup.string()
@@ -20,23 +28,51 @@ const validationSchema = Yup.object().shape({
 type formProps = {
   firstName: string;
   lastName: string;
-  mobileNo: string;
+  phone: string;
   aadharNo: string;
   email: string;
 };
 
 function CustomerForm() {
+  const [isDataSubmitted, setIsDataSubmitted] = useState(false);
+  const routes = useRouter();
+
+  /* Add Customer  */
+  const addCustomers = async (details: formProps) => {
+    await axios({
+      method: 'post',
+      url: `${API_ENDPOINT.LOCAL}/customer/create`,
+      data: details,
+      headers: { 'Content-Type': 'application/json' },
+    })
+      .then((res) => {
+        toast.success('Customer added successfully');
+        setTimeout(() => {
+          routes.push('/admin/customers');
+        }, 1000);
+        setIsDataSubmitted(true);
+      })
+      .catch((err) => {
+        toast.error('Something went wrong');
+      });
+  };
+
   const formik = useFormik({
     initialValues: {
       firstName: '',
       lastName: '',
-      mobileNo: '',
+      phone: '',
       aadharNo: '',
       email: '',
     },
     validationSchema,
-    onSubmit: (values: formProps, { setSubmitting }) => {
-      console.log(values);
+    onSubmit: (values: formProps, { setSubmitting, resetForm }) => {
+      addCustomers(values);
+
+      if (isDataSubmitted) {
+        resetForm();
+      }
+
       setSubmitting(true);
     },
   });
@@ -70,13 +106,13 @@ function CustomerForm() {
       <div className='flex flex-col'>
         <TextInput
           type='text'
-          name='mobileNo'
+          name='phone'
           label='Mobile No'
           onChange={formik.handleChange}
-          value={formik.values.mobileNo}
+          value={formik.values.phone}
         />
-        {formik.touched.mobileNo && formik.errors.mobileNo && (
-          <div className='text-red-400'>{formik.errors.mobileNo}</div>
+        {formik.touched.phone && formik.errors.phone && (
+          <div className='text-red-400'>{formik.errors.phone}</div>
         )}
       </div>
       <div className='flex flex-col'>
@@ -112,6 +148,8 @@ function CustomerForm() {
       >
         Submit
       </Button>
+
+      <SvmProjectToast />
     </div>
   );
 }
