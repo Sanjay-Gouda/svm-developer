@@ -25,6 +25,11 @@ export const AdminSidebarTabs: AdminTabsProps[] = [
     icon: FaUsers,
   },
   {
+    name: 'Referral',
+    to: 'referral',
+    icon: FaUsers,
+  },
+  {
     name: 'Sellers',
     to: 'sellers',
     icon: FaUsers,
