@@ -1,13 +1,13 @@
 import { Card, CardBody } from '@windmill/react-ui';
 import React from 'react';
 
-type CardProps = {
-  title: string;
-  value: string;
-  icon: string;
-};
+// type CardProps = {
+//   title: string;
+//   value: string;
+//   icon: string;
+// };
 
-function InfoCard({ title, value, icon }: CardProps) {
+function InfoCard({ title, value, children: icon }: any) {
   return (
     <Card>
       <CardBody className='flex items-center'>

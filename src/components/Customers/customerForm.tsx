@@ -20,7 +20,7 @@ const validationSchema = Yup.object().shape({
     .matches(/^[0-9]{10}$/, 'Invalid Mobile number')
     .required('Customer Mobile Number is required'),
   aadharNo: Yup.string()
-    .matches(/^[0-9]{12}$/, 'Invalid Aadhaar number')
+    .matches(/^[2-9]{1}[0-9]{3}\s[0-9]{4}\s[0-9]{4}$/, 'Invalid Aadhaar number')
     .required('Aadhar Card number is required '),
   email: Yup.string().email('Invalid email address'),
 });
@@ -41,7 +41,7 @@ function CustomerForm() {
   const addCustomers = async (details: formProps) => {
     await axios({
       method: 'post',
-      url: `${API_ENDPOINT.LOCAL}/customer/create`,
+      url: `${API_ENDPOINT.END_POINT}/customer/create`,
       data: details,
       headers: { 'Content-Type': 'application/json' },
     })

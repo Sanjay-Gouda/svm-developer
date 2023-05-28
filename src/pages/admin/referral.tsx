@@ -74,6 +74,7 @@ export default function Refferral() {
                   <TableCell>{list?.email}</TableCell>
                   <TableCell>{list?.address}</TableCell>
                   <TableCell className='flex gap-5'>
+                    {/* <EditIcon className='h-5 w-5 cursor-pointer' /> */}
                     <MdModeEditOutline
                       size='24'
                       className='cursor-pointer'

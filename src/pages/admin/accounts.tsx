@@ -9,31 +9,24 @@ import {
 } from '@windmill/react-ui';
 import axios from 'axios';
 import Link from 'next/link';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { MdDelete, MdModeEditOutline } from 'react-icons/md';
 
 import Layout from '@/containers/Layout';
 
 import { API_ENDPOINT } from '@/const/APIRoutes';
 
-type customerListProps = {
-  aadharNo: string;
-  customerId: string;
-  firstName: string;
-  lastName: string;
-};
+export default function Account() {
+  const [accountDetails, setAccountDetails] = useState<any>([]);
 
-const Customers = () => {
-  const [customerList, setCustomerList] = useState<customerListProps[]>([]);
-
-  /* Cutomer List */
-  const getCustomerList = async () => {
+  const getAccountDetails = async () => {
     await axios({
-      method: 'get',
-      url: `${API_ENDPOINT.END_POINT}/customer/advance-list`,
+      method: 'GET',
+      url: `${API_ENDPOINT.END_POINT}/account/basic-list`,
     })
       .then((res) => {
-        setCustomerList(res?.data?.result);
+        setAccountDetails(res?.data?.result);
+        console.log(res);
       })
       .catch((err) => {
         console.log(err);
@@ -41,15 +34,15 @@ const Customers = () => {
   };
 
   useEffect(() => {
-    getCustomerList();
+    getAccountDetails();
   }, []);
 
   return (
     <>
       <Layout
         right={
-          <Link href='realEstateProjects/addCustomers'>
-            <Button>Add Customers</Button>
+          <Link href='realEstateProjects/addAccounts'>
+            <Button>Add Accounts</Button>
           </Link>
         }
       >
@@ -57,25 +50,21 @@ const Customers = () => {
           <Table>
             <TableHeader>
               <tr>
-                <TableCell className='text-[14px]'>Name</TableCell>
-                <TableCell className='text-[14px]'>Mobile No</TableCell>
-                <TableCell className='text-[14px]'>Aadhar-Card No</TableCell>
-                <TableCell className='text-[14px]'>Email Id </TableCell>
+                <TableCell className='text-[14px]'>Bank Name</TableCell>
+                <TableCell className='text-[14px]'>
+                  Account Holdername
+                </TableCell>
+                <TableCell className='text-[14px]'>Account No.</TableCell>
                 <TableCell className='text-[14px]'>Action </TableCell>
               </tr>
             </TableHeader>
             <TableBody>
-              {customerList?.map((list: customerListProps) => {
-                const { firstName, lastName } = list;
-
-                const customerName = firstName + ' ' + lastName;
-
+              {accountDetails?.map((details) => {
                 return (
-                  <TableRow key={list?.customerId}>
-                    <TableCell>{customerName}</TableCell>
-                    <TableCell>9098212319</TableCell>
-                    <TableCell>{list?.aadharNo}</TableCell>
-                    <TableCell>some@gmail.com</TableCell>
+                  <TableRow key={details?.adminAccountId}>
+                    <TableCell>{details?.bankName}</TableCell>
+                    <TableCell>{details?.name}</TableCell>
+                    <TableCell>{details?.accNo}</TableCell>
                     <TableCell className='flex gap-5'>
                       <MdModeEditOutline
                         size='24'
@@ -97,6 +86,4 @@ const Customers = () => {
       </Layout>
     </>
   );
-};
-
-export default Customers;
+}

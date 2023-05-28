@@ -3,7 +3,7 @@
 import { Button, Input, Label } from '@windmill/react-ui';
 import Link from 'next/link';
 import React from 'react';
-export default function loginPage() {
+export default function LoginPage() {
   return (
     <div className='flex min-h-screen items-center bg-gray-50 p-6 dark:bg-gray-900'>
       <div className='mx-auto h-full max-w-4xl flex-1 overflow-hidden rounded-lg bg-white shadow-xl dark:bg-gray-800'>
@@ -12,13 +12,13 @@ export default function loginPage() {
             <img
               aria-hidden='true'
               className='h-full w-full object-cover dark:hidden'
-              src='/assets/img/login-office.jpeg'
+              src='https://windmill-dashboard-react.vercel.app/static/media/login-office-dark.cb4a995f.jpeg'
               alt='Office'
             />
             <img
               aria-hidden='true'
               className='hidden h-full w-full object-cover dark:block'
-              src='assets/img/login-office-dark.jpeg'
+              src='https://windmill-dashboard-react.vercel.app/static/media/login-office-dark.cb4a995f.jpeg'
               alt='Office'
             />
           </div>
@@ -47,7 +47,7 @@ export default function loginPage() {
                 />
               </Label>
 
-              <Link href='/app'>
+              <Link href='/admin'>
                 <Button className='mt-4' block>
                   Log in
                 </Button>

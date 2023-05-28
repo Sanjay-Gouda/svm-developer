@@ -1,5 +1,7 @@
 import { FaUsers } from 'react-icons/fa';
-import { MdHomeFilled, MdInventory2, MdRequestPage } from 'react-icons/md';
+import { MdHomeFilled, MdInventory2 } from 'react-icons/md';
+
+import { MoneyIcon } from '@/icons';
 
 interface AdminTabsProps {
   name: string;
@@ -27,16 +29,11 @@ export const AdminSidebarTabs: AdminTabsProps[] = [
   {
     name: 'Referral',
     to: 'referral',
-    icon: FaUsers,
+    icon: MoneyIcon,
   },
   {
-    name: 'Sellers',
-    to: 'sellers',
+    name: 'My Accounts',
+    to: 'accounts',
     icon: FaUsers,
-  },
-  {
-    name: 'Sell Requests',
-    to: 'sell-requests',
-    icon: MdRequestPage,
   },
 ];
