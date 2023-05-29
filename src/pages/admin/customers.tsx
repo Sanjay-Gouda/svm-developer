@@ -23,6 +23,15 @@ type customerListProps = {
   lastName: string;
 };
 
+// export const getServerSideProps = async () => {
+//   const res = await axios.get(
+//     `${API_ENDPOINT.END_POINT}/customer/advance-list`
+//   );
+//   const repo = res.data;
+
+//   return { prosp: { repo } };
+// };
+
 const Customers = () => {
   const [customerList, setCustomerList] = useState<customerListProps[]>([]);
 

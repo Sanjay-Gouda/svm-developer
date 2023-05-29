@@ -33,6 +33,14 @@ type formProps = {
   email: string;
 };
 
+const initialValues: formProps = {
+  firstName: '',
+  lastName: '',
+  phone: '',
+  aadharNo: '',
+  email: '',
+};
+
 function CustomerForm() {
   const [isDataSubmitted, setIsDataSubmitted] = useState(false);
   const routes = useRouter();
@@ -58,13 +66,7 @@ function CustomerForm() {
   };
 
   const formik = useFormik({
-    initialValues: {
-      firstName: '',
-      lastName: '',
-      phone: '',
-      aadharNo: '',
-      email: '',
-    },
+    initialValues: initialValues,
     validationSchema,
     onSubmit: (values: formProps, { setSubmitting, resetForm }) => {
       addCustomers(values);

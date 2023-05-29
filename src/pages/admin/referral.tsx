@@ -8,8 +8,9 @@ import {
   TableRow,
 } from '@windmill/react-ui';
 import axios from 'axios';
+import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { MdDelete, MdModeEditOutline } from 'react-icons/md';
 
 import Layout from '@/containers/Layout';
@@ -25,26 +26,16 @@ type referrerListProps = {
   address: string;
 };
 
-export default function Refferral() {
-  const [referrerList, setReferrerList] = useState<referrerListProps[]>([]);
+export const getServerSideProps: GetServerSideProps = async () => {
+  const res = await axios.get(`${API_ENDPOINT.LOCAL}/referral/list`);
+  const repo = res.data;
+  return { props: { repo } };
+};
 
-  const getReferrers = async () => {
-    await axios({
-      method: 'get',
-      url: `${API_ENDPOINT.LOCAL}/referral/list`,
-    })
-      .then((res) => {
-        setReferrerList(res?.data?.result);
-        console.log(res?.data?.result);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  useEffect(() => {
-    getReferrers();
-  }, []);
+export default function Refferral({
+  repo,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const [referrerList] = useState<referrerListProps[]>(repo.result);
 
   return (
     <Layout

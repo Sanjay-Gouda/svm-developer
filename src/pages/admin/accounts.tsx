@@ -8,34 +8,33 @@ import {
   TableRow,
 } from '@windmill/react-ui';
 import axios from 'axios';
+import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { MdDelete, MdModeEditOutline } from 'react-icons/md';
 
 import Layout from '@/containers/Layout';
 
 import { API_ENDPOINT } from '@/const/APIRoutes';
 
-export default function Account() {
-  const [accountDetails, setAccountDetails] = useState<any>([]);
+type accounrDetailProps = {
+  accNo: string;
+  adminAccountId: number;
+  balance: number;
+  bankName: string;
+  name: string;
+};
 
-  const getAccountDetails = async () => {
-    await axios({
-      method: 'GET',
-      url: `${API_ENDPOINT.END_POINT}/account/basic-list`,
-    })
-      .then((res) => {
-        setAccountDetails(res?.data?.result);
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+export const getServerSideProps: GetServerSideProps = async () => {
+  const res = await axios.get(`${API_ENDPOINT.END_POINT}/account/basic-list`);
+  const repo = res.data;
+  return { props: { repo } };
+};
 
-  useEffect(() => {
-    getAccountDetails();
-  }, []);
+export default function Account({
+  repo,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const [accountDetails] = useState<accounrDetailProps[]>(repo.result);
 
   return (
     <>
