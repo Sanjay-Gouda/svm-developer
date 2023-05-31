@@ -10,10 +10,14 @@ import {
 import axios from 'axios';
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 import { MdDelete, MdModeEditOutline } from 'react-icons/md';
+import { useDispatch } from 'react-redux';
 
 import Layout from '@/containers/Layout';
+
+import { setReferralList } from '@/store/refferSlice/refferList';
 
 import { API_ENDPOINT } from '@/const/APIRoutes';
 
@@ -36,6 +40,17 @@ export default function Refferral({
   repo,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [referrerList] = useState<referrerListProps[]>(repo.result);
+  // const [listEditId,setListEditId] = useState<string>();
+  const dispatch = useDispatch();
+  const router = useRouter();
+
+  const handleFormEdit = (id: string) => {
+    router.push(`/admin/realEstateProjects/${id}`);
+  };
+
+  useEffect(() => {
+    dispatch(setReferralList(repo.result));
+  }, []);
 
   return (
     <Layout
@@ -70,6 +85,9 @@ export default function Refferral({
                       size='24'
                       className='cursor-pointer'
                       style={{ color: ' #30bcc2' }}
+                      onClick={() => {
+                        handleFormEdit(list?.referralId);
+                      }}
                     />
                     <MdDelete
                       size='24'

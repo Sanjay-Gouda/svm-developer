@@ -1,8 +1,7 @@
 import { Button } from '@windmill/react-ui';
 import axios from 'axios';
 import { useFormik } from 'formik';
-import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import React from 'react';
 import * as Yup from 'yup';
 
 import 'react-toastify/dist/ReactToastify.css';
@@ -30,10 +29,16 @@ type formProps = {
   email: string;
 };
 
-function ReferrerForm() {
-  const [isDataSubmitted, setIsDataSubmitted] = useState(false);
-  const routes = useRouter();
+// type editFormProps = {
+//   firstName: string;
+//   lastName: string;
+//   phone: string;
+//   address: string;
+//   email: string;
+//   referralId: string;
+// };
 
+function ReferrerForm({ editList, editId }: any) {
   const addReferrer = async (details: formProps) => {
     await axios({
       method: 'POST',
@@ -49,19 +54,40 @@ function ReferrerForm() {
       });
   };
 
+  const updateReferrerList = async (details: formProps) => {
+    await axios({
+      method: 'PUT',
+      url: `${API_ENDPOINT.LOCAL}/referral/update/${editId} `,
+      data: details,
+      headers: { 'Content-Type': 'application/json' },
+    })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const initialValues = {
+    firstName: '',
+    lastName: '',
+    phone: '',
+    address: '',
+    email: '',
+  };
+
+  const formvalue = editList ? editList : initialValues;
+
   const formik = useFormik({
-    initialValues: {
-      firstName: '',
-      lastName: '',
-      phone: '',
-      address: '',
-      email: '',
-    },
+    initialValues: formvalue,
     validationSchema,
     onSubmit: (values: formProps, { setSubmitting, resetForm }) => {
       console.log(values);
-      addReferrer(values);
-      resetForm();
+
+      editList ? updateReferrerList(values) : addReferrer(values);
+
+      // resetForm();
 
       setSubmitting(true);
     },
@@ -75,10 +101,10 @@ function ReferrerForm() {
           name='firstName'
           label='FirstName'
           onChange={formik.handleChange}
-          value={formik.values.firstName}
+          value={formik.values?.firstName}
         />
-        {formik.touched.firstName && formik.errors.firstName && (
-          <div className='text-red-400'>{formik.errors.firstName}</div>
+        {formik.touched.firstName && formik.errors?.firstName && (
+          <div className='text-red-400'>{formik?.errors?.firstName}</div>
         )}
       </div>
       <div className='flex flex-col'>
@@ -87,10 +113,10 @@ function ReferrerForm() {
           name='lastName'
           label='LastName'
           onChange={formik.handleChange}
-          value={formik.values.lastName}
+          value={formik.values?.lastName}
         />
-        {formik.touched.lastName && formik.errors.lastName && (
-          <div className='text-red-400'>{formik.errors.lastName}</div>
+        {formik.touched.lastName && formik.errors?.lastName && (
+          <div className='text-red-400'>{formik.errors?.lastName}</div>
         )}
       </div>
       <div className='flex flex-col'>
@@ -99,7 +125,7 @@ function ReferrerForm() {
           name='phone'
           label='Mobile No'
           onChange={formik.handleChange}
-          value={formik.values.phone}
+          value={formik.values?.phone}
         />
         {formik.touched.phone && formik.errors.phone && (
           <div className='text-red-400'>{formik.errors.phone}</div>
@@ -112,14 +138,14 @@ function ReferrerForm() {
           name='email'
           label='Email'
           onChange={formik.handleChange}
-          value={formik.values.email}
+          value={formik.values?.email}
         />
         {formik.touched.email && formik.errors.email && (
           <div className='text-red-400'>{formik.errors.email}</div>
         )}
       </div>
       <TextInputArea
-        value={formik.values.address}
+        value={formik.values?.address}
         name='address'
         rows='2'
         label='Address'
@@ -132,7 +158,7 @@ function ReferrerForm() {
           formik.handleSubmit();
         }}
       >
-        Submit
+        {editList ? 'Update ' : 'Submit'}
       </Button>
 
       <SvmProjectToast />
