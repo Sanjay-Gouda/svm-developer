@@ -45,7 +45,7 @@ export default function Refferral({
   const router = useRouter();
 
   const handleFormEdit = (id: string) => {
-    router.push(`/admin/realEstateProjects/${id}`);
+    router.push(`/admin/realEstateProjects/referrerForm/${id}`);
   };
 
   useEffect(() => {
@@ -55,7 +55,7 @@ export default function Refferral({
   return (
     <Layout
       right={
-        <Link href='realEstateProjects/addReferral'>
+        <Link href='realEstateProjects/referrerForm/addReferral/'>
           <Button>Add Referrer</Button>
         </Link>
       }

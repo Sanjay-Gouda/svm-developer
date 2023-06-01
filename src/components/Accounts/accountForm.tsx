@@ -1,11 +1,8 @@
 import { Button } from '@windmill/react-ui';
-import axios from 'axios';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
 import { TextInput } from '@/components/ui-blocks';
-
-import { API_ENDPOINT } from '@/const/APIRoutes';
 
 const validationSchema = Yup.object().shape({
   bankName: Yup.string().required('bankName is required'),
@@ -22,29 +19,28 @@ type accProps = {
 };
 
 function AccountForm() {
-  
-  const addAccounts = async (values: accProps) => {
-    const { accHolderName, accNo, bankName } = values;
+  // const addAccounts = async (values: accProps) => {
+  //   const { accHolderName, accNo, bankName } = values;
 
-    const payload = {
-      name: accHolderName,
-      bankName: bankName,
-      accNo: accNo,
-    };
+  //   const payload = {
+  //     name: accHolderName,
+  //     bankName: bankName,
+  //     accNo: accNo,
+  //   };
 
-    await axios({
-      method: 'post',
-      url: `${API_ENDPOINT.END_POINT}/account/create`,
-      data: payload,
-      headers: { 'Content-Type': 'application/json' },
-    })
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+  //   await axios({
+  //     method: 'post',
+  //     url: `${API_ENDPOINT.END_POINT}/account/create`,
+  //     data: payload,
+  //     headers: { 'Content-Type': 'application/json' },
+  //   })
+  //     .then((res) => {
+  //       console.log(res);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // };
 
   const formik = useFormik({
     initialValues: {
@@ -55,7 +51,7 @@ function AccountForm() {
     validationSchema,
     onSubmit: (values: accProps) => {
       console.log(values);
-      addAccounts(values);
+      // addAccounts(values);
     },
   });
 

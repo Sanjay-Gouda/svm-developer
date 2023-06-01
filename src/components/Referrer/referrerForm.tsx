@@ -1,7 +1,9 @@
 import { Button } from '@windmill/react-ui';
 import axios from 'axios';
 import { useFormik } from 'formik';
+import { useRouter } from 'next/router';
 import React from 'react';
+import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 
 import 'react-toastify/dist/ReactToastify.css';
@@ -29,16 +31,15 @@ type formProps = {
   email: string;
 };
 
-// type editFormProps = {
-//   firstName: string;
-//   lastName: string;
-//   phone: string;
-//   address: string;
-//   email: string;
-//   referralId: string;
-// };
+type updatevalueProps = {
+  editList: formProps;
+  editId: string;
+};
 
-function ReferrerForm({ editList, editId }: any) {
+function ReferrerForm({ editList, editId }: updatevalueProps) {
+  const route = useRouter();
+
+  /* ADD REFERRER LIST  */
   const addReferrer = async (details: formProps) => {
     await axios({
       method: 'POST',
@@ -47,13 +48,18 @@ function ReferrerForm({ editList, editId }: any) {
       headers: { 'Content-Type': 'application/json' },
     })
       .then((res) => {
-        console.log(res);
+        toast.success('Referrer added successfully');
+        setTimeout(() => {
+          route.push('/admin/referral');
+        }, 1000);
       })
       .catch((err) => {
-        console.log(err);
+        toast.error('Something went wrong');
+        // console.log(err);
       });
   };
 
+  /* UPDATE REFERRER LIST */
   const updateReferrerList = async (details: formProps) => {
     await axios({
       method: 'PUT',
@@ -62,10 +68,13 @@ function ReferrerForm({ editList, editId }: any) {
       headers: { 'Content-Type': 'application/json' },
     })
       .then((res) => {
-        console.log(res);
+        toast.success('Data updated successfully');
+        setTimeout(() => {
+          route.push('/admin/referral');
+        }, 1000);
       })
       .catch((err) => {
-        console.log(err);
+        toast.error('Something went wrong');
       });
   };
 
@@ -83,12 +92,8 @@ function ReferrerForm({ editList, editId }: any) {
     initialValues: formvalue,
     validationSchema,
     onSubmit: (values: formProps, { setSubmitting, resetForm }) => {
-      console.log(values);
-
       editList ? updateReferrerList(values) : addReferrer(values);
-
       // resetForm();
-
       setSubmitting(true);
     },
   });
@@ -160,6 +165,11 @@ function ReferrerForm({ editList, editId }: any) {
       >
         {editList ? 'Update ' : 'Submit'}
       </Button>
+      {editList ? (
+        <Button layout='outline' onClick={() => route.push('/admin/referral')}>
+          Cancel
+        </Button>
+      ) : null}
 
       <SvmProjectToast />
     </div>

@@ -34,6 +34,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
 export default function Account({
   repo,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  console.log(repo.result);
   const [accountDetails] = useState<accounrDetailProps[]>(repo.result);
 
   return (
