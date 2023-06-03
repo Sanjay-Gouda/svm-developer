@@ -23,7 +23,7 @@ export async function getServerSideProps(params: any) {
   };
 }
 
-const RefferEditForm = ({ id }) => {
+const RefferEditForm = ({ id }: any) => {
   const refferList: any = useSelector<any>((state) => state.referrals.list);
 
   // const [editRefferData, setEditRefferData] = useState<formProps[]>([]);

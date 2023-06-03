@@ -31,7 +31,7 @@ type referrerListProps = {
 };
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const res = await axios.get(`${API_ENDPOINT.LOCAL}/referral/list`);
+  const res = await axios.get(`${API_ENDPOINT.END_POINT}/referral/list`);
   const repo = res.data;
   return { props: { repo } };
 };
@@ -39,6 +39,8 @@ export const getServerSideProps: GetServerSideProps = async () => {
 export default function Refferral({
   repo,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  console.log(repo);
+
   const [referrerList] = useState<referrerListProps[]>(repo.result);
   // const [listEditId,setListEditId] = useState<string>();
   const dispatch = useDispatch();

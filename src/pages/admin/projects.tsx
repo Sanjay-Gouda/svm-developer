@@ -17,51 +17,6 @@ import Layout from '@/containers/Layout';
 
 import { API_ENDPOINT } from '@/const/APIRoutes';
 
-const ListofProjects = [
-  {
-    projectName: 'Sai resedency',
-    projectsOwner: 'Vikram',
-    city: 'Surat',
-    area: '300',
-    status: 'In-Progress',
-  },
-  {
-    projectName: 'Sai resedency',
-    projectsOwner: 'Vikram',
-    city: 'Surat',
-    area: '300',
-    status: 'pending',
-  },
-  {
-    projectName: 'Sai resedency',
-    projectsOwner: 'Vikram',
-    city: 'Surat',
-    area: '300',
-    status: 'success',
-  },
-  {
-    projectName: 'Sai resedency',
-    projectsOwner: 'Vikram',
-    city: 'Surat',
-    area: '300',
-    status: 'In-Progress',
-  },
-  {
-    projectName: 'Sai resedency',
-    projectsOwner: 'Vikram',
-    city: 'Surat',
-    area: '300',
-    status: 'pending',
-  },
-  {
-    projectName: 'Sai resedency',
-    projectsOwner: 'Vikram',
-    city: 'Surat',
-    area: '300',
-    status: 'success',
-  },
-];
-
 export default function Projects() {
   const [projectDetails, setProjectDetails] = useState<any>([]);
 
@@ -69,7 +24,7 @@ export default function Projects() {
   const getProjectData = async () => {
     await axios({
       method: 'GET',
-      url: `${API_ENDPOINT.LOCAL}project/list`,
+      url: `${API_ENDPOINT.END_POINT}project/list`,
     })
       .then((res) => {
         setProjectDetails(res?.data?.result?.list);

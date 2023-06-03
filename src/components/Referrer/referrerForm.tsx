@@ -32,8 +32,8 @@ type formProps = {
 };
 
 type updatevalueProps = {
-  editList: formProps;
-  editId: string;
+  editList?: formProps;
+  editId?: string;
 };
 
 function ReferrerForm({ editList, editId }: updatevalueProps) {
@@ -43,7 +43,7 @@ function ReferrerForm({ editList, editId }: updatevalueProps) {
   const addReferrer = async (details: formProps) => {
     await axios({
       method: 'POST',
-      url: `${API_ENDPOINT.LOCAL}/referral/create`,
+      url: `${API_ENDPOINT.END_POINT}/referral/create`,
       data: details,
       headers: { 'Content-Type': 'application/json' },
     })
@@ -63,7 +63,7 @@ function ReferrerForm({ editList, editId }: updatevalueProps) {
   const updateReferrerList = async (details: formProps) => {
     await axios({
       method: 'PUT',
-      url: `${API_ENDPOINT.LOCAL}/referral/update/${editId} `,
+      url: `${API_ENDPOINT.END_POINT}/referral/update/${editId} `,
       data: details,
       headers: { 'Content-Type': 'application/json' },
     })

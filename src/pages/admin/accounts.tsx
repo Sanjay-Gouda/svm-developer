@@ -10,10 +10,14 @@ import {
 import axios from 'axios';
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 import { MdDelete, MdModeEditOutline } from 'react-icons/md';
+import { useDispatch } from 'react-redux';
 
 import Layout from '@/containers/Layout';
+
+import { setAccountList } from '@/store/accountSlice/accountList';
 
 import { API_ENDPOINT } from '@/const/APIRoutes';
 
@@ -34,14 +38,23 @@ export const getServerSideProps: GetServerSideProps = async () => {
 export default function Account({
   repo,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  console.log(repo.result);
   const [accountDetails] = useState<accounrDetailProps[]>(repo.result);
+  const dispatch = useDispatch();
+  const router = useRouter();
+
+  useEffect(() => {
+    dispatch(setAccountList(repo.result));
+  }, []);
+
+  const handleEdit = (id) => {
+    router.push(`realEstateProjects/accountForm/${id}`);
+  };
 
   return (
     <>
       <Layout
         right={
-          <Link href='realEstateProjects/addAccounts'>
+          <Link href='realEstateProjects/accountForm/addAccounts'>
             <Button>Add Accounts</Button>
           </Link>
         }
@@ -70,6 +83,9 @@ export default function Account({
                         size='24'
                         className='cursor-pointer'
                         style={{ color: ' #30bcc2' }}
+                        onClick={() => {
+                          handleEdit(details?.adminAccountId);
+                        }}
                       />
                       <MdDelete
                         size='24'
