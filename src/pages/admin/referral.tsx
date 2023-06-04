@@ -47,7 +47,7 @@ export default function Refferral({
   const router = useRouter();
 
   const handleFormEdit = (id: string) => {
-    router.push(`/realEstateProjects/accountForm/${id}`);
+    router.push(`realEstateProjects/referrerForm/${id}`);
   };
 
   useEffect(() => {
