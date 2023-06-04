@@ -8,11 +8,16 @@ import {
   TableRow,
 } from '@windmill/react-ui';
 import axios from 'axios';
+import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import Link from 'next/link';
-import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+import React, { useEffect } from 'react';
 import { MdDelete, MdModeEditOutline } from 'react-icons/md';
+import { useDispatch } from 'react-redux';
 
 import Layout from '@/containers/Layout';
+
+import { setCustomerList } from '@/store/customerSlice/customerList';
 
 import { API_ENDPOINT } from '@/const/APIRoutes';
 
@@ -21,43 +26,38 @@ type customerListProps = {
   customerId: string;
   firstName: string;
   lastName: string;
+  email: string;
+  phone: string;
 };
 
-// export const getServerSideProps = async () => {
-//   const res = await axios.get(
-//     `${API_ENDPOINT.END_POINT}/customer/advance-list`
-//   );
-//   const repo = res.data;
+export const getServerSideProps: GetServerSideProps = async () => {
+  const res = await axios.get(
+    `${API_ENDPOINT.END_POINT}/customer/advance-list`
+  );
+  const data = res.data.result;
 
-//   return { prosp: { repo } };
-// };
+  return { props: { data } };
+};
 
-const Customers = () => {
-  const [customerList, setCustomerList] = useState<customerListProps[]>([]);
+export default function Customers({
+  data,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const dispatch = useDispatch();
+  const route = useRouter();
 
-  /* Cutomer List */
-  const getCustomerList = async () => {
-    await axios({
-      method: 'get',
-      url: `${API_ENDPOINT.END_POINT}/customer/advance-list`,
-    })
-      .then((res) => {
-        setCustomerList(res?.data?.result);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  const handleEdit = (id) => {
+    route.push(`realEstateProjects/customerForm/${id}`);
   };
 
   useEffect(() => {
-    getCustomerList();
+    dispatch(setCustomerList(data));
   }, []);
 
   return (
     <>
       <Layout
         right={
-          <Link href='realEstateProjects/addCustomers'>
+          <Link href='realEstateProjects/customerForm/addCustomers'>
             <Button>Add Customers</Button>
           </Link>
         }
@@ -74,7 +74,7 @@ const Customers = () => {
               </tr>
             </TableHeader>
             <TableBody>
-              {customerList?.map((list: customerListProps) => {
+              {data?.map((list: customerListProps) => {
                 const { firstName, lastName } = list;
 
                 const customerName = firstName + ' ' + lastName;
@@ -82,11 +82,12 @@ const Customers = () => {
                 return (
                   <TableRow key={list?.customerId}>
                     <TableCell>{customerName}</TableCell>
-                    <TableCell>9098212319</TableCell>
+                    <TableCell>{list?.phone}</TableCell>
                     <TableCell>{list?.aadharNo}</TableCell>
-                    <TableCell>some@gmail.com</TableCell>
+                    <TableCell>{list?.email}</TableCell>
                     <TableCell className='flex gap-5'>
                       <MdModeEditOutline
+                        onClick={() => handleEdit(list?.customerId)}
                         size='24'
                         className='cursor-pointer'
                         style={{ color: ' #30bcc2' }}
@@ -106,6 +107,4 @@ const Customers = () => {
       </Layout>
     </>
   );
-};
-
-export default Customers;
+}

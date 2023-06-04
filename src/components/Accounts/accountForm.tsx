@@ -137,7 +137,18 @@ function AccountForm({ editInitialValues, editId }: editValueprops) {
         {formik.touched.accNo && formik.errors?.accNo && (
           <div className='text-red-400'>{formik?.errors?.accNo}</div>
         )}
-        <Button onClick={() => formik.handleSubmit()}>Submit</Button>
+        <Button onClick={() => formik.handleSubmit()}>
+          {editId ? 'Update' : 'Submit'}
+        </Button>
+
+        {editId ? (
+          <Button
+            layout='outline'
+            onClick={() => route.push('/admin/accounts')}
+          >
+            Cancel
+          </Button>
+        ) : null}
       </div>
       <SvmProjectToast />
     </div>

@@ -27,6 +27,7 @@ export default function Projects() {
       url: `${API_ENDPOINT.END_POINT}project/list`,
     })
       .then((res) => {
+        console.log(res);
         setProjectDetails(res?.data?.result?.list);
       })
       .catch((err) => {

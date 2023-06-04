@@ -105,8 +105,8 @@ const SiteImages = ({ onComplete }: formProps) => {
     status: status,
     unit: unit,
     address2: address2,
-    siteImages: siteImageFromData,
-    planningImages: planningImageFormData,
+    // siteImages: siteImageFromData,
+    // planningImages: planningImageFormData,
   };
 
   const addProjectDetails = async () => {
@@ -119,7 +119,7 @@ const SiteImages = ({ onComplete }: formProps) => {
 
     await axios({
       method: 'post',
-      url: `${API_ENDPOINT.LOCAL}/project/create`,
+      url: `${API_ENDPOINT.END_POINT}/project/create`,
       data: formdata,
       headers: { 'Content-Type': 'multipart/form-data' },
     })

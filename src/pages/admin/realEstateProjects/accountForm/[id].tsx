@@ -33,11 +33,11 @@ const AccountEditForm = ({ id }: any) => {
     (state) => state.accounts.accountList
   );
 
-  const getEditForValues = accountList?.filter(
+  const getEditFormValues = accountList?.filter(
     (accounts) => accounts?.adminAccountId === EditId
   );
 
-  const { name, bankName, accNo } = getEditForValues[0];
+  const { name, bankName, accNo } = getEditFormValues[0];
 
   const AccountEditInitialValues: any = {
     accHolderName: name,

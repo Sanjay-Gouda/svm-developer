@@ -33,7 +33,7 @@ type formProps = {
   email: string;
 };
 
-const initialValues: formProps = {
+const addInitialValues: formProps = {
   firstName: '',
   lastName: '',
   phone: '',
@@ -41,7 +41,12 @@ const initialValues: formProps = {
   email: '',
 };
 
-function CustomerForm() {
+type editValueProps = {
+  editInitialValues?: any;
+  editId?: string;
+};
+
+function CustomerForm({ editInitialValues, editId }: editValueProps) {
   const [isDataSubmitted, setIsDataSubmitted] = useState(false);
   const routes = useRouter();
 
@@ -65,11 +70,33 @@ function CustomerForm() {
       });
   };
 
+  /* Update Customer */
+  const updateCustomers = async (details: formProps) => {
+    await axios({
+      method: 'PUT',
+      url: `${API_ENDPOINT.END_POINT}/customer/update/${editId}`,
+      data: details,
+      headers: { 'Content-Type': 'application/json' },
+    })
+      .then((res) => {
+        toast.success('Customer data updated  successfully');
+        setTimeout(() => {
+          routes.push('/admin/customers');
+        }, 1000);
+        setIsDataSubmitted(true);
+      })
+      .catch((err) => {
+        toast.error('Something went wrong');
+      });
+  };
+
+  const formValues = editId ? editInitialValues : addInitialValues;
+
   const formik = useFormik({
-    initialValues: initialValues,
+    initialValues: formValues,
     validationSchema,
     onSubmit: (values: formProps, { setSubmitting, resetForm }) => {
-      addCustomers(values);
+      editId ? updateCustomers(values) : addCustomers(values);
 
       if (isDataSubmitted) {
         resetForm();
@@ -148,8 +175,16 @@ function CustomerForm() {
           formik.handleSubmit();
         }}
       >
-        Submit
+        {editId ? 'Update' : 'Submit'}
       </Button>
+      {editId ? (
+        <Button
+          layout='outline'
+          onClick={() => routes.push('/admin/customers')}
+        >
+          Cancel
+        </Button>
+      ) : null}
 
       <SvmProjectToast />
     </div>
