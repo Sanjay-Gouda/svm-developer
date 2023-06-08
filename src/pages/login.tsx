@@ -1,9 +1,53 @@
 /* eslint-disable @next/next/no-img-element */
 // import { GithubIcon, TwitterIcon } from '../icons';
 import { Button, Input, Label } from '@windmill/react-ui';
+import axios from 'axios';
+import { useFormik } from 'formik';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import React from 'react';
+import * as Yup from 'yup';
+
+import { API_ENDPOINT } from '@/const/APIRoutes';
+
+const validationSchema = Yup.object().shape({
+  email: Yup.string()
+    .email('Invalid email address')
+    .required('Email address is required'),
+  password: Yup.string().required('Password is required'),
+});
+
 export default function LoginPage() {
+  const routes = useRouter();
+  const LoginUser = async (values) => {
+    await axios({
+      method: 'post',
+      url: `${API_ENDPOINT.END_POINT}/auth/login`,
+      data: values,
+      headers: { 'Content-Type': 'application/json' },
+    })
+      .then((res) => {
+        console.log(res);
+
+        routes.push('/admin');
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const formik = useFormik({
+    initialValues: {
+      email: '',
+      password: '',
+    },
+    validationSchema,
+    onSubmit: (values) => {
+      console.log(values);
+      LoginUser(values);
+    },
+  });
+
   return (
     <div className='flex min-h-screen items-center bg-gray-50 p-6 dark:bg-gray-900'>
       <div className='mx-auto h-full max-w-4xl flex-1 overflow-hidden rounded-lg bg-white shadow-xl dark:bg-gray-800'>
@@ -33,7 +77,10 @@ export default function LoginPage() {
                   css={{}}
                   className='mt-1'
                   type='email'
+                  name='email'
                   placeholder='john@doe.com'
+                  onChange={formik.handleChange}
+                  value={formik.values.email}
                 />
               </Label>
 
@@ -43,15 +90,22 @@ export default function LoginPage() {
                   css={{}}
                   className='mt-1'
                   type='password'
+                  name='password'
+                  onChange={formik.handleChange}
                   placeholder='***************'
+                  value={formik.values.password}
                 />
               </Label>
 
-              <Link href='/admin'>
-                <Button className='mt-4' block>
-                  Log in
-                </Button>
-              </Link>
+              <Button
+                className='mt-4'
+                block
+                onClick={() => formik.handleSubmit()}
+              >
+                Log in
+              </Button>
+              {/* <Link href='/admin'>
+              </Link> */}
 
               <hr className='my-8' />
 
