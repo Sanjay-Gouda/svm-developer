@@ -29,8 +29,19 @@ type accounrDetailProps = {
   name: string;
 };
 
-export const getServerSideProps: GetServerSideProps = async () => {
-  const res = await axios.get(`${API_ENDPOINT.END_POINT}/account/basic-list`);
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { req } = context;
+  const { token } = req.cookies;
+
+  const axiosConfig = {
+    withCredentials: true,
+  };
+
+  // console.log(token, 'TOKEN');
+  const res = await axios.get(
+    `${API_ENDPOINT.END_POINT}/account/basic-list`,
+    axiosConfig
+  );
   const repo = res.data;
   return { props: { repo } };
 };

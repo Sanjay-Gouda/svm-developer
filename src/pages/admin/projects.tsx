@@ -9,44 +9,43 @@ import {
   TableRow,
 } from '@windmill/react-ui';
 import axios from 'axios';
+import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 import { MdDelete, MdModeEditOutline } from 'react-icons/md';
+import { useDispatch } from 'react-redux';
 
 import Layout from '@/containers/Layout';
 
+import { setProjectList } from '@/store/projectSlices/projectList';
+
 import { API_ENDPOINT } from '@/const/APIRoutes';
 
-export default function Projects() {
-  const [projectDetails, setProjectDetails] = useState<any>([]);
+export const getServerSideProps: GetServerSideProps = async () => {
+  const res = await axios.get(`${API_ENDPOINT.END_POINT}project/list`);
+  const repo = res.data.result.list;
+  return { props: { repo } };
+};
 
-  /* Project Details API */
-  const getProjectData = async () => {
-    await axios({
-      method: 'GET',
-      url: `${API_ENDPOINT.END_POINT}project/list`,
-    })
-      .then((res) => {
-        console.log(res);
-        setProjectDetails(res?.data?.result?.list);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+export default function Projects({
+  repo,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const dispatch = useDispatch();
+  const routes = useRouter();
 
   useEffect(() => {
-    getProjectData();
+    dispatch(setProjectList(repo));
   }, []);
 
   const handleEdit = (id: string) => {
-    console.log(id);
+    routes.push(`realEstateProjects/projectForm/${id}`);
   };
 
   return (
     <Layout
       right={
-        <Link href='realEstateProjects/add'>
+        <Link href='realEstateProjects/projectForm/add'>
           <Button>Add Projects</Button>
         </Link>
       }
@@ -64,7 +63,7 @@ export default function Projects() {
             </tr>
           </TableHeader>
           <TableBody>
-            {projectDetails?.map((data: any, ind: number) => {
+            {repo.map((data: any, ind: number) => {
               return (
                 <TableRow key={ind}>
                   <TableCell>{data?.name}</TableCell>

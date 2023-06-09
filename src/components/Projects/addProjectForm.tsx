@@ -1,19 +1,32 @@
 import { Button } from '@windmill/react-ui';
+import axios from 'axios';
 import { useFormik } from 'formik';
-import React, { useState } from 'react';
+import { useRouter } from 'next/router';
+import React from 'react';
 import { useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 
+import 'react-toastify/dist/ReactToastify.css';
+
 import { TDetailValues } from '@/components/Projects/projectDetailType';
+import { SvmProjectToast } from '@/components/Toast/Toast';
 import { TextInput } from '@/components/ui-blocks';
 import { SelectOption, TextInputArea } from '@/components/ui-blocks/input';
 
 import { setProjectinfo } from '@/store/projectSlices/projectDetail';
 
-import { ProjectFormTypes } from '@/pages/admin/realEstateProjects/add';
+import { API_ENDPOINT } from '@/const/APIRoutes';
+import { ProjectFormTypes } from '@/pages/admin/realEstateProjects/projectForm/add';
 
 type formProps = {
-  onComplete: (type: ProjectFormTypes) => void;
+  onComplete?: (type: ProjectFormTypes) => void;
+};
+
+type projectProps = {
+  onComplete?: formProps;
+  editInitialValues?: any;
+  editId?: string;
 };
 
 const validationSchema = Yup.object().shape({
@@ -32,31 +45,85 @@ const validationSchema = Yup.object().shape({
 const Status = ['ACTIVE', 'COMPLETED', 'UPCOMING'];
 const ParentProjects = ['pp1', 'pp2', 'pp3'];
 
-function AddProjectForm({ onComplete }: formProps) {
-  const dispatch = useDispatch();
+const addInitialValues: TDetailValues = {
+  name: '',
+  ownerName: '',
+  parentProject: 'none',
+  area: undefined,
+  pincode: undefined,
+  unit: 'meter',
+  state: '',
+  dist: '',
+  description: '',
+  status: 'upcomming',
+  address1: undefined,
+};
 
-  const [projectDetails, setProjectDetails] = useState<any>([]);
+function AddProjectForm({
+  onComplete,
+  editId,
+  editInitialValues,
+}: projectProps) {
+  const dispatch = useDispatch();
+  const router = useRouter();
+
+  const formValues = editId ? editInitialValues : addInitialValues;
+
+  /* Update List */
+  const updateProjectDetials = async (values) => {
+    const {
+      name,
+      area,
+      address1,
+      address2,
+      unit,
+      status,
+      pincode,
+      description,
+      ownerName,
+    } = values;
+
+    const payload = {
+      address1: address1,
+      area: area,
+      name: name,
+      description: description,
+      ownerName: ownerName,
+      pincode: pincode,
+      status: status,
+      unit: unit,
+      address2: address2,
+    };
+
+    await axios({
+      method: 'put',
+      url: `${API_ENDPOINT.END_POINT}project/update/${editId}`,
+      data: payload,
+      headers: { 'Content-Type': 'application/json' },
+    })
+      .then((res) => {
+        toast.success('Data updated successfully');
+        setTimeout(() => {
+          router.push('/admin/projects');
+        }, 1000);
+      })
+      .catch((err) => {
+        toast.error('Something went wrong');
+      });
+  };
 
   const formik = useFormik({
-    initialValues: {
-      name: '',
-      ownerName: '',
-      parentProject: 'none',
-      area: undefined,
-      pincode: undefined,
-      unit: 'meter',
-      state: '',
-      dist: '',
-      description: '',
-      status: 'upcomming',
-      address1: undefined,
-    },
+    initialValues: formValues,
     validationSchema,
     onSubmit: (values: TDetailValues, { setSubmitting }) => {
-      setProjectDetails(values);
-      dispatch(setProjectinfo(values));
-      if (Object.keys(formik.errors).length === 0) {
-        onComplete('image');
+      if (editId) {
+        console.log(values);
+        updateProjectDetials(values);
+      } else {
+        dispatch(setProjectinfo(values));
+        if (Object.keys(formik.errors).length === 0) {
+          onComplete('image');
+        }
       }
       setSubmitting(false);
     },
@@ -199,14 +266,26 @@ function AddProjectForm({ onComplete }: formProps) {
         handleChange={formik.handleChange}
       />
 
-      <Button
-        size='regular'
-        // onClick={() => onComplete('image')}
-        onClick={() => formik.handleSubmit()}
-        className='col-span-2 ml-auto mt-3'
-      >
-        Proceed
-      </Button>
+      {editId ? (
+        <Button
+          size='regular'
+          // onClick={() => onComplete('image')}
+          onClick={() => formik.handleSubmit()}
+          className='col-span-2 ml-auto mt-3'
+        >
+          Update
+        </Button>
+      ) : (
+        <Button
+          size='regular'
+          // onClick={() => onComplete('image')}
+          onClick={() => formik.handleSubmit()}
+          className='col-span-2 ml-auto mt-3'
+        >
+          Proceed
+        </Button>
+      )}
+      <SvmProjectToast />
     </div>
   );
 }

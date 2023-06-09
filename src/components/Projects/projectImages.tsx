@@ -14,7 +14,7 @@ import {
   setPlanningImages,
 } from '@/store/projectSlices/projectDetail';
 
-import { ProjectFormTypes } from '@/pages/admin/realEstateProjects/add';
+import { ProjectFormTypes } from '@/pages/admin/realEstateProjects/projectForm/add';
 
 type formProps = {
   onComplete: (type: ProjectFormTypes) => void;

@@ -6,6 +6,7 @@ import { useFormik } from 'formik';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
+import { useCookies } from 'react-cookie';
 import * as Yup from 'yup';
 
 import { API_ENDPOINT } from '@/const/APIRoutes';
@@ -19,6 +20,7 @@ const validationSchema = Yup.object().shape({
 
 export default function LoginPage() {
   const routes = useRouter();
+  const [cookies, setCookie] = useCookies(['token']);
   const LoginUser = async (values) => {
     await axios({
       method: 'post',
@@ -27,9 +29,12 @@ export default function LoginPage() {
       headers: { 'Content-Type': 'application/json' },
     })
       .then((res) => {
-        console.log(res);
+        const loginToken = res.data.result.accessToken;
 
-        routes.push('/admin');
+        setCookie('token', loginToken, { path: '/' });
+        if (cookies) {
+          routes.push('/admin');
+        }
       })
       .catch((err) => {
         console.log(err);
