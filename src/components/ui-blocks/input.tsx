@@ -1,13 +1,14 @@
-import { Input, Label, Textarea, Button } from '@windmill/react-ui';
+import { Input, Label, Textarea } from '@windmill/react-ui';
+import { Select } from '@windmill/react-ui';
 import { InputProps } from '@windmill/react-ui/dist/Input';
 import { TextareaProps } from '@windmill/react-ui/dist/Textarea';
-import { Select } from '@windmill/react-ui';
 import { FC } from 'react';
 
 interface P {
   label: string;
   containerClassName?: string;
   onChange?: (e: any) => void;
+  handleChange?: (e: any) => void;
   name: string;
   value?: string | number | undefined;
   valid?: boolean;
