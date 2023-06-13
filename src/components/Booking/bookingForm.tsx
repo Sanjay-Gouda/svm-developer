@@ -1,7 +1,9 @@
+import { Label } from '@windmill/react-ui';
 import React, { useState } from 'react';
 
+import ComboBox from '@/components/ComboBox/comboBox';
 import { TextInput } from '@/components/ui-blocks';
-import { SelectOption } from '@/components/ui-blocks/input';
+import { SelectOption, TextInputArea } from '@/components/ui-blocks/input';
 
 const BookingForm = () => {
   const [totalAmt, setTotalAmt] = useState(0);
@@ -32,12 +34,54 @@ const BookingForm = () => {
           Payment Details
         </h1> */}
         <div className='flex flex-col'>
-          <SelectOption
-            options={['done', 'pending']}
-            title='Bank Account'
-            containerClassName='flex-1 mt-1 w-full'
-            name='status'
+          <Label>Client Name</Label>
+          <ComboBox placeholder='Search Client' />
+        </div>
+        <div className='flex flex-col'>
+          <Label>Project Name</Label>
+          <ComboBox placeholder='Search Project' />
+        </div>
+
+        <div className='flex flex-col'>
+          <TextInput
+            type='text'
+            name='area'
+            label='Area'
+            placeholder='e.g 30 sq.meter'
+            // onChange={handleTotalAmtChange}
           />
+        </div>
+        <div className='flex flex-col'>
+          <TextInput
+            type='text'
+            name='pincode'
+            label='Pincode'
+            placeholder='e.g 394230'
+            // onChange={handleTotalAmtChange}
+          />
+        </div>
+        <div className='flex flex-col'>
+          <TextInput
+            type='text'
+            name='landmark'
+            label='Landmark'
+            placeholder='e.g Sachin'
+            // onChange={handleTotalAmtChange}
+          />
+        </div>
+
+        <TextInputArea
+          // value={formik.values.address1}
+          name='address1'
+          containerClassName='flex-1 '
+          label='Address'
+          rows='2'
+          // handleChange={formik.handleChange}
+        />
+
+        <div className='flex flex-col'>
+          <Label>Bank Account</Label>
+          <ComboBox placeholder='Select Account' />
         </div>
         <div className='flex flex-col'>
           <TextInput

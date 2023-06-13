@@ -18,6 +18,8 @@
     "prepare": "husky install"
   },
   "dependencies": {
+    "@headlessui/react": "^1.7.15",
+    "@heroicons/react": "^2.0.18",
     "@reduxjs/toolkit": "^1.9.5",
     "@windmill/react-ui": "^0.6.0",
     "axios": "^1.4.0",
@@ -27,6 +29,7 @@
     "next": "^13.3.0",
     "react": "^18.2.0",
     "react-chartjs-2": "^5.2.0",
+    "react-cookie": "^4.1.1",
     "react-dom": "^18.2.0",
     "react-icons": "^4.8.0",
     "react-query": "^3.39.3",
