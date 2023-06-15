@@ -1,9 +1,6 @@
 import { Combobox, Transition } from '@headlessui/react';
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid';
-import axios from 'axios';
-import { Fragment, useEffect, useState } from 'react';
-
-import { API_ENDPOINT } from '@/const/APIRoutes';
+import { Fragment } from 'react';
 
 const people = [
   { id: 1, name: 'Vikarm' },
@@ -16,45 +13,26 @@ const people = [
 
 type Props = {
   placeholder: string;
+  data?: any;
+  query?: string;
+  handleSearchQuery?: (e: any) => void;
+  afterLeave?: () => void;
+  selected?: any;
+  setSelected?: any;
 };
 
-export default function ComboBox({ placeholder }: Props) {
-  const [selected, setSelected] = useState('');
-  const [query, setQuery] = useState('');
+export default function ComboBox({
+  placeholder,
+  data,
+  query,
+  handleSearchQuery,
+  afterLeave,
+  selected,
+  setSelected,
+}: Props) {
+  // console.log(data, 'data');
 
-  const [customerList, setCustomerList] = useState([]);
-
-  const getCustomerList = async () => {
-    await axios({
-      method: 'GET',
-      url: `${API_ENDPOINT.END_POINT}/customer/advance-list`,
-    })
-      .then((res) => {
-        console.log(res);
-        setCustomerList(res.data.result);
-      })
-      .catch((res) => {
-        console.log(res);
-      });
-  };
-
-  useEffect(() => {
-    getCustomerList();
-  }, []);
-
-  const filteredPeople =
-    query === ''
-      ? customerList
-      : customerList.filter((person) =>
-          person.firstName
-            .toLowerCase()
-            .replace(/\s+/g, '')
-            .includes(query.toLowerCase().replace(/\s+/g, ''))
-        );
-
-  useEffect(() => {
-    console.log(selected, 'name');
-  }, [selected]);
+  // const [selected, setSelected] = useState('');
 
   return (
     <div className=''>
@@ -64,8 +42,8 @@ export default function ComboBox({ placeholder }: Props) {
             <Combobox.Input
               placeholder={placeholder}
               className='mt-1 block w-full rounded-md border-gray-300 text-sm leading-5 focus:border-purple-400 focus:outline-none focus:ring focus:ring-purple-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:focus:border-gray-600 dark:focus:ring-gray-300'
-              displayValue={(person: any) => person.firstName}
-              onChange={(event) => setQuery(event.target.value)}
+              displayValue={(person: any) => person?.name}
+              onChange={handleSearchQuery}
             />
             <Combobox.Button className='absolute inset-y-0 right-0 flex items-center pr-2'>
               <ChevronUpDownIcon
@@ -79,17 +57,17 @@ export default function ComboBox({ placeholder }: Props) {
             leave='transition ease-in duration-100'
             leaveFrom='opacity-100'
             leaveTo='opacity-0'
-            afterLeave={() => setQuery('')}
+            afterLeave={afterLeave}
           >
             <Combobox.Options className='absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-gray-700 dark:text-gray-300 sm:text-sm'>
-              {filteredPeople.length === 0 && query !== '' ? (
+              {data?.length === 0 && query !== '' ? (
                 <div className='relative cursor-default select-none px-4 py-2 text-white'>
                   Client Doesn't Exist.
                 </div>
               ) : (
-                filteredPeople.map((person) => (
+                data?.map((person) => (
                   <Combobox.Option
-                    key={person.customerId}
+                    key={person.id}
                     className={({ active }) =>
                       `relative cursor-default select-none py-2 pl-10 pr-4 ${
                         active ? 'bg-blue-600 text-white' : 'text-white'
@@ -104,7 +82,7 @@ export default function ComboBox({ placeholder }: Props) {
                             selected ? 'font-medium' : 'font-normal'
                           }`}
                         >
-                          {person.firstName}
+                          {person.name}
                         </span>
                         {selected ? (
                           <span

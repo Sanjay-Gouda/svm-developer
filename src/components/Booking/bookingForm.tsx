@@ -1,14 +1,123 @@
 import { Label } from '@windmill/react-ui';
-import React, { useState } from 'react';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 
 import ComboBox from '@/components/ComboBox/comboBox';
 import { TextInput } from '@/components/ui-blocks';
 import { SelectOption, TextInputArea } from '@/components/ui-blocks/input';
 
+import { API_ENDPOINT } from '@/const/APIRoutes';
+
+type payloadProp = {
+  id: string;
+  name: string;
+};
+
 const BookingForm = () => {
   const [totalAmt, setTotalAmt] = useState(0);
   const [paidAmt, setPaidAmt] = useState(0);
   const [remainingAmt, setRemainingAmt] = useState(0);
+  const [customerList, setCustomerList] = useState([]);
+  const [query, setQuery] = useState('');
+
+  const [selected, setSelected] = useState('');
+
+  const hadnleSearchQuery = (e) => {
+    setQuery(e.target.value);
+  };
+
+  const afterLeave = () => {
+    setQuery('');
+  };
+
+  useEffect(() => {
+    console.log(selected, 'name');
+  }, [selected]);
+
+  const [customerPayload, setCustomerPayload] = useState([]);
+  const [projectPayload, setProjectPayload] = useState([]);
+
+  const getCustomerList = async () => {
+    await axios({
+      method: 'GET',
+      url: `${API_ENDPOINT.END_POINT}/customer/advance-list`,
+    })
+      .then((res) => {
+        console.log(res);
+
+        const list = res?.data?.result;
+
+        if (list && list?.length > 0) {
+          const data = list?.map((payload) => ({
+            name: payload.firstName,
+            id: payload.customerId,
+          }));
+
+          setCustomerPayload(data);
+        }
+
+        setCustomerList(res.data.result);
+      })
+      .catch((res) => {
+        console.log(res);
+      });
+  };
+
+  const getProjectList = async () => {
+    await axios({
+      method: 'GET',
+      url: `${API_ENDPOINT.END_POINT}project/list`,
+    })
+      .then((res) => {
+        const list = res?.data?.result?.list;
+
+        if (list && list?.length > 0) {
+          const data = list?.map((payload) => ({
+            name: payload.name,
+            id: payload.projectId,
+          }));
+          console.log(data, 'payload');
+
+          setProjectPayload(data);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const getAccountList = async () => {
+    await axios({
+      method: 'GET',
+      url: `${API_ENDPOINT.END_POINT}/account/basic-list`,
+    })
+      .then((res) => {
+        console.log(res, 'res');
+      })
+      .catch((err) => {
+        console.log(err, 'err');
+      });
+  };
+
+  useEffect(() => {
+    getCustomerList();
+    getProjectList();
+    getAccountList();
+  }, []);
+
+  const filteredCustomer =
+    query === ''
+      ? customerPayload
+      : customerPayload.filter((person) => {
+          return person.name.toLowerCase().includes(query.toLowerCase());
+        });
+
+  const filterProjects =
+    query === ''
+      ? projectPayload
+      : projectPayload.filter((person) => {
+          return person.name.toLowerCase().includes(query.toLowerCase());
+        });
 
   const handleTotalAmtChange = (e) => {
     const newTotalAmt = parseInt(e.target.value);
@@ -35,11 +144,25 @@ const BookingForm = () => {
         </h1> */}
         <div className='flex flex-col'>
           <Label>Client Name</Label>
-          <ComboBox placeholder='Search Client' />
+          <ComboBox
+            placeholder='Search Client'
+            data={filteredCustomer}
+            query={query}
+            afterLeave={afterLeave}
+            handleSearchQuery={hadnleSearchQuery}
+            selected={selected}
+            setSelected={setSelected}
+          />
         </div>
         <div className='flex flex-col'>
           <Label>Project Name</Label>
-          <ComboBox placeholder='Search Project' />
+          <ComboBox
+            placeholder='Search Project'
+            data={filterProjects}
+            query={query}
+            afterLeave={afterLeave}
+            handleSearchQuery={hadnleSearchQuery}
+          />
         </div>
 
         <div className='flex flex-col'>
@@ -81,7 +204,13 @@ const BookingForm = () => {
 
         <div className='flex flex-col'>
           <Label>Bank Account</Label>
-          <ComboBox placeholder='Select Account' />
+          <ComboBox
+            placeholder='Select Account'
+            // data={filteredPeople}
+            // query={query}
+            // afterLeave={afterLeave}
+            // handleSearchQuery={hadnleSearchQuery}
+          />
         </div>
         <div className='flex flex-col'>
           <TextInput
