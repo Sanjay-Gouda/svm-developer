@@ -1,6 +1,8 @@
-import { Label } from '@windmill/react-ui';
+import { Button, Label } from '@windmill/react-ui';
 import axios from 'axios';
+import { useFormik } from 'formik';
 import React, { useEffect, useState } from 'react';
+import * as Yup from 'yup';
 
 import ComboBox from '@/components/ComboBox/comboBox';
 import { TextInput } from '@/components/ui-blocks';
@@ -13,7 +15,73 @@ type payloadProp = {
   name: string;
 };
 
+export const validationSchema = Yup.object().shape({
+  customerName: Yup.mixed().required('Customer Name is required'),
+  projectName: Yup.mixed().required('Project Name is required'),
+  area: Yup.number().required('Area must be in number'),
+  landmark: Yup.string().required('Landmark is required'),
+  pincode: Yup.string()
+    .required('Pincode is required')
+    .matches(/^\d{6}$/, 'Invalid PIN code. It must be a 6-digit number.'),
+  // address: Yup.string().required('Address is required'),
+  totalAmt: Yup.number()
+    .positive('Amount must be positive')
+    .integer('Amount must be an integer')
+    .required('Amount is required'),
+  paidAmt: Yup.number()
+    .min(0, 'Amount cannot be negative')
+    .integer('Amount must be an integer')
+    .required('Amount is required'),
+
+  noOfInstallment: Yup.number()
+    .positive('Amount must be positive')
+    .integer('Amount must be an integer')
+    .required('Amount is required'),
+
+  amtPerInstallment: Yup.number()
+    .positive('Amount must be positive')
+    .integer('Amount must be an integer')
+    .required('Amount is required'),
+  paymentStatus: Yup.string().required('Project Status is required'),
+});
+
+type bookingFormProps = {
+  customerName: string;
+  projectName: string;
+  area: undefined | number;
+  landmark: string;
+  pincode: undefined | number;
+  address: string;
+  totalAmt: undefined | number;
+  paidAmt: undefined | number;
+  remainingAmt: undefined | number;
+  noOfInstallment: undefined | number;
+  amtPerInstallment: undefined | number;
+  paymentStatus: 'Done' | 'Pending';
+};
+
 const BookingForm = () => {
+  const formik = useFormik({
+    initialValues: {
+      customerName: '',
+      projectName: '',
+      area: undefined,
+      landmark: '',
+      pincode: undefined,
+      address: '',
+      totalAmt: 0,
+      paidAmt: 0,
+      remainingAmt: 0,
+      noOfInstallment: 0,
+      amtPerInstallment: 0,
+      paymentStatus: 'Done',
+    },
+    validationSchema,
+    onSubmit: (values: bookingFormProps, { setSubmitting }) => {
+      console.log(values, 'values');
+    },
+  });
+
   const [totalAmt, setTotalAmt] = useState(0);
   const [paidAmt, setPaidAmt] = useState(0);
   const [remainingAmt, setRemainingAmt] = useState(0);
@@ -29,6 +97,10 @@ const BookingForm = () => {
   const afterLeave = () => {
     setQuery('');
   };
+
+  useEffect(() => {
+    console.log(formik.errors);
+  });
 
   useEffect(() => {
     console.log(selected, 'name');
@@ -139,9 +211,6 @@ const BookingForm = () => {
   return (
     <>
       <div className='mx-auto flex w-1/3 flex-col gap-2'>
-        {/* <h1 className='block text-center text-2xl text-gray-700 dark:text-gray-400'>
-          Payment Details
-        </h1> */}
         <div className='flex flex-col'>
           <Label>Client Name</Label>
           <ComboBox
@@ -150,9 +219,15 @@ const BookingForm = () => {
             query={query}
             afterLeave={afterLeave}
             handleSearchQuery={hadnleSearchQuery}
-            selected={selected}
-            setSelected={setSelected}
+            selected={formik.values.customerName}
+            setSelected={(person) => {
+              formik.setFieldValue('customerName', person);
+            }}
           />
+
+          {formik.touched.customerName && formik.errors.customerName && (
+            <div className='text-red-400'>{formik.errors.customerName}</div>
+          )}
         </div>
         <div className='flex flex-col'>
           <Label>Project Name</Label>
@@ -162,7 +237,14 @@ const BookingForm = () => {
             query={query}
             afterLeave={afterLeave}
             handleSearchQuery={hadnleSearchQuery}
+            selected={formik.values.projectName}
+            setSelected={(project) => {
+              formik.setFieldValue('projectName', project);
+            }}
           />
+          {formik.touched.projectName && formik.errors.projectName && (
+            <div className='text-red-400'>{formik.errors.projectName}</div>
+          )}
         </div>
 
         <div className='flex flex-col'>
@@ -171,7 +253,8 @@ const BookingForm = () => {
             name='area'
             label='Area'
             placeholder='e.g 30 sq.meter'
-            // onChange={handleTotalAmtChange}
+            value={formik.values.area}
+            onChange={formik.handleChange}
           />
         </div>
         <div className='flex flex-col'>
@@ -180,7 +263,8 @@ const BookingForm = () => {
             name='pincode'
             label='Pincode'
             placeholder='e.g 394230'
-            // onChange={handleTotalAmtChange}
+            value={formik.values.pincode}
+            onChange={formik.handleChange}
           />
         </div>
         <div className='flex flex-col'>
@@ -189,17 +273,18 @@ const BookingForm = () => {
             name='landmark'
             label='Landmark'
             placeholder='e.g Sachin'
-            // onChange={handleTotalAmtChange}
+            value={formik.values.landmark}
+            onChange={formik.handleChange}
           />
         </div>
 
         <TextInputArea
-          // value={formik.values.address1}
-          name='address1'
+          name='address'
           containerClassName='flex-1 '
           label='Address'
           rows='2'
-          // handleChange={formik.handleChange}
+          value={formik.values.address}
+          onChange={formik.handleChange}
         />
 
         <div className='flex flex-col'>
@@ -214,35 +299,43 @@ const BookingForm = () => {
         </div>
         <div className='flex flex-col'>
           <TextInput
-            value={totalAmt}
+            // value={totalAmt}
             type='text'
             name='totalAmt'
             label='Total Amount'
-            onChange={handleTotalAmtChange}
+            // onChange={handleTotalAmtChange}
+            value={formik.values.totalAmt}
+            onChange={formik.handleChange}
           />
         </div>
         <div className='flex flex-col'>
           <TextInput
-            value={paidAmt}
+            // value={paidAmt}
+            // onChange={handlePaidAmtChange}
             type='text'
             name='paidAmt'
             label='Paid Amount'
-            onChange={handlePaidAmtChange}
+            value={formik.values.paidAmt}
+            onChange={formik.handleChange}
           />
         </div>
         <div className='flex flex-col'>
           <TextInput
-            value={remainingAmt}
+            // value={remainingAmt}
             type='text'
             name='remainingAmt'
             label='Remaining Amount'
+            value={formik.values.remainingAmt}
+            onChange={formik.handleChange}
           />
         </div>
         <div className='flex flex-col'>
           <TextInput
             type='text'
-            name='installmentCount'
+            name='noOfInstallment'
             label='No.Of Installment'
+            value={formik.values.noOfInstallment}
+            onChange={formik.handleChange}
           />
         </div>
         <div className='flex flex-col'>
@@ -250,6 +343,8 @@ const BookingForm = () => {
             type='text'
             name='amtPerInstallment'
             label='Amount Per Installment'
+            value={formik.values.amtPerInstallment}
+            onChange={formik.handleChange}
           />
         </div>
         <div className='flex flex-col'>
@@ -258,8 +353,18 @@ const BookingForm = () => {
             title='Payment Status'
             containerClassName='flex-1 mt-1 w-full'
             name='status'
+            // value={formik.values.remainingAmt}
+            onChange={formik.handleChange}
           />
         </div>
+
+        <Button
+          onClick={() => {
+            formik.handleSubmit();
+          }}
+        >
+          Check
+        </Button>
       </div>
     </>
   );
