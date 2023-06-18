@@ -39,8 +39,6 @@ export const getServerSideProps: GetServerSideProps = async () => {
 export default function Refferral({
   repo,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  console.log(repo);
-
   const [referrerList] = useState<referrerListProps[]>(repo.result);
   // const [listEditId,setListEditId] = useState<string>();
   const dispatch = useDispatch();
