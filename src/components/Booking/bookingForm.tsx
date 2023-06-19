@@ -65,7 +65,7 @@ type bookingFormProps = {
   remainingAmt: undefined | number;
   noOfInstallment: undefined | number;
   amtPerInstallment: undefined | number;
-  paymentStatus: 'PENDING' | 'PARTIAL' | 'COMPLETED';
+  paymentStatus: 'PENDING' | 'PARTIAL' | 'COMPLETED' | '';
 };
 
 const BookingForm = () => {
@@ -135,7 +135,7 @@ const BookingForm = () => {
       remainingAmt: 0,
       noOfInstallment: 0,
       amtPerInstallment: 0,
-      paymentStatus: 'PENDING',
+      paymentStatus: '',
     },
     validationSchema,
     onSubmit: (values: bookingFormProps, { setSubmitting }) => {
@@ -144,8 +144,12 @@ const BookingForm = () => {
     },
   });
 
+  const [pincodeQuery, setPincodeQuery] = useState();
   const [customerList, setCustomerList] = useState([]);
   const [query, setQuery] = useState('');
+
+  const [bookingState, setBookingState] = useState('');
+  const [bookingCity, setBookingCity] = useState('');
 
   const hadnleSearchQuery = (e) => {
     setQuery(e.target.value);
@@ -274,6 +278,36 @@ const BookingForm = () => {
   //   return totalAmt - paidAmt;
   // };
 
+  useEffect(() => {
+    if (pincodeQuery === '') {
+      setBookingState('');
+    }
+
+    const timer = setTimeout(async () => {
+      await axios({
+        method: 'get',
+        url: `${API_ENDPOINT.END_POINT}/appConfig/pincode?zip=${pincodeQuery}`,
+      })
+        .then((res) => {
+          console.log(res?.data?.result[0].State);
+          setBookingState(res?.data?.result[0].State);
+          setBookingCity(res?.data?.result[0].District);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }, 200);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [pincodeQuery]);
+
+  const handlePinCodeApi = async (e) => {
+    const query = e.target.value;
+    setPincodeQuery(query);
+  };
+
   return (
     <>
       <div className='mx-auto flex w-1/3 flex-col gap-2'>
@@ -332,13 +366,43 @@ const BookingForm = () => {
             name='pincode'
             label='Pincode'
             placeholder='e.g 394230'
-            value={formik.values.pincode}
-            onChange={formik.handleChange}
+            // value={formik.values.pincode}
+            onChange={handlePinCodeApi}
           />
 
           {formik.touched.pincode && formik.errors.pincode && (
             <div className='text-red-400'>{formik.errors.pincode}</div>
           )}
+        </div>
+        <div className='flex flex-col'>
+          <TextInput
+            type='text'
+            name='state'
+            label='State'
+            placeholder='state'
+            disabled={bookingState ? true : false}
+            // value={formik.values.pincode}
+            value={bookingState}
+          />
+
+          {/* {formik.touched.pincode && formik.errors.pincode && (
+            <div className='text-red-400'>{formik.errors.pincode}</div>
+          )} */}
+        </div>
+        <div className='flex flex-col'>
+          <TextInput
+            type='text'
+            name='city'
+            label='City'
+            placeholder='City'
+            disabled={bookingCity ? true : false}
+            // value={formik.values.pincode}
+            value={bookingCity}
+          />
+
+          {/* {formik.touched.pincode && formik.errors.pincode && (
+            <div className='text-red-400'>{formik.errors.pincode}</div>
+          )} */}
         </div>
         <div className='flex flex-col'>
           <TextInput
@@ -462,7 +526,7 @@ const BookingForm = () => {
         </div>
         <div className='flex flex-col'>
           <SelectOption
-            options={['done', 'pending']}
+            options={['DONE', 'PENDING', 'PARTIAL']}
             title='Payment Status'
             containerClassName='flex-1 mt-1 w-full'
             name='paymentStatus'
