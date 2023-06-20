@@ -1,4 +1,4 @@
-import { Button, Label } from '@windmill/react-ui';
+import { Button, Input, Label } from '@windmill/react-ui';
 import axios from 'axios';
 import { useFormik } from 'formik';
 import React, { useEffect, useState } from 'react';
@@ -59,13 +59,27 @@ type bookingFormProps = {
   landmark: string;
   pincode: undefined | number;
   address: string;
+  state: string;
+  city: string;
   // totalAmt: undefined | number;
   totalAmt: any;
   paidAmt: any;
   remainingAmt: undefined | number;
   noOfInstallment: undefined | number;
   amtPerInstallment: undefined | number;
+
+  paymentMethod: 'CASH' | 'BANK-TRANSFER' | 'CHEQUE' | 'UPI';
   paymentStatus: 'PENDING' | 'PARTIAL' | 'COMPLETED' | '';
+
+  cheuqeNo: undefined | number;
+  /* C->Cheque */
+  cBankName: string;
+
+  UPIId: string;
+
+  /* BT -BankTransfer */
+  BTAcNo: undefined | number;
+  BTBankName: string;
 };
 
 const BookingForm = () => {
@@ -101,6 +115,7 @@ const BookingForm = () => {
       installmentAmt: amtPerInstallment,
       remainAmt: remainingAmt,
       paymentType: 'CASH',
+      // paymentMethod:'CHEQUE',
       paymentStatus: paymentStatus,
       customerId: customerId,
       adminAccountId: accountId,
@@ -129,17 +144,25 @@ const BookingForm = () => {
       area: undefined,
       landmark: '',
       pincode: undefined,
+      state: '',
+      city: '',
       address: '',
       totalAmt: 0,
       paidAmt: 0,
+      paymentMethod: 'CHEQUE',
       remainingAmt: 0,
       noOfInstallment: 0,
       amtPerInstallment: 0,
       paymentStatus: '',
+      UPIId: '',
+      cheuqeNo: undefined,
+      cBankName: '',
+      BTAcNo: undefined,
+      BTBankName: '',
     },
     validationSchema,
     onSubmit: (values: bookingFormProps, { setSubmitting }) => {
-      addBookingData(values);
+      // addBookingData(values);
       console.log(values, 'values');
     },
   });
@@ -273,11 +296,6 @@ const BookingForm = () => {
     formik.setFieldValue('remainingAmt', remainingAmt.toString());
   };
 
-  // const calculateRemainingAmt = (totalAmt, paidAmt) => {
-  //   console.log(totalAmt, paidAmt);
-  //   return totalAmt - paidAmt;
-  // };
-
   useEffect(() => {
     if (pincodeQuery === '') {
       setBookingState('');
@@ -292,6 +310,9 @@ const BookingForm = () => {
           console.log(res?.data?.result[0].State);
           setBookingState(res?.data?.result[0].State);
           setBookingCity(res?.data?.result[0].District);
+
+          formik.setFieldValue('state', res?.data?.result[0].State);
+          formik.setFieldValue('city', res?.data?.result[0].District);
         })
         .catch((err) => {
           console.log(err);
@@ -306,6 +327,12 @@ const BookingForm = () => {
   const handlePinCodeApi = async (e) => {
     const query = e.target.value;
     setPincodeQuery(query);
+
+    formik.setFieldValue('pincode', query);
+  };
+
+  const handlePaymentMethod = (e) => {
+    formik.setFieldValue('paymentMethod', e.target.value);
   };
 
   return (
@@ -366,6 +393,7 @@ const BookingForm = () => {
             name='pincode'
             label='Pincode'
             placeholder='e.g 394230'
+            value={pincodeQuery}
             // value={formik.values.pincode}
             onChange={handlePinCodeApi}
           />
@@ -380,9 +408,10 @@ const BookingForm = () => {
             name='state'
             label='State'
             placeholder='state'
-            disabled={bookingState ? true : false}
+            disabled={formik.values.state ? true : false}
             // value={formik.values.pincode}
-            value={bookingState}
+            // value={bookingState}
+            value={formik.values.state}
           />
 
           {/* {formik.touched.pincode && formik.errors.pincode && (
@@ -395,9 +424,9 @@ const BookingForm = () => {
             name='city'
             label='City'
             placeholder='City'
-            disabled={bookingCity ? true : false}
+            disabled={formik.values.city ? true : false}
             // value={formik.values.pincode}
-            value={bookingCity}
+            value={formik.values.city}
           />
 
           {/* {formik.touched.pincode && formik.errors.pincode && (
@@ -494,6 +523,124 @@ const BookingForm = () => {
             <div className='text-red-400'>{formik.errors.remainingAmt}</div>
           )}
         </div>
+        <div className='flex flex-col'>
+          <Label className='mb-2'>Payment Type</Label>
+          <div className='flex justify-between gap-2'>
+            <Label radio>
+              <Input
+                css=''
+                onChange={handlePaymentMethod}
+                type='radio'
+                value='CASH'
+                name='paymentMehod'
+                checked={formik.values.paymentMethod === 'CASH'}
+              />
+              <span className='ml-2'>Cash</span>
+            </Label>
+            <Label radio>
+              <Input
+                css=''
+                onChange={handlePaymentMethod}
+                type='radio'
+                value='CHEQUE'
+                name='paymentMehod'
+                checked={formik.values.paymentMethod === 'CHEQUE'}
+              />
+              <span className='ml-2'>Cheuqe</span>
+            </Label>
+            <Label radio>
+              <Input
+                css=''
+                onChange={handlePaymentMethod}
+                type='radio'
+                value='UPI'
+                name='paymentMehod'
+                checked={formik.values.paymentMethod === 'UPI'}
+              />
+              <span className='ml-2'>UPI</span>
+            </Label>
+            <Label radio>
+              <Input
+                css=''
+                onChange={handlePaymentMethod}
+                type='radio'
+                value='BANK-TRANSFER'
+                name='paymentMehod'
+                checked={formik.values.paymentMethod === 'BANK-TRANSFER'}
+              />
+              <span className='ml-2'>Bank Transfer</span>
+            </Label>
+          </div>
+        </div>
+
+        {/* For Cheque */}
+        <>
+          {formik.values.paymentMethod === 'CHEQUE' ? (
+            <div className='flex flex-col'>
+              <div className='flex flex-col'>
+                <TextInput
+                  type='text'
+                  name='cheuqeNo'
+                  value={formik.values.cheuqeNo}
+                  onChange={formik.handleChange}
+                  label='Cheuqe No'
+                />
+              </div>
+
+              <div className='flex flex-col'>
+                <TextInput
+                  type='text'
+                  name='cBankName'
+                  value={formik.values.cBankName}
+                  onChange={formik.handleChange}
+                  label='Bank Name'
+                />
+              </div>
+            </div>
+          ) : null}
+        </>
+        {/* For UPI */}
+        <>
+          {formik.values.paymentMethod === 'UPI' ? (
+            <div className='flex flex-col'>
+              <div className='flex flex-col'>
+                <TextInput
+                  type='text'
+                  name='UPIId'
+                  value={formik.values.UPIId}
+                  onChange={formik.handleChange}
+                  label='UPI ID'
+                />
+              </div>
+            </div>
+          ) : null}
+        </>
+        {/* For Bank Transfer */}
+        <>
+          {formik.values.paymentMethod === 'BANK-TRANSFER' ? (
+            <div className='flex flex-col'>
+              <div className='flex flex-col'>
+                <TextInput
+                  type='text'
+                  name='BTAcNo'
+                  value={formik.values.BTAcNo}
+                  onChange={formik.handleChange}
+                  label='Account No.'
+                />
+              </div>
+              <div className='flex flex-col'>
+                <TextInput
+                  type='text'
+                  name='BTBankName'
+                  value={formik.values.BTBankName}
+                  onChange={formik.handleChange}
+                  label='Bank Name'
+                />
+              </div>
+            </div>
+          ) : null}
+        </>
+
         <div className='flex flex-col'>
           <TextInput
             type='text'
