@@ -44,6 +44,20 @@ export const validationSchema = Yup.object().shape({
     .integer('Amount must be an integer')
     .required('Amount is required'),
   paymentStatus: Yup.string().required('Project Status is required'),
+
+  // UPIId: Yup.string().required('UPI ID is required'),
+  // cheuqeNo: Yup.string().required('Cheque No is required'),
+
+  // UPIId: Yup.string().when('paymentMethod', {
+  //   is: (val) => val === 'UPI',
+  //   then: Yup.string().required('Field is required'),
+  //   otherwise: Yup.string(),
+  // }),
+  // UPIId: Yup.string().when('paymentMethod', {
+  //   is: (val) => val === 'UPI',
+  //   then: Yup.string().required('UPI ID is required'),
+  //   otherwise: Yup.string(),
+  // }),
 });
 
 type customerNameProps = {
@@ -64,12 +78,12 @@ type bookingFormProps = {
   // totalAmt: undefined | number;
   totalAmt: any;
   paidAmt: any;
-  remainingAmt: undefined | number;
+  remainingAmt: any;
   noOfInstallment: undefined | number;
   amtPerInstallment: undefined | number;
 
-  paymentMethod: 'CASH' | 'BANK-TRANSFER' | 'CHEQUE' | 'UPI';
-  paymentStatus: 'PENDING' | 'PARTIAL' | 'COMPLETED' | '';
+  paymentMethod: 'CASH' | 'BANK_TRANSFER' | 'CHEQUE' | 'UPI';
+  paymentStatus: 'PENDING' | 'PARTIAL' | 'COMPLETED';
 
   cheuqeNo: undefined | number;
   /* C->Cheque */
@@ -83,6 +97,14 @@ type bookingFormProps = {
 };
 
 const BookingForm = () => {
+  const [paymentTypeError, setPaymentTypeError] = useState({
+    chequeNo: false,
+    cBankName: false,
+    UPIId: false,
+    bBankName: false,
+    bAcNo: false,
+  });
+
   const addBookingData = async (values: bookingFormProps) => {
     const {
       address,
@@ -98,6 +120,12 @@ const BookingForm = () => {
       projectName,
       remainingAmt,
       totalAmt,
+      paymentMethod,
+      UPIId,
+      cheuqeNo,
+      cBankName,
+      BTAcNo,
+      BTBankName,
     } = values;
 
     const projectId = projectName.id;
@@ -110,12 +138,17 @@ const BookingForm = () => {
       address2: landmark,
       pincode: pincode,
       area: area,
-      paidAmt: paidAmt,
-      totalAmt: totalAmt,
+      paidAmt: +paidAmt,
+      totalAmt: +totalAmt,
       installmentAmt: amtPerInstallment,
-      remainAmt: remainingAmt,
-      paymentType: 'CASH',
-      // paymentMethod:'CHEQUE',
+      remainAmt: +remainingAmt,
+      paymentType: paymentMethod,
+      upiId: UPIId,
+      chequeNo: cheuqeNo,
+      bankName: cBankName,
+      accountNo: cheuqeNo,
+
+      // paymentMethod:'paymentMethod',
       paymentStatus: paymentStatus,
       customerId: customerId,
       adminAccountId: accountId,
@@ -153,7 +186,7 @@ const BookingForm = () => {
       remainingAmt: 0,
       noOfInstallment: 0,
       amtPerInstallment: 0,
-      paymentStatus: '',
+      paymentStatus: 'COMPLETED',
       UPIId: '',
       cheuqeNo: undefined,
       cBankName: '',
@@ -162,10 +195,67 @@ const BookingForm = () => {
     },
     validationSchema,
     onSubmit: (values: bookingFormProps, { setSubmitting }) => {
-      // addBookingData(values);
-      console.log(values, 'values');
+      if (formik.values.paymentMethod === 'UPI' && formik.values.UPIId === '') {
+        setPaymentTypeError({
+          ...paymentTypeError,
+          UPIId: true,
+        });
+      } else if (
+        formik.values.paymentMethod === 'CHEQUE' &&
+        (formik.values.cheuqeNo === undefined || formik.values.cBankName === '')
+      ) {
+        setPaymentTypeError({
+          ...paymentTypeError,
+          chequeNo: true,
+          cBankName: true,
+        });
+      } else if (
+        formik.values.paymentMethod === 'BANK_TRANSFER' &&
+        (formik.values.BTBankName === '' || formik.values.BTAcNo === undefined)
+      ) {
+        setPaymentTypeError({
+          ...paymentTypeError,
+          bBankName: true,
+          bAcNo: true,
+        });
+      } else {
+        addBookingData(values);
+        console.log(values, 'values');
+      }
+
+      // console.log(formik.errors.length);
     },
   });
+
+  useEffect(() => {
+    if (formik.values.cheuqeNo !== undefined) {
+      setPaymentTypeError({
+        ...paymentTypeError,
+        chequeNo: false,
+        cBankName: false,
+      });
+    } else if (formik.values.cBankName !== '') {
+      setPaymentTypeError({
+        ...paymentTypeError,
+        cBankName: false,
+      });
+    } else if (formik.values.UPIId !== '') {
+      setPaymentTypeError({
+        ...paymentTypeError,
+        UPIId: false,
+      });
+    } else if (formik.values.BTAcNo !== undefined) {
+      setPaymentTypeError({
+        ...paymentTypeError,
+        bAcNo: false,
+      });
+    } else if (formik.values.BTBankName !== '') {
+      setPaymentTypeError({
+        ...paymentTypeError,
+        bBankName: false,
+      });
+    }
+  }, [formik.values]);
 
   const [pincodeQuery, setPincodeQuery] = useState();
   const [customerList, setCustomerList] = useState([]);
@@ -192,7 +282,7 @@ const BookingForm = () => {
       url: `${API_ENDPOINT.END_POINT}/customer/advance-list`,
     })
       .then((res) => {
-        console.log(res);
+        // console.log(res);
 
         const list = res?.data?.result;
 
@@ -307,7 +397,7 @@ const BookingForm = () => {
         url: `${API_ENDPOINT.END_POINT}/appConfig/pincode?zip=${pincodeQuery}`,
       })
         .then((res) => {
-          console.log(res?.data?.result[0].State);
+          // console.log(res);
           setBookingState(res?.data?.result[0].State);
           setBookingCity(res?.data?.result[0].District);
 
@@ -332,7 +422,7 @@ const BookingForm = () => {
   };
 
   const handlePaymentMethod = (e) => {
-    formik.setFieldValue('paymentMethod', e.target.value);
+    formik?.setFieldValue('paymentMethod', e.target.value);
   };
 
   return (
@@ -564,9 +654,9 @@ const BookingForm = () => {
                 css=''
                 onChange={handlePaymentMethod}
                 type='radio'
-                value='BANK-TRANSFER'
+                value='BANK_TRANSFER'
                 name='paymentMehod'
-                checked={formik.values.paymentMethod === 'BANK-TRANSFER'}
+                checked={formik.values.paymentMethod === 'BANK_TRANSFER'}
               />
               <span className='ml-2'>Bank Transfer</span>
             </Label>
@@ -585,6 +675,10 @@ const BookingForm = () => {
                   onChange={formik.handleChange}
                   label='Cheuqe No'
                 />
+
+                {paymentTypeError.chequeNo && (
+                  <div className='text-red-400'>Cheque No is required</div>
+                )}
               </div>
 
               <div className='flex flex-col'>
@@ -595,6 +689,9 @@ const BookingForm = () => {
                   onChange={formik.handleChange}
                   label='Bank Name'
                 />
+                {paymentTypeError.cBankName && (
+                  <div className='text-red-400'>Bank Name is required</div>
+                )}
               </div>
             </div>
           ) : null}
@@ -611,13 +708,17 @@ const BookingForm = () => {
                   onChange={formik.handleChange}
                   label='UPI ID'
                 />
+
+                {paymentTypeError.UPIId && (
+                  <div className='text-red-400'>UPI id required</div>
+                )}
               </div>
             </div>
           ) : null}
         </>
         {/* For Bank Transfer */}
         <>
-          {formik.values.paymentMethod === 'BANK-TRANSFER' ? (
+          {formik.values.paymentMethod === 'BANK_TRANSFER' ? (
             <div className='flex flex-col'>
               <div className='flex flex-col'>
                 <TextInput
@@ -627,6 +728,10 @@ const BookingForm = () => {
                   onChange={formik.handleChange}
                   label='Account No.'
                 />
+
+                {paymentTypeError.bAcNo && (
+                  <div className='text-red-400'>Account No. is required</div>
+                )}
               </div>
               <div className='flex flex-col'>
                 <TextInput
@@ -636,6 +741,9 @@ const BookingForm = () => {
                   onChange={formik.handleChange}
                   label='Bank Name'
                 />
+                {paymentTypeError.bBankName && (
+                  <div className='text-red-400'>Bank Name is required</div>
+                )}
               </div>
             </div>
           ) : null}
@@ -673,7 +781,7 @@ const BookingForm = () => {
         </div>
         <div className='flex flex-col'>
           <SelectOption
-            options={['DONE', 'PENDING', 'PARTIAL']}
+            options={['COMPLETED', 'PENDING', 'PARTIAL']}
             title='Payment Status'
             containerClassName='flex-1 mt-1 w-full'
             name='paymentStatus'

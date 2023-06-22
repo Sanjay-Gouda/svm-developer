@@ -64,7 +64,7 @@ export default function Booking({
                       <Badge
                         className='flex w-[40%] items-center justify-center py-1 text-[16px]'
                         type={
-                          list?.paymentStatus === 'DONE'
+                          list?.paymentStatus === 'COMPLETED'
                             ? 'success'
                             : list?.paymentStatus === 'PENDING'
                             ? 'warning'
