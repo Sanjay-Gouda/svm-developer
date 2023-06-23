@@ -13,8 +13,6 @@ export async function getServerSideProps(params: any) {
 }
 
 const EditCustomer = ({ EditId }) => {
-  console.log(EditId, 'Edit id');
-
   const customers = useSelector((state) => state.customers.customerList);
 
   const getEditFormValues = customers?.filter(

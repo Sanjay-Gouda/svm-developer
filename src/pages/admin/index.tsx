@@ -43,6 +43,12 @@ export default function Dashboard() {
             className='mr-4'
           />
         </InfoCard>
+        <>
+          {/* <ChartCard title='Revenue'>
+            <Doughnut {...doughnutOptions} />
+            <ChartLegend legends={doughnutLegends} />
+          </ChartCard> */}
+        </>
       </div>
     </Layout>
   );

@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 
 import accountList from '@/store/accountSlice/accountList';
+import bookingList from '@/store/bookingSlice/bookingList';
 import customerList from '@/store/customerSlice/customerList';
 import ProjectDetails from '@/store/projectSlices/projectDetail';
 import ProjectList from '@/store/projectSlices/projectList';
@@ -13,5 +14,6 @@ export const store = configureStore({
     accounts: accountList,
     customers: customerList,
     projects: ProjectList,
+    bookings: bookingList,
   },
 });

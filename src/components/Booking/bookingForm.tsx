@@ -1,10 +1,15 @@
 import { Button, Input, Label } from '@windmill/react-ui';
 import axios from 'axios';
 import { useFormik } from 'formik';
+import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 
+import 'react-toastify/dist/ReactToastify.css';
+
 import ComboBox from '@/components/ComboBox/comboBox';
+import { SvmProjectToast } from '@/components/Toast/Toast';
 import { TextInput } from '@/components/ui-blocks';
 import { SelectOption, TextInputArea } from '@/components/ui-blocks/input';
 
@@ -44,20 +49,6 @@ export const validationSchema = Yup.object().shape({
     .integer('Amount must be an integer')
     .required('Amount is required'),
   paymentStatus: Yup.string().required('Project Status is required'),
-
-  // UPIId: Yup.string().required('UPI ID is required'),
-  // cheuqeNo: Yup.string().required('Cheque No is required'),
-
-  // UPIId: Yup.string().when('paymentMethod', {
-  //   is: (val) => val === 'UPI',
-  //   then: Yup.string().required('Field is required'),
-  //   otherwise: Yup.string(),
-  // }),
-  // UPIId: Yup.string().when('paymentMethod', {
-  //   is: (val) => val === 'UPI',
-  //   then: Yup.string().required('UPI ID is required'),
-  //   otherwise: Yup.string(),
-  // }),
 });
 
 type customerNameProps = {
@@ -96,7 +87,38 @@ type bookingFormProps = {
   BTBankName: string;
 };
 
-const BookingForm = () => {
+type EditFormProps = {
+  editInitialValues?: any;
+  editId?: string;
+};
+
+const addInitialValues = {
+  customerName: {},
+  projectName: {},
+  bankAccount: {},
+  area: undefined,
+  landmark: '',
+  pincode: undefined,
+  state: '',
+  city: '',
+  address: '',
+  totalAmt: 0,
+  paidAmt: 0,
+  paymentMethod: 'CHEQUE',
+  remainingAmt: 0,
+  noOfInstallment: 0,
+  amtPerInstallment: 0,
+  paymentStatus: 'COMPLETED',
+  UPIId: '',
+  cheuqeNo: undefined,
+  cBankName: '',
+  BTAcNo: undefined,
+  BTBankName: '',
+};
+
+const BookingForm = ({ editId, editInitialValues }: EditFormProps) => {
+  const routes = useRouter();
+
   const [paymentTypeError, setPaymentTypeError] = useState({
     chequeNo: false,
     cBankName: false,
@@ -162,37 +184,20 @@ const BookingForm = () => {
       headers: { 'Content-Type': 'application/json' },
     })
       .then((res) => {
-        console.log(res);
+        toast.success('Booking complete successfully');
+        setTimeout(() => {
+          routes.push('/admin/booking');
+        }, 1000);
       })
       .catch((err) => {
         console.log(err);
       });
   };
 
+  const formInitialValue = editId ? editInitialValues : addInitialValues;
+
   const formik = useFormik({
-    initialValues: {
-      customerName: {},
-      projectName: {},
-      bankAccount: {},
-      area: undefined,
-      landmark: '',
-      pincode: undefined,
-      state: '',
-      city: '',
-      address: '',
-      totalAmt: 0,
-      paidAmt: 0,
-      paymentMethod: 'CHEQUE',
-      remainingAmt: 0,
-      noOfInstallment: 0,
-      amtPerInstallment: 0,
-      paymentStatus: 'COMPLETED',
-      UPIId: '',
-      cheuqeNo: undefined,
-      cBankName: '',
-      BTAcNo: undefined,
-      BTBankName: '',
-    },
+    initialValues: formInitialValue,
     validationSchema,
     onSubmit: (values: bookingFormProps, { setSubmitting }) => {
       if (formik.values.paymentMethod === 'UPI' && formik.values.UPIId === '') {
@@ -220,13 +225,13 @@ const BookingForm = () => {
         });
       } else {
         addBookingData(values);
+
         console.log(values, 'values');
       }
-
-      // console.log(formik.errors.length);
     },
   });
 
+  //  dependecny
   useEffect(() => {
     if (formik.values.cheuqeNo !== undefined) {
       setPaymentTypeError({
@@ -258,11 +263,7 @@ const BookingForm = () => {
   }, [formik.values]);
 
   const [pincodeQuery, setPincodeQuery] = useState();
-  const [customerList, setCustomerList] = useState([]);
   const [query, setQuery] = useState('');
-
-  const [bookingState, setBookingState] = useState('');
-  const [bookingCity, setBookingCity] = useState('');
 
   const hadnleSearchQuery = (e) => {
     setQuery(e.target.value);
@@ -294,8 +295,6 @@ const BookingForm = () => {
 
           setCustomerPayload(data);
         }
-
-        setCustomerList(res.data.result);
       })
       .catch((res) => {
         console.log(res);
@@ -315,7 +314,6 @@ const BookingForm = () => {
             name: payload.name,
             id: payload.projectId,
           }));
-          console.log(data, 'payload');
 
           setProjectPayload(data);
         }
@@ -387,10 +385,6 @@ const BookingForm = () => {
   };
 
   useEffect(() => {
-    if (pincodeQuery === '') {
-      setBookingState('');
-    }
-
     const timer = setTimeout(async () => {
       await axios({
         method: 'get',
@@ -398,8 +392,6 @@ const BookingForm = () => {
       })
         .then((res) => {
           // console.log(res);
-          setBookingState(res?.data?.result[0].State);
-          setBookingCity(res?.data?.result[0].District);
 
           formik.setFieldValue('state', res?.data?.result[0].State);
           formik.setFieldValue('city', res?.data?.result[0].District);
@@ -420,6 +412,10 @@ const BookingForm = () => {
 
     formik.setFieldValue('pincode', query);
   };
+
+  useEffect(() => {
+    setPincodeQuery(editInitialValues?.pincode);
+  }, [editId]);
 
   const handlePaymentMethod = (e) => {
     formik?.setFieldValue('paymentMethod', e.target.value);
@@ -794,13 +790,33 @@ const BookingForm = () => {
           )}
         </div>
 
-        <Button
-          onClick={() => {
-            formik.handleSubmit();
-          }}
-        >
-          Check
-        </Button>
+        {!editId ? (
+          <Button
+            onClick={() => {
+              formik.handleSubmit();
+            }}
+          >
+            Submit
+          </Button>
+        ) : (
+          <>
+            <Button
+              onClick={() => {
+                formik.handleSubmit();
+              }}
+            >
+              Update
+            </Button>
+            <Button
+              layout='outline'
+              onClick={() => routes.push('/admin/booking')}
+            >
+              Cancel
+            </Button>
+          </>
+        )}
+
+        <SvmProjectToast />
       </div>
     </>
   );

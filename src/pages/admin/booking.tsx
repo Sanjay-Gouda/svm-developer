@@ -11,10 +11,14 @@ import {
 import axios from 'axios';
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import Link from 'next/link';
-import React from 'react';
+import { useRouter } from 'next/router';
+import React, { useEffect } from 'react';
 import { MdDelete, MdModeEditOutline } from 'react-icons/md';
+import { useDispatch } from 'react-redux';
 
 import Layout from '@/containers/Layout';
+
+import { setBookingList } from '@/store/bookingSlice/bookingList';
 
 import { API_ENDPOINT } from '@/const/APIRoutes';
 
@@ -27,6 +31,17 @@ export const getServerSideProps: GetServerSideProps = async () => {
 export default function Booking({
   list,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const route = useRouter();
+  const dispatch = useDispatch();
+
+  const handleEdit = (id) => {
+    route.push(`realEstateProjects/bookingForm/${id}`);
+  };
+
+  useEffect(() => {
+    dispatch(setBookingList(list));
+  }, []);
+
   return (
     <>
       <Layout
@@ -76,7 +91,7 @@ export default function Booking({
                     </TableCell>
                     <TableCell className='flex gap-5'>
                       <MdModeEditOutline
-                        // onClick={() => handleEdit(list?.customerId)}
+                        onClick={() => handleEdit(list?.bookingId)}
                         size='24'
                         className='cursor-pointer'
                         style={{ color: ' #30bcc2' }}
