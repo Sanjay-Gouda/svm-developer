@@ -107,6 +107,14 @@ export default function Booking({
               })}
             </TableBody>
           </Table>
+          {/* <TableFooter>
+            <Pagination
+              totalResults={10}
+              resultsPerPage={4}
+              onChange={() => console.log('')}
+              label='Table navigation'
+            />
+          </TableFooter> */}
         </TableContainer>
       </Layout>
     </>

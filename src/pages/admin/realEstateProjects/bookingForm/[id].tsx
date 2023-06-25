@@ -68,6 +68,11 @@ export const EditBookingDetails = ({ EditId }) => {
     installmentCount,
     projectName,
     customerName,
+    adminBankName,
+    bankName,
+    chequeNumber,
+    upiId,
+    accountNumber,
   } = getBookingFormValues[0];
 
   const editCustomer = {
@@ -80,14 +85,14 @@ export const EditBookingDetails = ({ EditId }) => {
   };
 
   const editBankAccount = {
-    id: adminAccountId,
-    name: projectName,
+    id: +adminAccountId,
+    name: adminBankName,
   };
 
   const bookingEditInitialValues = {
     customerName: editCustomer,
     projectName: editProject,
-    bankAccount: editProject,
+    bankAccount: editBankAccount,
     area: area,
     landmark: address2,
     pincode: pincode,
@@ -101,11 +106,11 @@ export const EditBookingDetails = ({ EditId }) => {
     noOfInstallment: installmentCount,
     amtPerInstallment: installmentAmt,
     paymentStatus: paymentStatus,
-    UPIId: '89898989',
-    cheuqeNo: '89898989',
-    cBankName: 'dummy',
-    BTAcNo: '8989898',
-    BTBankName: 'dummy',
+    UPIId: upiId,
+    cheuqeNo: chequeNumber,
+    cBankName: bankName,
+    BTAcNo: accountNumber,
+    BTBankName: bankName,
   };
 
   return (

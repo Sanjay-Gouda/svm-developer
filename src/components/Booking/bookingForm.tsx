@@ -167,8 +167,10 @@ const BookingForm = ({ editId, editInitialValues }: EditFormProps) => {
       paymentType: paymentMethod,
       upiId: UPIId,
       chequeNo: cheuqeNo,
-      bankName: cBankName,
-      accountNo: cheuqeNo,
+      accountNo: BTAcNo,
+      bankName: cBankName || BTBankName,
+      // bankName: BTBankName,
+      // accountNumber: BTAcNo,
 
       // paymentMethod:'paymentMethod',
       paymentStatus: paymentStatus,
@@ -184,7 +186,73 @@ const BookingForm = ({ editId, editInitialValues }: EditFormProps) => {
       headers: { 'Content-Type': 'application/json' },
     })
       .then((res) => {
-        toast.success('Booking complete successfully');
+        toast.success('Booking completed successfully');
+        setTimeout(() => {
+          routes.push('/admin/booking');
+        }, 1000);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  const updateBookingData = async (values: bookingFormProps) => {
+    const {
+      address,
+      bankAccount,
+      customerName,
+      area,
+      amtPerInstallment,
+      noOfInstallment,
+      paidAmt,
+      paymentStatus,
+      landmark,
+      pincode,
+      projectName,
+      remainingAmt,
+      totalAmt,
+      paymentMethod,
+      UPIId,
+      cheuqeNo,
+      cBankName,
+      BTAcNo,
+      BTBankName,
+    } = values;
+
+    const projectId = projectName.id;
+    const accountId = bankAccount.id;
+    const customerId = customerName.id;
+
+    const payload = {
+      projectId: projectId,
+      address1: address,
+      address2: landmark,
+      pincode: pincode,
+      area: area,
+      paidAmt: +paidAmt,
+      totalAmt: +totalAmt,
+      installmentAmt: amtPerInstallment,
+      remainAmt: +remainingAmt,
+      paymentType: paymentMethod,
+      upiId: UPIId,
+      chequeNo: cheuqeNo,
+      accountNo: BTAcNo,
+      bankName: cBankName || BTBankName,
+
+      // paymentMethod:'paymentMethod',
+      paymentStatus: paymentStatus,
+      customerId: customerId,
+      adminAccountId: accountId,
+      installmentCount: noOfInstallment,
+    };
+
+    await axios({
+      method: 'post',
+      url: `${API_ENDPOINT.END_POINT}booking/update/${editId}`,
+      data: payload,
+      headers: { 'Content-Type': 'application/json' },
+    })
+      .then((res) => {
+        toast.success('Booking details are updated successfully');
         setTimeout(() => {
           routes.push('/admin/booking');
         }, 1000);
@@ -224,7 +292,7 @@ const BookingForm = ({ editId, editInitialValues }: EditFormProps) => {
           bAcNo: true,
         });
       } else {
-        addBookingData(values);
+        editId ? updateBookingData(values) : addBookingData(values);
 
         console.log(values, 'values');
       }
@@ -366,23 +434,41 @@ const BookingForm = ({ editId, editInitialValues }: EditFormProps) => {
         });
 
   const calculateRemainingAmt = (total, paid) => {
-    const amount = parseInt(total) - parseInt(paid);
+    const amount = +total - +paid;
 
-    return amount;
+    formik.setFieldValue('remainingAmt', amount.toString());
+    // return amount;
   };
 
-  const handleAmount = (e) => {
-    const { name, value } = e.target;
+  useEffect(() => {
+    calculateRemainingAmt(formik.values.totalAmt, formik.values.paidAmt);
+  }, [formik.values.paidAmt, formik.values.totalAmt]);
 
-    formik.setFieldValue(name, value);
+  // const handleTotalAmount = (e) => {
+  //   const value = e.target.value;
 
-    const remainingAmt = calculateRemainingAmt(
-      formik.values.totalAmt,
-      formik.values.paidAmt
-    );
+  //   formik.setFieldValue('totalAmt', value);
 
-    formik.setFieldValue('remainingAmt', remainingAmt.toString());
-  };
+  //   const remainingAmt = calculateRemainingAmt(
+  //     formik.values.totalAmt,
+  //     formik.values.paidAmt
+  //   );
+  //   formik.setFieldValue('remainingAmt', remainingAmt.toString());
+  // };
+  // const handlePaidAmount = (e) => {
+  //   formik.setFieldValue('paidAmt', e.target.value);
+  //   const remainingAmt = calculateRemainingAmt(
+  //     formik.values.totalAmt,
+  //     formik.values.paidAmt
+  //   );
+  //   formik.setFieldValue('remainingAmt', remainingAmt.toString());
+  // };
+
+  // const handleAmount = (e) => {
+  //   const { name, value } = e.target;
+
+  //   formik.setFieldValue(name, value);
+  // };
 
   useEffect(() => {
     const timer = setTimeout(async () => {
@@ -572,7 +658,7 @@ const BookingForm = ({ editId, editInitialValues }: EditFormProps) => {
             label='Total Amount'
             // onChange={handleTotalAmtChange}
             value={formik.values.totalAmt}
-            onChange={handleAmount}
+            onChange={formik.handleChange}
           />
 
           {formik.touched.totalAmt && formik.errors.totalAmt && (
@@ -587,7 +673,7 @@ const BookingForm = ({ editId, editInitialValues }: EditFormProps) => {
             name='paidAmt'
             label='Paid Amount'
             value={formik.values.paidAmt}
-            onChange={handleAmount}
+            onChange={formik.handleChange}
           />
 
           {formik.touched.paidAmt && formik.errors.paidAmt && (

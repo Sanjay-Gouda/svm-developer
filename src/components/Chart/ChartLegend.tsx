@@ -1,9 +1,10 @@
 import React from 'react';
 
-function ChartLegend(legends: { title: string; color: string }[]) {
+function ChartLegend(legends) {
+  // console.log(legends.legends);
   return (
     <div className='mt-4 flex justify-center space-x-3 text-sm text-gray-600 dark:text-gray-400'>
-      {legends.map((legend) => (
+      {legends?.legends?.map((legend) => (
         <div className='flex items-center' key={legend.title}>
           <span
             className={`mr-1 inline-block h-3 w-3 ${legend.color} rounded-full`}

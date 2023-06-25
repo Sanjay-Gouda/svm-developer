@@ -1,7 +1,7 @@
 import React from 'react';
 
 type ChartProps = {
-  children: React.ReactElement;
+  children: any;
   title: string;
 };
 
