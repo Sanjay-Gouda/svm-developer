@@ -56,6 +56,7 @@ export default function Customers({
   return (
     <>
       <Layout
+        pageTitle='Customers'
         right={
           <Link href='realEstateProjects/customerForm/addCustomers'>
             <Button>Add Customers</Button>

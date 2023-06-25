@@ -1,3 +1,5 @@
+import { useRouter } from 'next/router';
+
 import InfoCard from '@/components/Cards/InfoCard';
 import RecentCard from '@/components/RecentCard/recentCard';
 import RoundIcon from '@/components/RoundIcon';
@@ -40,9 +42,43 @@ const recentCustomer = [
   },
 ];
 
+const latestProjects = [
+  {
+    id: 1,
+    name: 'Sai Recendecy',
+    status: 'Upcomming',
+    email: 'Sachin',
+  },
+  {
+    id: 2,
+    name: 'Hall Town',
+    status: 'Active',
+    email: 'Olpard',
+  },
+  {
+    id: 3,
+    name: 'Glorniaa Valley',
+    status: 'Completed',
+    email: 'Vesu',
+  },
+  {
+    id: 4,
+    name: 'Sachin Square',
+    status: 'Upcomming',
+    email: 'Vadodra',
+  },
+  {
+    id: 5,
+    name: 'Umang',
+    status: 'Completed',
+    email: 'Bharuch',
+  },
+];
+
 export default function Dashboard() {
+  const router = useRouter();
   return (
-    <Layout>
+    <Layout pageTitle='Dashboard'>
       <div className='mb-8 grid gap-6 md:grid-cols-2 xl:grid-cols-4'>
         <InfoCard title='Total Clients' value='6389'>
           <RoundIcon
@@ -88,171 +124,31 @@ export default function Dashboard() {
           />
         </InfoCard>
       </div>
-      {/* <Card className='w-1/2 p-2'>
-        <div className='w-full'>
-          <p className='text-xl text-teal-500 dark:text-teal-100'>
-            Recent Projects
-          </p>
-        </div>
-        <div className='mt-3 flex justify-between'>
-          <div>
-            <p className=' text-base  text-gray-200 transition-colors duration-150'>
-              Project Name
-            </p>
-          </div>
-          <div>
-            <p className=' text-base  text-gray-200 transition-colors duration-150'>
-              City
-            </p>
-          </div>
-          <div>
-            <p className=' text-base  text-gray-200 transition-colors duration-150'>
-              Status
-            </p>
-          </div>
-        </div>
-      </Card> */}
-
-      {/* <div className='w-full max-w-md rounded-lg border border-gray-200 bg-white p-4 shadow dark:border-gray-700 dark:bg-gray-800 sm:p-8'>
-        <div className='mb-4 flex items-center justify-between'>
-          <h5 className='text-xl font-bold leading-none text-gray-900 dark:text-white'>
-            Latest Customers
-          </h5>
-          <a
-            href='#'
-            className='text-sm font-medium text-blue-600 hover:underline dark:text-blue-500'
-          >
-            View all
-          </a>
-        </div>
-        <div className='flow-root'>
-          <ul
-            role='list'
-            className='divide-y divide-gray-200 dark:divide-gray-700'
-          >
-            <li className='py-3 sm:py-4'>
-              <div className='flex items-center space-x-4'>
-                <div className='flex-shrink-0'>
-                  <img
-                    className='h-8 w-8 rounded-full'
-                    src='/docs/images/people/profile-picture-1.jpg'
-                    alt='Neil image'
-                  />
-                </div>
-                <div className='min-w-0 flex-1'>
-                  <p className='truncate text-sm font-medium text-gray-900 dark:text-white'>
-                    Neil Sims
-                  </p>
-                  <p className='truncate text-sm text-gray-500 dark:text-gray-400'>
-                    email@windster.com
-                  </p>
-                </div>
-                <div className='inline-flex items-center text-base font-semibold text-gray-900 dark:text-white'>
-                  $320
-                </div>
-              </div>
-            </li>
-            <li className='py-3 sm:py-4'>
-              <div className='flex items-center space-x-4'>
-                <div className='flex-shrink-0'>
-                  <img
-                    className='h-8 w-8 rounded-full'
-                    src='/docs/images/people/profile-picture-3.jpg'
-                    alt='Bonnie image'
-                  />
-                </div>
-                <div className='min-w-0 flex-1'>
-                  <p className='truncate text-sm font-medium text-gray-900 dark:text-white'>
-                    Bonnie Green
-                  </p>
-                  <p className='truncate text-sm text-gray-500 dark:text-gray-400'>
-                    email@windster.com
-                  </p>
-                </div>
-                <div className='inline-flex items-center text-base font-semibold text-gray-900 dark:text-white'>
-                  $3467
-                </div>
-              </div>
-            </li>
-            <li className='py-3 sm:py-4'>
-              <div className='flex items-center space-x-4'>
-                <div className='flex-shrink-0'>
-                  <img
-                    className='h-8 w-8 rounded-full'
-                    src='/docs/images/people/profile-picture-2.jpg'
-                    alt='Michael image'
-                  />
-                </div>
-                <div className='min-w-0 flex-1'>
-                  <p className='truncate text-sm font-medium text-gray-900 dark:text-white'>
-                    Michael Gough
-                  </p>
-                  <p className='truncate text-sm text-gray-500 dark:text-gray-400'>
-                    email@windster.com
-                  </p>
-                </div>
-                <div className='inline-flex items-center text-base font-semibold text-gray-900 dark:text-white'>
-                  $67
-                </div>
-              </div>
-            </li>
-            <li className='py-3 sm:py-4'>
-              <div className='flex items-center space-x-4'>
-                <div className='flex-shrink-0'>
-                  <img
-                    className='h-8 w-8 rounded-full'
-                    src='/docs/images/people/profile-picture-4.jpg'
-                    alt='Lana image'
-                  />
-                </div>
-                <div className='min-w-0 flex-1'>
-                  <p className='truncate text-sm font-medium text-gray-900 dark:text-white'>
-                    Lana Byrd
-                  </p>
-                  <p className='truncate text-sm text-gray-500 dark:text-gray-400'>
-                    email@windster.com
-                  </p>
-                </div>
-                <div className='inline-flex items-center text-base font-semibold text-gray-900 dark:text-white'>
-                  $367
-                </div>
-              </div>
-            </li>
-            <li className='pb-0 pt-3 sm:pt-4'>
-              <div className='flex items-center space-x-4'>
-                <div className='flex-shrink-0'>
-                  <img
-                    className='h-8 w-8 rounded-full'
-                    src='/docs/images/people/profile-picture-5.jpg'
-                    alt='Thomas image'
-                  />
-                </div>
-                <div className='min-w-0 flex-1'>
-                  <p className='truncate text-sm font-medium text-gray-900 dark:text-white'>
-                    Thomes Lean
-                  </p>
-                  <p className='truncate text-sm text-gray-500 dark:text-gray-400'>
-                    email@windster.com
-                  </p>
-                </div>
-                <div className='inline-flex items-center text-base font-semibold text-gray-900 dark:text-white'>
-                  $2367
-                </div>
-              </div>
-            </li>
-          </ul>
-        </div>
-      </div> */}
 
       <div className='flex justify-between gap-3'>
         <RecentCard
           cardTitle='Recent Customers'
+          isStatus={false}
+          viewAll={() => {
+            router.push('admin/customers');
+          }}
           customerList={recentCustomer}
         />
-        <RecentCard cardTitle='Latest Projects' customerList={recentCustomer} />
         <RecentCard
+          cardTitle='Latest Projects'
+          isStatus={true}
+          customerList={latestProjects}
+          viewAll={() => {
+            router.push('admin/projects');
+          }}
+        />
+        <RecentCard
+          isStatus={true}
           cardTitle='Current Bookings'
-          customerList={recentCustomer}
+          viewAll={() => {
+            router.push('admin/booking');
+          }}
+          customerList={latestProjects}
         />
       </div>
     </Layout>

@@ -2,7 +2,8 @@ import { Button } from '@windmill/react-ui';
 import axios from 'axios';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useState } from 'react';
+import { ClipLoader } from 'react-spinners';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 
@@ -38,9 +39,11 @@ type updatevalueProps = {
 
 function ReferrerForm({ editList, editId }: updatevalueProps) {
   const route = useRouter();
+  const [loader, setLoader] = useState(false);
 
   /* ADD REFERRER LIST  */
   const addReferrer = async (details: formProps) => {
+    setLoader(true);
     await axios({
       method: 'POST',
       url: `${API_ENDPOINT.END_POINT}/referral/create`,
@@ -49,6 +52,7 @@ function ReferrerForm({ editList, editId }: updatevalueProps) {
     })
       .then((res) => {
         toast.success('Referrer added successfully');
+        setLoader(false);
         setTimeout(() => {
           route.push('/admin/referral');
         }, 1000);
@@ -61,6 +65,7 @@ function ReferrerForm({ editList, editId }: updatevalueProps) {
 
   /* UPDATE REFERRER LIST */
   const updateReferrerList = async (details: formProps) => {
+    setLoader(true);
     await axios({
       method: 'PUT',
       url: `${API_ENDPOINT.END_POINT}/referral/update/${editId} `,
@@ -69,6 +74,8 @@ function ReferrerForm({ editList, editId }: updatevalueProps) {
     })
       .then((res) => {
         toast.success('Data updated successfully');
+        setLoader(false);
+
         setTimeout(() => {
           route.push('/admin/referral');
         }, 1000);
@@ -164,6 +171,7 @@ function ReferrerForm({ editList, editId }: updatevalueProps) {
         }}
       >
         {editList ? 'Update ' : 'Submit'}
+        {loader && <ClipLoader size={20} color='white' />}
       </Button>
       {editList ? (
         <Button layout='outline' onClick={() => route.push('/admin/referral')}>

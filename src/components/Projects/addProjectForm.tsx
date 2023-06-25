@@ -2,7 +2,7 @@ import { Button } from '@windmill/react-ui';
 import axios from 'axios';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
@@ -66,6 +66,36 @@ function AddProjectForm({
 }: projectProps) {
   const dispatch = useDispatch();
   const router = useRouter();
+  const [pincodeQuery, setPincodeQuery] = useState();
+
+  const handlePinCodeApi = async (e) => {
+    const query = e.target.value;
+    setPincodeQuery(query);
+
+    formik.setFieldValue('pincode', query);
+  };
+
+  useEffect(() => {
+    const timer = setTimeout(async () => {
+      await axios({
+        method: 'get',
+        url: `${API_ENDPOINT.END_POINT}/appConfig/pincode?zip=${pincodeQuery}`,
+      })
+        .then((res) => {
+          // console.log(res);
+
+          formik.setFieldValue('state', res?.data?.result[0].State);
+          formik.setFieldValue('dist', res?.data?.result[0].District);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }, 200);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [pincodeQuery]);
 
   const formValues = editId ? editInitialValues : addInitialValues;
 
@@ -201,11 +231,12 @@ function AddProjectForm({
       <div className='flex w-full  gap-4'>
         <div className='flex w-full flex-col'>
           <TextInput
-            onChange={formik.handleChange}
+            // onChange={formik.handleChange}
+            onChange={handlePinCodeApi}
             value={formik.values.pincode}
             name='pincode'
             containerClassName='w-full'
-            label='PinCode'
+            label='Pincode'
           />
           {formik.touched.pincode && formik.errors.pincode && (
             <div className='text-red-400'>{formik.errors.pincode}</div>
@@ -267,14 +298,26 @@ function AddProjectForm({
       />
 
       {editId ? (
-        <Button
-          size='regular'
-          // onClick={() => onComplete('image')}
-          onClick={() => formik.handleSubmit()}
-          className='col-span-2 ml-auto mt-3'
-        >
-          Update
-        </Button>
+        <div className='flex w-full justify-between'>
+          <Button
+            size='regular'
+            layout='outline'
+            // onClick={() => onComplete('image')}
+            onClick={() => router.push('/admin/projects')}
+            className='col-span-2  mt-3'
+          >
+            Cancel
+          </Button>
+
+          <Button
+            size='regular'
+            // onClick={() => onComplete('image')}
+            onClick={() => formik.handleSubmit()}
+            className='col-span-2  mt-3'
+          >
+            Update
+          </Button>
+        </div>
       ) : (
         <Button
           size='regular'

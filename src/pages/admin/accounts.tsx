@@ -64,6 +64,7 @@ export default function Account({
   return (
     <>
       <Layout
+        pageTitle='Bank Accounts'
         right={
           <Link href='realEstateProjects/accountForm/addAccounts'>
             <Button>Add Accounts</Button>

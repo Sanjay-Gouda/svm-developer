@@ -44,6 +44,7 @@ export default function Projects({
 
   return (
     <Layout
+      pageTitle='Projects'
       right={
         <Link href='realEstateProjects/projectForm/add'>
           <Button>Add Projects</Button>
@@ -55,9 +56,9 @@ export default function Projects({
           <TableHeader>
             <tr>
               <TableCell className='text-[14px]'>Project Name</TableCell>
-              <TableCell className='text-[14px]'>City</TableCell>
-              <TableCell className='text-[14px]'>Area</TableCell>
+              {/* <TableCell className='text-[14px]'>City</TableCell> */}
               <TableCell className='text-[14px]'>Project Owner </TableCell>
+              <TableCell className='text-[14px]'>Area</TableCell>
               <TableCell className='text-[14px]'>Status</TableCell>
               <TableCell className='text-[14px]'>Action</TableCell>
             </tr>
@@ -67,19 +68,19 @@ export default function Projects({
               return (
                 <TableRow key={ind}>
                   <TableCell>{data?.name}</TableCell>
-                  <TableCell>{data?.area}</TableCell>
-                  <TableCell>{data?.pincode}</TableCell>
+                  {/* <TableCell>{data?.dist}</TableCell> */}
                   <TableCell>{data?.ownerName}</TableCell>
+                  <TableCell>{data?.area} sq.ft</TableCell>
 
                   <TableCell>
                     <Badge
                       className='flex w-[40%] items-center justify-center py-1 text-[16px]'
                       type={
                         data.status === 'ACTIVE'
-                          ? 'success'
+                          ? 'primary'
                           : data.status === 'UPCOMING'
                           ? 'warning'
-                          : 'warning'
+                          : 'success'
                       }
                     >
                       {data.status}

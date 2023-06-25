@@ -54,6 +54,7 @@ export default function Refferral({
 
   return (
     <Layout
+      pageTitle='Referral'
       right={
         <Link href='realEstateProjects/referrerForm/addReferral/'>
           <Button>Add Referrer</Button>

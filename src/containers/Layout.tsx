@@ -8,8 +8,13 @@ import Sidebar from '../components/Sidebar';
 
 interface LayoutProps {
   right?: React.ReactNode;
+  pageTitle: string;
 }
-function Layout({ children, right }: PropsWithChildren<LayoutProps>) {
+function Layout({
+  children,
+  right,
+  pageTitle,
+}: PropsWithChildren<LayoutProps>) {
   // const { isSidebarOpen, closeSidebar } = useContext(SidebarContext);
 
   const isSidebarOpen = true;
@@ -29,7 +34,7 @@ function Layout({ children, right }: PropsWithChildren<LayoutProps>) {
         <Header />
         <Main>
           <div className='flex items-center justify-between'>
-            <PageTitle>Dashboard</PageTitle>
+            <PageTitle>{pageTitle}</PageTitle>
 
             {right && right}
           </div>

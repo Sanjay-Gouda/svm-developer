@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
+import { ClipLoader } from 'react-spinners';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 
@@ -72,6 +73,7 @@ type bookingFormProps = {
   remainingAmt: any;
   noOfInstallment: undefined | number;
   amtPerInstallment: undefined | number;
+  paymentId: any;
 
   paymentMethod: 'CASH' | 'BANK_TRANSFER' | 'CHEQUE' | 'UPI';
   paymentStatus: 'PENDING' | 'PARTIAL' | 'COMPLETED';
@@ -118,6 +120,7 @@ const addInitialValues = {
 
 const BookingForm = ({ editId, editInitialValues }: EditFormProps) => {
   const routes = useRouter();
+  const [loader, setLoader] = useState(false);
 
   const [paymentTypeError, setPaymentTypeError] = useState({
     chequeNo: false,
@@ -128,6 +131,7 @@ const BookingForm = ({ editId, editInitialValues }: EditFormProps) => {
   });
 
   const addBookingData = async (values: bookingFormProps) => {
+    setLoader(true);
     const {
       address,
       bankAccount,
@@ -187,6 +191,7 @@ const BookingForm = ({ editId, editInitialValues }: EditFormProps) => {
     })
       .then((res) => {
         toast.success('Booking completed successfully');
+        setLoader(false);
         setTimeout(() => {
           routes.push('/admin/booking');
         }, 1000);
@@ -196,6 +201,7 @@ const BookingForm = ({ editId, editInitialValues }: EditFormProps) => {
       });
   };
   const updateBookingData = async (values: bookingFormProps) => {
+    setLoader(true);
     const {
       address,
       bankAccount,
@@ -216,6 +222,7 @@ const BookingForm = ({ editId, editInitialValues }: EditFormProps) => {
       cBankName,
       BTAcNo,
       BTBankName,
+      paymentId,
     } = values;
 
     const projectId = projectName.id;
@@ -228,10 +235,10 @@ const BookingForm = ({ editId, editInitialValues }: EditFormProps) => {
       address2: landmark,
       pincode: pincode,
       area: area,
-      paidAmt: +paidAmt,
-      totalAmt: +totalAmt,
+      paidAmt: paidAmt.toString(),
+      totalAmt: totalAmt.toString(),
       installmentAmt: amtPerInstallment,
-      remainAmt: +remainingAmt,
+      remainAmt: remainingAmt,
       paymentType: paymentMethod,
       upiId: UPIId,
       chequeNo: cheuqeNo,
@@ -243,22 +250,26 @@ const BookingForm = ({ editId, editInitialValues }: EditFormProps) => {
       customerId: customerId,
       adminAccountId: accountId,
       installmentCount: noOfInstallment,
+      paymentId: paymentId,
     };
 
     await axios({
-      method: 'post',
+      method: 'put',
       url: `${API_ENDPOINT.END_POINT}booking/update/${editId}`,
       data: payload,
       headers: { 'Content-Type': 'application/json' },
     })
       .then((res) => {
         toast.success('Booking details are updated successfully');
+        setLoader(false);
         setTimeout(() => {
           routes.push('/admin/booking');
         }, 1000);
       })
       .catch((err) => {
-        console.log(err);
+        setLoader(false);
+        toast.error('Something went wrong');
+        // console.log(err);
       });
   };
 
@@ -443,32 +454,6 @@ const BookingForm = ({ editId, editInitialValues }: EditFormProps) => {
   useEffect(() => {
     calculateRemainingAmt(formik.values.totalAmt, formik.values.paidAmt);
   }, [formik.values.paidAmt, formik.values.totalAmt]);
-
-  // const handleTotalAmount = (e) => {
-  //   const value = e.target.value;
-
-  //   formik.setFieldValue('totalAmt', value);
-
-  //   const remainingAmt = calculateRemainingAmt(
-  //     formik.values.totalAmt,
-  //     formik.values.paidAmt
-  //   );
-  //   formik.setFieldValue('remainingAmt', remainingAmt.toString());
-  // };
-  // const handlePaidAmount = (e) => {
-  //   formik.setFieldValue('paidAmt', e.target.value);
-  //   const remainingAmt = calculateRemainingAmt(
-  //     formik.values.totalAmt,
-  //     formik.values.paidAmt
-  //   );
-  //   formik.setFieldValue('remainingAmt', remainingAmt.toString());
-  // };
-
-  // const handleAmount = (e) => {
-  //   const { name, value } = e.target;
-
-  //   formik.setFieldValue(name, value);
-  // };
 
   useEffect(() => {
     const timer = setTimeout(async () => {
@@ -892,6 +877,7 @@ const BookingForm = ({ editId, editInitialValues }: EditFormProps) => {
               }}
             >
               Update
+              {loader && <ClipLoader size={20} color='white' />}
             </Button>
             <Button
               layout='outline'

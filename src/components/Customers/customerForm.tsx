@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
+import { ClipLoader } from 'react-spinners';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 
@@ -49,9 +50,10 @@ type editValueProps = {
 function CustomerForm({ editInitialValues, editId }: editValueProps) {
   const [isDataSubmitted, setIsDataSubmitted] = useState(false);
   const routes = useRouter();
-
+  const [loader, setLoader] = useState(false);
   /* Add Customer  */
   const addCustomers = async (details: formProps) => {
+    setLoader(true);
     await axios({
       method: 'post',
       url: `${API_ENDPOINT.END_POINT}/customer/create`,
@@ -60,6 +62,7 @@ function CustomerForm({ editInitialValues, editId }: editValueProps) {
     })
       .then((res) => {
         toast.success('Customer added successfully');
+        setLoader(false);
         setTimeout(() => {
           routes.push('/admin/customers');
         }, 1000);
@@ -72,6 +75,7 @@ function CustomerForm({ editInitialValues, editId }: editValueProps) {
 
   /* Update Customer */
   const updateCustomers = async (details: formProps) => {
+    setLoader(true);
     await axios({
       method: 'PUT',
       url: `${API_ENDPOINT.END_POINT}/customer/update/${editId}`,
@@ -80,6 +84,7 @@ function CustomerForm({ editInitialValues, editId }: editValueProps) {
     })
       .then((res) => {
         toast.success('Customer data updated  successfully');
+        setLoader(false);
         setTimeout(() => {
           routes.push('/admin/customers');
         }, 1000);
@@ -176,6 +181,7 @@ function CustomerForm({ editInitialValues, editId }: editValueProps) {
         }}
       >
         {editId ? 'Update' : 'Submit'}
+        {loader && <ClipLoader size={20} color='white' />}
       </Button>
       {editId ? (
         <Button

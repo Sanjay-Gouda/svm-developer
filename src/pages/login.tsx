@@ -5,8 +5,9 @@ import axios from 'axios';
 import { useFormik } from 'formik';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useState } from 'react';
 import { useCookies } from 'react-cookie';
+import { ClipLoader } from 'react-spinners';
 import * as Yup from 'yup';
 
 import { API_ENDPOINT } from '@/const/APIRoutes';
@@ -19,9 +20,11 @@ const validationSchema = Yup.object().shape({
 });
 
 export default function LoginPage() {
+  const [loader, setLoader] = useState(false);
   const routes = useRouter();
   const [cookies, setCookie] = useCookies(['token']);
   const LoginUser = async (values) => {
+    setLoader(true);
     await axios({
       method: 'post',
       url: `${API_ENDPOINT.END_POINT}/auth/login`,
@@ -30,6 +33,7 @@ export default function LoginPage() {
     })
       .then((res) => {
         const loginToken = res.data.result.accessToken;
+        setLoader(false);
 
         setCookie('token', loginToken, { path: '/' });
         if (cookies) {
@@ -108,20 +112,19 @@ export default function LoginPage() {
                 onClick={() => formik.handleSubmit()}
               >
                 Log in
+                {loader && <ClipLoader size={20} color='white' />}
               </Button>
               {/* <Link href='/admin'>
               </Link> */}
 
               <hr className='my-8' />
 
-              <Button block layout='outline'>
-                {/* <GithubIcon className='mr-2 h-4 w-4' aria-hidden='true' /> */}
+              {/* <Button block layout='outline'>
                 Github
               </Button>
               <Button className='mt-4' block layout='outline'>
-                {/* <TwitterIcon className='mr-2 h-4 w-4' aria-hidden='true' /> */}
                 Twitter
-              </Button>
+              </Button> */}
 
               <p className='mt-4'>
                 <Link

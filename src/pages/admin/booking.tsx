@@ -45,6 +45,7 @@ export default function Booking({
   return (
     <>
       <Layout
+        pageTitle='Bookings'
         right={
           <Link href='realEstateProjects/bookingForm/registerForm'>
             <Button>Booking</Button>
@@ -71,7 +72,7 @@ export default function Booking({
                   <TableRow key={list?.bookingId}>
                     <TableCell>{list?.customerName}</TableCell>
                     <TableCell>{list?.projectName}</TableCell>
-                    <TableCell>{list?.area}sq m</TableCell>
+                    <TableCell>{list?.area}sq.ft</TableCell>
                     <TableCell>{list?.address2}</TableCell>
                     <TableCell>{list?.paidAmt}</TableCell>
                     <TableCell>{list?.paymentType.toLowerCase()}</TableCell>

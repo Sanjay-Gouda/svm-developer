@@ -73,6 +73,7 @@ export const EditBookingDetails = ({ EditId }) => {
     chequeNumber,
     upiId,
     accountNumber,
+    paymentId,
   } = getBookingFormValues[0];
 
   const editCustomer = {
@@ -111,6 +112,7 @@ export const EditBookingDetails = ({ EditId }) => {
     cBankName: bankName,
     BTAcNo: accountNumber,
     BTBankName: bankName,
+    paymentId: paymentId,
   };
 
   return (
