@@ -5,89 +5,22 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { ClipLoader } from 'react-spinners';
 import { toast } from 'react-toastify';
-import * as Yup from 'yup';
 
 import 'react-toastify/dist/ReactToastify.css';
 
+import { useBankDetails } from '@/hooks/useBankDetails';
+import { useCustomerDetails } from '@/hooks/useClientDetails';
+import { useProjectDetails } from '@/hooks/useProjectDetails';
+
+import { TBookingProps } from '@/components/Booking/bookingFormTypes';
+import { validationSchema } from '@/components/Booking/bookingFormValidationSchema';
 import ComboBox from '@/components/ComboBox/comboBox';
 import { SvmProjectToast } from '@/components/Toast/Toast';
 import { TextInput } from '@/components/ui-blocks';
 import { SelectOption, TextInputArea } from '@/components/ui-blocks/input';
 
 import { API_ENDPOINT } from '@/const/APIRoutes';
-
-type payloadProp = {
-  id: string;
-  name: string;
-};
-
-export const validationSchema = Yup.object().shape({
-  customerName: Yup.mixed().required('Customer Name is required'),
-  projectName: Yup.mixed().required('Project Name is required'),
-  bankAccount: Yup.mixed().required('Please Selct Bank Account'),
-  area: Yup.number().required('Area must be in number'),
-  landmark: Yup.string().required('Landmark is required'),
-  pincode: Yup.string()
-    .required('Pincode is required')
-    .matches(/^\d{6}$/, 'Invalid PIN code. It must be a 6-digit number.'),
-  // address: Yup.string().required('Address is required'),
-  totalAmt: Yup.number()
-    .positive('Amount must be positive')
-    .integer('Amount must be an integer')
-    .required('Amount is required'),
-  paidAmt: Yup.number()
-    .min(0, 'Amount cannot be negative')
-    .integer('Amount must be an integer')
-    .required('Amount is required'),
-
-  noOfInstallment: Yup.number()
-    .positive('Amount must be positive')
-    .integer('Amount must be an integer')
-    .required('Amount is required'),
-
-  amtPerInstallment: Yup.number()
-    .positive('Amount must be positive')
-    .integer('Amount must be an integer')
-    .required('Amount is required'),
-  paymentStatus: Yup.string().required('Project Status is required'),
-});
-
-type customerNameProps = {
-  id?: string;
-  name?: string;
-};
-
-type bookingFormProps = {
-  customerName: customerNameProps;
-  projectName: customerNameProps;
-  bankAccount: customerNameProps;
-  area: undefined | number;
-  landmark: string;
-  pincode: undefined | number;
-  address: string;
-  state: string;
-  city: string;
-  // totalAmt: undefined | number;
-  totalAmt: any;
-  paidAmt: any;
-  remainingAmt: any;
-  noOfInstallment: undefined | number;
-  amtPerInstallment: undefined | number;
-  paymentId: any;
-
-  paymentMethod: 'CASH' | 'BANK_TRANSFER' | 'CHEQUE' | 'UPI';
-  paymentStatus: 'PENDING' | 'PARTIAL' | 'COMPLETED';
-
-  cheuqeNo: undefined | number;
-  /* C->Cheque */
-  cBankName: string;
-
-  UPIId: string;
-
-  /* BT -BankTransfer */
-  BTAcNo: undefined | number;
-  BTBankName: string;
-};
+import { httpInstance } from '@/constants/httpInstances';
 
 type EditFormProps = {
   editInitialValues?: any;
@@ -120,6 +53,10 @@ const addInitialValues = {
 
 const BookingForm = ({ editId, editInitialValues }: EditFormProps) => {
   const routes = useRouter();
+  const customerList = useCustomerDetails();
+  const projectList = useProjectDetails();
+  const accountList = useBankDetails();
+
   const [loader, setLoader] = useState(false);
 
   const [paymentTypeError, setPaymentTypeError] = useState({
@@ -130,7 +67,7 @@ const BookingForm = ({ editId, editInitialValues }: EditFormProps) => {
     bAcNo: false,
   });
 
-  const addBookingData = async (values: bookingFormProps) => {
+  const addBookingData = async (values: TBookingProps) => {
     setLoader(true);
     const {
       address,
@@ -173,34 +110,30 @@ const BookingForm = ({ editId, editInitialValues }: EditFormProps) => {
       chequeNo: cheuqeNo,
       accountNo: BTAcNo,
       bankName: cBankName || BTBankName,
-      // bankName: BTBankName,
-      // accountNumber: BTAcNo,
-
-      // paymentMethod:'paymentMethod',
       paymentStatus: paymentStatus,
       customerId: customerId,
       adminAccountId: accountId,
       installmentCount: noOfInstallment,
     };
 
-    await axios({
-      method: 'post',
-      url: `${API_ENDPOINT.END_POINT}booking/create`,
-      data: payload,
-      headers: { 'Content-Type': 'application/json' },
-    })
-      .then((res) => {
-        toast.success('Booking completed successfully');
-        setLoader(false);
-        setTimeout(() => {
-          routes.push('/admin/booking');
-        }, 1000);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    try {
+      const res = await httpInstance.post(`/booking/create`, payload);
+      const isNotify = res.data.isNotify;
+      const successMessage = isNotify
+        ? res?.data?.message
+        : 'Booking completed successfully';
+      toast.success(successMessage);
+      setLoader(false);
+      setTimeout(() => {
+        routes.push('/admin/booking');
+      }, 1000);
+    } catch (err) {
+      setLoader(false);
+      toast.error('Something went wrong');
+      routes.push('/admin/booking');
+    }
   };
-  const updateBookingData = async (values: bookingFormProps) => {
+  const updateBookingData = async (values: TBookingProps) => {
     setLoader(true);
     const {
       address,
@@ -253,24 +186,24 @@ const BookingForm = ({ editId, editInitialValues }: EditFormProps) => {
       paymentId: paymentId,
     };
 
-    await axios({
-      method: 'put',
-      url: `${API_ENDPOINT.END_POINT}booking/update/${editId}`,
-      data: payload,
-      headers: { 'Content-Type': 'application/json' },
-    })
-      .then((res) => {
-        toast.success('Booking details are updated successfully');
-        setLoader(false);
-        setTimeout(() => {
-          routes.push('/admin/booking');
-        }, 1000);
-      })
-      .catch((err) => {
-        setLoader(false);
-        toast.error('Something went wrong');
-        // console.log(err);
-      });
+    try {
+      const res = await httpInstance.put(`booking/update/${editId}`, payload);
+
+      const isNotify = res.data.isNotify;
+      const successMessage = isNotify
+        ? res?.data?.message
+        : 'Booking Updated successfully';
+
+      toast.success(successMessage);
+      setLoader(false);
+      setTimeout(() => {
+        routes.push('/admin/booking');
+      }, 1000);
+    } catch (err) {
+      setLoader(false);
+      toast.success('Something went wrong');
+      routes.push('/admin/booking');
+    }
   };
 
   const formInitialValue = editId ? editInitialValues : addInitialValues;
@@ -278,7 +211,7 @@ const BookingForm = ({ editId, editInitialValues }: EditFormProps) => {
   const formik = useFormik({
     initialValues: formInitialValue,
     validationSchema,
-    onSubmit: (values: bookingFormProps, { setSubmitting }) => {
+    onSubmit: (values: TBookingProps, { setSubmitting }) => {
       if (formik.values.paymentMethod === 'UPI' && formik.values.UPIId === '') {
         setPaymentTypeError({
           ...paymentTypeError,
@@ -352,95 +285,24 @@ const BookingForm = ({ editId, editInitialValues }: EditFormProps) => {
     setQuery('');
   };
 
-  const [customerPayload, setCustomerPayload] = useState([]);
-  const [projectPayload, setProjectPayload] = useState([]);
-  const [accountPayload, setAccountPayload] = useState([]);
-
-  const getCustomerList = async () => {
-    await axios({
-      method: 'GET',
-      url: `${API_ENDPOINT.END_POINT}/customer/advance-list`,
-    })
-      .then((res) => {
-        // console.log(res);
-
-        const list = res?.data?.result;
-
-        if (list && list?.length > 0) {
-          const data = list?.map((payload) => ({
-            name: payload.firstName,
-            id: payload.customerId,
-          }));
-
-          setCustomerPayload(data);
-        }
-      })
-      .catch((res) => {
-        console.log(res);
-      });
-  };
-
-  const getProjectList = async () => {
-    await axios({
-      method: 'GET',
-      url: `${API_ENDPOINT.END_POINT}project/list`,
-    })
-      .then((res) => {
-        const list = res?.data?.result?.list;
-
-        if (list && list?.length > 0) {
-          const data = list?.map((payload) => ({
-            name: payload.name,
-            id: payload.projectId,
-          }));
-
-          setProjectPayload(data);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const getAccountList = async () => {
-    await axios({
-      method: 'GET',
-      url: `${API_ENDPOINT.END_POINT}/account/advance-list`,
-    })
-      .then((res) => {
-        // console.log(res?.data?.result, 'res');
-
-        const list = res?.data?.result;
-
-        const data = list?.map((accounts) => ({
-          name: accounts.bankName,
-          id: accounts.adminAccountId,
-        }));
-
-        setAccountPayload(data);
-      })
-      .catch((err) => {
-        console.log(err, 'err');
-      });
-  };
-
-  useEffect(() => {
-    getCustomerList();
-    getProjectList();
-    getAccountList();
-  }, []);
-
   const filteredCustomer =
     query === ''
-      ? customerPayload
-      : customerPayload.filter((person) => {
+      ? customerList
+      : customerList?.filter((person) => {
           return person.name.toLowerCase().includes(query.toLowerCase());
         });
 
   const filterProjects =
     query === ''
-      ? projectPayload
-      : projectPayload.filter((person) => {
+      ? projectList
+      : projectList.filter((person) => {
+          return person.name.toLowerCase().includes(query.toLowerCase());
+        });
+
+  const filterAccounts =
+    query === ''
+      ? accountList
+      : accountList.filter((person) => {
           return person.name.toLowerCase().includes(query.toLowerCase());
         });
 
@@ -622,7 +484,7 @@ const BookingForm = ({ editId, editInitialValues }: EditFormProps) => {
           <Label>Bank Account</Label>
           <ComboBox
             placeholder='Select Account'
-            data={accountPayload}
+            data={filterAccounts}
             query={query}
             afterLeave={afterLeave}
             handleSearchQuery={hadnleSearchQuery}
@@ -868,6 +730,7 @@ const BookingForm = ({ editId, editInitialValues }: EditFormProps) => {
             }}
           >
             Submit
+            {loader && <ClipLoader size={20} color='white' />}
           </Button>
         ) : (
           <>

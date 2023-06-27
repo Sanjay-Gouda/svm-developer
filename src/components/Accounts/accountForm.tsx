@@ -44,6 +44,18 @@ function AccountForm({ editInitialValues, editId }: editValueprops) {
       accNo: accNo,
     };
 
+    // try{
+    //     const res = await httpInstance.post(`/account/create`,payload).toProm
+
+    //     toast.success('Referrer added successfully');
+    //     setTimeout(() => {
+    //       route.push('/admin/accounts');
+    //     }, 1000);
+
+    // }catch(err){
+
+    // }
+
     await axios({
       method: 'post',
       url: `${API_ENDPOINT.END_POINT}/account/create`,
@@ -51,6 +63,7 @@ function AccountForm({ editInitialValues, editId }: editValueprops) {
       headers: { 'Content-Type': 'application/json' },
     })
       .then((res) => {
+        console.log(res);
         toast.success('Referrer added successfully');
         setTimeout(() => {
           route.push('/admin/accounts');
