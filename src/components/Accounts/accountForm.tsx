@@ -1,7 +1,8 @@
 import { Button } from '@windmill/react-ui';
-import axios from 'axios';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
+import { ClipLoader } from 'react-spinners';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 
@@ -10,7 +11,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { SvmProjectToast } from '@/components/Toast/Toast';
 import { TextInput } from '@/components/ui-blocks';
 
-import { API_ENDPOINT } from '@/const/APIRoutes';
+import { httpInstance } from '@/constants/httpInstances';
 
 const validationSchema = Yup.object().shape({
   bankName: Yup.string().required('bankName is required'),
@@ -33,72 +34,60 @@ type editValueprops = {
 
 function AccountForm({ editInitialValues, editId }: editValueprops) {
   const route = useRouter();
+  const [loader, setLoader] = useState(false);
 
   /* Add Account */
   const addAccounts = async (values: accProps) => {
     const { accHolderName, accNo, bankName } = values;
-
+    setLoader(true);
     const payload = {
       name: accHolderName,
       bankName: bankName,
       accNo: accNo,
     };
 
-    // try{
-    //     const res = await httpInstance.post(`/account/create`,payload).toProm
-
-    //     toast.success('Referrer added successfully');
-    //     setTimeout(() => {
-    //       route.push('/admin/accounts');
-    //     }, 1000);
-
-    // }catch(err){
-
-    // }
-
-    await axios({
-      method: 'post',
-      url: `${API_ENDPOINT.END_POINT}/account/create`,
-      data: payload,
-      headers: { 'Content-Type': 'application/json' },
-    })
-      .then((res) => {
-        console.log(res);
-        toast.success('Referrer added successfully');
-        setTimeout(() => {
-          route.push('/admin/accounts');
-        }, 1000);
-      })
-      .catch((err) => {
-        toast.error('Something went wrong');
-      });
+    try {
+      const res = await httpInstance.post(`/account/create`, payload);
+      setLoader(false);
+      const isNotify = res.data.isNotify;
+      const successMessage = isNotify
+        ? res?.data?.message
+        : 'Booking completed successfully';
+      toast.success(successMessage);
+      setTimeout(() => {
+        route.push('/admin/accounts');
+      }, 1000);
+    } catch (err) {
+      // console.log(err);
+      toast.success('Something went wrong');
+      route.push('/admin/accounts');
+    }
   };
 
   /* Update  AccountList */
   const updateAccounts = async (values: accProps) => {
     const { accHolderName, accNo, bankName } = values;
-
+    setLoader(true);
     const payload = {
       name: accHolderName,
       bankName: bankName,
       accNo: accNo,
     };
 
-    await axios({
-      method: 'PUT',
-      url: `${API_ENDPOINT.END_POINT}/account/update/${editId}`,
-      data: payload,
-      headers: { 'Content-Type': 'application/json' },
-    })
-      .then((res) => {
-        toast.success('Data updated successfully');
-        setTimeout(() => {
-          route.push('/admin/accounts');
-        }, 1000);
-      })
-      .catch((err) => {
-        toast.error('Something went wrong');
-      });
+    try {
+      const res = await httpInstance.put(`/account/update/${editId}`, payload);
+      setLoader(false);
+      const isNotify = res.data.isNotify;
+      const successMessage = isNotify
+        ? res?.data?.message
+        : 'Account details updated successfully';
+      toast.success(successMessage);
+      setTimeout(() => {
+        route.push('/admin/accounts');
+      }, 1000);
+    } catch (err) {
+      toast.error('Something went wrong');
+    }
   };
 
   const addAccountInitialValues = {
@@ -152,6 +141,7 @@ function AccountForm({ editInitialValues, editId }: editValueprops) {
         )}
         <Button onClick={() => formik.handleSubmit()}>
           {editId ? 'Update' : 'Submit'}
+          {loader && <ClipLoader size={20} color='white' />}
         </Button>
 
         {editId ? (

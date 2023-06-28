@@ -34,7 +34,8 @@ export const getServerSideProps: GetServerSideProps = async () => {
   const res = await axios.get(
     `${API_ENDPOINT.END_POINT}/customer/advance-list`
   );
-  const data = res.data.result;
+
+  const data = res.data.result.list;
 
   return { props: { data } };
 };

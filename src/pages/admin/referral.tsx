@@ -11,7 +11,7 @@ import axios from 'axios';
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { MdDelete, MdModeEditOutline } from 'react-icons/md';
 import { useDispatch } from 'react-redux';
 
@@ -32,15 +32,13 @@ type referrerListProps = {
 
 export const getServerSideProps: GetServerSideProps = async () => {
   const res = await axios.get(`${API_ENDPOINT.END_POINT}/referral/list`);
-  const repo = res.data;
+  const repo = res.data.result.list;
   return { props: { repo } };
 };
 
 export default function Refferral({
   repo,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const [referrerList] = useState<referrerListProps[]>(repo.result);
-  // const [listEditId,setListEditId] = useState<string>();
   const dispatch = useDispatch();
   const router = useRouter();
 
@@ -49,7 +47,7 @@ export default function Refferral({
   };
 
   useEffect(() => {
-    dispatch(setReferralList(repo.result));
+    dispatch(setReferralList(repo));
   }, []);
 
   return (
@@ -73,7 +71,7 @@ export default function Refferral({
             </tr>
           </TableHeader>
           <TableBody>
-            {referrerList?.map((list) => {
+            {repo?.map((list) => {
               return (
                 <TableRow key={list?.referralId}>
                   <TableCell>{list?.firstName}</TableCell>

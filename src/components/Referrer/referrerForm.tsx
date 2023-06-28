@@ -1,5 +1,4 @@
 import { Button } from '@windmill/react-ui';
-import axios from 'axios';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
@@ -12,7 +11,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { SvmProjectToast } from '@/components/Toast/Toast';
 import { TextInput, TextInputArea } from '@/components/ui-blocks';
 
-import { API_ENDPOINT } from '@/const/APIRoutes';
+import { httpInstance } from '@/constants/httpInstances';
 
 const validationSchema = Yup.object().shape({
   firstName: Yup.string().required('First Name is required '),
@@ -44,45 +43,43 @@ function ReferrerForm({ editList, editId }: updatevalueProps) {
   /* ADD REFERRER LIST  */
   const addReferrer = async (details: formProps) => {
     setLoader(true);
-    await axios({
-      method: 'POST',
-      url: `${API_ENDPOINT.END_POINT}/referral/create`,
-      data: details,
-      headers: { 'Content-Type': 'application/json' },
-    })
-      .then((res) => {
-        toast.success('Referrer added successfully');
-        setLoader(false);
-        setTimeout(() => {
-          route.push('/admin/referral');
-        }, 1000);
-      })
-      .catch((err) => {
-        toast.error('Something went wrong');
-        // console.log(err);
-      });
+
+    try {
+      const res = await httpInstance.post(`referral/create`, details);
+      const isNotify = res.data.isNotify;
+      const successMessage = isNotify
+        ? res?.data?.message
+        : 'Referrer added successfully';
+
+      toast.success(successMessage);
+      setLoader(false);
+      setTimeout(() => {
+        route.push('/admin/referral');
+      }, 1000);
+    } catch (err) {
+      toast.error('Something Went Wrong');
+    }
   };
 
   /* UPDATE REFERRER LIST */
   const updateReferrerList = async (details: formProps) => {
     setLoader(true);
-    await axios({
-      method: 'PUT',
-      url: `${API_ENDPOINT.END_POINT}/referral/update/${editId} `,
-      data: details,
-      headers: { 'Content-Type': 'application/json' },
-    })
-      .then((res) => {
-        toast.success('Data updated successfully');
-        setLoader(false);
 
-        setTimeout(() => {
-          route.push('/admin/referral');
-        }, 1000);
-      })
-      .catch((err) => {
-        toast.error('Something went wrong');
-      });
+    try {
+      const res = await httpInstance.put(`referral/update/${editId}`, details);
+      const isNotify = res.data.isNotify;
+      const successMessage = isNotify
+        ? res?.data?.message
+        : 'Referrer data updated successfully';
+
+      toast.success(successMessage);
+      setLoader(false);
+      setTimeout(() => {
+        route.push('/admin/referral');
+      }, 1000);
+    } catch (err) {
+      toast.error('Something Went Wrong');
+    }
   };
 
   const initialValues = {

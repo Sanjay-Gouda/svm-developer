@@ -1,5 +1,4 @@
 import { Button } from '@windmill/react-ui';
-import axios from 'axios';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
@@ -12,7 +11,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { SvmProjectToast } from '@/components/Toast/Toast';
 import { TextInput } from '@/components/ui-blocks';
 
-import { API_ENDPOINT } from '@/const/APIRoutes';
+import { httpInstance } from '@/constants/httpInstances';
 
 const validationSchema = Yup.object().shape({
   firstName: Yup.string().required('First Name is required '),
@@ -54,45 +53,61 @@ function CustomerForm({ editInitialValues, editId }: editValueProps) {
   /* Add Customer  */
   const addCustomers = async (details: formProps) => {
     setLoader(true);
-    await axios({
-      method: 'post',
-      url: `${API_ENDPOINT.END_POINT}/customer/create`,
-      data: details,
-      headers: { 'Content-Type': 'application/json' },
-    })
-      .then((res) => {
-        toast.success('Customer added successfully');
-        setLoader(false);
-        setTimeout(() => {
-          routes.push('/admin/customers');
-        }, 1000);
-        setIsDataSubmitted(true);
-      })
-      .catch((err) => {
-        toast.error('Something went wrong');
-      });
+    try {
+      const res = await httpInstance.post(`/customer/create`, details);
+      const isNotify = res.data.isNotify;
+      const successMessage = isNotify
+        ? res?.data?.message
+        : 'Customer added successfully';
+      toast.success(successMessage);
+      setLoader(false);
+      setTimeout(() => {
+        routes.push('/admin/customers');
+      }, 1000);
+      setIsDataSubmitted(true);
+    } catch (err) {
+      toast.error('Something went wrong');
+    }
+
+    // await axios({
+    //   method: 'post',
+    //   url: `${API_ENDPOINT.END_POINT}/customer/create`,
+    //   data: details,
+    //   headers: { 'Content-Type': 'application/json' },
+    // })
+    //   .then((res) => {
+    //     toast.success('Customer added successfully');
+    //     setLoader(false);
+    //     setTimeout(() => {
+    //       routes.push('/admin/customers');
+    //     }, 1000);
+    //     setIsDataSubmitted(true);
+    //   })
+    //   .catch((err) => {
+    //     toast.error('Something went wrong');
+    //   });
   };
 
   /* Update Customer */
   const updateCustomers = async (details: formProps) => {
     setLoader(true);
-    await axios({
-      method: 'PUT',
-      url: `${API_ENDPOINT.END_POINT}/customer/update/${editId}`,
-      data: details,
-      headers: { 'Content-Type': 'application/json' },
-    })
-      .then((res) => {
-        toast.success('Customer data updated  successfully');
-        setLoader(false);
-        setTimeout(() => {
-          routes.push('/admin/customers');
-        }, 1000);
-        setIsDataSubmitted(true);
-      })
-      .catch((err) => {
-        toast.error('Something went wrong');
-      });
+
+    try {
+      const res = await httpInstance.put(`/customer/update/${editId}`, details);
+
+      const isNotify = res.data.isNotify;
+      const successMessage = isNotify
+        ? res?.data?.message
+        : 'Customer added successfully';
+      toast.success(successMessage);
+      setLoader(false);
+      setTimeout(() => {
+        routes.push('/admin/customers');
+      }, 1000);
+      setIsDataSubmitted(true);
+    } catch (err) {
+      toast.error('Something went wrong');
+    }
   };
 
   const formValues = editId ? editInitialValues : addInitialValues;

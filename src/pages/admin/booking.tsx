@@ -24,7 +24,7 @@ import { API_ENDPOINT } from '@/const/APIRoutes';
 
 export const getServerSideProps: GetServerSideProps = async () => {
   const res = await axios.get(`${API_ENDPOINT.END_POINT}/booking/list`);
-  const list = res.data.result;
+  const list = res.data.result.list;
   return { props: { list } };
 };
 

@@ -34,6 +34,8 @@ const RefferEditForm = ({ id }: any) => {
     }
   });
 
+  console.log(getEditableReferralList, 'List');
+
   const { firstName, lastName, phone, address, email } =
     getEditableReferralList[0];
 
