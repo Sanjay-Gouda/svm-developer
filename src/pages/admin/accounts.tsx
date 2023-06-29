@@ -11,13 +11,10 @@ import axios from 'axios';
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { MdDelete, MdModeEditOutline } from 'react-icons/md';
-import { useDispatch } from 'react-redux';
 
 import Layout from '@/containers/Layout';
-
-import { setAccountList } from '@/store/accountSlice/accountList';
 
 import { API_ENDPOINT } from '@/const/APIRoutes';
 
@@ -50,14 +47,10 @@ export default function Account({
   repo,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [accountDetails] = useState<accounrDetailProps[]>(repo.result);
-  const dispatch = useDispatch();
+
   const router = useRouter();
 
-  useEffect(() => {
-    dispatch(setAccountList(repo.result));
-  }, []);
-
-  const handleEdit = (id) => {
+  const handleEdit = (id: any) => {
     router.push(`realEstateProjects/accountForm/${id}`);
   };
 

@@ -11,13 +11,9 @@ import axios from 'axios';
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
 import { MdDelete, MdModeEditOutline } from 'react-icons/md';
-import { useDispatch } from 'react-redux';
 
 import Layout from '@/containers/Layout';
-
-import { setReferralList } from '@/store/refferSlice/refferList';
 
 import { API_ENDPOINT } from '@/const/APIRoutes';
 
@@ -39,16 +35,11 @@ export const getServerSideProps: GetServerSideProps = async () => {
 export default function Refferral({
   repo,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const dispatch = useDispatch();
   const router = useRouter();
 
   const handleFormEdit = (id: string) => {
     router.push(`realEstateProjects/referrerForm/${id}`);
   };
-
-  useEffect(() => {
-    dispatch(setReferralList(repo));
-  }, []);
 
   return (
     <Layout

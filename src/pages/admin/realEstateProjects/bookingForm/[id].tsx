@@ -1,14 +1,16 @@
 import { Card, CardBody } from '@windmill/react-ui';
-import { useSelector } from 'react-redux';
 
 import BookingForm from '@/components/Booking/bookingForm';
 import Layout from '@/containers/Layout';
 
+import { httpInstance } from '@/constants/httpInstances';
+
 export async function getServerSideProps(params: any) {
   const EditId = params?.params.id;
-
+  const res = await httpInstance.get(`booking/get/${EditId}`);
+  const bookingDetails = res.data.result;
   return {
-    props: { EditId },
+    props: { EditId, bookingDetails },
   };
 }
 
@@ -43,12 +45,12 @@ type bookingFormProps = {
   BTBankName: string;
 }[];
 
-export const EditBookingDetails = ({ EditId }) => {
-  const bookings = useSelector((state) => state.bookings.bookingList);
+export const EditBookingDetails = ({ EditId, bookingDetails }) => {
+  // const bookings = useSelector((state) => state.bookings.bookingList);
 
-  const getBookingFormValues = bookings?.filter(
-    (booking) => booking?.bookingId === EditId
-  );
+  // const getBookingFormValues = bookings?.filter(
+  //   (booking) => booking?.bookingId === EditId
+  // );
 
   const {
     bookingId,
@@ -74,7 +76,7 @@ export const EditBookingDetails = ({ EditId }) => {
     upiId,
     accountNumber,
     paymentId,
-  } = getBookingFormValues[0];
+  } = bookingDetails;
 
   const editCustomer = {
     id: customerId,

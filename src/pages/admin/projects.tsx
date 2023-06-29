@@ -12,13 +12,9 @@ import axios from 'axios';
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
 import { MdDelete, MdModeEditOutline } from 'react-icons/md';
-import { useDispatch } from 'react-redux';
 
 import Layout from '@/containers/Layout';
-
-import { setProjectList } from '@/store/projectSlices/projectList';
 
 import { API_ENDPOINT } from '@/const/APIRoutes';
 
@@ -31,12 +27,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
 export default function Projects({
   repo,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const dispatch = useDispatch();
   const routes = useRouter();
-
-  useEffect(() => {
-    dispatch(setProjectList(repo));
-  }, []);
 
   const handleEdit = (id: string) => {
     routes.push(`realEstateProjects/projectForm/${id}`);

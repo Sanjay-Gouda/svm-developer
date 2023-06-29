@@ -1,26 +1,30 @@
 import { Card, CardBody } from '@windmill/react-ui';
 import React from 'react';
-import { useSelector } from 'react-redux';
 
 import AddProjectForm from '@/components/Projects/addProjectForm';
 import Layout from '@/containers/Layout';
 
+import { httpInstance } from '@/constants/httpInstances';
+
 export async function getServerSideProps(context) {
   const id = context.params.id;
+  const res = await httpInstance.get(`project/get/${id}`);
+
+  const projectDetails = res.data.result;
 
   return {
-    props: { id },
+    props: { id, projectDetails },
   };
 }
 
-const EditProject = ({ id }) => {
-  const projectList = useSelector((state) => state.projects.projectList);
+const EditProject = ({ id, projectDetails }) => {
+  // const projectList = useSelector((state) => state.projects.projectList);
 
-  const getEditFormValues = projectList?.filter(
-    (list) => list?.projectId === id
-  );
+  // const getEditFormValues = projectList?.filter(
+  //   (list) => list?.projectId === id
+  // );
 
-  console.log(getEditFormValues);
+  // console.log(getEditFormValues);
 
   const {
     name,
@@ -32,7 +36,7 @@ const EditProject = ({ id }) => {
     description,
     unit,
     area,
-  } = getEditFormValues[0];
+  } = projectDetails;
 
   const editInitialValues = {
     name: name,

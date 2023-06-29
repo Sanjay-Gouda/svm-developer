@@ -1,25 +1,36 @@
 import { Card, CardBody } from '@windmill/react-ui';
 import React from 'react';
-import { useSelector } from 'react-redux';
 
 import CustomerForm from '@/components/Customers/customerForm';
 import Layout from '@/containers/Layout';
 
+import { httpInstance } from '@/constants/httpInstances';
+
 export async function getServerSideProps(params: any) {
   const EditId = params?.params.id;
+  const res = await httpInstance.get(`customer/get/${EditId}`);
+  const customerDetails = res?.data?.result;
+
   return {
-    props: { EditId },
+    props: { EditId, customerDetails },
   };
 }
 
-const EditCustomer = ({ EditId }) => {
-  const customers = useSelector((state) => state.customers.customerList);
+type customerProps = {
+  firstName: string;
+  lastName: string;
+  aadharNo: string;
+  phone: string;
+  email: string;
+};
 
-  const getEditFormValues = customers?.filter(
-    (customers) => customers?.customerId === EditId
-  );
+type editCustomerprops = {
+  EditId: string;
+  customerDetails: customerProps;
+};
 
-  const { firstName, lastName, email, phone, aadharNo } = getEditFormValues[0];
+const EditCustomer = ({ EditId, customerDetails }: editCustomerprops) => {
+  const { firstName, lastName, email, phone, aadharNo } = customerDetails;
 
   const customerEditInitialValues = {
     firstName: firstName,

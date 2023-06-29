@@ -1,9 +1,24 @@
 import { Card, CardBody } from '@windmill/react-ui';
 import React from 'react';
-import { useSelector } from 'react-redux';
 
 import ReferrerForm from '@/components/Referrer/referrerForm';
 import Layout from '@/containers/Layout';
+
+import { httpInstance } from '@/constants/httpInstances';
+
+export async function getServerSideProps(params: any) {
+  const id = params.params.id;
+  const res = await httpInstance.get(`referral/get/${id}`);
+  const referralDetails = res?.data?.result;
+
+  return {
+    props: {
+      id,
+      referralDetails,
+    },
+  };
+}
+
 type formProps = {
   firstName: string;
   lastName: string;
@@ -13,31 +28,13 @@ type formProps = {
   referralId?: string;
 };
 
-export async function getServerSideProps(params: any) {
-  const id = params.params.id;
+type editFormProps = {
+  referralDetails: formProps;
+  id: string;
+};
 
-  return {
-    props: {
-      id: id,
-    },
-  };
-}
-
-const RefferEditForm = ({ id }: any) => {
-  const refferList: any = useSelector<any>((state) => state.referrals.list);
-
-  // const [editRefferData, setEditRefferData] = useState<formProps[]>([]);
-
-  const getEditableReferralList = refferList?.filter((list: formProps) => {
-    if (list?.referralId === id) {
-      return list;
-    }
-  });
-
-  console.log(getEditableReferralList, 'List');
-
-  const { firstName, lastName, phone, address, email } =
-    getEditableReferralList[0];
+const RefferEditForm = ({ id, referralDetails }: editFormProps) => {
+  const { firstName, lastName, phone, address, email } = referralDetails;
 
   const EditInitialValues: formProps = {
     firstName: firstName,

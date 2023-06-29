@@ -11,13 +11,10 @@ import axios from 'axios';
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { MdDelete, MdModeEditOutline } from 'react-icons/md';
-import { useDispatch } from 'react-redux';
 
 import Layout from '@/containers/Layout';
-
-import { setCustomerList } from '@/store/customerSlice/customerList';
 
 import { API_ENDPOINT } from '@/const/APIRoutes';
 
@@ -43,16 +40,11 @@ export const getServerSideProps: GetServerSideProps = async () => {
 export default function Customers({
   data,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const dispatch = useDispatch();
   const route = useRouter();
 
   const handleEdit = (id) => {
     route.push(`realEstateProjects/customerForm/${id}`);
   };
-
-  useEffect(() => {
-    dispatch(setCustomerList(data));
-  }, []);
 
   return (
     <>
