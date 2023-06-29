@@ -1,45 +1,45 @@
 import { Card, CardBody } from '@windmill/react-ui';
 import React from 'react';
-import { useSelector } from 'react-redux';
 
 import AccountForm from '@/components/Accounts/accountForm';
 import Layout from '@/containers/Layout';
 
+import { httpInstance } from '@/constants/httpInstances';
+
 export async function getServerSideProps(params: any) {
   const id = params.params.id;
 
+  const res = await httpInstance.get(`account/get/${id}`);
+  const accountDetails = res?.data?.result;
+
   return {
-    props: { id },
+    props: { id, accountDetails },
   };
 }
 
-interface Account {
+type Account = {
   adminAccountId?: number;
   name: string;
   bankName: string;
   accNo: string;
-}
+};
 
-interface RootState {
-  accounts: {
-    accountList: Account[];
-  };
-}
+type accountProps = {
+  accountDetails: Account;
+  id: string;
+};
 
-const AccountEditForm = ({ id }: any) => {
+type AccountInitialProps = {
+  accHolderName: string;
+  accNo: string;
+  bankName: string;
+};
+const AccountEditForm = ({ id, accountDetails }: accountProps) => {
   const EditId = parseInt(id);
-  /* AccountList from the Store */
-  const accountList: Account[] = useSelector<RootState, Account[]>(
-    (state) => state.accounts.accountList
-  );
 
-  const getEditFormValues = accountList?.filter(
-    (accounts) => accounts?.adminAccountId === EditId
-  );
+  const { accNo, bankName, name } = accountDetails;
 
-  const { name, bankName, accNo } = getEditFormValues[0];
-
-  const AccountEditInitialValues: any = {
+  const AccountEditInitialValues: AccountInitialProps = {
     accHolderName: name,
     accNo: accNo,
     bankName: bankName,

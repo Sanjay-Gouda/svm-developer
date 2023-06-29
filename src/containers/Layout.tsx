@@ -8,7 +8,7 @@ import Sidebar from '../components/Sidebar';
 
 interface LayoutProps {
   right?: React.ReactNode;
-  pageTitle: string;
+  pageTitle?: string;
 }
 function Layout({
   children,
