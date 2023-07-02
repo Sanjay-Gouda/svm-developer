@@ -18,14 +18,15 @@ export const useBankDetails = () => {
     try {
       const res = await httpInstance.get(`/account/advance-list`);
 
-      const list = res?.data?.result;
+      const list = res?.data?.result?.list;
+
       const data = list?.map((accounts) => ({
         name: accounts.bankName,
         id: accounts.adminAccountId,
       }));
       setAccountList(data);
     } catch (err) {
-      alert('Something went wrong');
+      console.log('error', err);
     }
   };
 

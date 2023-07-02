@@ -54,6 +54,7 @@ const addInitialValues = {
 const BookingForm = ({ editId, editInitialValues }: EditFormProps) => {
   const routes = useRouter();
   const customerList = useCustomerDetails();
+
   const projectList = useProjectDetails();
   const accountList = useBankDetails();
 
@@ -237,8 +238,6 @@ const BookingForm = ({ editId, editInitialValues }: EditFormProps) => {
         });
       } else {
         editId ? updateBookingData(values) : addBookingData(values);
-
-        console.log(values, 'values');
       }
     },
   });

@@ -18,16 +18,18 @@ export const useCustomerDetails = () => {
   const getCustomerList = async () => {
     await axios({
       method: 'GET',
-      url: `${API_ENDPOINT.END_POINT}/customer/advance-list`,
+      url: `${API_ENDPOINT.END_POINT}customer/advance-list`,
     })
       .then((res) => {
-        const list = res?.data?.result;
+        // console.log(res, 'response');
+        const list = res?.data?.result?.list;
+
         if (list && list?.length > 0) {
           const data = list?.map((payload) => ({
             name: payload.firstName,
             id: payload.customerId,
           }));
-
+          console.log(data, 'customers');
           setCustomerList(data);
         }
       })
