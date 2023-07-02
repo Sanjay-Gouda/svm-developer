@@ -1,7 +1,6 @@
-import axios from 'axios';
 import { useEffect, useState } from 'react';
 
-import { API_ENDPOINT } from '@/const/APIRoutes';
+import { httpInstance } from '@/constants/httpInstances';
 
 type customerProps = {
   id: string;
@@ -16,26 +15,21 @@ export const useCustomerDetails = () => {
   }, []);
 
   const getCustomerList = async () => {
-    await axios({
-      method: 'GET',
-      url: `${API_ENDPOINT.END_POINT}customer/advance-list`,
-    })
-      .then((res) => {
-        // console.log(res, 'response');
-        const list = res?.data?.result?.list;
+    try {
+      const res = await httpInstance.get(`customer/advance-list`);
+      const list = res?.data?.result?.list;
 
-        if (list && list?.length > 0) {
-          const data = list?.map((payload) => ({
-            name: payload.firstName,
-            id: payload.customerId,
-          }));
-          console.log(data, 'customers');
-          setCustomerList(data);
-        }
-      })
-      .catch((res) => {
-        console.log(res);
-      });
+      if (list && list?.length > 0) {
+        const data = list?.map((payload) => ({
+          name: payload.firstName,
+          id: payload.customerId,
+        }));
+
+        setCustomerList(data);
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return customerList;
