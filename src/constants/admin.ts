@@ -1,7 +1,11 @@
 import { BsBank2 } from 'react-icons/bs';
 import { FaUsers } from 'react-icons/fa';
 import { MdHomeFilled } from 'react-icons/md';
-import { TbBrandBooking, TbBuildingEstate } from 'react-icons/tb';
+import {
+  TbBrandBooking,
+  TbBuildingEstate,
+  TbFileInvoice,
+} from 'react-icons/tb';
 
 import { MoneyIcon } from '@/icons';
 
@@ -39,8 +43,13 @@ export const AdminSidebarTabs: AdminTabsProps[] = [
     icon: MoneyIcon,
   },
   {
-    name: 'Bank Accounts',
+    name: 'Accounts',
     to: 'accounts',
     icon: BsBank2,
+  },
+  {
+    name: 'Expanses',
+    to: 'expanses',
+    icon: TbFileInvoice,
   },
 ];
