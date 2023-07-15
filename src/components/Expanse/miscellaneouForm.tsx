@@ -3,27 +3,37 @@ import React from 'react';
 
 import { TextInput } from '@/components/ui-blocks';
 
+type formProps = {
+  index: number;
+  handleHideForm: () => void;
+  handleAddFields: () => void;
+  handleRemoveFields: () => void;
+  handleChange: (e: any) => void;
+  expanse: string | undefined;
+  cost: number | undefined;
+};
+
 const MiscellaneouForm = ({
   index,
   handleHideForm,
   handleAddFields,
   handleRemoveFields,
   handleChange,
-  expanseName,
+  expanse,
   cost,
-}) => {
-  console.log(expanseName);
+}: formProps) => {
+  // console.log(expanseName);
 
   return (
     <>
       <div className='flex items-end justify-start gap-3'>
         <TextInput
           type='text'
-          name='expanseName'
+          name='expenseName'
           onChange={(e) => handleChange(e)}
-          value={expanseName}
+          value={expanse}
           label='Expanse Name'
-          placeholder='expanse name  '
+          placeholder='expanse name'
           className='w-[50%]'
         />
         <TextInput

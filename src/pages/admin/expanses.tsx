@@ -7,12 +7,24 @@ import {
   TableHeader,
   TableRow,
 } from '@windmill/react-ui';
+import axios from 'axios';
+import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import Link from 'next/link';
 import { MdDelete, MdModeEditOutline } from 'react-icons/md';
 
 import Layout from '@/containers/Layout';
 
-export default function Expanses() {
+import { API_ENDPOINT } from '@/const/APIRoutes';
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  const res = await axios.get(`${API_ENDPOINT.END_POINT}/expense/list`);
+  const data = res.data.result;
+  return { props: { data } };
+};
+
+export default function Expanses({
+  data,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
     <>
       <Layout
@@ -37,30 +49,31 @@ export default function Expanses() {
               </tr>
             </TableHeader>
             <TableBody>
-              <TableRow>
-                <TableCell>Sai Resendency</TableCell>
-                <TableCell>300</TableCell>
-                <TableCell>300</TableCell>
-                <TableCell>300</TableCell>
-                <TableCell>300</TableCell>
-                <TableCell>300</TableCell>
-                <TableCell className='flex gap-5'>
-                  {/* <EditIcon className='h-5 w-5 cursor-pointer' /> */}
-                  <MdModeEditOutline
-                    size='24'
-                    className='cursor-pointer'
-                    style={{ color: ' #30bcc2' }}
-                    onClick={() => {
-                      // handleFormEdit(list?.referralId);
-                    }}
-                  />
-                  <MdDelete
-                    size='24'
-                    className='cursor-pointer'
-                    style={{ color: ' #F38C7F' }}
-                  />
-                </TableCell>
-              </TableRow>
+              {data?.map((list) => {
+                return (
+                  <TableRow key={list?.expenseId}>
+                    <TableCell>{list?.projectId}</TableCell>
+                    <TableCell>{list?.landPurchase}</TableCell>
+                    <TableCell>{list?.nonAgricultural}</TableCell>
+                    <TableCell>{list?.brokerage}</TableCell>
+                    <TableCell>{list?.planningAndLayout}</TableCell>
+                    <TableCell>{list?.landVisitCharge}</TableCell>
+                    <TableCell className='flex gap-5'>
+                      <MdModeEditOutline
+                        onClick={() => console.log('')}
+                        size='24'
+                        className='cursor-pointer'
+                        style={{ color: ' #30bcc2' }}
+                      />
+                      <MdDelete
+                        size='24'
+                        className='cursor-pointer'
+                        style={{ color: ' #F38C7F' }}
+                      />
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
             </TableBody>
           </Table>
         </TableContainer>

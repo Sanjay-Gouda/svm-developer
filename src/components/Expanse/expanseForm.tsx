@@ -1,25 +1,67 @@
 import { Button, Label } from '@windmill/react-ui';
+import { useFormik } from 'formik';
+import { useRouter } from 'next/router';
 import React, { useState } from 'react';
+import { ClipLoader } from 'react-spinners';
+import { toast } from 'react-toastify';
+
+import 'react-toastify/dist/ReactToastify.css';
 
 import { useProjectDetails } from '@/hooks/useProjectDetails';
 
 import ComboBox from '@/components/ComboBox/comboBox';
 import MiscellaneouForm from '@/components/Expanse/miscellaneouForm';
+import { SvmProjectToast } from '@/components/Toast/Toast';
 import { TextInput } from '@/components/ui-blocks';
 
+import { httpInstance } from '@/constants/httpInstances';
+
 type miscProps = {
-  id: number;
-  expanseName: string;
+  id?: number;
+  expenseName: string | undefined;
   cost: number | undefined;
 }[];
 
+type miscexpenseProps = {
+  expenseName: string;
+  cost: undefined | number;
+}[];
+
+type projectProps = {
+  id: string;
+  projectName: string;
+};
+
+type payloadProps = {
+  brokrage: string;
+  landDevelopment: string;
+  landPurchase: string;
+  landVisit: string;
+  miscExpense: miscexpenseProps;
+  nonAgriculture: string;
+  planningLayout: string;
+  projectName: projectProps;
+};
+
+const initialValues = {
+  projectName: '',
+  landPurchase: '',
+  nonAgriculture: '',
+  brokrage: '',
+  planningLayout: '',
+  landVisit: '',
+  landDevelopment: '',
+};
+
 const ExpanseForm = () => {
+  const route = useRouter();
+  const [loader, setLoader] = useState(false);
   const [showExapnseForm, setShowExapnseForm] = useState(false);
 
   const [miscForm, setMiscForm] = useState<miscProps>([
     {
       id: Math.floor(Math.random() * 1000),
-      expanseName: '',
+      expenseName: undefined,
       cost: undefined,
     },
   ]);
@@ -27,7 +69,7 @@ const ExpanseForm = () => {
   const projectList = useProjectDetails();
   const [query, setQuery] = useState('');
 
-  const hadnleSearchQuery = (e) => {
+  const hadnleSearchQuery = (e: any) => {
     setQuery(e.target.value);
   };
 
@@ -47,13 +89,13 @@ const ExpanseForm = () => {
       ...miscForm,
       {
         id: Math.floor(Math.random() * 1000),
-        expanseName: '',
+        expenseName: '',
         cost: undefined,
       },
     ]);
   };
 
-  const handleRemoveFields = (id) => {
+  const handleRemoveFields = (id: number) => {
     const remainedForm = miscForm.filter((box) => {
       return box.id !== id;
     });
@@ -65,14 +107,77 @@ const ExpanseForm = () => {
     }
   };
 
-  const handleChange = (e, ind) => {
+  const handleChange = (e: any, ind: number) => {
     const { name, value } = e.target;
+    const miscFormData = [...miscForm];
 
-    console.log(value, ind);
+    miscFormData[ind][name] = value;
+
+    setMiscForm(miscFormData);
   };
-  const handleSubmit = () => {
-    console.log(miscForm);
+
+  const addExpnases = async (values: payloadProps) => {
+    setLoader(true);
+    const {
+      brokrage,
+      landDevelopment,
+      landPurchase,
+      landVisit,
+      miscExpense,
+      nonAgriculture,
+      planningLayout,
+      projectName,
+    } = values;
+
+    const { id } = projectName;
+
+    const payload = {
+      landPurchase: +landPurchase,
+      nonAgricultural: +nonAgriculture,
+      planningAndLayout: +planningLayout,
+      landDevelopment: +landDevelopment,
+      brokerage: +brokrage,
+      landVisitCharge: +landVisit,
+      projectId: id,
+      miscExpense: miscExpense,
+    };
+
+    try {
+      const res = await httpInstance.post(`expense/create/`, payload);
+
+      const isNotify = res.data.isNotify;
+      const successMessage = isNotify
+        ? res?.data?.message
+        : 'Referrer added successfully';
+
+      toast.success(successMessage);
+      setLoader(false);
+      setTimeout(() => {
+        route.push('/admin/expanses');
+      }, 1000);
+    } catch (err) {
+      toast.error('Something Went Wrong');
+    }
   };
+
+  const formik = useFormik({
+    initialValues: initialValues,
+    onSubmit: (values) => {
+      // console.log(values);
+
+      const miscExpense = miscForm.map(({ expenseName, cost }) => ({
+        expenseName,
+        cost: +cost,
+      }));
+
+      const miscFormvalues = {
+        ...values,
+        miscExpense,
+      };
+
+      addExpnases(miscFormvalues);
+    },
+  });
 
   return (
     <div className='mx-auto flex w-1/3 flex-col gap-2'>
@@ -84,7 +189,10 @@ const ExpanseForm = () => {
           query={query}
           afterLeave={afterLeave}
           handleSearchQuery={hadnleSearchQuery}
-          //  selected={formik.values.customerName}
+          selected={formik.values.projectName}
+          setSelected={(project) => {
+            formik.setFieldValue('projectName', project);
+          }}
         />
       </div>
 
@@ -94,6 +202,8 @@ const ExpanseForm = () => {
           name='landPurchase'
           label='Land Purchase'
           placeholder='cost '
+          onChange={formik.handleChange}
+          value={formik.values.landPurchase}
         />
       </div>
       <div className='flex flex-col'>
@@ -102,6 +212,8 @@ const ExpanseForm = () => {
           name='nonAgriculture'
           label='Non-Agriculture'
           placeholder=' cost '
+          onChange={formik.handleChange}
+          value={formik.values.nonAgriculture}
         />
       </div>
       <div className='flex flex-col'>
@@ -110,6 +222,8 @@ const ExpanseForm = () => {
           name='brokrage'
           label='Brokrage'
           placeholder='cost '
+          onChange={formik.handleChange}
+          value={formik.values.brokrage}
         />
       </div>
       <div className='flex flex-col'>
@@ -118,21 +232,27 @@ const ExpanseForm = () => {
           name='planningLayout'
           label='Planning & Layout'
           placeholder='cost '
+          onChange={formik.handleChange}
+          value={formik.values.planningLayout}
         />
       </div>
       <div className='flex flex-col'>
         <TextInput
           type='text'
-          name='landvisit'
+          name='landVisit'
           label='Land Visit'
           placeholder='cost '
+          onChange={formik.handleChange}
+          value={formik.values.landVisit}
         />
       </div>
       <div className='flex flex-col'>
         <TextInput
           type='text'
-          name='landdevelopement'
+          name='landDevelopment'
           label='Land Developement'
+          onChange={formik.handleChange}
+          value={formik.values.landDevelopment}
           placeholder='cost '
         />
       </div>
@@ -145,10 +265,11 @@ const ExpanseForm = () => {
                 <MiscellaneouForm
                   index={ind}
                   key={box.id}
-                  expanseName={box.expanseName}
+                  expanse={box.expenseName}
                   cost={box.cost}
                   handleHideForm={() => {
                     setShowExapnseForm(false);
+                    setMiscForm([{ expenseName: '', cost: undefined }]);
                   }}
                   handleChange={(e) => {
                     handleChange(e, ind);
@@ -174,9 +295,11 @@ const ExpanseForm = () => {
         )}
       </div>
 
-      <Button className='' onClick={() => handleSubmit()}>
+      <Button className='' onClick={() => formik.handleSubmit()}>
         Submit
+        {loader && <ClipLoader size={20} className='ml-1' color='white' />}
       </Button>
+      <SvmProjectToast />
     </div>
   );
 };
