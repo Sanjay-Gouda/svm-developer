@@ -30,6 +30,7 @@ type editCustomerprops = {
 };
 
 const EditCustomer = ({ EditId, customerDetails }: editCustomerprops) => {
+  console.log(EditId, 'editId');
   const { firstName, lastName, email, phone, aadharNo } = customerDetails;
 
   const customerEditInitialValues = {

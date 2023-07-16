@@ -1,7 +1,7 @@
 import { Button, Label } from '@windmill/react-ui';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ClipLoader } from 'react-spinners';
 import { toast } from 'react-toastify';
 
@@ -53,7 +53,17 @@ const initialValues = {
   landDevelopment: '',
 };
 
-const ExpanseForm = () => {
+type editPorps = {
+  EditInitialValues?: any;
+  miscExpenseList?: any;
+  editId?: string;
+};
+
+const ExpanseForm = ({
+  EditInitialValues,
+  miscExpenseList,
+  editId,
+}: editPorps) => {
   const route = useRouter();
   const [loader, setLoader] = useState(false);
   const [showExapnseForm, setShowExapnseForm] = useState(false);
@@ -99,13 +109,18 @@ const ExpanseForm = () => {
     const remainedForm = miscForm.filter((box) => {
       return box.id !== id;
     });
-
     setMiscForm(remainedForm);
-
     if (remainedForm.length === 0) {
       setShowExapnseForm(!showExapnseForm);
     }
   };
+
+  useEffect(() => {
+    setMiscForm(miscExpenseList);
+    if (miscExpenseList.length > 0) {
+      setShowExapnseForm(true);
+    }
+  }, [editId]);
 
   const handleChange = (e: any, ind: number) => {
     const { name, value } = e.target;
@@ -148,7 +163,7 @@ const ExpanseForm = () => {
       const isNotify = res.data.isNotify;
       const successMessage = isNotify
         ? res?.data?.message
-        : 'Referrer added successfully';
+        : 'Expense list added successfully';
 
       toast.success(successMessage);
       setLoader(false);
@@ -160,11 +175,55 @@ const ExpanseForm = () => {
     }
   };
 
-  const formik = useFormik({
-    initialValues: initialValues,
-    onSubmit: (values) => {
-      // console.log(values);
+  const updateExpenses = async (values: payloadProps) => {
+    setLoader(true);
+    const {
+      brokrage,
+      landDevelopment,
+      landPurchase,
+      landVisit,
+      miscExpense,
+      nonAgriculture,
+      planningLayout,
+      projectName,
+    } = values;
 
+    const { id } = projectName;
+
+    const payload = {
+      landPurchase: +landPurchase,
+      nonAgricultural: +nonAgriculture,
+      planningAndLayout: +planningLayout,
+      landDevelopment: +landDevelopment,
+      brokerage: +brokrage,
+      landVisitCharge: +landVisit,
+      projectId: id,
+      miscExpense: miscExpense,
+    };
+
+    try {
+      const res = await httpInstance.put(`expense/update/${editId}`, payload);
+
+      const isNotify = res.data.isNotify;
+      const successMessage = isNotify
+        ? res?.data?.message
+        : 'Expense List updated successfully';
+
+      toast.success(successMessage);
+      setLoader(false);
+      setTimeout(() => {
+        route.push('/admin/expanses');
+      }, 1000);
+    } catch (err) {
+      toast.error('Something Went Wrong');
+    }
+  };
+
+  const formikInitialvalues = editId ? EditInitialValues : initialValues;
+
+  const formik = useFormik({
+    initialValues: formikInitialvalues,
+    onSubmit: (values) => {
       const miscExpense = miscForm.map(({ expenseName, cost }) => ({
         expenseName,
         cost: +cost,
@@ -175,7 +234,7 @@ const ExpanseForm = () => {
         miscExpense,
       };
 
-      addExpnases(miscFormvalues);
+      editId ? updateExpenses(miscFormvalues) : addExpnases(miscFormvalues);
     },
   });
 
@@ -269,7 +328,7 @@ const ExpanseForm = () => {
                   cost={box.cost}
                   handleHideForm={() => {
                     setShowExapnseForm(false);
-                    setMiscForm([{ expenseName: '', cost: undefined }]);
+                    // setMiscForm([{ expenseName: '', cost: undefined }]);
                   }}
                   handleChange={(e) => {
                     handleChange(e, ind);
@@ -296,9 +355,14 @@ const ExpanseForm = () => {
       </div>
 
       <Button className='' onClick={() => formik.handleSubmit()}>
-        Submit
+        {editId ? 'Update' : 'Submit'}
         {loader && <ClipLoader size={20} className='ml-1' color='white' />}
       </Button>
+      {editId ? (
+        <Button layout='outline' onClick={() => route.push('/admin/expanses')}>
+          Cancel
+        </Button>
+      ) : null}
       <SvmProjectToast />
     </div>
   );

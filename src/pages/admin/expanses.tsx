@@ -10,6 +10,7 @@ import {
 import axios from 'axios';
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { MdDelete, MdModeEditOutline } from 'react-icons/md';
 
 import Layout from '@/containers/Layout';
@@ -25,6 +26,12 @@ export const getServerSideProps: GetServerSideProps = async () => {
 export default function Expanses({
   data,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const router = useRouter();
+
+  const handleEdit = (id) => {
+    router.push(`realEstateProjects/expanseForm/${id}`);
+  };
+
   return (
     <>
       <Layout
@@ -52,7 +59,7 @@ export default function Expanses({
               {data?.map((list) => {
                 return (
                   <TableRow key={list?.expenseId}>
-                    <TableCell>{list?.projectId}</TableCell>
+                    <TableCell>{list?.projectName}</TableCell>
                     <TableCell>{list?.landPurchase}</TableCell>
                     <TableCell>{list?.nonAgricultural}</TableCell>
                     <TableCell>{list?.brokerage}</TableCell>
@@ -60,7 +67,7 @@ export default function Expanses({
                     <TableCell>{list?.landVisitCharge}</TableCell>
                     <TableCell className='flex gap-5'>
                       <MdModeEditOutline
-                        onClick={() => console.log('')}
+                        onClick={() => handleEdit(list?.projectId)}
                         size='24'
                         className='cursor-pointer'
                         style={{ color: ' #30bcc2' }}
