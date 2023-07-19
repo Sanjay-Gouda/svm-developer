@@ -21,8 +21,14 @@ import { SelectOption, TextInputArea } from '@/components/ui-blocks/input';
 
 import { API_ENDPOINT } from '@/const/APIRoutes';
 import { httpInstance } from '@/constants/httpInstances';
+import { bookingComponetTypes } from '@/pages/admin/realEstateProjects/bookingForm/registerForm';
+
+type formProps = {
+  onComplete?: (type: bookingComponetTypes) => void;
+};
 
 type EditFormProps = {
+  onComplete?: formProps;
   editInitialValues?: any;
   editId?: string;
 };
@@ -51,7 +57,11 @@ const addInitialValues = {
   BTBankName: '',
 };
 
-const BookingForm = ({ editId, editInitialValues }: EditFormProps) => {
+const BookingForm = ({
+  onComplete,
+  editId,
+  editInitialValues,
+}: EditFormProps) => {
   const routes = useRouter();
   const customerList = useCustomerDetails();
 
@@ -213,32 +223,34 @@ const BookingForm = ({ editId, editInitialValues }: EditFormProps) => {
     initialValues: formInitialValue,
     validationSchema,
     onSubmit: (values: TBookingProps, { setSubmitting }) => {
-      if (formik.values.paymentMethod === 'UPI' && formik.values.UPIId === '') {
-        setPaymentTypeError({
-          ...paymentTypeError,
-          UPIId: true,
-        });
-      } else if (
-        formik.values.paymentMethod === 'CHEQUE' &&
-        (formik.values.cheuqeNo === undefined || formik.values.cBankName === '')
-      ) {
-        setPaymentTypeError({
-          ...paymentTypeError,
-          chequeNo: true,
-          cBankName: true,
-        });
-      } else if (
-        formik.values.paymentMethod === 'BANK_TRANSFER' &&
-        (formik.values.BTBankName === '' || formik.values.BTAcNo === undefined)
-      ) {
-        setPaymentTypeError({
-          ...paymentTypeError,
-          bBankName: true,
-          bAcNo: true,
-        });
-      } else {
-        editId ? updateBookingData(values) : addBookingData(values);
-      }
+      onComplete('imageUpload');
+
+      // if (formik.values.paymentMethod === 'UPI' && formik.values.UPIId === '') {
+      //   setPaymentTypeError({
+      //     ...paymentTypeError,
+      //     UPIId: true,
+      //   });
+      // } else if (
+      //   formik.values.paymentMethod === 'CHEQUE' &&
+      //   (formik.values.cheuqeNo === undefined || formik.values.cBankName === '')
+      // ) {
+      //   setPaymentTypeError({
+      //     ...paymentTypeError,
+      //     chequeNo: true,
+      //     cBankName: true,
+      //   });
+      // } else if (
+      //   formik.values.paymentMethod === 'BANK_TRANSFER' &&
+      //   (formik.values.BTBankName === '' || formik.values.BTAcNo === undefined)
+      // ) {
+      //   setPaymentTypeError({
+      //     ...paymentTypeError,
+      //     bBankName: true,
+      //     bAcNo: true,
+      //   });
+      // } else {
+      //   editId ? updateBookingData(values) : addBookingData(values);
+      // }
     },
   });
 

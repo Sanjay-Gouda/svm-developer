@@ -1,16 +1,33 @@
 import { Card, CardBody } from '@windmill/react-ui';
-import React from 'react';
+import React, { useState } from 'react';
 
 import BookingForm from '@/components/Booking/bookingForm';
+import UploadDocuments from '@/components/Booking/uploadDocuments';
 import Layout from '@/containers/Layout';
 
+export type bookingComponetTypes = 'form' | 'imageUpload';
+
+const PhaseComponent: Record<
+  bookingComponetTypes,
+  React.FC<{ onComplete: (type: bookingComponetTypes) => void }>
+> = {
+  form: BookingForm,
+  imageUpload: UploadDocuments,
+};
+
 const RegisterForm = () => {
+  const [componentPhase, setComponentPhase] =
+    useState<bookingComponetTypes>('imageUpload');
+
+  const Component = PhaseComponent[componentPhase];
+
   return (
     <>
       <Layout>
         <Card className='mx-auto w-full p-2'>
           <CardBody>
-            <BookingForm />
+            {/* <BookingForm /> */}
+            <Component onComplete={setComponentPhase} />
           </CardBody>
         </Card>
       </Layout>

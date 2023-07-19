@@ -48,7 +48,7 @@ export const AdminSidebarTabs: AdminTabsProps[] = [
     icon: BsBank2,
   },
   {
-    name: 'Expanses',
+    name: 'Expenses',
     to: 'expanses',
     icon: TbFileInvoice,
   },
