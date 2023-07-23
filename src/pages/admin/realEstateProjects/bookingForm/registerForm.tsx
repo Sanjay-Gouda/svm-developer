@@ -17,7 +17,7 @@ const PhaseComponent: Record<
 
 const RegisterForm = () => {
   const [componentPhase, setComponentPhase] =
-    useState<bookingComponetTypes>('imageUpload');
+    useState<bookingComponetTypes>('form');
 
   const Component = PhaseComponent[componentPhase];
 

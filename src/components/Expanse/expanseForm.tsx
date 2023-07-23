@@ -117,7 +117,7 @@ const ExpanseForm = ({
 
   useEffect(() => {
     setMiscForm(miscExpenseList);
-    if (miscExpenseList.length > 0) {
+    if (miscExpenseList?.length > 0) {
       setShowExapnseForm(true);
     }
   }, [editId]);
@@ -224,7 +224,7 @@ const ExpanseForm = ({
   const formik = useFormik({
     initialValues: formikInitialvalues,
     onSubmit: (values) => {
-      const miscExpense = miscForm.map(({ expenseName, cost }) => ({
+      const miscExpense = miscForm?.map(({ expenseName, cost }) => ({
         expenseName,
         cost: +cost,
       }));
@@ -317,7 +317,7 @@ const ExpanseForm = ({
       </div>
 
       <div className='flex flex-col gap-2'>
-        {showExapnseForm ? (
+        {!showExapnseForm ? (
           <>
             {miscForm?.map((box, ind) => {
               return (

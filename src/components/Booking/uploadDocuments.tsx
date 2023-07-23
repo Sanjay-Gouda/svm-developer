@@ -1,58 +1,111 @@
+import { Button } from '@windmill/react-ui';
 import React, { useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 
 import AadharCardPlaceholder from '@/components/Booking/aadharCardPlaceholder';
 import PassportPlaceholder from '@/components/Booking/passportPlaceholder';
 
-const UploadDocuments = () => {
-  const [files, setFiles] = useState<any>([]);
+import { bookingComponetTypes } from '@/pages/admin/realEstateProjects/bookingForm/registerForm';
+
+type formProps = {
+  onComplete?: (type: bookingComponetTypes) => void;
+};
+
+const UploadDocuments = ({ onComplete }: formProps) => {
+  // const [imageFiles, setImageFiles] = useState({
+  //   clientsSecondPassphoto: [],
+  //   clientsThirdPassphoto: [],
+  //   frontSideOfAadharCard: [],
+  //   backtSideOfAadharCard: [],
+  //   panCard: [],
+  // });
 
   const [passPhoto, setPassPhoto] = useState<any>([]);
+  const [thirdPassphoto, setThirdPassphoto] = useState<any>([]);
+  const [secondPassPhoto, setSecondPassPhoto] = useState<any>([]);
+  const [frontAadharCard, setFrontAadharCard] = useState<any>([]);
+  const [backAadharCard, setBackAadharCard] = useState<any>([]);
+  const [panCard, setPanCard] = useState<any>([]);
 
-  const handleDrop = (acceptedFiles: any) => {
-    console.log('image upload', acceptedFiles);
 
-    setFiles((prevFiles) => [
+
+  const handlePanCard = (acceptedFiles: any) => {
+    setPanCard((prevFiles:any) => [
       ...prevFiles,
-      ...acceptedFiles.map((file) =>
+      ...acceptedFiles.map((file:any) =>
+        Object.assign(file, { preview: URL.createObjectURL(file) })
+      ),
+    ]);
+  };
+  const handleFrontSideAadharCard = (acceptedFiles: any) => {
+    setFrontAadharCard((prevFiles:any) => [
+      ...prevFiles,
+      ...acceptedFiles.map((file:any) =>
+        Object.assign(file, { preview: URL.createObjectURL(file) })
+      ),
+    ]);
+  };
+
+  const handleBackSideAadhardCard = (acceptedFiles: any) => {
+    setBackAadharCard((prevFiles:any) => [
+      ...prevFiles,
+      ...acceptedFiles.map((file:any) =>
         Object.assign(file, { preview: URL.createObjectURL(file) })
       ),
     ]);
   };
   const handleFirstpassPhoto = (acceptedFiles: any) => {
-    console.log('image upload', acceptedFiles);
-
-    setPassPhoto((prevFiles) => [
+    setPassPhoto((prevFiles:any) => [
       ...prevFiles,
-      ...acceptedFiles.map((file) =>
+      ...acceptedFiles.map((file:any) =>
         Object.assign(file, { preview: URL.createObjectURL(file) })
       ),
     ]);
   };
 
-  // const { getRootProps, getInputProps, isDragActive } = useDropzone();
+  const handleThirdPassPhoto = (acceptedFiles: any) => {
+    setThirdPassphoto((prevFiles: any) => [
+      ...prevFiles,
+      ...acceptedFiles.map((file: any) =>
+        Object.assign(file, { preview: URL.createObjectURL(file) })
+      ),
+    ]);
+  };
 
-  const defaultDropzon = useDropzone({
-    onDrop: handleDrop,
-    multiple: false,
-  });
+  const handleSecondpassPhoto = (acceptedFiles: any) => {
+    setSecondPassPhoto((prevFiles: any) => [
+      ...prevFiles,
+      ...acceptedFiles.map((file: any) =>
+        Object.assign(file, { preview: URL.createObjectURL(file) })
+      ),
+    ]);
+  };
 
   const firstPassphotoDropzone = useDropzone({
     onDrop: handleFirstpassPhoto,
     multiple: false,
   });
+  const secondPassphotoDropzone = useDropzone({
+    onDrop: handleSecondpassPhoto,
+    multiple: false,
+  });
 
-  console.log(firstPassphotoDropzone, 'zoe');
-
-  // const { getRootProps, getInputProps, isDragActive } = useDropzone({
-  //   onDrop: handleDrop,
-  //   multiple: false,
-  // });
-
-  // const { getRootProps, getInputProps, isDragActive } = useDropzone({
-  //   onDrop: handleDrop,
-  //   multiple: false,
-  // });
+  const thirdPassPhotoDropZone = useDropzone({
+    onDrop: handleThirdPassPhoto,
+    multiple: false,
+  });
+  const frontSideAadharCard = useDropzone({
+    onDrop: handleFrontSideAadharCard,
+    multiple: false,
+  });
+  const backSideAadharCard = useDropzone({
+    onDrop: handleBackSideAadhardCard,
+    multiple: false,
+  });
+  const panCardDropZone = useDropzone({
+    onDrop: handlePanCard,
+    multiple: false,
+  });
 
   return (
     <>
@@ -66,25 +119,18 @@ const UploadDocuments = () => {
               files={passPhoto}
               setImageArray={setPassPhoto}
               {...firstPassphotoDropzone}
-              // getRootProps={getRootProps()}
-              // getInputProps={getInputProps()}
-              // isDragActive={isDragActive}
               placeholder='Upload Clients first passphoto'
             />
             <PassportPlaceholder
-              files={files}
-              {...defaultDropzon}
-              // getRootProps={getRootProps()}
-              // getInputProps={getInputProps()}
-              // isDragActive={isDragActive}
+              files={secondPassPhoto}
+              setImageArray={setSecondPassPhoto}
+              {...secondPassphotoDropzone}
               placeholder='Upload Clients second passphoto'
             />
             <PassportPlaceholder
-              files={files}
-              {...defaultDropzon}
-              // getRootProps={getRootProps()}
-              // getInputProps={getInputProps()}
-              // isDragActive={isDragActive}
+              setImageArray={setThirdPassphoto}
+              files={thirdPassphoto}
+              {...thirdPassPhotoDropZone}
               placeholder='Upload Clients third passphoto'
             />
           </div>
@@ -95,19 +141,15 @@ const UploadDocuments = () => {
 
           <div className='flex w-[60%] justify-between gap-8'>
             <AadharCardPlaceholder
-              files={files}
-              {...defaultDropzon}
-              // getRootProps={getRootProps()}
-              // getInputProps={getInputProps()}
-              // isDragActive={isDragActive}
+              setImageArray={setFrontAadharCard}
+              files={frontAadharCard}
+              {...frontSideAadharCard}
               placeholder='Upload Clients frontside of Aadharcard'
             />
             <AadharCardPlaceholder
-              files={files}
-              {...defaultDropzon}
-              // getRootProps={getRootProps()}
-              // getInputProps={getInputProps()}
-              // isDragActive={isDragActive}
+              setImageArray={setBackAadharCard}
+              files={backAadharCard}
+              {...backSideAadharCard}
               placeholder='Upload Clients backside of Aadharcard'
             />
           </div>
@@ -118,13 +160,30 @@ const UploadDocuments = () => {
 
           <div className='flex w-[60%] justify-center gap-8'>
             <AadharCardPlaceholder
-              files={files}
-              {...defaultDropzon}
-              // getRootProps={getRootProps()}
-              // getInputProps={getInputProps()}
-              // isDragActive={isDragActive}
+              setImageArray={setPanCard}
+              files={panCard}
+              {...panCardDropZone}
               placeholder='Upload Clients pancard/votingcard'
             />
+          </div>
+
+          <div className='mt-3 flex w-[60%] items-center justify-between'>
+            <Button
+              size='regular'
+              onClick={() => onComplete('form')}
+              layout='link'
+              className='mr-auto'
+            >
+              Go Back
+            </Button>
+            <Button
+              size='regular'
+              // onClick={() => onComplete('siteImages')}
+              // onClick={() => handlePlanningImages()}
+              className='col-span-2 ml-auto'
+            >
+              Submit
+            </Button>
           </div>
         </div>
       </>

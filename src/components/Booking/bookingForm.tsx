@@ -223,34 +223,34 @@ const BookingForm = ({
     initialValues: formInitialValue,
     validationSchema,
     onSubmit: (values: TBookingProps, { setSubmitting }) => {
-      onComplete('imageUpload');
+      // onComplete('imageUpload');
 
-      // if (formik.values.paymentMethod === 'UPI' && formik.values.UPIId === '') {
-      //   setPaymentTypeError({
-      //     ...paymentTypeError,
-      //     UPIId: true,
-      //   });
-      // } else if (
-      //   formik.values.paymentMethod === 'CHEQUE' &&
-      //   (formik.values.cheuqeNo === undefined || formik.values.cBankName === '')
-      // ) {
-      //   setPaymentTypeError({
-      //     ...paymentTypeError,
-      //     chequeNo: true,
-      //     cBankName: true,
-      //   });
-      // } else if (
-      //   formik.values.paymentMethod === 'BANK_TRANSFER' &&
-      //   (formik.values.BTBankName === '' || formik.values.BTAcNo === undefined)
-      // ) {
-      //   setPaymentTypeError({
-      //     ...paymentTypeError,
-      //     bBankName: true,
-      //     bAcNo: true,
-      //   });
-      // } else {
-      //   editId ? updateBookingData(values) : addBookingData(values);
-      // }
+      if (formik.values.paymentMethod === 'UPI' && formik.values.UPIId === '') {
+        setPaymentTypeError({
+          ...paymentTypeError,
+          UPIId: true,
+        });
+      } else if (
+        formik.values.paymentMethod === 'CHEQUE' &&
+        (formik.values.cheuqeNo === undefined || formik.values.cBankName === '')
+      ) {
+        setPaymentTypeError({
+          ...paymentTypeError,
+          chequeNo: true,
+          cBankName: true,
+        });
+      } else if (
+        formik.values.paymentMethod === 'BANK_TRANSFER' &&
+        (formik.values.BTBankName === '' || formik.values.BTAcNo === undefined)
+      ) {
+        setPaymentTypeError({
+          ...paymentTypeError,
+          bBankName: true,
+          bAcNo: true,
+        });
+      } else {
+        editId ? updateBookingData(values) : addBookingData(values);
+      }
     },
   });
 
@@ -749,6 +749,8 @@ const BookingForm = ({
               onClick={() => {
                 formik.handleSubmit();
               }}
+
+              // onClick={() => onComplete('imageUpload')}
             >
               Update
               {loader && <ClipLoader size={20} color='white' />}

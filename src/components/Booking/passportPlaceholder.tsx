@@ -11,6 +11,8 @@ const PassportPlaceholder = ({
 }: any) => {
   // console.log(files[0]?.name);
 
+  console.log(setImageArray, 'array list');
+
   const handleRemove = (name) => {
     const remove = files.filter((images) => {
       return images.name !== name;
@@ -27,7 +29,7 @@ const PassportPlaceholder = ({
             <ImCancelCircle
               size={30}
               onClick={() => handleRemove(files[0]?.name)}
-              className='dark:text-grey-700 absolute right-[-18px] top-[-14px] text-gray-50'
+              className=' absolute right-[-18px] top-[-14px] cursor-pointer text-gray-950 dark:text-gray-50'
             />
             ;
             {files.map((files, ind) => {
