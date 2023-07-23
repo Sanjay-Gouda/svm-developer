@@ -1,6 +1,6 @@
 import { Card, CardBody } from '@windmill/react-ui';
 
-import BookingForm from '@/components/Booking/bookingForm';
+import TestBooking from '@/components/TestBooking';
 import Layout from '@/containers/Layout';
 
 import { httpInstance } from '@/constants/httpInstances';
@@ -122,7 +122,11 @@ export const EditBookingDetails = ({ EditId, bookingDetails }) => {
       <Layout>
         <Card>
           <CardBody>
-            <BookingForm
+            {/* <BookingForm
+              editInitialValues={bookingEditInitialValues}
+              editId={EditId}
+            /> */}
+            <TestBooking
               editInitialValues={bookingEditInitialValues}
               editId={EditId}
             />

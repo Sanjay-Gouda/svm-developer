@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 
 import BookingForm from '@/components/Booking/bookingForm';
 import UploadDocuments from '@/components/Booking/uploadDocuments';
+import TestBooking from '@/components/TestBooking';
 import Layout from '@/containers/Layout';
 
 export type bookingComponetTypes = 'form' | 'imageUpload';
@@ -27,7 +28,8 @@ const RegisterForm = () => {
         <Card className='mx-auto w-full p-2'>
           <CardBody>
             {/* <BookingForm /> */}
-            <Component onComplete={setComponentPhase} />
+            <TestBooking />
+            {/* <Component onComplete={setComponentPhase} /> */}
           </CardBody>
         </Card>
       </Layout>

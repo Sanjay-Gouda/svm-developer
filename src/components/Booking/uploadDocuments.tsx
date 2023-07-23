@@ -9,9 +9,10 @@ import { bookingComponetTypes } from '@/pages/admin/realEstateProjects/bookingFo
 
 type formProps = {
   onComplete?: (type: bookingComponetTypes) => void;
+  handleGoBack: () => void;
 };
 
-const UploadDocuments = ({ onComplete }: formProps) => {
+const UploadDocuments = ({ onComplete, handleGoBack }: formProps) => {
   // const [imageFiles, setImageFiles] = useState({
   //   clientsSecondPassphoto: [],
   //   clientsThirdPassphoto: [],
@@ -27,37 +28,35 @@ const UploadDocuments = ({ onComplete }: formProps) => {
   const [backAadharCard, setBackAadharCard] = useState<any>([]);
   const [panCard, setPanCard] = useState<any>([]);
 
-
-
   const handlePanCard = (acceptedFiles: any) => {
-    setPanCard((prevFiles:any) => [
+    setPanCard((prevFiles: any) => [
       ...prevFiles,
-      ...acceptedFiles.map((file:any) =>
+      ...acceptedFiles.map((file: any) =>
         Object.assign(file, { preview: URL.createObjectURL(file) })
       ),
     ]);
   };
   const handleFrontSideAadharCard = (acceptedFiles: any) => {
-    setFrontAadharCard((prevFiles:any) => [
+    setFrontAadharCard((prevFiles: any) => [
       ...prevFiles,
-      ...acceptedFiles.map((file:any) =>
+      ...acceptedFiles.map((file: any) =>
         Object.assign(file, { preview: URL.createObjectURL(file) })
       ),
     ]);
   };
 
   const handleBackSideAadhardCard = (acceptedFiles: any) => {
-    setBackAadharCard((prevFiles:any) => [
+    setBackAadharCard((prevFiles: any) => [
       ...prevFiles,
-      ...acceptedFiles.map((file:any) =>
+      ...acceptedFiles.map((file: any) =>
         Object.assign(file, { preview: URL.createObjectURL(file) })
       ),
     ]);
   };
   const handleFirstpassPhoto = (acceptedFiles: any) => {
-    setPassPhoto((prevFiles:any) => [
+    setPassPhoto((prevFiles: any) => [
       ...prevFiles,
-      ...acceptedFiles.map((file:any) =>
+      ...acceptedFiles.map((file: any) =>
         Object.assign(file, { preview: URL.createObjectURL(file) })
       ),
     ]);
@@ -170,7 +169,8 @@ const UploadDocuments = ({ onComplete }: formProps) => {
           <div className='mt-3 flex w-[60%] items-center justify-between'>
             <Button
               size='regular'
-              onClick={() => onComplete('form')}
+              // onClick={() => onComplete('form')}
+              onClick={handleGoBack}
               layout='link'
               className='mr-auto'
             >
