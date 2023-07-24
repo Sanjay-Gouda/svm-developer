@@ -2,8 +2,8 @@ import { Card, CardBody } from '@windmill/react-ui';
 import React, { useState } from 'react';
 
 import AddProjectForm from '@/components/Projects/addProjectForm';
-import ProjectImages from '@/components/Projects/projectImages';
 import SiteImages from '@/components/Projects/siteImages';
+import UploadProjectImages from '@/components/Projects/uploadProjectImages';
 import Layout from '@/containers/Layout';
 
 export type ProjectFormTypes = 'form' | 'image' | 'siteImages';
@@ -13,12 +13,12 @@ const PhaseComponent: Record<
   React.FC<{ onComplete: (type: ProjectFormTypes) => void }>
 > = {
   form: AddProjectForm,
-  image: ProjectImages,
+  image: UploadProjectImages,
   siteImages: SiteImages,
 };
 
 function SvmProjects() {
-  const [phase, setPhase] = useState<ProjectFormTypes>('form');
+  const [phase, setPhase] = useState<ProjectFormTypes>('image');
 
   const Component = PhaseComponent[phase];
 

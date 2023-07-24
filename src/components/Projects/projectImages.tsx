@@ -75,6 +75,7 @@ function ProjectImages({ onComplete }: formProps) {
         multiple
         accept='image/png, image/gif, image/jpeg, image/jpg'
       />
+
       <div className='flex justify-between gap-2'>
         <label className='block text-lg font-medium leading-6 text-gray-900 dark:text-gray-300'>
           Planning Images

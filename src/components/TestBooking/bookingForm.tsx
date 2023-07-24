@@ -159,6 +159,8 @@ const BookingForm = ({
   handleAmtPerInstallment,
   handleSelectOption,
 }: EditFormProps) => {
+  console.log(cBankNameError, 'error');
+
   const routes = useRouter();
   const customerList = useCustomerDetails();
 
@@ -565,7 +567,7 @@ const BookingForm = ({
             // }}
             onClick={() => handleMoveToUpload()}
           >
-            Submit
+            Upload Documents
             {loader && <ClipLoader size={20} color='white' />}
           </Button>
         ) : (

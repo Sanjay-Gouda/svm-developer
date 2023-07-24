@@ -207,38 +207,42 @@ const TestBooking = ({ editInitialValues, editId }: editProps) => {
     onSubmit: (values: TBookingProps, { setSubmitting }) => {
       // console.log(values);
       // console.log(errors);
-      // setShowUploadDocument(false);
+      setShowUploadDocument(false);
 
       // onComplete('imageUpload');
-      if (formik.values.paymentMethod === 'UPI' && formik.values.UPIId === '') {
-        setPaymentTypeError({
-          ...paymentTypeError,
-          UPIId: true,
-        });
-      } else if (
-        formik.values.paymentMethod === 'CHEQUE' &&
-        (formik.values.cheuqeNo === undefined || formik.values.cBankName === '')
-      ) {
-        setPaymentTypeError({
-          ...paymentTypeError,
-          chequeNo: true,
-          cBankName: true,
-        });
-      } else if (
-        formik.values.paymentMethod === 'BANK_TRANSFER' &&
-        (formik.values.BTBankName === '' || formik.values.BTAcNo === undefined)
-      ) {
-        setPaymentTypeError({
-          ...paymentTypeError,
-          bBankName: true,
-          bAcNo: true,
-        });
-      } else {
-        editId ? updateBookingData(values) : addBookingData(values);
-        // addBookingData(values);
-      }
+      // if (formik.values.paymentMethod === 'UPI' && formik.values.UPIId === '') {
+      //   setPaymentTypeError({
+      //     ...paymentTypeError,
+      //     UPIId: true,
+      //   });
+      // } else if (
+      //   formik.values.paymentMethod === 'CHEQUE' &&
+      //   (formik.values.cheuqeNo === undefined || formik.values.cBankName === '')
+      // ) {
+      //   setPaymentTypeError({
+      //     ...paymentTypeError,
+      //     chequeNo: true,
+      //     cBankName: true,
+      //   });
+      // } else if (
+      //   formik.values.paymentMethod === 'BANK_TRANSFER' &&
+      //   (formik.values.BTBankName === '' || formik.values.BTAcNo === undefined)
+      // ) {
+      //   setPaymentTypeError({
+      //     ...paymentTypeError,
+      //     bBankName: true,
+      //     bAcNo: true,
+      //   });
+      // } else {
+      //   editId ? updateBookingData(values) : addBookingData(values);
+      //   // addBookingData(values);
+      // }
     },
   });
+
+  useEffect(() => {
+    console.log(paymentTypeError);
+  }, [paymentTypeError]);
 
   useEffect(() => {
     if (formik.values.cheuqeNo !== undefined) {
@@ -270,7 +274,7 @@ const TestBooking = ({ editInitialValues, editId }: editProps) => {
     }
   }, [formik.values]);
 
-  const handlePaymentMethod = (e) => {
+  const handlePaymentMethod = (e: any) => {
     formik?.setFieldValue('paymentMethod', e.target.value);
   };
 
@@ -312,7 +316,7 @@ const TestBooking = ({ editInitialValues, editId }: editProps) => {
     setShowUploadDocument(true);
   };
 
-  const calculateRemainingAmt = (total, paid) => {
+  const calculateRemainingAmt = (total: number, paid: number) => {
     const amount = +total - +paid;
 
     formik.setFieldValue('remainingAmt', amount.toString());
