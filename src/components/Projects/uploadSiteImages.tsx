@@ -5,9 +5,12 @@ import { useDropzone } from 'react-dropzone';
 import ImageContainer from '@/components/Booking/imageContainer';
 import UploadPlaceholder from '@/components/Projects/uploadPlaceholder';
 
-const UploadProjectImages = ({ setPlanImages, planImages }) => {
+const UploadSiteImages = ({
+  setProjectDevelopementImages,
+  projectDevelopementImages,
+}) => {
   const handleDrop = (acceptedFiles: any) => {
-    setPlanImages((prevFiles: any) => [
+    setProjectDevelopementImages((prevFiles: any) => [
       ...prevFiles,
       ...acceptedFiles.map((file: any) =>
         Object.assign(file, { preview: URL.createObjectURL(file) })
@@ -17,25 +20,24 @@ const UploadProjectImages = ({ setPlanImages, planImages }) => {
 
   const { getRootProps, getInputProps, isDragActive, open } = useDropzone({
     onDrop: handleDrop,
-    // noClick: true,
   });
 
   const handleClearImages = () => {
-    setPlanImages([]);
+    setProjectDevelopementImages([]);
   };
 
   const handleRemove = (name: string) => {
-    const remainingImages = planImages.filter((file) => {
+    const remainingImages = projectDevelopementImages.filter((file: any) => {
       return file.name !== name;
     });
-    setPlanImages(remainingImages);
+    setProjectDevelopementImages(remainingImages);
   };
 
   return (
     <>
       <div className=' mb-2 flex items-center justify-between gap-2'>
         <label className='block text-lg font-medium leading-6 text-gray-900 dark:text-gray-300'>
-          Upload Planning Images
+          Upload Site Images
         </label>
         <div className='flex gap-2'>
           <Button
@@ -51,9 +53,9 @@ const UploadProjectImages = ({ setPlanImages, planImages }) => {
         </div>
       </div>
 
-      {planImages?.length > 0 ? (
+      {projectDevelopementImages?.length > 0 ? (
         <div className='auto  flex w-full flex-wrap gap-6  rounded-lg  border-2 border-gray-300 px-2 py-5  dark:border-gray-600'>
-          {planImages?.map((file, ind) => {
+          {projectDevelopementImages?.map((file: any, ind: any) => {
             return (
               <>
                 <ImageContainer
@@ -75,4 +77,4 @@ const UploadProjectImages = ({ setPlanImages, planImages }) => {
   );
 };
 
-export default UploadProjectImages;
+export default UploadSiteImages;

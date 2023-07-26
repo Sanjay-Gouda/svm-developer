@@ -307,7 +307,6 @@ const TestBooking = ({ editInitialValues, editId }: editProps) => {
       clearTimeout(timer);
     };
   }, [pincodeQuery]);
-
   /* pincode API */
 
   // console.log(formik.errors);
