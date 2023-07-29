@@ -14,43 +14,8 @@ export async function getServerSideProps(params: any) {
   };
 }
 
-type bookingFormProps = {
-  customerName: {};
-  projectName: string;
-  bankAccount: string;
-  area: undefined | number;
-  landmark: string;
-  pincode: undefined | number;
-  address: string;
-  state: string;
-  city: string;
-  // totalAmt: undefined | number;
-  totalAmt: any;
-  paidAmt: any;
-  remainingAmt: any;
-  noOfInstallment: undefined | number;
-  amtPerInstallment: undefined | number;
-
-  paymentMethod: 'CASH' | 'BANK_TRANSFER' | 'CHEQUE' | 'UPI';
-  paymentStatus: 'PENDING' | 'PARTIAL' | 'COMPLETED';
-
-  cheuqeNo: undefined | number;
-  /* C->Cheque */
-  cBankName: string;
-
-  UPIId: string;
-
-  /* BT -BankTransfer */
-  BTAcNo: undefined | number;
-  BTBankName: string;
-}[];
-
 export const EditBookingDetails = ({ EditId, bookingDetails }) => {
-  // const bookings = useSelector((state) => state.bookings.bookingList);
-
-  // const getBookingFormValues = bookings?.filter(
-  //   (booking) => booking?.bookingId === EditId
-  // );
+  console.log(bookingDetails, 'details');
 
   const {
     bookingId,

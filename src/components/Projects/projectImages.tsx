@@ -10,6 +10,7 @@ function ProjectImages({
   setPlanImages,
   projectDevelopementImages,
   setProjectDevelopementImages,
+  handleSubmit,
 }) {
   return (
     <div className='flex flex-col gap-5'>
@@ -38,7 +39,7 @@ function ProjectImages({
         <Button
           size='regular'
           // onClick={() => onComplete('siteImages')}
-          // onClick={() => handlePlanningImages()}
+          onClick={handleSubmit}
           className='col-span-2 ml-auto'
         >
           Submit

@@ -1,6 +1,8 @@
 import axios from 'axios';
 import { useFormik } from 'formik';
+import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 
 import { TDetailValues } from '@/components/Projects/projectDetailType';
@@ -52,14 +54,19 @@ interface payloadProps {
   planningImages?: string[];
 }
 
-const TestProjects = () => {
+type editProps = {
+  editInitialValues?: any;
+  editId?: string;
+};
+
+const TestProjects = ({ editId, editInitialValues }: editProps) => {
+  const router = useRouter();
   const [planningImages, setPlanningImages] = useState<any>([]);
   const [siteImages, setSiteImages] = useState<any>([]);
-
-  console.log(planningImages, 'planImages');
-
   const [showImageUpload, setShowImageUpload] = useState(false);
+  const [isformikError, setIsFromikError] = useState<number>();
 
+  const [enableSubmit, setEnableSubmit] = useState(false);
   const addProject = async (values: TDetailValues) => {
     const {
       address1,
@@ -93,13 +100,76 @@ const TestProjects = () => {
     }
   };
 
+  const updateProjectDetials = async (values: TDetailValues) => {
+    const {
+      name,
+      area,
+      address1,
+      address2,
+      unit,
+      status,
+      pincode,
+      description,
+      ownerName,
+    } = values;
+
+    const payload = {
+      address1: address1,
+      area: area,
+      name: name,
+      description: description,
+      ownerName: ownerName,
+      pincode: pincode,
+      status: status,
+      unit: unit,
+      address2: address2,
+    };
+
+    await axios({
+      method: 'put',
+      url: `${API_ENDPOINT.END_POINT}project/update/${editId}`,
+      data: payload,
+      headers: { 'Content-Type': 'application/json' },
+    })
+      .then((res) => {
+        toast.success('Data updated successfully');
+        setTimeout(() => {
+          router.push('/admin/projects');
+        }, 1000);
+      })
+      .catch((err) => {
+        toast.error('Something went wrong');
+      });
+  };
+
+  const formInitialValue = editId ? editInitialValues : addInitialValues;
+
   const formik = useFormik({
-    initialValues: addInitialValues,
+    initialValues: formInitialValue,
     validationSchema,
     onSubmit: (values: TDetailValues) => {
-      addProject(values);
+      // setCounter((counter) => counter + 1);
+
+      if (isformikError === 0) {
+        setShowImageUpload(true);
+        setEnableSubmit(true);
+      }
+
+      if (enableSubmit) {
+        editId ? updateProjectDetials(values) : addProject(values);
+      }
+
+      // console.log(values);
+      // isSubmit ? console.log(values) : setShowImageUpload(true);
     },
   });
+
+  useEffect(() => {
+    const errors = formik.errors;
+    const errorLength = Object.keys(errors).length;
+    // console.log(errorLength);
+    setIsFromikError(errorLength);
+  }, [formik.handleSubmit]);
 
   const [pincodeQuery, setPincodeQuery] = useState();
 
@@ -109,6 +179,10 @@ const TestProjects = () => {
 
     formik.setFieldValue('pincode', query);
   };
+
+  useEffect(() => {
+    setPincodeQuery(editInitialValues?.pincode);
+  }, [editId]);
 
   useEffect(() => {
     const timer = setTimeout(async () => {
@@ -132,24 +206,17 @@ const TestProjects = () => {
     };
   }, [pincodeQuery]);
 
-  const handleProceed = () => {
-    setShowImageUpload(true);
-
-    // formik.validateForm().then((errors) => {
-    //   console.log('Validation Errors:', errors);
-    // });
-  };
-
   return (
     <>
       {!showImageUpload ? (
         <AddProjectForm
-          // handleProceed={formik.handleSubmit}
-          handleProceed={handleProceed}
+          handleProceed={formik.handleSubmit}
+          // handleProceed={handleProceed}
           handleName={formik.handleChange}
           nameValue={formik.values.name}
           nameError={formik.touched.name && formik.errors.name ? true : false}
           nameErrorMessage={formik.errors.name}
+          // nameErrorMessage={fieldError?.name}
           ownerNameValue={formik.values.ownerName}
           handleOwnerName={formik.handleChange}
           ownerNameError={
@@ -187,6 +254,7 @@ const TestProjects = () => {
         <ProjectImages
           planImages={planningImages}
           handleGoBack={() => setShowImageUpload(false)}
+          handleSubmit={formik.handleSubmit}
           setPlanImages={setPlanningImages}
           setProjectDevelopementImages={setSiteImages}
           projectDevelopementImages={siteImages}

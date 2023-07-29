@@ -48,17 +48,7 @@ interface payloadProps {
   siteImages?: string[];
   planningImages?: string[];
 
-  // name: string
-  // description?: string
-  // parentId?: string
-  // ownerName: string
-  // area: number
-  // unit: string
-  // status: ProjectStatus
-  // address1: string
-  // address2?: string
-  // pincode: string
-  // planningImages: string[]
+  
 }
 
 const SiteImages = ({ onComplete }: formProps) => {

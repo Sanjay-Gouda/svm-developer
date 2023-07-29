@@ -1,7 +1,7 @@
 import { Card, CardBody } from '@windmill/react-ui';
 import React from 'react';
 
-import AddProjectForm from '@/components/Projects/addProjectForm';
+import TestProjects from '@/components/TestProjects';
 import Layout from '@/containers/Layout';
 
 import { httpInstance } from '@/constants/httpInstances';
@@ -56,7 +56,8 @@ const EditProject = ({ id, projectDetails }) => {
     <Layout>
       <Card className='mx-auto  w-full p-2'>
         <CardBody>
-          <AddProjectForm editInitialValues={editInitialValues} editId={id} />
+          {/* <AddProjectForm editInitialValues={editInitialValues} editId={id} /> */}
+          <TestProjects editInitialValues={editInitialValues} editId={id} />
         </CardBody>
       </Card>
     </Layout>

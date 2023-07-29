@@ -241,10 +241,6 @@ const TestBooking = ({ editInitialValues, editId }: editProps) => {
   });
 
   useEffect(() => {
-    console.log(paymentTypeError);
-  }, [paymentTypeError]);
-
-  useEffect(() => {
     if (formik.values.cheuqeNo !== undefined) {
       setPaymentTypeError({
         ...paymentTypeError,
@@ -293,8 +289,6 @@ const TestBooking = ({ editInitialValues, editId }: editProps) => {
         url: `${API_ENDPOINT.END_POINT}/appConfig/pincode?zip=${pincodeQuery}`,
       })
         .then((res) => {
-          // console.log(res);
-
           formik.setFieldValue('state', res?.data?.result[0].State);
           formik.setFieldValue('city', res?.data?.result[0].District);
         })
@@ -308,6 +302,10 @@ const TestBooking = ({ editInitialValues, editId }: editProps) => {
     };
   }, [pincodeQuery]);
   /* pincode API */
+
+  useEffect(() => {
+    setPincodeQuery(editInitialValues?.pincode);
+  }, [editId]);
 
   // console.log(formik.errors);
 
