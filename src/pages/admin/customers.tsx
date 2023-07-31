@@ -11,7 +11,7 @@ import axios from 'axios';
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useState } from 'react';
 import { MdDelete, MdModeEditOutline } from 'react-icons/md';
 
 import Layout from '@/containers/Layout';
@@ -41,9 +41,31 @@ export default function Customers({
   data,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const route = useRouter();
+  const [customerData, setCustomerData] = useState<any>(data);
 
   const handleEdit = (id) => {
     route.push(`realEstateProjects/customerForm/${id}`);
+  };
+
+  const handleSearch = async (e: any) => {
+    const value = e.target.value;
+
+    const timer = setTimeout(async () => {
+      try {
+        const res = await axios.get(
+          `${API_ENDPOINT.END_POINT}/customer/advance-list?searchString=${value}`
+        );
+        const data = res.data.result.list;
+
+        setCustomerData(data);
+      } catch (err) {
+        console.log(err);
+      }
+    }, 200);
+
+    return () => {
+      clearTimeout(timer);
+    };
   };
 
   return (
@@ -55,6 +77,7 @@ export default function Customers({
             <Button>Add Customers</Button>
           </Link>
         }
+        handleSearch={handleSearch}
       >
         <TableContainer>
           <Table>
@@ -68,7 +91,7 @@ export default function Customers({
               </tr>
             </TableHeader>
             <TableBody>
-              {data?.map((list: customerListProps) => {
+              {customerData?.map((list: customerListProps) => {
                 const { firstName, lastName } = list;
 
                 const customerName = firstName + ' ' + lastName;

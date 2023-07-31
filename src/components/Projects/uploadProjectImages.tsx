@@ -6,6 +6,7 @@ import ImageContainer from '@/components/Booking/imageContainer';
 import UploadPlaceholder from '@/components/Projects/uploadPlaceholder';
 
 const UploadProjectImages = ({ setPlanImages, planImages }) => {
+
   const handleDrop = (acceptedFiles: any) => {
     setPlanImages((prevFiles: any) => [
       ...prevFiles,

@@ -12,6 +12,7 @@ import axios from 'axios';
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
 import { MdDelete, MdModeEditOutline } from 'react-icons/md';
 
 import Layout from '@/containers/Layout';
@@ -28,9 +29,31 @@ export default function Projects({
   repo,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const routes = useRouter();
+  const [projects, setProjects] = useState(repo);
 
   const handleEdit = (id: string) => {
     routes.push(`realEstateProjects/projectForm/${id}`);
+  };
+
+  const handleSearch = async (e: any) => {
+    const value = e.target.value;
+
+    const timer = setTimeout(async () => {
+      try {
+        const res = await axios.get(
+          `${API_ENDPOINT.END_POINT}/project/list?searchString=${value}`
+        );
+        const data = res.data.result.list;
+
+        setProjects(data);
+      } catch (err) {
+        console.log(err);
+      }
+    }, 200);
+
+    return () => {
+      clearTimeout(timer);
+    };
   };
 
   return (
@@ -41,6 +64,7 @@ export default function Projects({
           <Button>Add Projects</Button>
         </Link>
       }
+      handleSearch={handleSearch}
     >
       <TableContainer className='mb-8'>
         <Table>
@@ -55,7 +79,7 @@ export default function Projects({
             </tr>
           </TableHeader>
           <TableBody>
-            {repo.map((data: any, ind: number) => {
+            {projects.map((data: any, ind: number) => {
               return (
                 <TableRow key={ind}>
                   <TableCell>{data?.name}</TableCell>

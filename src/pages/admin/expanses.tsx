@@ -11,6 +11,7 @@ import axios from 'axios';
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
 import { MdDelete, MdModeEditOutline } from 'react-icons/md';
 
 import Layout from '@/containers/Layout';
@@ -26,10 +27,33 @@ export const getServerSideProps: GetServerSideProps = async () => {
 export default function Expanses({
   data,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const [expanseData, setExpanseData] = useState(data);
+
   const router = useRouter();
 
   const handleEdit = (id) => {
     router.push(`realEstateProjects/expanseForm/${id}`);
+  };
+
+  const handleSearch = async (e: any) => {
+    const value = e.target.value;
+
+    const timer = setTimeout(async () => {
+      try {
+        const res = await axios.get(
+          `${API_ENDPOINT.END_POINT}/expense/list?searchString=${value}`
+        );
+        const data = res.data.result.list;
+
+        setExpanseData(data);
+      } catch (err) {
+        console.log(err);
+      }
+    }, 200);
+
+    return () => {
+      clearTimeout(timer);
+    };
   };
 
   return (
@@ -56,7 +80,7 @@ export default function Expanses({
               </tr>
             </TableHeader>
             <TableBody>
-              {data?.map((list) => {
+              {expanseData?.map((list) => {
                 return (
                   <TableRow key={list?.expenseId}>
                     <TableCell>{list?.projectName}</TableCell>

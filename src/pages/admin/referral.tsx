@@ -11,6 +11,7 @@ import axios from 'axios';
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
 import { MdDelete, MdModeEditOutline } from 'react-icons/md';
 
 import Layout from '@/containers/Layout';
@@ -35,6 +36,29 @@ export const getServerSideProps: GetServerSideProps = async () => {
 export default function Refferral({
   repo,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const [refferList, setRefferList] = useState(repo);
+
+  const handleSearch = async (e: any) => {
+    const value = e.target.value;
+
+    const timer = setTimeout(async () => {
+      try {
+        const res = await axios.get(
+          `${API_ENDPOINT.END_POINT}/referral/list?searchString=${value}`
+        );
+        const data = res.data.result.list;
+
+        setRefferList(data);
+      } catch (err) {
+        console.log(err);
+      }
+    }, 200);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  };
+
   const router = useRouter();
 
   const handleFormEdit = (id: string) => {
@@ -49,6 +73,7 @@ export default function Refferral({
           <Button>Add Referrer</Button>
         </Link>
       }
+      handleSearch={handleSearch}
     >
       <TableContainer>
         <Table>
@@ -62,7 +87,7 @@ export default function Refferral({
             </tr>
           </TableHeader>
           <TableBody>
-            {repo?.map((list) => {
+            {refferList?.map((list) => {
               return (
                 <TableRow key={list?.referralId}>
                   <TableCell>{list?.firstName}</TableCell>

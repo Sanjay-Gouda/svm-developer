@@ -10,10 +10,12 @@ import Sidebar from '../components/Sidebar';
 interface LayoutProps {
   right?: React.ReactNode;
   pageTitle?: string;
+  handleSearch?: (e: any) => void;
 }
 function Layout({
   children,
   right,
+  handleSearch,
   pageTitle,
 }: PropsWithChildren<LayoutProps>) {
   // const { isSidebarOpen, closeSidebar } = useContext(SidebarContext);
@@ -55,6 +57,7 @@ function Layout({
                 placeholder='search'
                 label=''
                 containerClassName='w-full'
+                onChange={handleSearch}
               />
             </div>
 

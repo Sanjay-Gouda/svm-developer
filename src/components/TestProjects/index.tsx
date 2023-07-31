@@ -192,9 +192,13 @@ const TestProjects = ({ editId, editInitialValues }: editProps) => {
       })
         .then((res) => {
           // console.log(res);
-
-          formik.setFieldValue('state', res?.data?.result[0].State);
-          formik.setFieldValue('dist', res?.data?.result[0].District);
+          if (pincodeQuery) {
+            formik.setFieldValue('state', res?.data?.result[0].State);
+            formik.setFieldValue('dist', res?.data?.result[0].District);
+          } else {
+            formik.setFieldValue('state', '');
+            formik.setFieldValue('dist', '');
+          }
         })
         .catch((err) => {
           console.log(err);
@@ -259,38 +263,6 @@ const TestProjects = ({ editId, editInitialValues }: editProps) => {
           setProjectDevelopementImages={setSiteImages}
           projectDevelopementImages={siteImages}
         />
-
-        // <div className='flex flex-col gap-5'>
-        //   <div>
-        //     <UploadProjectImages
-        //       handleClearImages={handleClearImages}
-        //       planningImages={planningImages}
-        //       getRootProps={getRootProps}
-        //       getInputProps={getInputProps}
-        //     />
-        //   </div>
-        //   <div>
-        //     <UploadSiteImages
-        //       handleClearImages={handleClearImages}
-        //       planningImages={siteImages}
-        //       getRootProps={getRootProps}
-        //       getInputProps={getInputProps}
-        //     />
-        //   </div>
-        //   <div className='mt-3 flex w-full items-center justify-between'>
-        //     <Button
-        //       size='regular'
-        //       onClick={() => setShowImageUpload(false)}
-        //       layout='link'
-        //       className='mr-auto'
-        //     >
-        //       Go Back
-        //     </Button>
-        //     <Button size='regular' className='col-span-2 ml-auto'>
-        //       Submit
-        //     </Button>
-        //   </div>
-        // </div>
       )}
     </>
   );

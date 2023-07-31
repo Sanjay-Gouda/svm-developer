@@ -27,8 +27,8 @@ type accounrDetailProps = {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { req } = context;
-  const { token } = req.cookies;
+  // const { req } = context;
+  // const { token } = req.cookies;
 
   const axiosConfig = {
     withCredentials: true,
@@ -39,19 +39,42 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     `${API_ENDPOINT.END_POINT}/account/basic-list`,
     axiosConfig
   );
-  const repo = res.data;
+  const repo = res.data.result;
   return { props: { repo } };
 };
 
 export default function Account({
   repo,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const [accountDetails] = useState<accounrDetailProps[]>(repo.result);
+  const [accountDetails, setAccountDetails] =
+    useState<accounrDetailProps[]>(repo);
 
   const router = useRouter();
 
   const handleEdit = (id: any) => {
     router.push(`realEstateProjects/accountForm/${id}`);
+  };
+
+  const handleSearch = async (e: any) => {
+    const value = e.target.value;
+
+    const timer = setTimeout(async () => {
+      try {
+        const res = await axios.get(
+          `${API_ENDPOINT.END_POINT}/account/basic-list?searchString=${value}`
+        );
+
+        const data = res.data.result;
+        console.log(data);
+        setAccountDetails(data);
+      } catch (err) {
+        console.log(err);
+      }
+    }, 200);
+
+    return () => {
+      clearTimeout(timer);
+    };
   };
 
   return (
@@ -63,6 +86,7 @@ export default function Account({
             <Button>Add Accounts</Button>
           </Link>
         }
+        handleSearch={handleSearch}
       >
         <TableContainer>
           <Table>
