@@ -1,3 +1,4 @@
+import { PDFDownloadLink } from '@react-pdf/renderer';
 import {
   Button,
   Table,
@@ -11,12 +12,13 @@ import axios from 'axios';
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { MdDelete, MdModeEditOutline } from 'react-icons/md';
 
 import Layout from '@/containers/Layout';
 
 import { API_ENDPOINT } from '@/const/APIRoutes';
+import MyDocument from '@/pages/admin/dummyPDF';
 
 type referrerListProps = {
   firstName: string;
@@ -65,6 +67,12 @@ export default function Refferral({
     router.push(`realEstateProjects/referrerForm/${id}`);
   };
 
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   return (
     <Layout
       pageTitle='Referral'
@@ -104,11 +112,26 @@ export default function Refferral({
                         handleFormEdit(list?.referralId);
                       }}
                     />
-                    <MdDelete
-                      size='24'
-                      className='cursor-pointer'
-                      style={{ color: ' #F38C7F' }}
-                    />
+                    {isClient ? (
+                      <PDFDownloadLink
+                        document={<MyDocument />}
+                        fileName='somename.pdf'
+                      >
+                        {({ loading }) =>
+                          loading ? (
+                            'loading'
+                          ) : (
+                            <button>
+                              <MdDelete
+                                size='24'
+                                className='cursor-pointer'
+                                style={{ color: ' #F38C7F' }}
+                              />
+                            </button>
+                          )
+                        }
+                      </PDFDownloadLink>
+                    ) : null}
                   </TableCell>
                 </TableRow>
               );
