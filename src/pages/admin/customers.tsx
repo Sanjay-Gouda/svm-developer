@@ -47,6 +47,10 @@ export default function Customers({
     route.push(`realEstateProjects/customerForm/${id}`);
   };
 
+  const handleView = (id) => {
+    route.push(`realEstateProjects/bookingPDF/${id}`);
+  };
+
   const handleSearch = async (e: any) => {
     const value = e.target.value;
 
@@ -110,6 +114,7 @@ export default function Customers({
                         style={{ color: ' #30bcc2' }}
                       />
                       <MdDelete
+                        onClick={() => handleView(list?.customerId)}
                         size='24'
                         className='cursor-pointer'
                         style={{ color: ' #F38C7F' }}

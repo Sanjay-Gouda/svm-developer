@@ -112,26 +112,11 @@ export default function Refferral({
                         handleFormEdit(list?.referralId);
                       }}
                     />
-                    {isClient ? (
-                      <PDFDownloadLink
-                        document={<MyDocument />}
-                        fileName='somename.pdf'
-                      >
-                        {({ loading }) =>
-                          loading ? (
-                            'loading'
-                          ) : (
-                            <button>
-                              <MdDelete
-                                size='24'
-                                className='cursor-pointer'
-                                style={{ color: ' #F38C7F' }}
-                              />
-                            </button>
-                          )
-                        }
-                      </PDFDownloadLink>
-                    ) : null}
+                    <MdDelete
+                      size='24'
+                      className='cursor-pointer'
+                      style={{ color: ' #F38C7F' }}
+                    />
                   </TableCell>
                 </TableRow>
               );

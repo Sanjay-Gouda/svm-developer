@@ -49,13 +49,14 @@ const styles = StyleSheet.create({
   document: {
     display: 'flex',
     width: '100%',
+
     // fontFamily: 'Roboto',
     justifyContent: 'center',
   },
   page: {
     flexDirection: 'row',
     backgroundColor: '#FFFFFF',
-    border: '2px solid gray',
+    border: '1px solid gray',
     width: '1170px',
   },
   temrsSection: {
@@ -94,9 +95,18 @@ const styles = StyleSheet.create({
   },
   tableHead: {
     display: 'flex',
+    borderBottom: '1px solid grey',
   },
   imageWrapper: {
-    border: '1px solid gray',
+    // border: '1px solid gray',
+    borderRight: ' 1px solid gray',
+    width: '25%',
+    padding: '8px',
+    display: 'flex',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+  projectLogoContainer: {
     width: '25%',
     padding: '8px',
     display: 'flex',
@@ -104,7 +114,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   companyHeader: {
-    border: '1px solid gray',
+    // border: '1px solid gray',
     width: '75%',
     padding: '8px',
     display: 'flex',
@@ -113,10 +123,10 @@ const styles = StyleSheet.create({
   },
   image: {
     width: 200,
-    height: 100,
+    height: 200,
   },
   projectLogoWrapper: {
-    border: '1px solid gray',
+    // border: '1px solid gray',
     width: '75%',
     padding: '8px',
     display: 'flex',
@@ -124,20 +134,130 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   leftDiv: {
-    border: '1px solid gray',
+    borderRight: '1px solid gray',
     width: '25%',
     padding: '8px',
     display: 'flex',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+  mobileWrapper: {
+    // borderTop: '1px solid gray',
+    borderRight: '1px solid gray',
+    width: '40%',
+    padding: '8px',
+    display: 'flex',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+  ownerSign: {
+    borderRight: '1px solid gray',
+    width: '40%',
+    height: '70px',
+    padding: '8px',
+    display: 'flex',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+  customersSign: {
+    // border: '1px solid gray',
+    width: '60%',
+    height: '70px',
+    padding: '8px',
+    display: 'flex',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+  descWrapper: {
+    // borderTop: '1px solid gray',
+    width: '60%',
+    padding: '8px',
+    display: 'flex',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+  rightBorder: {
+    borderRight: '1px solid gray',
+    width: '60%',
+    padding: '8px',
+    display: 'flex',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+  signatureBox: {
+    // borderBottom: '1px solid gray',
+    // borderTop: '1px solid gray',
+    width: '60%',
+    padding: '8px',
+    display: 'flex',
+    justifyContent: 'flex-start',
     alignItems: 'center',
   },
   rightDiv: {
-    border: '1px solid gray',
+    // border: '1px solid gray',
     width: '55%',
     padding: '8px',
     display: 'flex',
     justifyContent: 'flex-start',
     alignItems: 'center',
+  },
+  passphotoSection: {
+    display: 'flex',
+    width: '100%',
+    // border: '1px solid gray',
+  },
+  passPhotoLeftDiv: {
+    // border: '1px solid gray',
+    display: 'flex',
+    flexDirection: 'column',
+    width: '80%',
+  },
+  passphotoRightDiv: {
+    width: '20%',
+    height: '180px',
+    border: '1px solid gray',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  nameValue: {
+    // border: '1px solid gray',
+    width: '75%',
+    padding: '8px',
+    display: 'flex',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+  addressKey: {
+    width: '25%',
+    padding: '8px',
+    display: 'flex',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    borderRight: '1px solid gray',
+  },
+
+  addressWrpper: {
+    width: '75%',
+    padding: '8px',
+    display: 'flex',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+  passphotoWrapper: {
+    width: '20%',
+    borderLeft: '1px solid gray',
+    padding: '8px',
+  },
+  addressMainDiv: {
+    display: 'flex',
+    height: '100%',
+  },
+  socialWrapper: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '20px',
+    padding: '8px',
   },
 });
 
@@ -171,51 +291,39 @@ export default function MyDocument() {
 
             <View style={styles.tableHead}>
               <View style={styles.imageWrapper}>
-                <h1 className='text-xl '>Project Logo</h1>
+                <h1 className='text-base font-semibold'>Project Logo:</h1>
               </View>
               <View style={styles.projectLogoWrapper}>
-                <View style={styles.imageWrapper}>
+                <View style={styles.projectLogoContainer}>
                   <img src='http://svmdevelopers.in/wp-content/uploads/2019/08/saireslogo-e1570106978177.jpg' />
                 </View>
               </View>
             </View>
 
-            <View
-              style={{
-                display: 'flex',
-                width: '100%',
-                border: '1px solid gray',
-              }}
-            >
-              <View
-                style={{
-                  border: '1px solid gray',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  width: '80%',
-                }}
-              >
+            <View style={styles.passphotoSection}>
+              <View style={styles.passPhotoLeftDiv}>
                 <View style={styles.tableHead}>
                   <View style={styles.leftDiv}>
-                    <h1 className='text-xl '>Name</h1>
+                    <h1 className='text-base font-semibold'>Name:</h1>
                   </View>
-                  <View style={styles.rightDiv}>
-                    <h1 className='text-xl '>Vikram Kumawat</h1>
+                  <View style={styles.nameValue}>
+                    <h1 className='text-base '>Vikram Kumawat</h1>
                   </View>
                 </View>
-                <View style={styles.tableHead}>
-                  <View style={styles.leftDiv}>
-                    <h1 className='text-xl '>Address</h1>
+                <View style={styles.addressMainDiv}>
+                  <View style={styles.addressKey}>
+                    <h1 className='text-base font-semibold'>Address :</h1>
                   </View>
-                  <View style={styles.rightDiv}>
-                    <h1 className='text-xl '>
+                  <View style={styles.addressWrpper}>
+                    <h1 className='text-base '>
                       Gram- Joriyam Pure Kaloot, Joriyam, Faizabad, Uttar
                       Pradesh. Pin- 224229
                     </h1>
                   </View>
                 </View>
               </View>
-              <View style={{ width: '20%' }}>
+
+              <View style={styles.passphotoWrapper}>
                 <View style={styles.image}>
                   <img src='http://svmdevelopers.in/wp-content/uploads/2019/08/saireslogo-e1570106978177.jpg' />
                 </View>
@@ -224,11 +332,179 @@ export default function MyDocument() {
                 </View> */}
               </View>
             </View>
+
+            <View style={styles.passphotoSection}>
+              <View
+                style={{
+                  width: '50%',
+                  display: 'flex',
+                  borderBottom: '1px solid gray',
+                  borderTop: '1px solid gray',
+                }}
+              >
+                <View style={styles.mobileWrapper}>
+                  <h1 className='text-base font-semibold'>Mobile No:</h1>
+                </View>
+                <View style={styles.rightBorder}>
+                  <h1 className='text-base'>909090</h1>
+                </View>
+              </View>
+              <View
+                style={{
+                  width: '50%',
+                  display: 'flex',
+                  borderBottom: '1px solid gray',
+                  borderTop: '1px solid gray',
+                }}
+              >
+                <View style={styles.mobileWrapper}>
+                  <h1 className='text-base font-semibold'>EMI :</h1>
+                </View>
+                <View style={styles.descWrapper}>
+                  <h1 className='text-base '> </h1>
+                </View>
+              </View>
+            </View>
+            <View style={styles.passphotoSection}>
+              <View
+                style={{
+                  width: '50%',
+                  display: 'flex',
+                  borderBottom: '1px solid gray',
+                }}
+              >
+                <View style={styles.mobileWrapper}>
+                  <h1 className='text-base font-semibold'>Shop/Plot No.:</h1>
+                </View>
+                <View style={styles.rightBorder}>
+                  <h1 className='text-base '>909090</h1>
+                </View>
+              </View>
+              <View
+                style={{
+                  width: '50%',
+                  display: 'flex',
+                  borderBottom: '1px solid gray',
+                }}
+              >
+                <View style={styles.mobileWrapper}>
+                  <h1 className='text-base font-semibold '>Area :</h1>
+                </View>
+                <View style={styles.descWrapper}>
+                  <h1 className='text-base '> </h1>
+                </View>
+              </View>
+            </View>
+            <View style={styles.passphotoSection}>
+              <View
+                style={{
+                  width: '50%',
+                  display: 'flex',
+                  borderBottom: '1px solid gray',
+                }}
+              >
+                <View style={styles.mobileWrapper}>
+                  <h1 className='text-base font-semibold '>Total Amount:</h1>
+                </View>
+                <View style={styles.rightBorder}>
+                  <h1 className='text-base'>909090</h1>
+                </View>
+              </View>
+              <View
+                style={{
+                  width: '50%',
+                  display: 'flex',
+                  borderBottom: '1px solid gray',
+                }}
+              >
+                <View style={styles.mobileWrapper}>
+                  <h1 className='text-base font-semibold '>Down Payment:</h1>
+                </View>
+                <View style={styles.descWrapper}>
+                  <h1 className='text-base '> </h1>
+                </View>
+              </View>
+            </View>
+
+            <View style={styles.passphotoSection}>
+              <View
+                style={{
+                  width: '50%',
+                  display: 'flex',
+                  borderBottom: '1px solid gray',
+                }}
+              >
+                <View style={styles.ownerSign}>
+                  <h1 className='text-base font-semibold'>Owner's Sign:</h1>
+                </View>
+                <View style={styles.rightBorder}>
+                  <h1 className='text-base'>Vikram Kumawat</h1>
+                </View>
+              </View>
+              <View
+                style={{
+                  width: '50%',
+                  display: 'flex',
+                  borderBottom: '1px solid gray',
+                }}
+              >
+                <View style={styles.ownerSign}>
+                  <h1 className='text-base font-semibold'>Customer Sign:</h1>
+                </View>
+                <View style={styles.signatureBox}>
+                  <h1 className='text-base'>Vikram Kumawat</h1>
+                </View>
+              </View>
+            </View>
+          </View>
+
+          {/* Identity Section  */}
+
+          {/* <View
+            style={{
+              display: 'flex',
+              width: '100%',
+              justifyContent: 'space-around',
+              marginTop: '40px',
+            }}
+          >
+            <View
+              style={{
+                width: '500px',
+                height: '250px',
+                padding: '8px',
+                border: '1px solid gray',
+              }}
+            >
+
+
+
+            </View>
+            <View
+              style={{
+                width: '500px',
+                height: '250px',
+                padding: '8px',
+                border: '1px solid gray',
+              }}
+            ></View>
+          </View> */}
+
+          <View style={styles.socialWrapper}>
+            <h1 className='text-xl font-semibold'>Follow Us</h1>
+            <p className='text-base font-semibold'>
+              <a href='http://svmdevelopers.in/'>🌐 www.svmdevelopers.in</a>
+            </p>
+            <p className='text-base font-semibold'>
+              <a href='https://www.facebook.com/profile.php?id=100064151886759'>
+                🌐 SVM Builders & Developers
+              </a>
+            </p>
           </View>
 
           {/* Terms */}
           <View style={styles.temrsSection}>
-            {/* <Text style={styles.termsHeading}>નિયમો અને શરતો</Text> */}
+            <Text style={styles.termsHeading}>નિયમો અને શરતો</Text>
             <Text style={styles.terms}>
               {termsAndCondition?.map((term) => {
                 return <BulletListItem key={term?.id} text={term.term} />;
@@ -239,6 +515,25 @@ export default function MyDocument() {
               ** ઉપર દર્શાવેલ તમામ શરતો અને નિયમો મને સારી રીતે સમજાય છે. અને આ
               તમામ શરતો અને નિયમઓ મને મંજૂર છે.**
             </Text>
+            <View
+              style={{
+                width: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'flex-end',
+                justifyContent: 'flex-end',
+              }}
+            >
+              <View
+                style={{
+                  border: '2px solid gray',
+                  padding: '8px',
+                  width: '200px',
+                  height: '80px',
+                }}
+              ></View>
+              <Text>ખરીદનાર</Text>
+            </View>
           </View>
         </Page>
       </Document>
