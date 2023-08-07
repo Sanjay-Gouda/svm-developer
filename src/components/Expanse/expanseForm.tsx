@@ -317,40 +317,40 @@ const ExpanseForm = ({
       </div>
 
       <div className='flex flex-col gap-2'>
-        {!showExapnseForm ? (
+        {showExapnseForm ? (
           <>
-            {miscForm?.map((box, ind) => {
-              return (
-                <MiscellaneouForm
-                  index={ind}
-                  key={box.id}
-                  expanse={box.expenseName}
-                  cost={box.cost}
-                  handleHideForm={() => {
-                    setShowExapnseForm(false);
-                    // setMiscForm([{ expenseName: '', cost: undefined }]);
-                  }}
-                  handleChange={(e) => {
-                    handleChange(e, ind);
-                  }}
-                  handleAddFields={handleAddFields}
-                  handleRemoveFields={() => {
-                    handleRemoveFields(box.id);
-                  }}
-                />
-              );
-            })}
+            <Button
+              className='my-1'
+              layout='outline'
+              onClick={() => {
+                setShowExapnseForm(true);
+              }}
+            >
+              Add Miscellaneous Exapnse
+            </Button>
           </>
         ) : (
-          <Button
-            className='my-1'
-            layout='outline'
-            onClick={() => {
-              setShowExapnseForm(true);
-            }}
-          >
-            Add Miscellaneous Exapnse
-          </Button>
+          miscForm?.map((box, ind) => {
+            return (
+              <MiscellaneouForm
+                index={ind}
+                key={box.id}
+                expanse={box.expenseName}
+                cost={box.cost}
+                handleHideForm={() => {
+                  setShowExapnseForm(false);
+                  // setMiscForm([{ expenseName: '', cost: undefined }]);
+                }}
+                handleChange={(e) => {
+                  handleChange(e, ind);
+                }}
+                handleAddFields={handleAddFields}
+                handleRemoveFields={() => {
+                  handleRemoveFields(box.id);
+                }}
+              />
+            );
+          })
         )}
       </div>
 
