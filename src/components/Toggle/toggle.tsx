@@ -3,7 +3,7 @@ import React from 'react';
 type toggleProps = {
   value?: number;
   handleChange: (e: any) => void;
-  name?: string;
+  name?: number;
   checked?: boolean;
 };
 

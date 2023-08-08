@@ -1,4 +1,5 @@
 import {
+  Button,
   Card,
   CardBody,
   Table,
@@ -9,7 +10,11 @@ import {
   TableRow,
 } from '@windmill/react-ui';
 import React, { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 
+import 'react-toastify/dist/ReactToastify.css';
+
+import { SvmProjectToast } from '@/components/Toast/Toast';
 import Toggle from '@/components/Toggle/toggle';
 import { TextInput } from '@/components/ui-blocks';
 import Layout from '@/containers/Layout';
@@ -36,56 +41,73 @@ type permissmison_type =
 
 const permissions = [
   {
-    label: 'account',
-    readName: 'acc_read',
-    writeName: 'acc_write',
     read: 1,
+    group: 'ADMIN_ACCOUNT',
     write: 2,
   },
   {
-    label: 'booking',
-    readName: 'book_read',
-    writeName: 'book_write',
     read: 3,
+    group: 'BOOKING',
     write: 4,
   },
   {
-    label: 'expenses',
-    readName: 'exp_read',
-    writeName: 'exp_write',
     read: 5,
+    group: 'CUSTOMER',
     write: 6,
   },
   {
-    label: 'referrar',
-    readName: 'ref_read',
-    writeName: 'ref_write',
     read: 7,
+    group: 'EXPENSE',
     write: 8,
+  },
+  {
+    read: 9,
+    group: 'PROJECT',
+    write: 10,
+  },
+  {
+    read: 11,
+    group: 'REFERRAL',
+    write: 12,
+  },
+  {
+    read: 13,
+    group: 'ROLE',
+    write: 14,
+  },
+  {
+    read: 15,
+    group: 'USER',
+    write: 16,
+  },
+  {
+    read: 17,
+    group: 'INSTALLMENT',
+    write: 18,
   },
 ];
 
 const Permissions = () => {
   const [toggleName, setToggleName] = useState<permissmison_type>('acc_write');
   const [toggleValue, setToggleValue] = useState<number>(0);
-
   const [permissionId, setPermissionId] = useState<number[]>([]);
-
   const [isPermissionChecked, setIsPermissionChecked] = useState<any>({});
+  // const [toggleChange, setToggleChange] = useState({});
+  const [error, setError] = useState(false);
 
-  const [toggleChange, setToggleChange] = useState({});
+  const [roleName, setRoleName] = useState('');
 
   const handleChange = (e: any) => {
     // setToggleState(!toggleState);
     const { name, value, checked } = e.target;
 
-    setToggleValue(value);
+    setToggleValue(+value);
     setToggleName(name);
 
     setIsPermissionChecked({
       [name]: checked,
     });
-    setToggleChange({ ...toggleChange, [name]: value });
+    // setToggleChange({ ...toggleChange, [name]: value });
   };
 
   useEffect(() => {
@@ -107,9 +129,25 @@ const Permissions = () => {
     setPermissionId(removedId);
   };
 
-  // useEffect(() => {
-  //   console.log(permissionId, 'id');
-  // }, [permissionId]);
+  const handleName = (e) => {
+    setRoleName(e.target.name);
+  };
+
+  useEffect(() => {
+    if (roleName.length > 0) {
+      setError(false);
+    }
+  }, [roleName]);
+
+  const handleSubmit = () => {
+    if (roleName === '') {
+      setError(true);
+    } else if (permissionId.length === 0) {
+      toast.error('Pleast allow atleast one permission ');
+    } else {
+      console.log({ permissionId, roleName });
+    }
+  };
 
   return (
     <>
@@ -122,7 +160,11 @@ const Permissions = () => {
                   name='roleName'
                   label='Role Name'
                   placeholder='Role Name'
+                  onChange={handleName}
                 />
+                {error && (
+                  <div className='text-red-400'>Role name is required</div>
+                )}
               </div>
 
               <TableContainer>
@@ -136,40 +178,23 @@ const Permissions = () => {
                     </tr>
                   </TableHeader>
                   <TableBody>
-                    {/* <Toggle
-                      name='tstate'
-                      value={1}
-                      checked={toggleState}
-                      handleChange={handleToggle}
-                    /> */}
-
                     {permissions?.map((list) => {
                       return (
                         <TableRow key={list?.read}>
-                          <TableCell>{list?.label.toLowerCase()}</TableCell>
+                          <TableCell>{list?.group.toLowerCase()}</TableCell>
                           <TableCell>
                             <Toggle
                               value={list?.read}
-                              name={list?.readName}
-                              checked={
-                                isPermissionChecked?.[`${list?.readName}`]
-                              }
-                              // handleChange={() => {
-                              //   handleChange(list?.read);
-                              // }}
+                              name={list?.read}
+                              checked={isPermissionChecked?.[`${list?.read}`]}
                               handleChange={handleChange}
                             />
                           </TableCell>
                           <TableCell>
                             <Toggle
                               value={list?.write}
-                              name={list?.writeName}
-                              checked={
-                                isPermissionChecked[`${list?.writeName}`]
-                              }
-                              // handleChange={() => {
-                              //   handleChange(list?.write);
-                              // }}
+                              name={list?.write}
+                              checked={isPermissionChecked[`${list?.write}`]}
                               handleChange={handleChange}
                             />
                           </TableCell>
@@ -179,9 +204,17 @@ const Permissions = () => {
                   </TableBody>
                 </Table>
               </TableContainer>
+
+              <div className='w-full'>
+                <Button className='w-full' onClick={handleSubmit}>
+                  Submit
+                </Button>
+              </div>
             </div>
           </CardBody>
         </Card>
+
+        <SvmProjectToast />
       </Layout>
     </>
   );
