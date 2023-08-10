@@ -19,6 +19,8 @@ import Toggle from '@/components/Toggle/toggle';
 import { TextInput } from '@/components/ui-blocks';
 import Layout from '@/containers/Layout';
 
+import { httpInstance } from '@/constants/httpInstances';
+
 type permissmison_type =
   | 'acc_read'
   | 'acc_write'
@@ -130,7 +132,7 @@ const Permissions = () => {
   };
 
   const handleName = (e) => {
-    setRoleName(e.target.name);
+    setRoleName(e.target.value);
   };
 
   useEffect(() => {
@@ -139,13 +141,28 @@ const Permissions = () => {
     }
   }, [roleName]);
 
+  const addRole = async () => {
+    const payload = {
+      label: roleName,
+      permissionIds: permissionId,
+    };
+
+    try {
+      const res = await httpInstance.post('/role/create', payload);
+      console.log(res);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const handleSubmit = () => {
     if (roleName === '') {
       setError(true);
     } else if (permissionId.length === 0) {
       toast.error('Pleast allow atleast one permission ');
     } else {
-      console.log({ permissionId, roleName });
+      addRole();
+      // console.log(roleName);
     }
   };
 

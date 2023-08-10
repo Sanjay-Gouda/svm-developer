@@ -7,11 +7,15 @@ import {
   ModalHeader,
 } from '@windmill/react-ui';
 import { useFormik } from 'formik';
-import React from 'react';
+import React, { useState } from 'react';
 import * as Yup from 'yup';
+
+import { useRoles } from '@/hooks/useRoles';
 
 import ComboBox from '@/components/ComboBox/comboBox';
 import { TextInput } from '@/components/ui-blocks';
+
+import { httpInstance } from '@/constants/httpInstances';
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required('First Name is required '),
@@ -21,7 +25,7 @@ const validationSchema = Yup.object().shape({
   email: Yup.string()
     .email('Invalid email address')
     .required('Email is required'),
-  userRole: Yup.string().required('Please select user role '),
+  userRole: Yup.mixed().required('Please select user role '),
 });
 
 type modalProps = {
@@ -29,34 +33,93 @@ type modalProps = {
   closeModal: () => void;
 };
 
+type RoleProps = {
+  id: string;
+  name: string;
+};
+
 type addUser = {
   name: string;
   phone: number | undefined;
   email: string;
-  userRole: any;
+  userRole: RoleProps;
 };
 
 const initialValue: addUser = {
   name: '',
   phone: undefined,
   email: '',
-  userRole: '',
+  userRole: { id: '', name: '' },
 };
 
 const AddUser = ({ closeModal, openModal }: modalProps) => {
+  const roles = useRoles();
+  const [query, setQuery] = useState('');
+
+  const addUser = async (values: addUser) => {
+    const { email, name, phone, userRole } = values;
+    const { id } = userRole;
+    const payload = {
+      email: email,
+      phone: phone,
+      name: name,
+      roleId: id,
+    };
+    try {
+      const res = await httpInstance.post('/user/create', payload);
+      console.log(res);
+      closeModal();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const formik = useFormik({
     initialValues: initialValue,
     validationSchema,
     onSubmit: (values: addUser) => {
-      console.log(values);
+      addUser(values);
     },
   });
+
+  const hadnleSearchQuery = (e) => {
+    setQuery(e.target.value);
+  };
+
+  const afterLeave = () => {
+    setQuery('');
+  };
+
+  const filterRoles =
+    query === ''
+      ? roles
+      : roles.filter((person) => {
+          return person.name.toLowerCase().includes(query.toLowerCase());
+        });
 
   return (
     <Modal isOpen={openModal} onClose={closeModal}>
       <ModalHeader>Add User</ModalHeader>
       <ModalBody>
         <div className='flex flex-col gap-2'>
+          <div className='flex flex-col'>
+            <Label>User Role</Label>
+
+            <ComboBox
+              placeholder='Select User'
+              data={filterRoles}
+              query={query}
+              afterLeave={afterLeave}
+              handleSearchQuery={hadnleSearchQuery}
+              setSelected={(project) => {
+                formik.setFieldValue('userRole', project);
+              }}
+            />
+            {formik.touched.userRole && formik.errors.userRole && (
+              <div className='text-red-400'> {formik.errors.userRole}</div>
+            )}
+          </div>
+
           <div className='flex flex-col '>
             <TextInput
               type='text'
@@ -94,15 +157,6 @@ const AddUser = ({ closeModal, openModal }: modalProps) => {
 
             {formik.touched.phone && formik.errors.phone && (
               <div className='text-red-400'> {formik.errors.phone}</div>
-            )}
-          </div>
-
-          <div className='flex flex-col'>
-            <Label>User Role</Label>
-
-            <ComboBox placeholder='Select User' />
-            {formik.touched.userRole && formik.errors.userRole && (
-              <div className='text-red-400'> {formik.errors.userRole}</div>
             )}
           </div>
         </div>
