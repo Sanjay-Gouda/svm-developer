@@ -7,10 +7,11 @@ import {
   TableHeader,
   TableRow,
 } from '@windmill/react-ui';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { MdDelete, MdModeEditOutline } from 'react-icons/md';
 
-import AddUser from '@/components/ManageUser/addUser';
 import Layout from '@/containers/Layout';
 
 import { httpInstance } from '@/constants/httpInstances';
@@ -25,21 +26,36 @@ export const getServerSideProps = async () => {
   };
 };
 
+type RoleProps = {
+  id: string;
+  name: string;
+};
+
+type addUser = {
+  name: string;
+  phone: number | undefined;
+  email: string;
+  userRole: RoleProps;
+};
+
 const ManageUsers = ({ users }) => {
-  const [isOpenModal, setIsOpenModal] = useState(false);
   const [userList, setUserList] = useState(users);
+  const route = useRouter();
+
+  const handleEdit = async (userId: string) => {
+    route.push(`${userId}`);
+  };
 
   return (
     <>
       <Layout
-        pageTitle='Manage Roles'
-        right={<Button onClick={() => setIsOpenModal(true)}>Add User</Button>}
+        pageTitle='Manage Users'
+        right={
+          <Link href='addUser'>
+            <Button>Add User</Button>
+          </Link>
+        }
       >
-        <AddUser
-          openModal={isOpenModal}
-          closeModal={() => setIsOpenModal(false)}
-        />
-
         <TableContainer>
           <Table>
             <TableHeader>
@@ -55,7 +71,7 @@ const ManageUsers = ({ users }) => {
               {userList?.map((user) => {
                 return (
                   <TableRow key={user?.userId}>
-                    <TableCell>{user?.roleId}</TableCell>
+                    <TableCell>{user?.role}</TableCell>
                     <TableCell>{user?.name}</TableCell>
                     <TableCell>{user?.phone}</TableCell>
                     <TableCell>{user?.email}</TableCell>
@@ -64,9 +80,9 @@ const ManageUsers = ({ users }) => {
                         size='24'
                         className='cursor-pointer'
                         style={{ color: ' #30bcc2' }}
-                        // onClick={() => {
-                        //   handleEdit(details?.adminAccountId);
-                        // }}
+                        onClick={() => {
+                          handleEdit(user?.userId);
+                        }}
                       />
                       <MdDelete
                         size='24'

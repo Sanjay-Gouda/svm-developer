@@ -1,37 +1,29 @@
-import {
-  Button,
-  Label,
-  Modal,
-  ModalBody,
-  ModalFooter,
-  ModalHeader,
-} from '@windmill/react-ui';
+import { Button, Label } from '@windmill/react-ui';
 import { useFormik } from 'formik';
+import { useRouter } from 'next/router';
 import React, { useState } from 'react';
+import { ClipLoader } from 'react-spinners';
+import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 
 import { useRoles } from '@/hooks/useRoles';
 
 import ComboBox from '@/components/ComboBox/comboBox';
+import { SvmProjectToast } from '@/components/Toast/Toast';
 import { TextInput } from '@/components/ui-blocks';
 
 import { httpInstance } from '@/constants/httpInstances';
 
 const validationSchema = Yup.object().shape({
-  name: Yup.string().required('First Name is required '),
+  name: Yup.string().required('Name is required '),
   phone: Yup.string()
     .matches(/^[0-9]{10}$/, 'Invalid Mobile number')
-    .required('Customer Mobile Number is required'),
+    .required('User mobile number is required'),
   email: Yup.string()
     .email('Invalid email address')
     .required('Email is required'),
   userRole: Yup.mixed().required('Please select user role '),
 });
-
-type modalProps = {
-  openModal: boolean;
-  closeModal: () => void;
-};
 
 type RoleProps = {
   id: string;
@@ -45,6 +37,12 @@ type addUser = {
   userRole: RoleProps;
 };
 
+type modalProps = {
+  editId?: string;
+  editValues?: any;
+  // editInitialValues: addUser;
+};
+
 const initialValue: addUser = {
   name: '',
   phone: undefined,
@@ -52,11 +50,15 @@ const initialValue: addUser = {
   userRole: { id: '', name: '' },
 };
 
-const AddUser = ({ closeModal, openModal }: modalProps) => {
+const AddUserForm = ({ editId, editValues }: modalProps) => {
   const roles = useRoles();
+  const routes = useRouter();
   const [query, setQuery] = useState('');
+  const [loader, setLoader] = useState(false);
+  const formValues = editId ? editValues : initialValue;
 
   const addUser = async (values: addUser) => {
+    setLoader(true);
     const { email, name, phone, userRole } = values;
     const { id } = userRole;
     const payload = {
@@ -67,18 +69,50 @@ const AddUser = ({ closeModal, openModal }: modalProps) => {
     };
     try {
       const res = await httpInstance.post('/user/create', payload);
-      console.log(res);
-      closeModal();
+      setLoader(false);
+      const isNotify = res.data.isNotify;
+      const successMessage = isNotify
+        ? res?.data?.message
+        : 'User Created Successfully';
+      toast.success(successMessage);
+      setTimeout(() => {
+        routes.push('manageUser');
+      }, [1000]);
     } catch (err) {
-      console.log(err);
+      toast.error('Something went wrong');
+      routes.push('manageUser');
+    }
+  };
+  const updateUser = async (values: addUser) => {
+    setLoader(true);
+    const { email, name, phone, userRole } = values;
+    const { id } = userRole;
+    const payload = {
+      email: email,
+      phone: phone,
+      name: name,
+      roleId: id.toString(),
+    };
+    try {
+      const res = await httpInstance.put(`/user/update/${editId}`, payload);
+      setLoader(false);
+      const isNotify = res.data.isNotify;
+      const successMessage = isNotify
+        ? res?.data?.message
+        : 'User data Updated Successfully';
+      toast.success(successMessage);
+      routes.push('manageUser');
+    } catch (err) {
+      toast.error('Something went wrong');
+      routes.push('manageUser');
     }
   };
 
   const formik = useFormik({
-    initialValues: initialValue,
+    initialValues: formValues,
     validationSchema,
-    onSubmit: (values: addUser) => {
-      addUser(values);
+    onSubmit: (values: addUser, { resetForm }) => {
+      editId ? updateUser(values) : addUser(values);
     },
   });
 
@@ -98,86 +132,88 @@ const AddUser = ({ closeModal, openModal }: modalProps) => {
         });
 
   return (
-    <Modal isOpen={openModal} onClose={closeModal}>
-      <ModalHeader>Add User</ModalHeader>
-      <ModalBody>
-        <div className='flex flex-col gap-2'>
-          <div className='flex flex-col'>
-            <Label>User Role</Label>
+    <>
+      <div className='mx-auto flex w-1/3 flex-col gap-2'>
+        <div className='flex flex-col'>
+          <Label>User Role</Label>
 
-            <ComboBox
-              placeholder='Select User'
-              data={filterRoles}
-              query={query}
-              afterLeave={afterLeave}
-              handleSearchQuery={hadnleSearchQuery}
-              setSelected={(project) => {
-                formik.setFieldValue('userRole', project);
-              }}
-            />
-            {formik.touched.userRole && formik.errors.userRole && (
-              <div className='text-red-400'> {formik.errors.userRole}</div>
-            )}
-          </div>
-
-          <div className='flex flex-col '>
-            <TextInput
-              type='text'
-              name='name'
-              value={formik.values.name}
-              onChange={formik.handleChange}
-              label='Name'
-            />
-
-            {formik.touched.name && formik.errors.name && (
-              <div className='text-red-400'> {formik.errors.name}</div>
-            )}
-          </div>
-          <div className='flex flex-col '>
-            <TextInput
-              type='email'
-              name='email'
-              value={formik.values.email}
-              onChange={formik.handleChange}
-              label='Email'
-            />
-
-            {formik.touched.email && formik.errors.email && (
-              <div className='text-red-400'> {formik.errors.email}</div>
-            )}
-          </div>
-          <div className='flex flex-col '>
-            <TextInput
-              type='text'
-              name='phone'
-              value={formik.values.phone}
-              onChange={formik.handleChange}
-              label='Mobile No'
-            />
-
-            {formik.touched.phone && formik.errors.phone && (
-              <div className='text-red-400'> {formik.errors.phone}</div>
-            )}
-          </div>
+          <ComboBox
+            placeholder='Select User'
+            data={filterRoles}
+            query={query}
+            afterLeave={afterLeave}
+            handleSearchQuery={hadnleSearchQuery}
+            selected={formik.values.userRole}
+            setSelected={(project) => {
+              formik.setFieldValue('userRole', project);
+            }}
+          />
+          {formik.touched.userRole && formik.errors.userRole && (
+            <div className='text-red-400'> {formik.errors.userRole}</div>
+          )}
         </div>
-      </ModalBody>
-      <ModalFooter>
+
+        <div className='flex flex-col '>
+          <TextInput
+            type='text'
+            name='name'
+            value={formik.values.name}
+            onChange={formik.handleChange}
+            label='Name'
+          />
+
+          {formik.touched.name && formik.errors.name && (
+            <div className='text-red-400'> {formik.errors.name}</div>
+          )}
+        </div>
+        <div className='flex flex-col '>
+          <TextInput
+            type='email'
+            name='email'
+            value={formik.values.email}
+            onChange={formik.handleChange}
+            label='Email'
+          />
+
+          {formik.touched.email && formik.errors.email && (
+            <div className='text-red-400'> {formik.errors.email}</div>
+          )}
+        </div>
+        <div className='flex flex-col '>
+          <TextInput
+            type='text'
+            name='phone'
+            value={formik.values.phone === undefined ? '' : formik.values.phone}
+            onChange={formik.handleChange}
+            label='Mobile No'
+          />
+
+          {formik.touched.phone && formik.errors.phone && (
+            <div className='text-red-400'> {formik.errors.phone}</div>
+          )}
+        </div>
         <Button
-          className='w-full sm:w-auto'
-          layout='outline'
-          onClick={closeModal}
-        >
-          Cancel
-        </Button>
-        <Button
-          className='w-full sm:w-auto'
+          className='mt-1'
+          disabled={loader ? true : false}
           onClick={() => formik.handleSubmit()}
         >
-          Accept
+          {editId ? 'Update' : 'Submit'}
+          {loader && <ClipLoader size={20} color='white' />}
         </Button>
-      </ModalFooter>
-    </Modal>
+
+        {editId && (
+          <Button
+            className='mt-1'
+            layout='outline'
+            onClick={() => formik.handleSubmit()}
+          >
+            Cancel
+          </Button>
+        )}
+      </div>
+      <SvmProjectToast />
+    </>
   );
 };
 
-export default AddUser;
+export default AddUserForm;

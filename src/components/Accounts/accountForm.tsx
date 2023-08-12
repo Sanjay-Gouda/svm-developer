@@ -59,7 +59,7 @@ function AccountForm({ editInitialValues, editId }: editValueprops) {
       }, 1000);
     } catch (err) {
       // console.log(err);
-      toast.success('Something went wrong');
+      toast.error('Something went wrong');
       route.push('/admin/accounts');
     }
   };

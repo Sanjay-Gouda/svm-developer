@@ -29,6 +29,6 @@ export const useRoles = () => {
       console.log(err, 'error');
     }
   };
-  console.log(roles, 'ROles');
+
   return roles;
 };

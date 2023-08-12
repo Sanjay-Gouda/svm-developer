@@ -1,5 +1,5 @@
 import { BsBank2 } from 'react-icons/bs';
-import { FaUsers } from 'react-icons/fa';
+import { FaUserCog, FaUsers } from 'react-icons/fa';
 import { MdHomeFilled } from 'react-icons/md';
 import {
   TbBrandBooking,
@@ -51,5 +51,11 @@ export const AdminSidebarTabs: AdminTabsProps[] = [
     name: 'Expenses',
     to: 'expanses',
     icon: TbFileInvoice,
+  },
+
+  {
+    name: 'Users',
+    to: 'users/manageUser',
+    icon: FaUserCog,
   },
 ];

@@ -29,7 +29,9 @@ function SidebarContent() {
 
 const SideTab: FC<{ tab: (typeof AdminSidebarTabs)[number] }> = ({ tab }) => {
   const segments = usePathname()?.split('/');
+
   const lastSegment = segments ? segments[segments.length - 1] : '';
+
   const active =
     lastSegment === tab.to || (tab.to === '' && lastSegment === 'admin');
 
