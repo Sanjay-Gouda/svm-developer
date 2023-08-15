@@ -4,10 +4,10 @@ import { MdDelete, MdModeEditOutline } from 'react-icons/md';
 type TcardProps = {
   label: string;
   permissions: any;
+  handleEdit: () => void;
 };
 
-const Rolecard = ({ label, permissions }: TcardProps) => {
-  console.log(permissions, 'per');
+const Rolecard = ({ label, permissions, handleEdit }: TcardProps) => {
   return (
     <>
       <div className='w-full max-w-sm rounded-lg border border-gray-200 bg-white p-4 shadow dark:border-gray-700 dark:bg-gray-800 sm:p-8'>
@@ -19,6 +19,7 @@ const Rolecard = ({ label, permissions }: TcardProps) => {
             <MdModeEditOutline
               size='24'
               className='cursor-pointer'
+              onClick={handleEdit}
               style={{ color: ' #30bcc2' }}
             />
             <MdDelete

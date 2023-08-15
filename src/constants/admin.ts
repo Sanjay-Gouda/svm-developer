@@ -1,5 +1,6 @@
 import { BsBank2 } from 'react-icons/bs';
 import { FaUserCog, FaUsers } from 'react-icons/fa';
+import { HiCircleStack } from 'react-icons/hi2';
 import { MdHomeFilled } from 'react-icons/md';
 import {
   TbBrandBooking,
@@ -57,5 +58,10 @@ export const AdminSidebarTabs: AdminTabsProps[] = [
     name: 'Users',
     to: 'users/manageUser',
     icon: FaUserCog,
+  },
+  {
+    name: 'Roles',
+    to: 'Roles/manageRoles',
+    icon: HiCircleStack,
   },
 ];

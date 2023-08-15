@@ -1,5 +1,7 @@
 import { Button } from '@windmill/react-ui';
-import React, { useState } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import React from 'react';
 
 import Rolecard from '@/components/RoleCard';
 import Layout from '@/containers/Layout';
@@ -17,35 +19,30 @@ export const getServerSideProps = async () => {
 };
 
 const ManageRoles = ({ roleList }) => {
-  const [isOpenModal, setIsOpenModal] = useState(false);
+  const routes = useRouter();
 
-  console.log(roleList, 'list');
+  const handleEdit = (id) => {
+    routes.push(`${id}`);
+  };
 
   return (
     <>
       <Layout
         pageTitle='Manage Roles'
-        right={<Button onClick={() => setIsOpenModal(true)}>Add User</Button>}
+        right={
+          <Link href='addRole'>
+            <Button>Add User</Button>
+          </Link>
+        }
       >
-        {/* <AddUser
-          openModal={isOpenModal}
-          closeModal={() => setIsOpenModal(false)}
-        /> */}
-
-        {/* {roleList?.map((list) => {
-          return (
-            <div className='flex w-full flex-wrap gap-4' key={list?.roleId}>
-              <Rolecard label={list?.label} />
-              </div>
-              );
-            })} */}
-        <div className='flex w-full flex-wrap gap-4'>
+        <div className='mb-4 flex w-full flex-wrap gap-4'>
           {roleList?.map((list) => {
             return (
               <Rolecard
                 label={list?.label}
                 key={list?.roleId}
                 permissions={list?.permission}
+                handleEdit={() => handleEdit(list.roleId)}
               />
             );
           })}
