@@ -10,6 +10,7 @@ import Sidebar from '../components/Sidebar';
 interface LayoutProps {
   right?: React.ReactNode;
   pageTitle?: string;
+  isShowSearchBar?: boolean;
   handleSearch?: (e: any) => void;
 }
 function Layout({
@@ -17,6 +18,7 @@ function Layout({
   right,
   handleSearch,
   pageTitle,
+  isShowSearchBar,
 }: PropsWithChildren<LayoutProps>) {
   // const { isSidebarOpen, closeSidebar } = useContext(SidebarContext);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
@@ -51,14 +53,16 @@ function Layout({
           </div>
           <div className=' mb-6 flex items-center justify-between'>
             <div className='flex w-[25%] justify-start '>
-              <TextInput
-                type='text'
-                name='placeholder'
-                placeholder='search'
-                label=''
-                containerClassName='w-full'
-                onChange={handleSearch}
-              />
+              {isShowSearchBar && (
+                <TextInput
+                  type='text'
+                  name='placeholder'
+                  placeholder='search'
+                  label=''
+                  containerClassName='w-full'
+                  onChange={handleSearch}
+                />
+              )}
             </div>
 
             {right && right}

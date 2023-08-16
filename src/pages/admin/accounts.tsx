@@ -65,7 +65,7 @@ export default function Account({
         );
 
         const data = res.data.result;
-        console.log(data);
+
         setAccountDetails(data);
       } catch (err) {
         console.log(err);
@@ -86,6 +86,7 @@ export default function Account({
             <Button>Add Accounts</Button>
           </Link>
         }
+        isShowSearchBar={true}
         handleSearch={handleSearch}
       >
         <TableContainer>

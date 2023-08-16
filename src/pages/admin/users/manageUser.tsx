@@ -46,6 +46,25 @@ const ManageUsers = ({ users }) => {
     route.push(`${userId}`);
   };
 
+  const handleSearch = async (e: any) => {
+    const searchvalue = e.target.value;
+
+    const timer = setTimeout(async () => {
+      try {
+        const res = await httpInstance.get(
+          `user/list?searchString=${searchvalue}`
+        );
+        setUserList(res?.data?.result?.list);
+      } catch (err) {
+        console.log(err);
+      }
+    }, 200);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  };
+
   return (
     <>
       <Layout
@@ -55,6 +74,8 @@ const ManageUsers = ({ users }) => {
             <Button>Add User</Button>
           </Link>
         }
+        isShowSearchBar={true}
+        handleSearch={handleSearch}
       >
         <TableContainer>
           <Table>

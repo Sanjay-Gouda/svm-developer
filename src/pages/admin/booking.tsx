@@ -66,6 +66,7 @@ export default function Booking({
             <Button>Booking</Button>
           </Link>
         }
+        isShowSearchBar={true}
         handleSearch={handleSearch}
       >
         <TableContainer>

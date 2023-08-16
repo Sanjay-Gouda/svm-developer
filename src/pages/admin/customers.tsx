@@ -81,6 +81,7 @@ export default function Customers({
             <Button>Add Customers</Button>
           </Link>
         }
+        isShowSearchBar={true}
         handleSearch={handleSearch}
       >
         <TableContainer>

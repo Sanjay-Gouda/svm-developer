@@ -1,7 +1,7 @@
 import { Button } from '@windmill/react-ui';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useState } from 'react';
 
 import Rolecard from '@/components/RoleCard';
 import Layout from '@/containers/Layout';
@@ -21,8 +21,30 @@ export const getServerSideProps = async () => {
 const ManageRoles = ({ roleList }) => {
   const routes = useRouter();
 
-  const handleEdit = (id) => {
+  const [roles, setRoles] = useState(roleList);
+
+  const handleEdit = (id: string) => {
     routes.push(`${id}`);
+  };
+
+  const handleSearch = (e: any) => {
+    const searchValue = e.target.value;
+
+    const timer = setTimeout(async () => {
+      try {
+        const res = await httpInstance.get(
+          `role/advance-list?searchString=${searchValue}`
+        );
+        setRoles(res?.data?.result);
+        console.log(res);
+      } catch (err) {
+        console.log(err);
+      }
+    }, 200);
+
+    return () => {
+      clearTimeout(timer);
+    };
   };
 
   return (
@@ -34,9 +56,11 @@ const ManageRoles = ({ roleList }) => {
             <Button>Add User</Button>
           </Link>
         }
+        isShowSearchBar={true}
+        handleSearch={handleSearch}
       >
         <div className='mb-4 flex w-full flex-wrap gap-4'>
-          {roleList?.map((list) => {
+          {roles?.map((list) => {
             return (
               <Rolecard
                 label={list?.label}

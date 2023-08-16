@@ -64,6 +64,7 @@ export default function Projects({
           <Button>Add Projects</Button>
         </Link>
       }
+      isShowSearchBar={true}
       handleSearch={handleSearch}
     >
       <TableContainer className='mb-8'>

@@ -1,4 +1,3 @@
-import { PDFDownloadLink } from '@react-pdf/renderer';
 import {
   Button,
   Table,
@@ -18,7 +17,6 @@ import { MdDelete, MdModeEditOutline } from 'react-icons/md';
 import Layout from '@/containers/Layout';
 
 import { API_ENDPOINT } from '@/const/APIRoutes';
-import MyDocument from '@/pages/admin/dummyPDF';
 
 type referrerListProps = {
   firstName: string;
@@ -81,6 +79,7 @@ export default function Refferral({
           <Button>Add Referrer</Button>
         </Link>
       }
+      isShowSearchBar={true}
       handleSearch={handleSearch}
     >
       <TableContainer>

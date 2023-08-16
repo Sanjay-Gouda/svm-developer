@@ -65,6 +65,7 @@ export default function Expanses({
             <Button>Add Expanses</Button>
           </Link>
         }
+        isShowSearchBar={true}
       >
         <TableContainer>
           <Table>
