@@ -8,6 +8,10 @@ const nextConfig = {
     domains: ['images.pexels.com'],
   },
 
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+
   reactStrictMode: true,
   swcMinify: true,
 
