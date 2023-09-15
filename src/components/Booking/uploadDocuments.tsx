@@ -28,6 +28,10 @@ const UploadDocuments = ({ onComplete, handleGoBack }: formProps) => {
   const [backAadharCard, setBackAadharCard] = useState<any>([]);
   const [panCard, setPanCard] = useState<any>([]);
 
+  const handleDocumentSubmit = () => {
+    console.log(passPhoto);
+  };
+
   const handlePanCard = (acceptedFiles: any) => {
     setPanCard((prevFiles: any) => [
       ...prevFiles,
@@ -179,7 +183,7 @@ const UploadDocuments = ({ onComplete, handleGoBack }: formProps) => {
             <Button
               size='regular'
               // onClick={() => onComplete('siteImages')}
-              // onClick={() => handlePlanningImages()}
+              onClick={() => handleDocumentSubmit()}
               className='col-span-2 ml-auto'
             >
               Submit

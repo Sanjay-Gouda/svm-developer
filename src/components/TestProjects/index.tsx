@@ -68,6 +68,7 @@ const TestProjects = ({ editId, editInitialValues }: editProps) => {
 
   const [enableSubmit, setEnableSubmit] = useState(false);
   const addProject = async (values: TDetailValues) => {
+    console.log(planningImages[0], 'images');
     const {
       address1,
       address2,
@@ -90,10 +91,22 @@ const TestProjects = ({ editId, editInitialValues }: editProps) => {
       status: status,
       unit: unit,
       address2: address2,
+      planningImages: planningImages,
+      // siteImages: siteImages,
     };
 
+    const formData = new FormData();
+
+    // formData.append('payload',)
+
+    Object.entries(payLoads).forEach(([key, value]) => {
+      formData.append(key, value);
+      return null;
+    });
+
     try {
-      const res = await httpInstance.post(`project/create`, payLoads);
+      // console.log(formData);
+      const res = await httpInstance.post(`project/create`, formData);
       console.log(res);
     } catch (error) {
       console.log(error);
@@ -149,14 +162,16 @@ const TestProjects = ({ editId, editInitialValues }: editProps) => {
     validationSchema,
     onSubmit: (values: TDetailValues) => {
       // setCounter((counter) => counter + 1);
-
       if (isformikError === 0) {
         setShowImageUpload(true);
         setEnableSubmit(true);
       }
 
       if (enableSubmit) {
-        editId ? updateProjectDetials(values) : addProject(values);
+        addProject(values);
+        // console.log('planningImages', planningImages);
+        // console.log('site', siteImages);
+        // editId ? updateProjectDetials(values) : addProject(values);
       }
 
       // console.log(values);

@@ -66,7 +66,7 @@ const ExpanseForm = ({
 }: editPorps) => {
   const route = useRouter();
   const [loader, setLoader] = useState(false);
-  const [showExapnseForm, setShowExapnseForm] = useState(false);
+  const [showExapnseForm, setShowExapnseForm] = useState(true);
 
   const [miscForm, setMiscForm] = useState<miscProps>([
     {
@@ -124,9 +124,9 @@ const ExpanseForm = ({
 
   const handleChange = (e: any, ind: number) => {
     const { name, value } = e.target;
-    const miscFormData = [...miscForm];
+    const miscFormData: any = [...miscForm];
 
-    miscFormData[ind][name] = value;
+    if (miscFormData) miscFormData[ind][name] = value;
 
     setMiscForm(miscFormData);
   };
@@ -226,7 +226,7 @@ const ExpanseForm = ({
     onSubmit: (values) => {
       const miscExpense = miscForm?.map(({ expenseName, cost }) => ({
         expenseName,
-        cost: +cost,
+        cost: cost ? +cost : 0,
       }));
 
       const miscFormvalues = {
@@ -249,7 +249,7 @@ const ExpanseForm = ({
           afterLeave={afterLeave}
           handleSearchQuery={hadnleSearchQuery}
           selected={formik.values.projectName}
-          setSelected={(project) => {
+          setSelected={(project: any) => {
             formik.setFieldValue('projectName', project);
           }}
         />
@@ -330,7 +330,7 @@ const ExpanseForm = ({
             </Button>
           </>
         ) : (
-          miscForm?.map((box, ind) => {
+          miscForm?.map((box: any, ind) => {
             return (
               <MiscellaneouForm
                 index={ind}
