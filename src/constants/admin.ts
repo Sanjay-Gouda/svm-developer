@@ -1,7 +1,7 @@
 import { BsBank2 } from 'react-icons/bs';
 import { FaUserCog, FaUsers } from 'react-icons/fa';
 import { HiCircleStack } from 'react-icons/hi2';
-import { MdHomeFilled } from 'react-icons/md';
+import { MdHomeFilled, MdTempleHindu } from 'react-icons/md';
 import {
   TbBrandBooking,
   TbBuildingEstate,
@@ -52,6 +52,11 @@ export const AdminSidebarTabs: AdminTabsProps[] = [
     name: 'Expenses',
     to: 'expanses',
     icon: TbFileInvoice,
+  },
+  {
+    name: 'Festival',
+    to: 'festival',
+    icon: MdTempleHindu,
   },
 
   {

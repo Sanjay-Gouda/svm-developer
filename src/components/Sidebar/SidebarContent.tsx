@@ -48,10 +48,6 @@ const SideTab: FC<{ tab: (typeof AdminSidebarTabs)[number] }> = ({ tab }) => {
         } inline-flex w-full items-center text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200`}
         // activeClassName=''
       >
-        {/* <span
-      className='absolute inset-y-0 left-0 w-1 rounded-br-lg rounded-tr-lg bg-purple-600'
-      aria-hidden='true'
-    /> */}
         <tab.icon
           className='h-5 w-5'
           aria-hidden='true'

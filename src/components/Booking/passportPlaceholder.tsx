@@ -24,7 +24,7 @@ const PassportPlaceholder = ({
   return (
     <>
       <div className='relative flex h-48 w-48'>
-        {files.length > 0 ? (
+        {files?.length > 0 ? (
           <>
             <ImCancelCircle
               size={30}
@@ -32,7 +32,7 @@ const PassportPlaceholder = ({
               className=' absolute right-[-18px] top-[-14px] cursor-pointer text-gray-950 dark:text-gray-50'
             />
             ;
-            {files.map((files, ind) => {
+            {files?.map((files, ind) => {
               console.log(files.name);
               return (
                 <div

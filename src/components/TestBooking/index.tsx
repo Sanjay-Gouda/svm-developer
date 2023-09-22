@@ -234,6 +234,7 @@ const TestBooking = ({ editInitialValues, editId }: editProps) => {
           bAcNo: true,
         });
       } else {
+        setShowUploadDocument(false);
         console.log(values);
         // editId ? updateBookingData(values) : addBookingData(values);
         // addBookingData(values);

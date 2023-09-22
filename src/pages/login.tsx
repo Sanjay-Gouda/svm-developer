@@ -32,6 +32,7 @@ export default function LoginPage() {
       headers: { 'Content-Type': 'application/json' },
     })
       .then((res) => {
+        // console.log(res.cookie, 'loginRes');
         const loginToken = res.data.result.accessToken;
         setLoader(false);
 
@@ -52,7 +53,6 @@ export default function LoginPage() {
     },
     validationSchema,
     onSubmit: (values) => {
-      console.log(values);
       LoginUser(values);
     },
   });

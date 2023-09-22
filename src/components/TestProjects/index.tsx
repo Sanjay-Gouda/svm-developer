@@ -68,7 +68,11 @@ const TestProjects = ({ editId, editInitialValues }: editProps) => {
 
   const [enableSubmit, setEnableSubmit] = useState(false);
   const addProject = async (values: TDetailValues) => {
-    console.log(planningImages[0], 'images');
+    const config = {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    };
+
+    // console.log(planningImages[0], 'images');
     const {
       address1,
       address2,
@@ -92,21 +96,25 @@ const TestProjects = ({ editId, editInitialValues }: editProps) => {
       unit: unit,
       address2: address2,
       planningImages: planningImages,
-      // siteImages: siteImages,
     };
 
     const formData = new FormData();
 
-    // formData.append('payload',)
-
-    Object.entries(payLoads).forEach(([key, value]) => {
-      formData.append(key, value);
-      return null;
+    Object.entries(payLoads).forEach(([key, value]: any) => {
+      if (key !== 'planningImages') {
+        formData.append(key, value);
+      }
     });
+
+    for (let i = 0; i < planningImages.length; i++) {
+      formData.append('planningImages', planningImages[i]);
+    }
 
     try {
       // console.log(formData);
-      const res = await httpInstance.post(`project/create`, formData);
+      const res = await httpInstance.post(`project/create`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
       console.log(res);
     } catch (error) {
       console.log(error);
