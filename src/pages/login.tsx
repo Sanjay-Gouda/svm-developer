@@ -33,6 +33,7 @@ export default function LoginPage() {
     })
       .then((res) => {
         // console.log(res.cookie, 'loginRes');
+        console.log(res);
         const loginToken = res.data.result.accessToken;
         setLoader(false);
 

@@ -1,7 +1,7 @@
 import { Button, Label } from '@windmill/react-ui';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { ClipLoader } from 'react-spinners';
 import { toast } from 'react-toastify';
 
@@ -71,8 +71,8 @@ const ExpanseForm = ({
   const [miscForm, setMiscForm] = useState<miscProps>([
     {
       id: Math.floor(Math.random() * 1000),
-      expenseName: undefined,
-      cost: undefined,
+      expenseName: '',
+      cost: 0,
     },
   ]);
 
@@ -100,7 +100,7 @@ const ExpanseForm = ({
       {
         id: Math.floor(Math.random() * 1000),
         expenseName: '',
-        cost: undefined,
+        cost: 0,
       },
     ]);
   };
@@ -115,12 +115,12 @@ const ExpanseForm = ({
     }
   };
 
-  useEffect(() => {
-    setMiscForm(miscExpenseList);
-    if (miscExpenseList?.length > 0) {
-      setShowExapnseForm(true);
-    }
-  }, [editId]);
+  // useEffect(() => {
+  //   setMiscForm(miscExpenseList);
+  //   if (miscExpenseList?.length > 0) {
+  //     setShowExapnseForm(true);
+  //   }
+  // }, [editId]);
 
   const handleChange = (e: any, ind: number) => {
     const { name, value } = e.target;
@@ -215,6 +215,7 @@ const ExpanseForm = ({
         route.push('/admin/expanses');
       }, 1000);
     } catch (err) {
+      setLoader(false);
       toast.error('Something Went Wrong');
     }
   };
@@ -315,6 +316,7 @@ const ExpanseForm = ({
           placeholder='cost '
         />
       </div>
+      {console.log(miscForm, 'inside JSx')}
 
       <div className='flex flex-col gap-2'>
         {showExapnseForm ? (
@@ -323,34 +325,36 @@ const ExpanseForm = ({
               className='my-1'
               layout='outline'
               onClick={() => {
-                setShowExapnseForm(true);
+                setShowExapnseForm(false);
               }}
             >
               Add Miscellaneous Exapnse
             </Button>
           </>
         ) : (
-          miscForm?.map((box: any, ind) => {
-            return (
-              <MiscellaneouForm
-                index={ind}
-                key={box.id}
-                expanse={box.expenseName}
-                cost={box.cost}
-                handleHideForm={() => {
-                  setShowExapnseForm(false);
-                  // setMiscForm([{ expenseName: '', cost: undefined }]);
-                }}
-                handleChange={(e) => {
-                  handleChange(e, ind);
-                }}
-                handleAddFields={handleAddFields}
-                handleRemoveFields={() => {
-                  handleRemoveFields(box.id);
-                }}
-              />
-            );
-          })
+          <>
+            {miscForm?.map((box, ind) => {
+              return (
+                <MiscellaneouForm
+                  index={ind}
+                  key={box.id}
+                  expanse={box.expenseName}
+                  cost={box.cost}
+                  handleHideForm={() => {
+                    setShowExapnseForm(true);
+                    // setMiscForm([{ expenseName: '', cost: undefined }]);
+                  }}
+                  handleChange={(e) => {
+                    handleChange(e, ind);
+                  }}
+                  handleAddFields={handleAddFields}
+                  handleRemoveFields={() => {
+                    handleRemoveFields(box.id);
+                  }}
+                />
+              );
+            })}
+          </>
         )}
       </div>
 

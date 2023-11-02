@@ -52,6 +52,7 @@ interface payloadProps {
   parentId?: string;
   siteImages?: string[];
   planningImages?: string[];
+  logo?: string[];
 }
 
 type editProps = {
@@ -63,6 +64,9 @@ const TestProjects = ({ editId, editInitialValues }: editProps) => {
   const router = useRouter();
   const [planningImages, setPlanningImages] = useState<any>([]);
   const [siteImages, setSiteImages] = useState<any>([]);
+
+  const [projectLogo, setProjectLogo] = useState<any>([]);
+
   const [showImageUpload, setShowImageUpload] = useState(false);
   const [isformikError, setIsFromikError] = useState<number>();
 
@@ -95,19 +99,23 @@ const TestProjects = ({ editId, editInitialValues }: editProps) => {
       status: status,
       unit: unit,
       address2: address2,
+      logo: projectLogo,
       planningImages: planningImages,
     };
 
     const formData = new FormData();
 
     Object.entries(payLoads).forEach(([key, value]: any) => {
-      if (key !== 'planningImages') {
+      if (key !== 'planningImages' && key !== 'logo') {
         formData.append(key, value);
       }
     });
 
     for (let i = 0; i < planningImages.length; i++) {
       formData.append('planningImages', planningImages[i]);
+    }
+    for (let i = 0; i < projectLogo.length; i++) {
+      formData.append('logo', projectLogo[i]);
     }
 
     try {
@@ -237,7 +245,7 @@ const TestProjects = ({ editId, editInitialValues }: editProps) => {
     <>
       {!showImageUpload ? (
         <AddProjectForm
-          handleProceed={formik.handleSubmit}
+          handleProceed={() => setShowImageUpload(true)}
           // handleProceed={handleProceed}
           handleName={formik.handleChange}
           nameValue={formik.values.name}
@@ -279,6 +287,8 @@ const TestProjects = ({ editId, editInitialValues }: editProps) => {
         />
       ) : (
         <ProjectImages
+          projectLogo={projectLogo}
+          setProjectLogo={setProjectLogo}
           planImages={planningImages}
           handleGoBack={() => setShowImageUpload(false)}
           handleSubmit={formik.handleSubmit}

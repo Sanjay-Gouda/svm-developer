@@ -37,6 +37,11 @@ export const Header = () => {
     setIsProfileMenuOpen(!isProfileMenuOpen);
   }
 
+  const handleLogout = () => {
+    // const isLoginCookie = document?.cookie?.split('=')?.[1];
+    // const token = document.cookie.get('token');
+  };
+
   return (
     <header className='shadow-bottom z-40 bg-white py-4 dark:bg-gray-800'>
       <div className='container mx-auto flex h-full items-center justify-between px-6 text-purple-600 dark:text-purple-300'>
@@ -141,7 +146,7 @@ export const Header = () => {
                 <OutlineCogIcon className='mr-3 h-4 w-4' aria-hidden='true' />
                 <span>Settings</span>
               </DropdownItem>
-              <DropdownItem onClick={() => alert('Log out!')}>
+              <DropdownItem onClick={handleLogout}>
                 <OutlineLogoutIcon
                   className='mr-3 h-4 w-4'
                   aria-hidden='true'

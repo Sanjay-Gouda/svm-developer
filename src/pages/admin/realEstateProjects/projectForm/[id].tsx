@@ -26,6 +26,8 @@ const EditProject = ({ id, projectDetails }) => {
 
   // console.log(getEditFormValues);
 
+  console.log(projectDetails, 'details');
+
   const {
     name,
     ownerName,

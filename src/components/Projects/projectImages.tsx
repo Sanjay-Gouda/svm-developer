@@ -1,6 +1,7 @@
 import { Button } from '@windmill/react-ui';
 import React from 'react';
 
+import LogoContainer from '@/components/Projects/logoContainer';
 import UploadProjectImages from '@/components/Projects/uploadProjectImages';
 import UploadSiteImages from '@/components/Projects/uploadSiteImages';
 
@@ -11,9 +12,18 @@ function ProjectImages({
   projectDevelopementImages,
   setProjectDevelopementImages,
   handleSubmit,
+  projectLogo,
+  setProjectLogo,
 }) {
   return (
     <div className='flex flex-col gap-5'>
+      <div>
+        <LogoContainer
+          projectLogo={projectLogo}
+          setProjectLogo={setProjectLogo}
+        />
+      </div>
+
       <div>
         <UploadProjectImages
           setPlanImages={setPlanImages}

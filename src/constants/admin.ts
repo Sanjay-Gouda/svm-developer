@@ -13,7 +13,6 @@ import { MoneyIcon } from '@/icons';
 interface AdminTabsProps {
   name: string;
   icon: React.FC<any>;
-
   to: string;
 }
 
@@ -32,6 +31,11 @@ export const AdminSidebarTabs: AdminTabsProps[] = [
     name: 'Booking',
     to: 'booking',
     icon: TbBrandBooking,
+  },
+  {
+    name: 'Installment',
+    to: 'installment',
+    icon: TbFileInvoice,
   },
   {
     name: 'Customers',

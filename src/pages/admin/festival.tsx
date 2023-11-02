@@ -24,12 +24,13 @@ function Festival() {
     const payload = {
       url: url,
       title: title,
-      desc: desc,
+      description: desc,
+      // isLatest: false,
       thumbnailImg: 'string',
     };
 
     try {
-      const res = await httpInstance.post('/festival/create', payload);
+      const res = await httpInstance.post('website/festival/create', payload);
       console.log(res);
     } catch (err) {
       console.log(err);

@@ -5,6 +5,11 @@ export function middleware(request: NextRequest) {
   // return NextResponse.redirect(new URL('/home', request.url));
 
   const isLogin = true;
+  //   const cookies = parse(request?.headers?.cookie || '');
+  // const isLoginCookie = cookies.isLogin;
+
+  // const isLoginCookie = document?.cookie?.split('=')?.[1];
+
   const currentURL = request.nextUrl.clone();
 
   if (isLogin) {
