@@ -38,6 +38,12 @@ const EditProject = ({ id, projectDetails }) => {
     description,
     unit,
     area,
+    downPayment,
+    emiAmt,
+    totalAmt,
+    location,
+    logoUrl,
+    projectImages,
   } = projectDetails;
 
   const editInitialValues = {
@@ -47,11 +53,14 @@ const EditProject = ({ id, projectDetails }) => {
     area: area,
     pincode: pincode,
     unit: unit,
-    // state: '',
-    // dist: '',
+    emiAmt: emiAmt,
+    downPayment: downPayment,
+    totalAmt: totalAmt,
     description: description,
     status: status,
     address1: address1,
+    logoUrl: logoUrl,
+    projectImages: projectImages,
   };
 
   return (

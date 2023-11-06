@@ -28,11 +28,17 @@ const validationSchema = Yup.object().shape({
   // parentProject: Yup.string().required('Parent Project is required'),
   // status: Yup.string().required('status is required'),
   ownerName: Yup.string().required('Owner Name is required'),
+
   area: Yup.number().required('Area must be in number'),
+  emiAmt: Yup.number().required('Amount must be in number'),
+  downPayment: Yup.number().required(' Amount must be in number'),
+  totalAmt: Yup.number().required('Amount must be in number'),
+  // location: Yup.number().required('Area must be in number'),
+
   // projectStatus: Yup.string().required('Project Status is required'),
   pincode: Yup.string().required('Pincode is required'),
-  state: Yup.string().required('state is required'),
-  dist: Yup.string().required('district is required'),
+  // state: Yup.string().required('state is required'),
+  // dist: Yup.string().required('district is required'),
   address1: Yup.string().required('address is required'),
 });
 
@@ -51,6 +57,10 @@ const addInitialValues: TDetailValues = {
   description: '',
   status: 'upcomming',
   address1: undefined,
+  emiAmt: undefined,
+  downPayment: undefined,
+  totalAmt: undefined,
+  location: '',
 };
 
 type projectProps = {
@@ -71,6 +81,21 @@ type projectProps = {
   ownerNameErrorMessage: string | undefined;
 
   areaValue: string | number | undefined;
+
+  emiAmt: number | undefined;
+  handleEmi: (e: any) => void;
+  emiAmtError: boolean;
+  emiErrorMessage: string | undefined;
+  downPayment: number | undefined;
+  handleDownPayment: (e: any) => void;
+  downPaymentError: boolean;
+  downPaymentErrorMessage: string | undefined;
+
+  totalAmt: number | undefined;
+  handleTotalAmount: (e: any) => void;
+  totalAmtError: boolean;
+  totalAmtErrorMessage: string | undefined;
+
   handleArea: (e: any) => void;
   areaError: boolean;
   areaErrorMessgage: string | undefined;
@@ -115,6 +140,10 @@ function AddProjectForm({
   areaValue,
   descValue,
   distValue,
+  emiAmt,
+  handleEmi,
+  emiAmtError,
+  emiErrorMessage,
   handleAddress,
   handleArea,
   handleDesc,
@@ -133,6 +162,16 @@ function AddProjectForm({
   pincodeValue,
   secondaryAddressValue,
   stateValue,
+
+  downPayment,
+  downPaymentError,
+  downPaymentErrorMessage,
+  handleDownPayment,
+
+  handleTotalAmount,
+  totalAmt,
+  totalAmtError,
+  totalAmtErrorMessage,
 }: projectProps) {
   const dispatch = useDispatch();
   const router = useRouter();
@@ -262,14 +301,6 @@ function AddProjectForm({
           label='Area'
         />
         {areaError && <div className='text-red-400'>{areaErrorMessgage}</div>}
-        {/* 
-        <SelectOption
-          onChange={formik.handleChange}
-          title='Parent Project'
-          options={ParentProjects}
-          containerClassName='mt-1 w-[50%]'
-          name='parentProject'
-        /> */}
       </div>
 
       <div className='flex w-full items-center justify-between gap-4'>
@@ -331,6 +362,43 @@ function AddProjectForm({
           {/* {formik.touched.state && formik.errors.state && (
             <div className='text-red-400'>{formik.errors.state}</div>
           )} */}
+        </div>
+      </div>
+      <div className='flex w-full  gap-4'>
+        <div className='flex w-full flex-col'>
+          <TextInput
+            onChange={handleEmi}
+            // onChange={handlePincode}
+            value={emiAmt}
+            name='emiAmt'
+            containerClassName='w-full'
+            label='EMI'
+          />
+          {emiAmtError && <div className='text-red-400'>{emiErrorMessage}</div>}
+        </div>
+        <div className='flex w-full flex-col'>
+          <TextInput
+            onChange={handleDownPayment}
+            value={downPayment}
+            name='downPayment'
+            containerClassName=' w-full'
+            label='Down Payment'
+          />
+          {downPaymentError && (
+            <div className='text-red-400'>{downPaymentErrorMessage}</div>
+          )}
+        </div>
+        <div className='flex w-full flex-col'>
+          <TextInput
+            onChange={handleTotalAmount}
+            value={totalAmt}
+            name='totalAmt'
+            containerClassName=' w-full'
+            label='Total Price'
+          />
+          {totalAmtError && (
+            <div className='text-red-400'>{totalAmtErrorMessage}</div>
+          )}
         </div>
       </div>
 

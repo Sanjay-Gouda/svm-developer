@@ -6,7 +6,6 @@ import ImageContainer from '@/components/Booking/imageContainer';
 import UploadPlaceholder from '@/components/Projects/uploadPlaceholder';
 
 const UploadProjectImages = ({ setPlanImages, planImages }) => {
-
   const handleDrop = (acceptedFiles: any) => {
     setPlanImages((prevFiles: any) => [
       ...prevFiles,
@@ -55,11 +54,12 @@ const UploadProjectImages = ({ setPlanImages, planImages }) => {
       {planImages?.length > 0 ? (
         <div className='auto  flex w-full flex-wrap gap-6  rounded-lg  border-2 border-gray-300 px-2 py-5  dark:border-gray-600'>
           {planImages?.map((file, ind) => {
+            console.log(file, 'files');
             return (
               <>
                 <ImageContainer
                   key={ind}
-                  file={file?.preview}
+                  file={file?.preview || file}
                   handleRemove={() => handleRemove(file?.name)}
                 />
               </>

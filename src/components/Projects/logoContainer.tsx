@@ -33,7 +33,7 @@ const LogoContainer = ({ projectLogo, setProjectLogo }: TLogo) => {
                 <>
                   <ImageContainer
                     key={ind}
-                    file={file?.prevFile}
+                    file={file?.prevFile || file}
                     // handleRemove={() => handleRemove(file?.name)}
                   />
                 </>

@@ -18,10 +18,13 @@ const validationSchema = Yup.object().shape({
   // status: Yup.string().required('status is required'),
   ownerName: Yup.string().required('Owner Name is required'),
   area: Yup.number().required('Area must be in number'),
+  emiAmt: Yup.number().required('Amount must be in number'),
+  downPayment: Yup.number().required(' Amount must be in number'),
+  totalAmt: Yup.number().required('Amount must be in number'),
   // projectStatus: Yup.string().required('Project Status is required'),
   pincode: Yup.string().required('Pincode is required'),
-  state: Yup.string().required('state is required'),
-  dist: Yup.string().required('district is required'),
+  // state: Yup.string().required('state is required'),
+  // dist: Yup.string().required('district is required'),
   address1: Yup.string().required('address is required'),
 });
 
@@ -37,6 +40,10 @@ const addInitialValues: TDetailValues = {
   description: '',
   status: 'upcomming',
   address1: undefined,
+  downPayment: undefined,
+  totalAmt: undefined,
+  emiAmt: undefined,
+  location: '',
 };
 
 interface payloadProps {
@@ -53,6 +60,10 @@ interface payloadProps {
   siteImages?: string[];
   planningImages?: string[];
   logo?: string[];
+  location?: string;
+  emiAmt: number | undefined;
+  downPayment: number | undefined;
+  totalAmt: number | undefined;
 }
 
 type editProps = {
@@ -65,6 +76,13 @@ const TestProjects = ({ editId, editInitialValues }: editProps) => {
   const [planningImages, setPlanningImages] = useState<any>([]);
   const [siteImages, setSiteImages] = useState<any>([]);
 
+  const [editPlanImages, setEditPlanImages] = useState<any>([
+    {
+      preview: '',
+      name: '',
+    },
+  ]);
+
   const [projectLogo, setProjectLogo] = useState<any>([]);
 
   const [showImageUpload, setShowImageUpload] = useState(false);
@@ -72,9 +90,7 @@ const TestProjects = ({ editId, editInitialValues }: editProps) => {
 
   const [enableSubmit, setEnableSubmit] = useState(false);
   const addProject = async (values: TDetailValues) => {
-    const config = {
-      headers: { 'Content-Type': 'multipart/form-data' },
-    };
+    console.log('Worked');
 
     // console.log(planningImages[0], 'images');
     const {
@@ -87,6 +103,9 @@ const TestProjects = ({ editId, editInitialValues }: editProps) => {
       pincode,
       status,
       unit,
+      downPayment,
+      totalAmt,
+      emiAmt,
     } = values;
 
     const payLoads: payloadProps = {
@@ -101,6 +120,10 @@ const TestProjects = ({ editId, editInitialValues }: editProps) => {
       address2: address2,
       logo: projectLogo,
       planningImages: planningImages,
+      location: 'location',
+      downPayment: downPayment,
+      emiAmt: emiAmt,
+      totalAmt: totalAmt,
     };
 
     const formData = new FormData();
@@ -177,21 +200,19 @@ const TestProjects = ({ editId, editInitialValues }: editProps) => {
     initialValues: formInitialValue,
     validationSchema,
     onSubmit: (values: TDetailValues) => {
+      console.log(values, 'Values');
+
       // setCounter((counter) => counter + 1);
       if (isformikError === 0) {
         setShowImageUpload(true);
         setEnableSubmit(true);
       }
 
-      if (enableSubmit) {
+      if (enableSubmit && showImageUpload) {
         addProject(values);
-        // console.log('planningImages', planningImages);
-        // console.log('site', siteImages);
+
         // editId ? updateProjectDetials(values) : addProject(values);
       }
-
-      // console.log(values);
-      // isSubmit ? console.log(values) : setShowImageUpload(true);
     },
   });
 
@@ -239,18 +260,56 @@ const TestProjects = ({ editId, editInitialValues }: editProps) => {
     return () => {
       clearTimeout(timer);
     };
-  }, [pincodeQuery]);
+  }, [pincodeQuery, editId]);
+
+  /* set Logo if editId exist */
+
+  // useEffect(() => {
+  //   setProjectLogo([editInitialValues?.logoUrl]);
+
+  //   editInitialValues?.projectImages((image) => {
+  //     const { url, projectImageId } = image;
+  //     setEditPlanImages({
+  //       preview: url,
+  //       name: projectImageId,
+  //     });
+  //   });
+  // }, [editId]);
+
+  useEffect(() => {
+    console.log(editPlanImages, 'images');
+  }, [editPlanImages]);
 
   return (
     <>
       {!showImageUpload ? (
         <AddProjectForm
-          handleProceed={() => setShowImageUpload(true)}
-          // handleProceed={handleProceed}
+          // handleProceed={() => setShowImageUpload(true)}
+          handleProceed={() => formik.handleSubmit()}
           handleName={formik.handleChange}
           nameValue={formik.values.name}
           nameError={formik.touched.name && formik.errors.name ? true : false}
           nameErrorMessage={formik.errors.name}
+          emiAmt={formik.values.emiAmt}
+          handleEmi={formik.handleChange}
+          downPayment={formik.values.downPayment}
+          handleDownPayment={formik.handleChange}
+          downPaymentError={
+            formik.touched.downPayment && formik.errors.downPayment
+              ? true
+              : false
+          }
+          downPaymentErrorMessage={formik.errors.downPayment}
+          totalAmt={formik.values.totalAmt}
+          handleTotalAmount={formik.handleChange}
+          totalAmtError={
+            formik.touched.totalAmt && formik.errors.totalAmt ? true : false
+          }
+          totalAmtErrorMessage={formik.errors.totalAmt}
+          emiAmtError={
+            formik.touched.emiAmt && formik.errors.emiAmt ? true : false
+          }
+          emiErrorMessage={formik.errors.emiAmt}
           // nameErrorMessage={fieldError?.name}
           ownerNameValue={formik.values.ownerName}
           handleOwnerName={formik.handleChange}
@@ -291,7 +350,7 @@ const TestProjects = ({ editId, editInitialValues }: editProps) => {
           setProjectLogo={setProjectLogo}
           planImages={planningImages}
           handleGoBack={() => setShowImageUpload(false)}
-          handleSubmit={formik.handleSubmit}
+          handleSubmit={() => formik.handleSubmit()}
           setPlanImages={setPlanningImages}
           setProjectDevelopementImages={setSiteImages}
           projectDevelopementImages={siteImages}

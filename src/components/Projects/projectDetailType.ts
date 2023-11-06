@@ -13,6 +13,10 @@ export type TDetailValues = {
   description?: string | undefined;
   planningImageFormData?: string[];
   siteImageFromData?: string[];
+  emiAmt: number | undefined;
+  downPayment: number | undefined;
+  totalAmt: number | undefined;
+  location: string;
 };
 
 export type TPlanningState = TDetailValues & {
