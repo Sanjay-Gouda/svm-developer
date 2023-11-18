@@ -1,10 +1,24 @@
 import { Button } from '@windmill/react-ui';
+import { useRouter } from 'next/router';
 import React from 'react';
 import { ClipLoader } from 'react-spinners';
 
 import LogoContainer from '@/components/Projects/logoContainer';
 import UploadProjectImages from '@/components/Projects/uploadProjectImages';
 import UploadSiteImages from '@/components/Projects/uploadSiteImages';
+
+type TImageProps = {
+  isEditActive?: string;
+  handleGoBack: () => void;
+  planImages: [];
+  setPlanImages: (e: any) => void;
+  projectDevelopementImages: [];
+  setProjectDevelopementImages: (e: any) => void;
+  handleSubmit: (e: any) => void;
+  projectLogo: [];
+  setProjectLogo: (e: any) => void;
+  loader: boolean;
+};
 
 function ProjectImages({
   handleGoBack,
@@ -15,8 +29,11 @@ function ProjectImages({
   handleSubmit,
   projectLogo,
   setProjectLogo,
+  isEditActive,
   loader,
-}) {
+}: TImageProps) {
+  const routes = useRouter();
+
   return (
     <div className='flex flex-col gap-5'>
       <div>
@@ -48,15 +65,25 @@ function ProjectImages({
         >
           Go Back
         </Button>
-        <Button
-          size='regular'
-          // onClick={() => onComplete('siteImages')}
-          onClick={handleSubmit}
-          className='col-span-2 ml-auto'
-        >
-          Submit
-          {loader && <ClipLoader size={20} color='white' />}
-        </Button>
+        <div className='flex gap-4'>
+          <Button
+            size='regular'
+            // onClick={() => onComplete('siteImages')}
+            onClick={handleSubmit}
+            className='col-span-2 ml-auto'
+          >
+            Submit
+            {loader && <ClipLoader size={20} color='white' />}
+          </Button>
+          {isEditActive && (
+            <Button
+              layout='outline'
+              onClick={() => routes.push('/admin/projects')}
+            >
+              Cancel
+            </Button>
+          )}
+        </div>
       </div>
     </div>
   );

@@ -59,7 +59,7 @@ const UploadProjectImages = ({ setPlanImages, planImages }) => {
               <>
                 <ImageContainer
                   key={ind}
-                  file={file?.preview || file}
+                  file={file?.preview || file.url}
                   handleRemove={() => handleRemove(file?.name)}
                 />
               </>

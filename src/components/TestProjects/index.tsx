@@ -64,9 +64,9 @@ interface payloadProps {
   planningImages?: string[];
   logo?: string[];
   location?: string;
-  emiAmt: number | undefined;
-  downPayment: number | undefined;
-  totalAmt: number | undefined;
+  emiAmt: number;
+  downPayment: number;
+  totalAmt: number;
 }
 
 type editProps = {
@@ -75,18 +75,12 @@ type editProps = {
 };
 
 const TestProjects = ({ editId, editInitialValues }: editProps) => {
+  console.log(editInitialValues, 'editValues');
+
   const router = useRouter();
   const [planningImages, setPlanningImages] = useState<any>([]);
   const [siteImages, setSiteImages] = useState<any>([]);
-
   const [loader, setLoader] = useState(false);
-
-  const [editPlanImages, setEditPlanImages] = useState<any>([
-    {
-      preview: '',
-      name: '',
-    },
-  ]);
 
   const [projectLogo, setProjectLogo] = useState<any>([]);
 
@@ -171,19 +165,23 @@ const TestProjects = ({ editId, editInitialValues }: editProps) => {
   };
 
   const updateProjectDetials = async (values: TDetailValues) => {
+    setLoader(true);
     const {
-      name,
-      area,
       address1,
       address2,
-      unit,
-      status,
-      pincode,
+      area,
       description,
+      name,
       ownerName,
+      pincode,
+      status,
+      unit,
+      downPayment,
+      totalAmt,
+      emiAmt,
     } = values;
 
-    const payload = {
+    const payload: payloadProps = {
       address1: address1,
       area: area,
       name: name,
@@ -193,23 +191,50 @@ const TestProjects = ({ editId, editInitialValues }: editProps) => {
       status: status,
       unit: unit,
       address2: address2,
+      logo: projectLogo,
+      planningImages: planningImages,
+      location: 'location',
+      downPayment: +downPayment,
+      emiAmt: +emiAmt,
+      totalAmt: +totalAmt,
     };
 
-    await axios({
-      method: 'put',
-      url: `${API_ENDPOINT.END_POINT}project/update/${editId}`,
-      data: payload,
-      headers: { 'Content-Type': 'application/json' },
-    })
-      .then((res) => {
-        toast.success('Data updated successfully');
-        setTimeout(() => {
-          router.push('/admin/projects');
-        }, 1000);
-      })
-      .catch((err) => {
-        toast.error('Something went wrong');
+    const formData = new FormData();
+
+    Object.entries(payload).forEach(([key, value]: any) => {
+      if (key !== 'planningImages' && key !== 'logo') {
+        formData.append(key, value);
+      }
+    });
+
+    for (let i = 0; i < planningImages.length; i++) {
+      formData.append('planningImages', planningImages[i]);
+    }
+    for (let i = 0; i < projectLogo.length; i++) {
+      formData.append('logo', projectLogo[i]);
+    }
+
+    try {
+      // console.log(formData);
+      const res = await httpInstance.put(`project/update/${editId}`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
       });
+      const isNotify = res.data.isNotify;
+      const successMessage = isNotify
+        ? res?.data?.message
+        : 'Project updated successfully';
+      toast.success(successMessage);
+      setLoader(false);
+      setTimeout(() => {
+        routes.push('/admin/projects');
+      }, 1000);
+
+      console.log(res);
+    } catch (error) {
+      toast.error('Something went wrong');
+
+      console.log(error);
+    }
   };
 
   const formInitialValue = editId ? editInitialValues : addInitialValues;
@@ -227,9 +252,9 @@ const TestProjects = ({ editId, editInitialValues }: editProps) => {
       }
 
       if (enableSubmit && showImageUpload) {
-        addProject(values);
+        // addProject(values);
 
-        // editId ? updateProjectDetials(values) : addProject(values);
+        editId ? updateProjectDetials(values) : addProject(values);
       }
     },
   });
@@ -282,21 +307,11 @@ const TestProjects = ({ editId, editInitialValues }: editProps) => {
 
   /* set Logo if editId exist */
 
-  // useEffect(() => {
-  //   setProjectLogo([editInitialValues?.logoUrl]);
-
-  //   editInitialValues?.projectImages((image) => {
-  //     const { url, projectImageId } = image;
-  //     setEditPlanImages({
-  //       preview: url,
-  //       name: projectImageId,
-  //     });
-  //   });
-  // }, [editId]);
-
   useEffect(() => {
-    console.log(editPlanImages, 'images');
-  }, [editPlanImages]);
+    setProjectLogo([editInitialValues?.logoUrl]);
+
+    setPlanningImages(editInitialValues?.projectImages);
+  }, [editId]);
 
   return (
     <>
@@ -364,6 +379,7 @@ const TestProjects = ({ editId, editInitialValues }: editProps) => {
         />
       ) : (
         <ProjectImages
+          isEditActive={editId}
           loader={loader}
           projectLogo={projectLogo}
           setProjectLogo={setProjectLogo}
