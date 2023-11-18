@@ -3,7 +3,7 @@ import React from 'react';
 const ServerError = () => {
   return (
     <>
-      <div className='flex h-[calc(100vh-80px)] w-full items-center justify-center bg-white p-5'>
+      <div className='flex h-[calc(100vh-80px)] w-full items-center justify-center bg-white p-5 shadow-lg dark:bg-gray-800'>
         <div className='text-center'>
           <div className='inline-flex rounded-full bg-red-100 p-4'>
             <div className='rounded-full bg-red-200 stroke-red-600 p-4'>
@@ -28,10 +28,10 @@ const ServerError = () => {
               </svg>
             </div>
           </div>
-          <h1 className='mt-5 text-[36px] font-bold text-slate-800 lg:text-[50px]'>
+          <h1 className='mt-5 text-[36px] font-bold text-slate-800 dark:text-white lg:text-[50px]'>
             500 - Server error
           </h1>
-          <p className='mt-5 text-slate-600 lg:text-lg'>
+          <p className='mt-5 text-slate-600 dark:text-gray-400 lg:text-lg'>
             Oops something went wrong. Try to refresh this page or <br /> feel
             free to contact us if the problem presists.
           </p>

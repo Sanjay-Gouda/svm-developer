@@ -14,6 +14,8 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { MdDelete, MdModeEditOutline } from 'react-icons/md';
 
+import EmptyState from '@/components/Empty';
+import ServerError from '@/components/Error/500Error';
 import Layout from '@/containers/Layout';
 
 import { API_ENDPOINT } from '@/const/APIRoutes';
@@ -28,13 +30,23 @@ type referrerListProps = {
 };
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const res = await axios.get(`${API_ENDPOINT.END_POINT}/referral/list`);
-  const repo = res.data.result.list;
-  return { props: { repo } };
+  try {
+    const res = await axios.get(`${API_ENDPOINT.END_POINT}/referral/list`);
+    const repo = res.data.result.list;
+    return { props: { repo } };
+  } catch (err) {
+    console.log(err);
+  }
+  return {
+    props: {
+      error: 'An error occurred while fetching data. Please try again later.',
+    },
+  };
 };
 
 export default function Refferral({
   repo,
+  error,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [refferList, setRefferList] = useState(repo);
 
@@ -82,47 +94,61 @@ export default function Refferral({
       isShowSearchBar={true}
       handleSearch={handleSearch}
     >
-      <TableContainer>
-        <Table>
-          <TableHeader>
-            <tr>
-              <TableCell className='text-[14px]'>Name</TableCell>
-              <TableCell className='text-[14px]'>Mobile No</TableCell>
-              <TableCell className='text-[14px]'>Emaild Id</TableCell>
-              <TableCell className='text-[14px]'>Address</TableCell>
-              <TableCell className='text-[14px]'>Action </TableCell>
-            </tr>
-          </TableHeader>
-          <TableBody>
-            {refferList?.map((list) => {
-              return (
-                <TableRow key={list?.referralId}>
-                  <TableCell>{list?.firstName}</TableCell>
-                  <TableCell>{list?.phone}</TableCell>
-                  <TableCell>{list?.email}</TableCell>
-                  <TableCell>{list?.address}</TableCell>
-                  <TableCell className='flex gap-5'>
-                    {/* <EditIcon className='h-5 w-5 cursor-pointer' /> */}
-                    <MdModeEditOutline
-                      size='24'
-                      className='cursor-pointer'
-                      style={{ color: ' #30bcc2' }}
-                      onClick={() => {
-                        handleFormEdit(list?.referralId);
-                      }}
-                    />
-                    <MdDelete
-                      size='24'
-                      className='cursor-pointer'
-                      style={{ color: ' #F38C7F' }}
-                    />
-                  </TableCell>
-                </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      {error ? (
+        <>
+          <ServerError />
+        </>
+      ) : (
+        <>
+          {repo.length === 0 ? (
+            <>
+              <EmptyState />
+            </>
+          ) : (
+            <TableContainer>
+              <Table>
+                <TableHeader>
+                  <tr>
+                    <TableCell className='text-[14px]'>Name</TableCell>
+                    <TableCell className='text-[14px]'>Mobile No</TableCell>
+                    <TableCell className='text-[14px]'>Emaild Id</TableCell>
+                    <TableCell className='text-[14px]'>Address</TableCell>
+                    <TableCell className='text-[14px]'>Action </TableCell>
+                  </tr>
+                </TableHeader>
+                <TableBody>
+                  {refferList?.map((list) => {
+                    return (
+                      <TableRow key={list?.referralId}>
+                        <TableCell>{list?.firstName}</TableCell>
+                        <TableCell>{list?.phone}</TableCell>
+                        <TableCell>{list?.email}</TableCell>
+                        <TableCell>{list?.address}</TableCell>
+                        <TableCell className='flex gap-5'>
+                          {/* <EditIcon className='h-5 w-5 cursor-pointer' /> */}
+                          <MdModeEditOutline
+                            size='24'
+                            className='cursor-pointer'
+                            style={{ color: ' #30bcc2' }}
+                            onClick={() => {
+                              handleFormEdit(list?.referralId);
+                            }}
+                          />
+                          <MdDelete
+                            size='24'
+                            className='cursor-pointer'
+                            style={{ color: ' #F38C7F' }}
+                          />
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          )}
+        </>
+      )}
     </Layout>
   );
 }

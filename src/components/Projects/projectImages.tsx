@@ -1,5 +1,6 @@
 import { Button } from '@windmill/react-ui';
 import React from 'react';
+import { ClipLoader } from 'react-spinners';
 
 import LogoContainer from '@/components/Projects/logoContainer';
 import UploadProjectImages from '@/components/Projects/uploadProjectImages';
@@ -14,6 +15,7 @@ function ProjectImages({
   handleSubmit,
   projectLogo,
   setProjectLogo,
+  loader,
 }) {
   return (
     <div className='flex flex-col gap-5'>
@@ -53,6 +55,7 @@ function ProjectImages({
           className='col-span-2 ml-auto'
         >
           Submit
+          {loader && <ClipLoader size={20} color='white' />}
         </Button>
       </div>
     </div>

@@ -14,6 +14,8 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { MdDelete, MdModeEditOutline } from 'react-icons/md';
 
+import EmptyState from '@/components/Empty';
+import ServerError from '@/components/Error/500Error';
 import Layout from '@/containers/Layout';
 
 import { API_ENDPOINT } from '@/const/APIRoutes';
@@ -35,16 +37,28 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   };
 
   // console.log(token, 'TOKEN');
-  const res = await axios.get(
-    `${API_ENDPOINT.END_POINT}/account/basic-list`,
-    axiosConfig
-  );
-  const repo = res.data.result;
-  return { props: { repo } };
+
+  try {
+    const res = await axios.get(
+      `${API_ENDPOINT.END_POINT}/account/basic-list`,
+      axiosConfig
+    );
+    const repo = res.data.result;
+    return { props: { repo } };
+  } catch (err) {
+    console.log(err);
+  }
+
+  return {
+    props: {
+      error: 'An error occurred while fetching data. Please try again later.',
+    },
+  };
 };
 
 export default function Account({
   repo,
+  error,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [accountDetails, setAccountDetails] =
     useState<accounrDetailProps[]>(repo);
@@ -89,46 +103,60 @@ export default function Account({
         isShowSearchBar={true}
         handleSearch={handleSearch}
       >
-        <TableContainer>
-          <Table>
-            <TableHeader>
-              <tr>
-                <TableCell className='text-[14px]'>Bank Name</TableCell>
-                <TableCell className='text-[14px]'>
-                  Account Holdername
-                </TableCell>
-                <TableCell className='text-[14px]'>Account No.</TableCell>
-                <TableCell className='text-[14px]'>Action </TableCell>
-              </tr>
-            </TableHeader>
-            <TableBody>
-              {accountDetails?.map((details) => {
-                return (
-                  <TableRow key={details?.adminAccountId}>
-                    <TableCell>{details?.bankName}</TableCell>
-                    <TableCell>{details?.name}</TableCell>
-                    <TableCell>{details?.accNo}</TableCell>
-                    <TableCell className='flex gap-5'>
-                      <MdModeEditOutline
-                        size='24'
-                        className='cursor-pointer'
-                        style={{ color: ' #30bcc2' }}
-                        onClick={() => {
-                          handleEdit(details?.adminAccountId);
-                        }}
-                      />
-                      <MdDelete
-                        size='24'
-                        className='cursor-pointer'
-                        style={{ color: ' #F38C7F' }}
-                      />
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-        </TableContainer>
+        {error ? (
+          <>
+            <ServerError />
+          </>
+        ) : (
+          <>
+            {repo?.length === 0 ? (
+              <>
+                <EmptyState />
+              </>
+            ) : (
+              <TableContainer>
+                <Table>
+                  <TableHeader>
+                    <tr>
+                      <TableCell className='text-[14px]'>Bank Name</TableCell>
+                      <TableCell className='text-[14px]'>
+                        Account Holdername
+                      </TableCell>
+                      <TableCell className='text-[14px]'>Account No.</TableCell>
+                      <TableCell className='text-[14px]'>Action </TableCell>
+                    </tr>
+                  </TableHeader>
+                  <TableBody>
+                    {accountDetails?.map((details) => {
+                      return (
+                        <TableRow key={details?.adminAccountId}>
+                          <TableCell>{details?.bankName}</TableCell>
+                          <TableCell>{details?.name}</TableCell>
+                          <TableCell>{details?.accNo}</TableCell>
+                          <TableCell className='flex gap-5'>
+                            <MdModeEditOutline
+                              size='24'
+                              className='cursor-pointer'
+                              style={{ color: ' #30bcc2' }}
+                              onClick={() => {
+                                handleEdit(details?.adminAccountId);
+                              }}
+                            />
+                            <MdDelete
+                              size='24'
+                              className='cursor-pointer'
+                              style={{ color: ' #F38C7F' }}
+                            />
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            )}
+          </>
+        )}
       </Layout>
     </>
   );

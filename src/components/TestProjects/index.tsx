@@ -5,9 +5,12 @@ import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 
+import 'react-toastify/dist/ReactToastify.css';
+
 import { TDetailValues } from '@/components/Projects/projectDetailType';
 import ProjectImages from '@/components/Projects/projectImages';
 import AddProjectForm from '@/components/TestProjects/addProjectForm';
+import { SvmProjectToast } from '@/components/Toast/Toast';
 
 import { API_ENDPOINT } from '@/const/APIRoutes';
 import { httpInstance } from '@/constants/httpInstances';
@@ -76,6 +79,8 @@ const TestProjects = ({ editId, editInitialValues }: editProps) => {
   const [planningImages, setPlanningImages] = useState<any>([]);
   const [siteImages, setSiteImages] = useState<any>([]);
 
+  const [loader, setLoader] = useState(false);
+
   const [editPlanImages, setEditPlanImages] = useState<any>([
     {
       preview: '',
@@ -87,11 +92,12 @@ const TestProjects = ({ editId, editInitialValues }: editProps) => {
 
   const [showImageUpload, setShowImageUpload] = useState(false);
   const [isformikError, setIsFromikError] = useState<number>();
+  const routes = useRouter();
 
   const [enableSubmit, setEnableSubmit] = useState(false);
   const addProject = async (values: TDetailValues) => {
     console.log('Worked');
-
+    setLoader(true);
     // console.log(planningImages[0], 'images');
     const {
       address1,
@@ -146,8 +152,20 @@ const TestProjects = ({ editId, editInitialValues }: editProps) => {
       const res = await httpInstance.post(`project/create`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
+      const isNotify = res.data.isNotify;
+      const successMessage = isNotify
+        ? res?.data?.message
+        : 'Project Created successfully';
+      toast.success(successMessage);
+      setLoader(false);
+      setTimeout(() => {
+        routes.push('/admin/projects');
+      }, 1000);
+
       console.log(res);
     } catch (error) {
+      toast.error('Something went wrong');
+
       console.log(error);
     }
   };
@@ -346,6 +364,7 @@ const TestProjects = ({ editId, editInitialValues }: editProps) => {
         />
       ) : (
         <ProjectImages
+          loader={loader}
           projectLogo={projectLogo}
           setProjectLogo={setProjectLogo}
           planImages={planningImages}
@@ -356,6 +375,7 @@ const TestProjects = ({ editId, editInitialValues }: editProps) => {
           projectDevelopementImages={siteImages}
         />
       )}
+      <SvmProjectToast />
     </>
   );
 };
