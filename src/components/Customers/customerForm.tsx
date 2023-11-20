@@ -1,13 +1,13 @@
 import { Button } from '@windmill/react-ui';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
-import { ClipLoader } from 'react-spinners';
+import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 
 import 'react-toastify/dist/ReactToastify.css';
 
+import UploadDocuments from '@/components/Booking/uploadDocuments';
 import { SvmProjectToast } from '@/components/Toast/Toast';
 import { TextInput } from '@/components/ui-blocks';
 
@@ -46,10 +46,39 @@ type editValueProps = {
   editId?: string;
 };
 
+type TDocuments = {
+  passPhoto: [];
+  secondPassPhoto: [];
+  thirdPassphoto: [];
+  frontAadharCard: [];
+  backAadharCard: [];
+  panCard: [];
+};
+
 function CustomerForm({ editInitialValues, editId }: editValueProps) {
   const [isDataSubmitted, setIsDataSubmitted] = useState(false);
   const routes = useRouter();
+  const [isformikError, setIsFromikError] = useState<number>();
+  const [showUploadDoc, setShowUploadDoc] = useState(false);
   const [loader, setLoader] = useState(false);
+  const [enableSubmit, setEnableSubmit] = useState(false);
+
+  const [passPhoto, setPassPhoto] = useState<any>([]);
+  const [thirdPassphoto, setThirdPassphoto] = useState<any>([]);
+  const [secondPassPhoto, setSecondPassPhoto] = useState<any>([]);
+  const [frontAadharCard, setFrontAadharCard] = useState<any>([]);
+  const [backAadharCard, setBackAadharCard] = useState<any>([]);
+  const [panCard, setPanCard] = useState<any>([]);
+
+  // const [documents, setDocuments] = useState<TDocuments>({
+  //   passPhoto: [],
+  //   secondPassPhoto: [],
+  //   thirdPassphoto: [],
+  //   frontAadharCard: [],
+  //   backAadharCard: [],
+  //   panCard: [],
+  // });
+
   /* Add Customer  */
   const addCustomers = async (details: formProps) => {
     setLoader(true);
@@ -67,6 +96,10 @@ function CustomerForm({ editInitialValues, editId }: editValueProps) {
       setIsDataSubmitted(true);
     } catch (err) {
       toast.error('Something went wrong');
+      setLoader(false);
+      setTimeout(() => {
+        routes.push('/admin/customers');
+      }, 1000);
     }
 
     // await axios({
@@ -106,6 +139,8 @@ function CustomerForm({ editInitialValues, editId }: editValueProps) {
       }, 1000);
       setIsDataSubmitted(true);
     } catch (err) {
+      routes.push('/admin/customers');
+      setLoader(false);
       toast.error('Something went wrong');
     }
   };
@@ -116,99 +151,159 @@ function CustomerForm({ editInitialValues, editId }: editValueProps) {
     initialValues: formValues,
     validationSchema,
     onSubmit: (values: formProps, { setSubmitting, resetForm }) => {
-      editId ? updateCustomers(values) : addCustomers(values);
-
-      if (isDataSubmitted) {
-        resetForm();
+      if (isformikError === 0) {
+        setShowUploadDoc(true);
+        setEnableSubmit(true);
       }
 
-      setSubmitting(true);
+      if (enableSubmit && showUploadDoc) {
+        // editId ? updateCustomers(values) : addCustomers(values);
+        console.log(values);
+      }
+
+      // if (isDataSubmitted) {
+      //   resetForm();
+      // }
+
+      // setSubmitting(true);
     },
   });
 
+  const handleGoBack = () => {
+    setShowUploadDoc(false);
+  };
+
+  const handleDocumentSubmit = () => {
+    console.log({
+      passPhoto,
+      secondPassPhoto,
+      thirdPassphoto,
+      frontAadharCard,
+      backAadharCard,
+      panCard,
+    });
+  };
+
+  useEffect(() => {
+    const errors = formik.errors;
+    const errorLength = Object.keys(errors).length;
+    console.log(errorLength);
+    setIsFromikError(errorLength);
+  }, [formik.handleSubmit]);
+
   return (
-    <div className='mx-auto flex w-1/3 flex-col gap-2'>
-      <div className='flex flex-col'>
-        <TextInput
-          type='text'
-          name='firstName'
-          label='FirstName'
-          onChange={formik.handleChange}
-          value={formik.values.firstName}
-        />
-        {formik.touched.firstName && formik.errors.firstName && (
-          <div className='text-red-400'>{formik.errors.firstName}</div>
-        )}
-      </div>
-      <div className='flex flex-col'>
-        <TextInput
-          type='text'
-          name='lastName'
-          label='LastName'
-          onChange={formik.handleChange}
-          value={formik.values.lastName}
-        />
-        {formik.touched.lastName && formik.errors.lastName && (
-          <div className='text-red-400'>{formik.errors.lastName}</div>
-        )}
-      </div>
-      <div className='flex flex-col'>
-        <TextInput
-          type='text'
-          name='phone'
-          label='Mobile No'
-          onChange={formik.handleChange}
-          value={formik.values.phone}
-        />
-        {formik.touched.phone && formik.errors.phone && (
-          <div className='text-red-400'>{formik.errors.phone}</div>
-        )}
-      </div>
-      <div className='flex flex-col'>
-        <TextInput
-          type='text'
-          name='aadharNo'
-          label='Aadhar No'
-          onChange={formik.handleChange}
-          value={formik.values.aadharNo}
-        />
-        {formik.touched.aadharNo && formik.errors.aadharNo && (
-          <div className='text-red-400'>{formik.errors.aadharNo}</div>
-        )}
-      </div>
+    <>
+      {!showUploadDoc ? (
+        <div className='mx-auto flex w-1/3 flex-col gap-2'>
+          <div className='flex flex-col'>
+            <TextInput
+              type='text'
+              name='firstName'
+              label='FirstName'
+              onChange={formik.handleChange}
+              value={formik.values.firstName}
+            />
+            {formik.touched.firstName && formik.errors.firstName && (
+              <div className='text-red-400'>{formik.errors.firstName}</div>
+            )}
+          </div>
+          <div className='flex flex-col'>
+            <TextInput
+              type='text'
+              name='lastName'
+              label='LastName'
+              onChange={formik.handleChange}
+              value={formik.values.lastName}
+            />
+            {formik.touched.lastName && formik.errors.lastName && (
+              <div className='text-red-400'>{formik.errors.lastName}</div>
+            )}
+          </div>
+          <div className='flex flex-col'>
+            <TextInput
+              type='text'
+              name='phone'
+              label='Mobile No'
+              onChange={formik.handleChange}
+              value={formik.values.phone}
+            />
+            {formik.touched.phone && formik.errors.phone && (
+              <div className='text-red-400'>{formik.errors.phone}</div>
+            )}
+          </div>
+          <div className='flex flex-col'>
+            <TextInput
+              type='text'
+              name='aadharNo'
+              label='Aadhar No'
+              onChange={formik.handleChange}
+              value={formik.values.aadharNo}
+            />
+            {formik.touched.aadharNo && formik.errors.aadharNo && (
+              <div className='text-red-400'>{formik.errors.aadharNo}</div>
+            )}
+          </div>
 
-      <div className='flex flex-col'>
-        <TextInput
-          type='email'
-          name='email'
-          label='Email'
-          onChange={formik.handleChange}
-          value={formik.values.email}
-        />
-        {formik.touched.email && formik.errors.email && (
-          <div className='text-red-400'>{formik.errors.email}</div>
-        )}
-      </div>
+          <div className='flex flex-col'>
+            <TextInput
+              type='email'
+              name='email'
+              label='Email'
+              onChange={formik.handleChange}
+              value={formik.values.email}
+            />
+            {formik.touched.email && formik.errors.email && (
+              <div className='text-red-400'>{formik.errors.email}</div>
+            )}
+          </div>
 
-      <Button
-        onClick={() => {
-          formik.handleSubmit();
-        }}
-      >
-        {editId ? 'Update' : 'Submit'}
-        {loader && <ClipLoader size={20} color='white' />}
-      </Button>
-      {editId ? (
-        <Button
-          layout='outline'
-          onClick={() => routes.push('/admin/customers')}
+          <Button
+            onClick={() => {
+              formik.handleSubmit();
+            }}
+          >
+            Proceed
+          </Button>
+
+          {/* <Button
+          onClick={() => {
+            formik.handleSubmit();
+          }}
         >
-          Cancel
+          {editId ? 'Update' : 'Submit'}
+          {loader && <ClipLoader size={20} color='white' />}
         </Button>
-      ) : null}
+        {editId ? (
+          <Button
+            layout='outline'
+            onClick={() => routes.push('/admin/customers')}
+          >
+            Cancel
+          </Button>
+        ) : null} */}
+        </div>
+      ) : (
+        <UploadDocuments
+          passPhoto={passPhoto}
+          setPassphoto={setPassPhoto}
+          secondPassphoto={secondPassPhoto}
+          setSecondPassphoto={setSecondPassPhoto}
+          thirdPassphoto={thirdPassphoto}
+          setThirdPassphoto={setThirdPassphoto}
+          frontAadharCard={frontAadharCard}
+          setFrontAadharCard={setFrontAadharCard}
+          backAadharCard={backAadharCard}
+          setBackAadharCard={setBackAadharCard}
+          panCard={panCard}
+          setPanCard={setPanCard}
+          handleDocumentSubmit={handleDocumentSubmit}
+          // setDocuments={setDocuments}
+          handleGoBack={handleGoBack}
+        />
+      )}
 
       <SvmProjectToast />
-    </div>
+    </>
   );
 }
 

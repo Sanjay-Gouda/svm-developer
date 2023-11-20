@@ -1,37 +1,44 @@
 import { Button } from '@windmill/react-ui';
-import React, { useState } from 'react';
+import React from 'react';
 import { useDropzone } from 'react-dropzone';
 
 import AadharCardPlaceholder from '@/components/Booking/aadharCardPlaceholder';
 import PassportPlaceholder from '@/components/Booking/passportPlaceholder';
 
-import { bookingComponetTypes } from '@/pages/admin/realEstateProjects/bookingForm/registerForm';
-
 type formProps = {
-  onComplete?: (type: bookingComponetTypes) => void;
-  handleGoBack: () => void;
+  // onComplete?: (type: bookingComponetTypes) => void;
+  handleGoBack?: () => void;
+  handleDocumentSubmit: () => void;
+  passPhoto: [];
+  setPassphoto: (e: any) => void;
+  secondPassphoto: [];
+  setSecondPassphoto: (e: any) => void;
+  thirdPassphoto: [];
+  setThirdPassphoto: (e: any) => void;
+  frontAadharCard: [];
+  setFrontAadharCard: (e: any) => void;
+  backAadharCard: [];
+  setBackAadharCard: (e: any) => void;
+  panCard: [];
+  setPanCard: (e: any) => void;
 };
 
-const UploadDocuments = ({ onComplete, handleGoBack }: formProps) => {
-  // const [imageFiles, setImageFiles] = useState({
-  //   clientsSecondPassphoto: [],
-  //   clientsThirdPassphoto: [],
-  //   frontSideOfAadharCard: [],
-  //   backtSideOfAadharCard: [],
-  //   panCard: [],
-  // });
-
-  const [passPhoto, setPassPhoto] = useState<any>([]);
-  const [thirdPassphoto, setThirdPassphoto] = useState<any>([]);
-  const [secondPassPhoto, setSecondPassPhoto] = useState<any>([]);
-  const [frontAadharCard, setFrontAadharCard] = useState<any>([]);
-  const [backAadharCard, setBackAadharCard] = useState<any>([]);
-  const [panCard, setPanCard] = useState<any>([]);
-
-  const handleDocumentSubmit = () => {
-    console.log(passPhoto);
-  };
-
+const UploadDocuments = ({
+  handleGoBack,
+  backAadharCard,
+  frontAadharCard,
+  panCard,
+  passPhoto,
+  secondPassphoto,
+  setBackAadharCard,
+  setFrontAadharCard,
+  setPanCard,
+  setPassphoto,
+  setSecondPassphoto,
+  setThirdPassphoto,
+  thirdPassphoto,
+  handleDocumentSubmit,
+}: formProps) => {
   const handlePanCard = (acceptedFiles: any) => {
     setPanCard((prevFiles: any) => [
       ...prevFiles,
@@ -58,7 +65,7 @@ const UploadDocuments = ({ onComplete, handleGoBack }: formProps) => {
     ]);
   };
   const handleFirstpassPhoto = (acceptedFiles: any) => {
-    setPassPhoto((prevFiles: any) => [
+    setPassphoto((prevFiles: any) => [
       ...prevFiles,
       ...acceptedFiles.map((file: any) =>
         Object.assign(file, { preview: URL.createObjectURL(file) })
@@ -76,7 +83,7 @@ const UploadDocuments = ({ onComplete, handleGoBack }: formProps) => {
   };
 
   const handleSecondpassPhoto = (acceptedFiles: any) => {
-    setSecondPassPhoto((prevFiles: any) => [
+    setSecondPassphoto((prevFiles: any) => [
       ...prevFiles,
       ...acceptedFiles.map((file: any) =>
         Object.assign(file, { preview: URL.createObjectURL(file) })
@@ -120,13 +127,13 @@ const UploadDocuments = ({ onComplete, handleGoBack }: formProps) => {
           <div className='flex w-[60%] justify-between gap-8'>
             <PassportPlaceholder
               files={passPhoto}
-              setImageArray={setPassPhoto}
+              setImageArray={setPassphoto}
               {...firstPassphotoDropzone}
               placeholder='Upload Clients first passphoto'
             />
             <PassportPlaceholder
-              files={secondPassPhoto}
-              setImageArray={setSecondPassPhoto}
+              files={secondPassphoto}
+              setImageArray={setSecondPassphoto}
               {...secondPassphotoDropzone}
               placeholder='Upload Clients second passphoto'
             />
