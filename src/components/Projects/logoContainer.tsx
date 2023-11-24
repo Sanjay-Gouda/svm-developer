@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useDropzone } from 'react-dropzone';
 
 import ImageContainer from '@/components/Booking/imageContainer';
@@ -22,10 +22,6 @@ const LogoContainer = ({ projectLogo, setProjectLogo }: TLogo) => {
     onDrop: handleLogo,
     multiple: false,
   });
-
-  useEffect(() => {
-    console.log(projectLogo, 'Logo');
-  }, [projectLogo]);
 
   return (
     <div className='h-56'>

@@ -28,6 +28,11 @@ export const AdminSidebarTabs: AdminTabsProps[] = [
     icon: TbBuildingEstate,
   },
   {
+    name: 'Happy Customers',
+    to: 'happyCustomers',
+    icon: FaUsers,
+  },
+  {
     name: 'Booking',
     to: 'booking',
     icon: TbBrandBooking,

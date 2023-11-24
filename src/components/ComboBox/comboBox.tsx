@@ -41,7 +41,7 @@ export default function ComboBox({
           <div className=''>
             <Combobox.Input
               placeholder={placeholder}
-              className='mt-1 block w-full rounded-md border-gray-300 text-sm leading-5 focus:border-purple-400 focus:outline-none focus:ring focus:ring-purple-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:focus:border-gray-600 dark:focus:ring-gray-300'
+              className='mt-1 block w-full rounded-md border-gray-300 bg-slate-50 text-sm leading-5 focus:border-purple-400 focus:outline-none focus:ring focus:ring-purple-300  dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:focus:border-gray-600 dark:focus:ring-gray-300'
               displayValue={(person: any) => person?.name}
               onChange={handleSearchQuery}
             />
@@ -59,7 +59,7 @@ export default function ComboBox({
             leaveTo='opacity-0'
             afterLeave={afterLeave}
           >
-            <Combobox.Options className='absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-gray-700 dark:text-gray-300 sm:text-sm'>
+            <Combobox.Options className='absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-slate-50 py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-gray-700 dark:text-gray-300 sm:text-sm'>
               {data?.length === 0 && query !== '' ? (
                 <div className='relative cursor-default select-none px-4 py-2 text-white'>
                   Client Doesn't Exist.
@@ -70,7 +70,9 @@ export default function ComboBox({
                     key={person.id}
                     className={({ active }) =>
                       `relative cursor-default select-none py-2 pl-10 pr-4 ${
-                        active ? 'bg-blue-600 text-white' : 'text-white'
+                        active
+                          ? 'bg-blue-600 text-white dark:text-white'
+                          : 'text-black dark:text-white'
                       }`
                     }
                     value={person}

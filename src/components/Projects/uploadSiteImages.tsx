@@ -1,25 +1,50 @@
 import { Button } from '@windmill/react-ui';
-import React from 'react';
+import React, { useRef } from 'react';
 import { useDropzone } from 'react-dropzone';
+import { toast } from 'react-toastify';
+
+import 'react-toastify/dist/ReactToastify.css';
 
 import ImageContainer from '@/components/Booking/imageContainer';
 import UploadPlaceholder from '@/components/Projects/uploadPlaceholder';
+import { SvmProjectToast } from '@/components/Toast/Toast';
+
+type TUploadImages = {
+  setProjectDevelopementImages: (e: any) => void;
+  projectDevelopementImages: [];
+};
 
 const UploadSiteImages = ({
   setProjectDevelopementImages,
   projectDevelopementImages,
-}) => {
+}: TUploadImages) => {
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
+  const handleAddMoreClick = () => {
+    console.log(inputRef);
+    // Trigger file input click
+    if (inputRef.current) {
+      inputRef.current.click();
+    }
+  };
+
   const handleDrop = (acceptedFiles: any) => {
-    setProjectDevelopementImages((prevFiles: any) => [
-      ...prevFiles,
-      ...acceptedFiles.map((file: any) =>
-        Object.assign(file, { preview: URL.createObjectURL(file) })
-      ),
-    ]);
+    if (acceptedFiles.length > 11) {
+      toast.info('You can upload a maximum of 10 images.');
+    } else {
+      setProjectDevelopementImages((prevFiles: any) => [
+        ...prevFiles,
+        ...acceptedFiles.map((file: any) =>
+          Object.assign(file, { preview: URL.createObjectURL(file) })
+        ),
+      ]);
+    }
   };
 
   const { getRootProps, getInputProps, isDragActive, open } = useDropzone({
     onDrop: handleDrop,
+    accept: { 'image/png': ['.png', '.jpg', '.jpeg'] },
+    // maxFiles: 1,
   });
 
   const handleClearImages = () => {
@@ -32,6 +57,10 @@ const UploadSiteImages = ({
     });
     setProjectDevelopementImages(remainingImages);
   };
+
+  // useEffect(()=>{
+
+  // },[])
 
   return (
     <>
@@ -47,9 +76,10 @@ const UploadSiteImages = ({
           >
             Clear Images
           </Button>
-          {/* <Button size='regular' onClick={open}>
+          <Button size='regular' {...getRootProps()}>
             Add Images
-          </Button> */}
+            <input {...getInputProps()} className='hidden' />
+          </Button>
         </div>
       </div>
 
@@ -73,6 +103,8 @@ const UploadSiteImages = ({
           inputProps={getInputProps}
         />
       )}
+
+      <SvmProjectToast />
     </>
   );
 };

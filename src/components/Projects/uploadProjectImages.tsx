@@ -45,16 +45,16 @@ const UploadProjectImages = ({ setPlanImages, planImages }) => {
           >
             Clear Images
           </Button>
-          {/* <Button size='regular' onClick={open}>
+          <Button size='regular' {...getRootProps()}>
             Add Images
-          </Button> */}
+            <input {...getInputProps()} className='hidden' />
+          </Button>
         </div>
       </div>
 
       {planImages?.length > 0 ? (
         <div className='auto  flex w-full flex-wrap gap-6  rounded-lg  border-2 border-gray-300 px-2 py-5  dark:border-gray-600'>
           {planImages?.map((file, ind) => {
-            console.log(file, 'files');
             return (
               <>
                 <ImageContainer

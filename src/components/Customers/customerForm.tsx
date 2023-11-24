@@ -19,9 +19,9 @@ const validationSchema = Yup.object().shape({
   phone: Yup.string()
     .matches(/^[0-9]{10}$/, 'Invalid Mobile number')
     .required('Customer Mobile Number is required'),
-  aadharNo: Yup.string()
-    .matches(/^[2-9]{1}[0-9]{3}\s[0-9]{4}\s[0-9]{4}$/, 'Invalid Aadhaar number')
-    .required('Aadhar Card number is required '),
+  // aadharNo: Yup.string()
+  //   .matches(/^[2-9]{1}[0-9]{3}\s[0-9]{4}\s[0-9]{4}$/, 'Invalid Aadhaar number')
+  //   .required('Aadhar Card number is required '),
   email: Yup.string().email('Invalid email address'),
 });
 
@@ -46,13 +46,15 @@ type editValueProps = {
   editId?: string;
 };
 
-type TDocuments = {
-  passPhoto: [];
-  secondPassPhoto: [];
-  thirdPassphoto: [];
-  frontAadharCard: [];
-  backAadharCard: [];
-  panCard: [];
+type Tpayload = {
+  firstName: string;
+  lastName: string;
+  aadharNo: string;
+  email: string;
+  phone: string;
+  aadharImages: any;
+  panImages: any;
+  customerImage: any;
 };
 
 function CustomerForm({ editInitialValues, editId }: editValueProps) {
@@ -66,40 +68,82 @@ function CustomerForm({ editInitialValues, editId }: editValueProps) {
   const [passPhoto, setPassPhoto] = useState<any>([]);
   const [thirdPassphoto, setThirdPassphoto] = useState<any>([]);
   const [secondPassPhoto, setSecondPassPhoto] = useState<any>([]);
+
   const [frontAadharCard, setFrontAadharCard] = useState<any>([]);
   const [backAadharCard, setBackAadharCard] = useState<any>([]);
   const [panCard, setPanCard] = useState<any>([]);
 
-  // const [documents, setDocuments] = useState<TDocuments>({
-  //   passPhoto: [],
-  //   secondPassPhoto: [],
-  //   thirdPassphoto: [],
-  //   frontAadharCard: [],
-  //   backAadharCard: [],
-  //   panCard: [],
-  // });
-
   /* Add Customer  */
   const addCustomers = async (details: formProps) => {
     setLoader(true);
+
+    const { aadharNo, email, firstName, lastName, phone } = details;
+
+    const payload: Tpayload = {
+      firstName: firstName,
+      lastName: lastName,
+      aadharNo: aadharNo,
+      email: email,
+      phone: phone,
+      aadharImages: frontAadharCard,
+      panImages: panCard,
+      customerImage: passPhoto,
+      // customerImage: secondPassPhoto,
+    };
+
+    const formData = new FormData();
+
+    Object.entries(payload).forEach(([key, value]: any) => {
+      if (
+        key !== 'aadharImages' &&
+        key !== 'panImages' &&
+        key !== 'customerImage'
+      ) {
+        formData.append(key, value);
+      }
+    });
+
+    for (let i = 0; i < frontAadharCard.length; i++) {
+      formData.append('aadharImages', frontAadharCard[i]);
+    }
+    for (let i = 0; i < backAadharCard.length; i++) {
+      formData.append('aadharImages', backAadharCard[i]);
+    }
+    for (let i = 0; i < panCard.length; i++) {
+      formData.append('panImages', panCard[i]);
+    }
+    for (let i = 0; i < passPhoto.length; i++) {
+      formData.append('customerImage', passPhoto[i]);
+    }
+    for (let i = 0; i < secondPassPhoto.length; i++) {
+      formData.append('customerImage', secondPassPhoto[i]);
+    }
+    for (let i = 0; i < thirdPassphoto.length; i++) {
+      formData.append('customerImage', thirdPassphoto[i]);
+    }
+
     try {
-      const res = await httpInstance.post(`/customer/create`, details);
-      const isNotify = res.data.isNotify;
-      const successMessage = isNotify
-        ? res?.data?.message
-        : 'Customer added successfully';
-      toast.success(successMessage);
-      setLoader(false);
-      setTimeout(() => {
-        routes.push('/admin/customers');
-      }, 1000);
-      setIsDataSubmitted(true);
+      const res = await httpInstance.post(`/customer/create`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+      console.log({ res });
+      // const isNotify = res.data.isNotify;
+      // const successMessage = isNotify
+      //   ? res?.data?.message
+      //   : 'Customer added successfully';
+      // toast.success(successMessage);
+      // setLoader(false);
+      // setTimeout(() => {
+      //   routes.push('/admin/customers');
+      // }, 1000);
+      // setIsDataSubmitted(true);
     } catch (err) {
-      toast.error('Something went wrong');
-      setLoader(false);
-      setTimeout(() => {
-        routes.push('/admin/customers');
-      }, 1000);
+      // toast.error('Something went wrong');
+      // setLoader(false);
+      // setTimeout(() => {
+      //   routes.push('/admin/customers');
+      // }, 1000);
+      console.log(err, 'error');
     }
 
     // await axios({
@@ -159,6 +203,7 @@ function CustomerForm({ editInitialValues, editId }: editValueProps) {
       if (enableSubmit && showUploadDoc) {
         // editId ? updateCustomers(values) : addCustomers(values);
         console.log(values);
+        addCustomers(values);
       }
 
       // if (isDataSubmitted) {
@@ -173,16 +218,16 @@ function CustomerForm({ editInitialValues, editId }: editValueProps) {
     setShowUploadDoc(false);
   };
 
-  const handleDocumentSubmit = () => {
-    console.log({
-      passPhoto,
-      secondPassPhoto,
-      thirdPassphoto,
-      frontAadharCard,
-      backAadharCard,
-      panCard,
-    });
-  };
+  // const handleDocumentSubmit = () => {
+  //   console.log({
+  //     passPhoto,
+  //     secondPassPhoto,
+  //     thirdPassphoto,
+  //     frontAadharCard,
+  //     backAadharCard,
+  //     panCard,
+  //   });
+  // };
 
   useEffect(() => {
     const errors = formik.errors;
@@ -296,7 +341,7 @@ function CustomerForm({ editInitialValues, editId }: editValueProps) {
           setBackAadharCard={setBackAadharCard}
           panCard={panCard}
           setPanCard={setPanCard}
-          handleDocumentSubmit={handleDocumentSubmit}
+          handleDocumentSubmit={() => formik.handleSubmit()}
           // setDocuments={setDocuments}
           handleGoBack={handleGoBack}
         />
