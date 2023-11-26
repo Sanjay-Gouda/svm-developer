@@ -5,7 +5,9 @@ import {
   DropdownItem,
   Input,
 } from '@windmill/react-ui';
+import { useRouter } from 'next/router';
 import React, { useState } from 'react';
+import { useCookies } from 'react-cookie';
 
 import { useDisplayPref } from '@/hooks/useDarkMode';
 
@@ -20,6 +22,9 @@ import {
 } from '@/icons';
 
 export const Header = () => {
+  const routes = useRouter();
+  const [, , removeCookie] = useCookies(['token']);
+
   // const { mode, toggleMode } = useContext(WindmillContext);
   // const { toggleSidebar } = useContext(SidebarContext);
 
@@ -38,6 +43,12 @@ export const Header = () => {
   }
 
   const handleLogout = () => {
+    // removeCookie('token', {});
+    removeCookie('token', { path: '/' });
+    localStorage.removeItem('loginToken');
+
+    routes.push('/');
+
     // const isLoginCookie = document?.cookie?.split('=')?.[1];
     // const token = document.cookie.get('token');
   };

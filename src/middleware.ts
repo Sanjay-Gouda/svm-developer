@@ -4,15 +4,15 @@ import { NextRequest, NextResponse } from 'next/server';
 export function middleware(request: NextRequest) {
   // return NextResponse.redirect(new URL('/home', request.url));
 
-  const isLogin = true;
-  //   const cookies = parse(request?.headers?.cookie || '');
-  // const isLoginCookie = cookies.isLogin;
+  // const isLogin = false;
 
-  // const isLoginCookie = document?.cookie?.split('=')?.[1];
-
+  // const token = localStorage.getItem('loginToken');
+  // const token = request.cookies.getAll();
+  const isTokenAvailable = request.cookies.has('token');
+  console.log(isTokenAvailable, 'middleware');
   const currentURL = request.nextUrl.clone();
 
-  if (isLogin) {
+  if (isTokenAvailable) {
     if (request.nextUrl.pathname === '/admin/:path*') {
       return NextResponse.redirect(currentURL);
     }

@@ -59,7 +59,6 @@ const TestBooking = ({ editInitialValues, editId }: editProps) => {
   });
 
   const routes = useRouter();
-  const [bookingData, setBookingData] = useState({});
 
   const addBookingData = async (values: TBookingProps) => {
     // setLoader(true);

@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router';
+import { useCookies } from 'react-cookie';
 
 import InfoCard from '@/components/Cards/InfoCard';
 import RecentCard from '@/components/RecentCard/recentCard';
@@ -77,6 +78,8 @@ const latestProjects = [
 
 export default function Dashboard() {
   const router = useRouter();
+  const [cookies, setCookie] = useCookies(['token']);
+  console.log({ cookies });
   return (
     <Layout pageTitle='Dashboard'>
       <div className='mb-8 grid gap-6 md:grid-cols-2 xl:grid-cols-4'>
@@ -102,7 +105,8 @@ export default function Dashboard() {
           <RoundIcon
             icon={CartIcon}
             iconColorClass='text-blue-500 dark:text-blue-100'
-            bgColorClass='bg-blue-100 dark:bg-blue-500'
+            bgColorClass='bg-
+            blue-100 dark:bg-blue-500'
             className='mr-4'
           />
         </InfoCard>

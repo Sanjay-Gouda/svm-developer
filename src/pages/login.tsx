@@ -1,16 +1,19 @@
 /* eslint-disable @next/next/no-img-element */
 // import { GithubIcon, TwitterIcon } from '../icons';
 import { Button, Input, Label } from '@windmill/react-ui';
-import axios from 'axios';
 import { useFormik } from 'formik';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { useCookies } from 'react-cookie';
 import { ClipLoader } from 'react-spinners';
+import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 
-import { API_ENDPOINT } from '@/const/APIRoutes';
+import 'react-toastify/dist/ReactToastify.css';
+
+import { SvmProjectToast } from '@/components/Toast/Toast';
+
+import { httpInstance } from '@/constants/httpInstances';
 
 const validationSchema = Yup.object().shape({
   email: Yup.string()
@@ -19,32 +22,56 @@ const validationSchema = Yup.object().shape({
   password: Yup.string().required('Password is required'),
 });
 
+type TLogin = {
+  email: string;
+  password: string;
+};
+
 export default function LoginPage() {
   const [loader, setLoader] = useState(false);
   const routes = useRouter();
   const [cookies, setCookie] = useCookies(['token']);
-  const LoginUser = async (values) => {
+  const LoginUser = async (values: TLogin) => {
     setLoader(true);
-    await axios({
-      method: 'post',
-      url: `${API_ENDPOINT.END_POINT}/auth/login`,
-      data: values,
-      headers: { 'Content-Type': 'application/json' },
-    })
-      .then((res) => {
-        // console.log(res.cookie, 'loginRes');
-        console.log(res);
-        const loginToken = res.data.result.accessToken;
-        setLoader(false);
 
-        setCookie('token', loginToken, { path: '/' });
-        if (cookies) {
-          routes.push('/admin');
-        }
-      })
-      .catch((err) => {
-        setLoader(false);
-      });
+    try {
+      const res = await httpInstance.post(`/auth/login`, values);
+      setLoader(false);
+      const loginToken = res.data.result.accessToken;
+      localStorage.setItem('loginToken', loginToken);
+      toast.success('Welcome to the Dashboard');
+
+      setCookie('token', loginToken, { path: '/' });
+      if (cookies) {
+        routes.push('/admin');
+      }
+    } catch (err) {
+      setLoader(false);
+      toast.error('Invalid Credential');
+    }
+
+    // await axios({
+    //   method: 'post',
+    //   url: `${API_ENDPOINT.END_POINT}/auth/login`,
+    //   data: values,
+    //   headers: { 'Content-Type': 'application/json' },
+    // })
+    //   .then((res) => {
+    //     const loginToken = res.data.result.accessToken;
+    //     localStorage.setItem('loginToken', loginToken);
+    //     toast.success('Welcome to the Dashboard');
+
+    //     setLoader(false);
+
+    //     setCookie('token', loginToken, { path: '/' });
+    //     if (cookies) {
+    //       routes.push('/admin');
+    //     }
+    //   })
+    //   .catch((err) => {
+    //     setLoader(false);
+    //     toast.error('Invalid Credential');
+    //   });
   };
 
   const formik = useFormik({
@@ -53,7 +80,7 @@ export default function LoginPage() {
       password: '',
     },
     validationSchema,
-    onSubmit: (values) => {
+    onSubmit: (values: TLogin) => {
       LoginUser(values);
     },
   });
@@ -93,6 +120,9 @@ export default function LoginPage() {
                   value={formik.values.email}
                 />
               </Label>
+              {formik.touched.email && formik.errors.email && (
+                <div className='text-red-400'>{formik.errors.email}</div>
+              )}
 
               <Label className='mt-4'>
                 <span>Password</span>
@@ -106,6 +136,9 @@ export default function LoginPage() {
                   value={formik.values.password}
                 />
               </Label>
+              {formik.touched.password && formik.errors.password && (
+                <div className='text-red-400'>{formik.errors.password}</div>
+              )}
 
               <Button
                 className='mt-4'
@@ -127,26 +160,19 @@ export default function LoginPage() {
                 Twitter
               </Button> */}
 
-              <p className='mt-4'>
+              {/* <p className='mt-4'>
                 <Link
                   href='/forgot-password'
                   className='text-sm font-medium text-purple-600 hover:underline dark:text-purple-400'
                 >
                   Forgot your password?
                 </Link>
-              </p>
-              <p className='mt-1'>
-                <Link
-                  href='/create-account'
-                  className='text-sm font-medium text-purple-600 hover:underline dark:text-purple-400'
-                >
-                  Create account
-                </Link>
-              </p>
+              </p> */}
             </div>
           </main>
         </div>
       </div>
+      <SvmProjectToast />
     </div>
   );
 }

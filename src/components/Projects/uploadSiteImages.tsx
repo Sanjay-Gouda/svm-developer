@@ -58,10 +58,6 @@ const UploadSiteImages = ({
     setProjectDevelopementImages(remainingImages);
   };
 
-  // useEffect(()=>{
-
-  // },[])
-
   return (
     <>
       <div className=' mb-2 flex items-center justify-between gap-2'>
