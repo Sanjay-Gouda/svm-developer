@@ -11,6 +11,8 @@ export async function getServerSideProps(params: any) {
   const res = await httpInstance.get(`customer/get/${EditId}`);
   const customerDetails = res?.data?.result;
 
+  console.log(customerDetails);
+
   return {
     props: { EditId, customerDetails },
   };
@@ -31,7 +33,8 @@ type editCustomerprops = {
 
 const EditCustomer = ({ EditId, customerDetails }: editCustomerprops) => {
   console.log(EditId, 'editId');
-  const { firstName, lastName, email, phone, aadharNo } = customerDetails;
+  const { firstName, lastName, email, phone, aadharNo, customerImage } =
+    customerDetails;
 
   const customerEditInitialValues = {
     firstName: firstName,
@@ -39,6 +42,7 @@ const EditCustomer = ({ EditId, customerDetails }: editCustomerprops) => {
     email: email,
     phone: phone,
     aadharNo: aadharNo,
+    customerImage: customerImage,
   };
 
   return (

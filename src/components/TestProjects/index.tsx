@@ -108,6 +108,8 @@ const TestProjects = ({ editId, editInitialValues }: editProps) => {
       emiAmt,
     } = values;
 
+    console.log(planningImages, 'images');
+
     const payLoads: payloadProps = {
       address1: address1,
       area: area,
@@ -180,6 +182,8 @@ const TestProjects = ({ editId, editInitialValues }: editProps) => {
       totalAmt,
       emiAmt,
     } = values;
+
+    console.log(values, 'project update');
 
     const payload: payloadProps = {
       address1: address1,
@@ -308,7 +312,13 @@ const TestProjects = ({ editId, editInitialValues }: editProps) => {
   /* set Logo if editId exist */
 
   useEffect(() => {
-    setProjectLogo([editInitialValues?.logoUrl]);
+    fetch(editInitialValues?.logoUrl)
+      .then((res) => res.blob())
+      .then((blob) => {
+        const file = new File([blob], 'logo', { type: 'image/*' });
+        console.log(file, 'Logo file');
+        setProjectLogo(file);
+      });
 
     setPlanningImages(editInitialValues?.projectImages);
   }, [editId]);

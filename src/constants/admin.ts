@@ -14,6 +14,7 @@ interface AdminTabsProps {
   name: string;
   icon: React.FC<any>;
   to: string;
+  routes?: any;
 }
 
 export const AdminSidebarTabs: AdminTabsProps[] = [

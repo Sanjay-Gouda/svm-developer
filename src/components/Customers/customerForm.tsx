@@ -2,7 +2,6 @@ import { Button } from '@windmill/react-ui';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 
 import 'react-toastify/dist/ReactToastify.css';
@@ -58,6 +57,8 @@ type Tpayload = {
 };
 
 function CustomerForm({ editInitialValues, editId }: editValueProps) {
+  // console.log(editInitialValues, 'image');
+
   const [isDataSubmitted, setIsDataSubmitted] = useState(false);
   const routes = useRouter();
   const [isformikError, setIsFromikError] = useState<number>();
@@ -72,6 +73,29 @@ function CustomerForm({ editInitialValues, editId }: editValueProps) {
   const [frontAadharCard, setFrontAadharCard] = useState<any>([]);
   const [backAadharCard, setBackAadharCard] = useState<any>([]);
   const [panCard, setPanCard] = useState<any>([]);
+
+  // const editImageField = () => {
+  //   const editImages: any = {};
+  //   editInitialValues?.customerImage.forEach((image: any) => {
+  //     if (!editImages[image.type]) editImages[image.type] = [];
+  //     editImages[image.type].push(image);
+  //   });
+
+  //   editImages?.AADHAR?.map((img) => setFrontAadharCard([img?.imageUrl]));
+
+  //   editImages?.PAN?.map((img) => {
+  //     setPanCard([window.URL.createObjectURL(img?.imageUrl)]);
+  //   });
+
+  //   editImages?.PHOTO?.map((img, ind) => {
+  //     ind === 0 && setPassPhoto([img?.imageUrl]);
+  //     ind === 1 && setSecondPassPhoto([img?.imageUrl]);
+  //     ind === 2 && setThirdPassphoto([img?.imageUrl]);
+  //   });
+  // };
+  // useEffect(() => {
+  //   editImageField();
+  // }, [editId]);
 
   /* Add Customer  */
   const addCustomers = async (details: formProps) => {
@@ -126,66 +150,73 @@ function CustomerForm({ editInitialValues, editId }: editValueProps) {
       const res = await httpInstance.post(`/customer/create`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
+
       console.log({ res });
-      // const isNotify = res.data.isNotify;
-      // const successMessage = isNotify
-      //   ? res?.data?.message
-      //   : 'Customer added successfully';
-      // toast.success(successMessage);
-      // setLoader(false);
-      // setTimeout(() => {
-      //   routes.push('/admin/customers');
-      // }, 1000);
-      // setIsDataSubmitted(true);
     } catch (err) {
-      // toast.error('Something went wrong');
-      // setLoader(false);
-      // setTimeout(() => {
-      //   routes.push('/admin/customers');
-      // }, 1000);
       console.log(err, 'error');
     }
-
-    // await axios({
-    //   method: 'post',
-    //   url: `${API_ENDPOINT.END_POINT}/customer/create`,
-    //   data: details,
-    //   headers: { 'Content-Type': 'application/json' },
-    // })
-    //   .then((res) => {
-    //     toast.success('Customer added successfully');
-    //     setLoader(false);
-    //     setTimeout(() => {
-    //       routes.push('/admin/customers');
-    //     }, 1000);
-    //     setIsDataSubmitted(true);
-    //   })
-    //   .catch((err) => {
-    //     toast.error('Something went wrong');
-    //   });
   };
 
   /* Update Customer */
   const updateCustomers = async (details: formProps) => {
     setLoader(true);
 
-    try {
-      const res = await httpInstance.put(`/customer/update/${editId}`, details);
+    const { aadharNo, email, firstName, lastName, phone } = details;
 
-      const isNotify = res.data.isNotify;
-      const successMessage = isNotify
-        ? res?.data?.message
-        : 'Customer added successfully';
-      toast.success(successMessage);
-      setLoader(false);
-      setTimeout(() => {
-        routes.push('/admin/customers');
-      }, 1000);
-      setIsDataSubmitted(true);
+    console.log(frontAadharCard, passPhoto, 'Update Images');
+    const payload: Tpayload = {
+      firstName: firstName,
+      lastName: lastName,
+      aadharNo: aadharNo,
+      email: email,
+      phone: phone,
+      aadharImages: frontAadharCard,
+      panImages: panCard,
+      customerImage: passPhoto,
+    };
+
+    const formData = new FormData();
+
+    Object.entries(payload).forEach(([key, value]: any) => {
+      if (
+        key !== 'aadharImages' &&
+        key !== 'panImages' &&
+        key !== 'customerImage'
+      ) {
+        formData.append(key, value);
+      }
+    });
+
+    for (let i = 0; i < frontAadharCard.length; i++) {
+      formData.append('aadharImages', frontAadharCard[i]);
+    }
+    for (let i = 0; i < backAadharCard.length; i++) {
+      formData.append('aadharImages', backAadharCard[i]);
+    }
+    for (let i = 0; i < panCard.length; i++) {
+      formData.append('panImages', panCard[i]);
+    }
+    for (let i = 0; i < passPhoto.length; i++) {
+      formData.append('customerImage', passPhoto[i]);
+    }
+    for (let i = 0; i < secondPassPhoto.length; i++) {
+      formData.append('customerImage', secondPassPhoto[i]);
+    }
+    for (let i = 0; i < thirdPassphoto.length; i++) {
+      formData.append('customerImage', thirdPassphoto[i]);
+    }
+
+    try {
+      const res = await httpInstance.put(
+        `/customer/update/${editId}`,
+        formData,
+        {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        }
+      );
+      console.log({ res });
     } catch (err) {
-      routes.push('/admin/customers');
-      setLoader(false);
-      toast.error('Something went wrong');
+      console.log(err, 'error');
     }
   };
 
@@ -201,9 +232,9 @@ function CustomerForm({ editInitialValues, editId }: editValueProps) {
       }
 
       if (enableSubmit && showUploadDoc) {
-        // editId ? updateCustomers(values) : addCustomers(values);
-        console.log(values);
-        addCustomers(values);
+        // console.log(values);
+        editId ? updateCustomers(values) : addCustomers(values);
+        // addCustomers(values);
       }
 
       // if (isDataSubmitted) {
@@ -232,7 +263,6 @@ function CustomerForm({ editInitialValues, editId }: editValueProps) {
   useEffect(() => {
     const errors = formik.errors;
     const errorLength = Object.keys(errors).length;
-    console.log(errorLength);
     setIsFromikError(errorLength);
   }, [formik.handleSubmit]);
 

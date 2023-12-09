@@ -2,6 +2,8 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import React, { FC } from 'react';
 
+import SidebarSubmenu from '@/components/Sidebar/SidebarSubmenu';
+
 import { AdminSidebarTabs } from '@/constants/admin';
 
 // function Icon({ icon, ...props }) {
@@ -20,7 +22,13 @@ function SidebarContent() {
       </a>
       <ul className='mt-6'>
         {AdminSidebarTabs.map((tab, index) => (
-          <SideTab key={index} tab={tab} />
+          <>
+            {tab.routes ? (
+              <SidebarSubmenu route={tab} key={index} />
+            ) : (
+              <SideTab key={index} tab={tab} />
+            )}
+          </>
         ))}
       </ul>
     </div>
@@ -28,6 +36,8 @@ function SidebarContent() {
 }
 
 const SideTab: FC<{ tab: (typeof AdminSidebarTabs)[number] }> = ({ tab }) => {
+  console.log(tab, 'Sidetab');
+
   const segments = usePathname()?.split('/');
 
   const lastSegment = segments ? segments[segments.length - 1] : '';

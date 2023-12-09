@@ -33,7 +33,7 @@ const PassportPlaceholder = ({
             />
             ;
             {files?.map((files, ind) => {
-              console.log(files.name);
+              // console.log(files.name);
               return (
                 <div
                   className='h-48 w-48 overflow-hidden  rounded-lg border-2 border-gray-300  dark:border-gray-600'
@@ -41,7 +41,7 @@ const PassportPlaceholder = ({
                 >
                   <img
                     className='h-full w-full  object-cover'
-                    src={files.preview}
+                    src={files?.preview || files}
                   />
                 </div>
               );

@@ -1,5 +1,5 @@
 import { Button } from '@windmill/react-ui';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
 
 import AadharCardPlaceholder from '@/components/Booking/aadharCardPlaceholder';
@@ -39,6 +39,11 @@ const UploadDocuments = ({
   thirdPassphoto,
   handleDocumentSubmit,
 }: formProps) => {
+  useEffect(() => {
+    console.log(passPhoto, 'front');
+    console.log(secondPassphoto, 'sfront');
+  }, [passPhoto]);
+
   const handlePanCard = (acceptedFiles: any) => {
     setPanCard((prevFiles: any) => [
       ...prevFiles,

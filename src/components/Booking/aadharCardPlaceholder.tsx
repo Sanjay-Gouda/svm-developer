@@ -11,6 +11,7 @@ const AadharCardPlaceholder = ({
   placeholder,
   setImageArray,
 }: any) => {
+  console.log(files, 'files');
   const handleRemove = (name) => {
     const remove = files.filter((images) => {
       return images.name !== name;
@@ -22,14 +23,14 @@ const AadharCardPlaceholder = ({
   return (
     <>
       <div className='relative flex h-48 w-96 '>
-        {files.length > 0 ? (
+        {files?.length > 0 ? (
           <>
             <ImCancelCircle
               size={30}
               onClick={() => handleRemove(files[0]?.name)}
               className=' absolute right-[-18px] top-[-14px] cursor-pointer text-gray-950 dark:text-gray-50'
             />
-            {files.map((files, ind) => {
+            {files?.map((files, ind) => {
               return (
                 <div
                   className='h-48 w-96  overflow-hidden  rounded-lg border-2 border-gray-300  dark:border-gray-600'
