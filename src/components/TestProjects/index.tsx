@@ -2,19 +2,19 @@ import axios from 'axios';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
+// import Stepper from 'react-stepper-horizontal';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 
 import 'react-toastify/dist/ReactToastify.css';
 
 import { TDetailValues } from '@/components/Projects/projectDetailType';
-import ProjectImages from '@/components/Projects/projectImages';
 import AddProjectForm from '@/components/TestProjects/addProjectForm';
+import { TCreateProject } from '@/components/TestProjects/types';
 import { SvmProjectToast } from '@/components/Toast/Toast';
 
 import { API_ENDPOINT } from '@/const/APIRoutes';
 import { httpInstance } from '@/constants/httpInstances';
-
 const validationSchema = Yup.object().shape({
   name: Yup.string().required('Project Name is required'),
   // parentProject: Yup.string().required('Parent Project is required'),
@@ -49,34 +49,56 @@ const addInitialValues: TDetailValues = {
   location: '',
 };
 
-interface payloadProps {
-  address1: string | undefined;
-  area: number | undefined | string;
-  name: string;
-  description?: string | undefined;
-  ownerName: string;
-  pincode: number | undefined;
-  status: string;
-  unit: string;
-  address2?: string | undefined;
-  parentId?: string;
-  siteImages?: string[];
-  planningImages?: string[];
-  logo?: string[];
-  location?: string;
-  emiAmt: number;
-  downPayment: number;
-  totalAmt: number;
-}
+// interface payloadProps {
+//   address1: string | undefined;
+//   area: number | undefined | string;
+//   name: string;
+//   description?: string | undefined;
+//   ownerName: string;
+//   pincode: number | undefined;
+//   status: string;
+//   unit: string;
+//   address2?: string | undefined;
+//   parentId?: string;
+//   siteImages?: string[];
+//   planningImages?: string[];
+//   logo?: string[];
+//   location?: string;
+//   emiAmt: number;
+//   downPayment: number;
+//   totalAmt: number;
+// }
+
+// type TCreateProject = {
+//   name: string;
+//   description?: string | undefined;
+//   parentId?: string | undefined;
+//   ownerName: string;
+//   area?: number | string;
+//   unit: string;
+//   status: string;
+//   address1?: string;
+//   address2?: string;
+//   pincode?: number;
+//   emiAmt: number;
+//   downPayment: number;
+//   totalAmt: number;
+//   location: string;
+// };
 
 type editProps = {
   editInitialValues?: any;
   editId?: string;
+  handleNextStep?: () => void;
+  setProjectFormValues?: (value: TCreateProject) => void;
 };
 
-const TestProjects = ({ editId, editInitialValues }: editProps) => {
-  console.log(editInitialValues, 'editValues');
-
+const TestProjects = ({
+  editId,
+  editInitialValues,
+  handleNextStep,
+  setProjectFormValues,
+}: editProps) => {
   const router = useRouter();
   const [planningImages, setPlanningImages] = useState<any>([]);
   const [siteImages, setSiteImages] = useState<any>([]);
@@ -88,11 +110,8 @@ const TestProjects = ({ editId, editInitialValues }: editProps) => {
   const [isformikError, setIsFromikError] = useState<number>();
   const routes = useRouter();
 
-  const [enableSubmit, setEnableSubmit] = useState(false);
-  const addProject = async (values: TDetailValues) => {
-    console.log('Worked');
+  const addProject = async (values: TCreateProject) => {
     setLoader(true);
-    // console.log(planningImages[0], 'images');
     const {
       address1,
       address2,
@@ -108,9 +127,7 @@ const TestProjects = ({ editId, editInitialValues }: editProps) => {
       emiAmt,
     } = values;
 
-    console.log(planningImages, 'images');
-
-    const payLoads: payloadProps = {
+    const payLoads: TCreateProject = {
       address1: address1,
       area: area,
       name: name,
@@ -120,46 +137,46 @@ const TestProjects = ({ editId, editInitialValues }: editProps) => {
       status: status,
       unit: unit,
       address2: address2,
-      logo: projectLogo,
-      planningImages: planningImages,
       location: 'location',
       downPayment: downPayment,
       emiAmt: emiAmt,
       totalAmt: totalAmt,
     };
 
-    const formData = new FormData();
+    // const formData = new FormData();
 
-    Object.entries(payLoads).forEach(([key, value]: any) => {
-      if (key !== 'planningImages' && key !== 'logo') {
-        formData.append(key, value);
-      }
-    });
+    // Object.entries(payLoads).forEach(([key, value]: any) => {
+    //   if (key !== 'planningImages' && key !== 'logo') {
+    //     formData.append(key, value);
+    //   }
+    // });
 
-    for (let i = 0; i < planningImages.length; i++) {
-      formData.append('planningImages', planningImages[i]);
-    }
-    for (let i = 0; i < projectLogo.length; i++) {
-      formData.append('logo', projectLogo[i]);
-    }
+    // for (let i = 0; i < planningImages.length; i++) {
+    //   formData.append('planningImages', planningImages[i]);
+    // }
+    // for (let i = 0; i < projectLogo.length; i++) {
+    //   formData.append('logo', projectLogo[i]);
+    // }
 
     try {
       // console.log(formData);
-      const res = await httpInstance.post(`project/create`, formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
+      const res = await httpInstance.post(`project/create`, payLoads);
+      setProjectFormValues(res.data?.result);
       const isNotify = res.data.isNotify;
       const successMessage = isNotify
         ? res?.data?.message
         : 'Project Created successfully';
       toast.success(successMessage);
       setLoader(false);
-      setTimeout(() => {
-        routes.push('/admin/projects');
-      }, 1000);
+
+      handleNextStep();
+      // setTimeout(() => {
+      //   routes.push('/admin/projects');
+      // }, 1000);
 
       console.log(res);
     } catch (error) {
+      console.log(error, 'Error project');
       toast.error('Something went wrong');
 
       console.log(error);
@@ -246,20 +263,23 @@ const TestProjects = ({ editId, editInitialValues }: editProps) => {
   const formik = useFormik({
     initialValues: formInitialValue,
     validationSchema,
-    onSubmit: (values: TDetailValues) => {
+    onSubmit: (values: TCreateProject) => {
       console.log(values, 'Values');
+      // setProjectFormValues(values);
+      // addProject(values);
+      editId ? updateProjectDetials(values) : addProject(values);
 
       // setCounter((counter) => counter + 1);
-      if (isformikError === 0) {
-        setShowImageUpload(true);
-        setEnableSubmit(true);
-      }
+      // if (isformikError === 0) {
+      //   setShowImageUpload(true);
+      //   setEnableSubmit(true);
+      // }
 
-      if (enableSubmit && showImageUpload) {
-        // addProject(values);
+      // if (enableSubmit && showImageUpload) {
+      //   // addProject(values);
 
-        editId ? updateProjectDetials(values) : addProject(values);
-      }
+      //   editId ? updateProjectDetials(values) : addProject(values);
+      // }
     },
   });
 
@@ -270,12 +290,15 @@ const TestProjects = ({ editId, editInitialValues }: editProps) => {
     setIsFromikError(errorLength);
   }, [formik.handleSubmit]);
 
-  const [pincodeQuery, setPincodeQuery] = useState();
+  const [pincodeQuery, setPincodeQuery] = useState<string>();
 
   const handlePinCodeApi = async (e) => {
     const query = e.target.value;
+    if (query.length < 6) {
+      formik.setFieldValue('state', '');
+      formik.setFieldValue('dist', '');
+    }
     setPincodeQuery(query);
-
     formik.setFieldValue('pincode', query);
   };
 
@@ -284,123 +307,115 @@ const TestProjects = ({ editId, editInitialValues }: editProps) => {
   }, [editId]);
 
   useEffect(() => {
-    const timer = setTimeout(async () => {
-      await axios({
-        method: 'get',
-        url: `${API_ENDPOINT.END_POINT}/appConfig/pincode?zip=${pincodeQuery}`,
-      })
-        .then((res) => {
-          // console.log(res);
-          if (pincodeQuery) {
-            formik.setFieldValue('state', res?.data?.result[0].State);
-            formik.setFieldValue('dist', res?.data?.result[0].District);
-          } else {
-            formik.setFieldValue('state', '');
-            formik.setFieldValue('dist', '');
-          }
+    if (pincodeQuery?.length === 6) {
+      const timer = setTimeout(async () => {
+        await axios({
+          method: 'get',
+          url: `${API_ENDPOINT.END_POINT}/appConfig/pincode?zip=${pincodeQuery}`,
         })
-        .catch((err) => {
-          console.log(err);
-        });
-    }, 200);
-
-    return () => {
-      clearTimeout(timer);
-    };
+          .then((res) => {
+            // console.log(res);
+            if (pincodeQuery) {
+              formik.setFieldValue('state', res?.data?.result[0].State);
+              formik.setFieldValue('dist', res?.data?.result[0].District);
+            } else {
+              formik.setFieldValue('state', '');
+              formik.setFieldValue('dist', '');
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }, 200);
+      return () => {
+        clearTimeout(timer);
+      };
+    }
   }, [pincodeQuery, editId]);
 
   /* set Logo if editId exist */
 
-  useEffect(() => {
-    fetch(editInitialValues?.logoUrl)
-      .then((res) => res.blob())
-      .then((blob) => {
-        const file = new File([blob], 'logo', { type: 'image/*' });
-        console.log(file, 'Logo file');
-        setProjectLogo(file);
-      });
-
-    setPlanningImages(editInitialValues?.projectImages);
-  }, [editId]);
-
   return (
     <>
+      {/* <div className='flex items-center justify-center'>
+        <Stepper />
+      </div>
       {!showImageUpload ? (
-        <AddProjectForm
-          // handleProceed={() => setShowImageUpload(true)}
-          handleProceed={() => formik.handleSubmit()}
-          handleName={formik.handleChange}
-          nameValue={formik.values.name}
-          nameError={formik.touched.name && formik.errors.name ? true : false}
-          nameErrorMessage={formik.errors.name}
-          emiAmt={formik.values.emiAmt}
-          handleEmi={formik.handleChange}
-          downPayment={formik.values.downPayment}
-          handleDownPayment={formik.handleChange}
-          downPaymentError={
-            formik.touched.downPayment && formik.errors.downPayment
-              ? true
-              : false
-          }
-          downPaymentErrorMessage={formik.errors.downPayment}
-          totalAmt={formik.values.totalAmt}
-          handleTotalAmount={formik.handleChange}
-          totalAmtError={
-            formik.touched.totalAmt && formik.errors.totalAmt ? true : false
-          }
-          totalAmtErrorMessage={formik.errors.totalAmt}
-          emiAmtError={
-            formik.touched.emiAmt && formik.errors.emiAmt ? true : false
-          }
-          emiErrorMessage={formik.errors.emiAmt}
-          // nameErrorMessage={fieldError?.name}
-          ownerNameValue={formik.values.ownerName}
-          handleOwnerName={formik.handleChange}
-          ownerNameError={
-            formik.touched.ownerName && formik.errors.ownerName ? true : false
-          }
-          ownerNameErrorMessage={formik.errors.ownerName}
-          areaValue={formik.values.area}
-          handleArea={formik.handleChange}
-          areaError={formik.touched.area && formik.errors.area ? true : false}
-          areaErrorMessgage={formik.errors.area}
-          handleParentProject={formik.handleChange}
-          handleStatus={formik.handleChange}
-          pincodeValue={formik.values.pincode}
-          handlePincode={handlePinCodeApi}
-          pincodeError={
-            formik.touched.pincode && formik.errors.pincode ? true : false
-          }
-          pincodeErrorMessage={formik.errors.pincode}
-          distValue={formik.values.dist}
-          handleDist={formik.handleChange}
-          handleState={formik.handleChange}
-          stateValue={formik.values.state}
-          addressValue={formik.values.address1}
-          handleAddress={formik.handleChange}
-          addressError={
-            formik.touched.address1 && formik.errors.address1 ? true : false
-          }
-          addressErrorMessage={formik.errors.address1}
-          secondaryAddressValue={formik.values.address2}
-          handleSecondaryAddress={formik.handleChange}
-          descValue={formik.values.description}
-          handleDesc={formik.handleChange}
-        />
+        
       ) : (
-        <ProjectImages
-          isEditActive={editId}
-          loader={loader}
-          projectLogo={projectLogo}
-          setProjectLogo={setProjectLogo}
-          planImages={planningImages}
-          handleGoBack={() => setShowImageUpload(false)}
-          handleSubmit={() => formik.handleSubmit()}
-          setPlanImages={setPlanningImages}
-          setProjectDevelopementImages={setSiteImages}
-          projectDevelopementImages={siteImages}
-        />
-      )}
+      )} */}
+      {/* <ProjectImages
+        isEditActive={editId}
+        loader={loader}
+        projectLogo={projectLogo}
+        setProjectLogo={setProjectLogo}
+        planImages={planningImages}
+        handleGoBack={() => setShowImageUpload(false)}
+        handleSubmit={() => formik.handleSubmit()}
+        setPlanImages={setPlanningImages}
+        setProjectDevelopementImages={setSiteImages}
+        projectDevelopementImages={siteImages}
+      /> */}
+
+      <AddProjectForm
+        // handleProceed={() => setShowImageUpload(true)}
+        handleProceed={() => formik.handleSubmit()}
+        handleName={formik.handleChange}
+        nameValue={formik.values.name}
+        nameError={formik.touched.name && formik.errors.name ? true : false}
+        nameErrorMessage={formik.errors.name}
+        emiAmt={formik.values.emiAmt}
+        handleEmi={formik.handleChange}
+        downPayment={formik.values.downPayment}
+        handleDownPayment={formik.handleChange}
+        downPaymentError={
+          formik.touched.downPayment && formik.errors.downPayment ? true : false
+        }
+        downPaymentErrorMessage={formik.errors.downPayment}
+        totalAmt={formik.values.totalAmt}
+        handleTotalAmount={formik.handleChange}
+        totalAmtError={
+          formik.touched.totalAmt && formik.errors.totalAmt ? true : false
+        }
+        totalAmtErrorMessage={formik.errors.totalAmt}
+        emiAmtError={
+          formik.touched.emiAmt && formik.errors.emiAmt ? true : false
+        }
+        emiErrorMessage={formik.errors.emiAmt}
+        // nameErrorMessage={fieldError?.name}
+        ownerNameValue={formik.values.ownerName}
+        handleOwnerName={formik.handleChange}
+        ownerNameError={
+          formik.touched.ownerName && formik.errors.ownerName ? true : false
+        }
+        ownerNameErrorMessage={formik.errors.ownerName}
+        areaValue={formik.values.area}
+        handleArea={formik.handleChange}
+        areaError={formik.touched.area && formik.errors.area ? true : false}
+        areaErrorMessgage={formik.errors.area}
+        handleParentProject={formik.handleChange}
+        handleStatus={formik.handleChange}
+        pincodeValue={formik.values.pincode}
+        handlePincode={handlePinCodeApi}
+        pincodeError={
+          formik.touched.pincode && formik.errors.pincode ? true : false
+        }
+        pincodeErrorMessage={formik.errors.pincode}
+        distValue={formik.values.dist}
+        handleDist={formik.handleChange}
+        handleState={formik.handleChange}
+        stateValue={formik.values.state}
+        addressValue={formik.values.address1}
+        handleAddress={formik.handleChange}
+        addressError={
+          formik.touched.address1 && formik.errors.address1 ? true : false
+        }
+        addressErrorMessage={formik.errors.address1}
+        secondaryAddressValue={formik.values.address2}
+        handleSecondaryAddress={formik.handleChange}
+        descValue={formik.values.description}
+        handleDesc={formik.handleChange}
+      />
       <SvmProjectToast />
     </>
   );

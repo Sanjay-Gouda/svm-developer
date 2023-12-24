@@ -6,7 +6,7 @@ const cookies = new Cookies();
 const httpInstance = axios.create({
   // baseURL: 'https://svm-ra9i.onrender.com/api/',
   baseURL: 'https://svmdevelopers.in/api/',
-  // baseURL: 'http://localhost:3050/api/',
+  // baseURL: 'http://localhost:3060/api/',
   // baseURL: 'http://192.168.1.9:3050/api/',
 });
 

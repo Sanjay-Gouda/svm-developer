@@ -160,43 +160,46 @@ function AddProjectForm({
   });
 
   return (
-    <div className='mx-auto  flex w-1/2 flex-col gap-2'>
-      <TextInput
-        onChange={formik.handleChange}
-        value={formik.values.name}
-        name='name'
-        containerClassName='flex-1'
-        label='Project Name'
-        // valid={errors.name && touched.name}
-      />
+    <>
+      {/* <h1>Project Info</h1> */}
 
-      {formik.touched.name && formik.errors.name && (
-        <div className='text-red-400'>{formik.errors.name}</div>
-      )}
-
-      <TextInput
-        onChange={formik.handleChange}
-        value={formik.values.ownerName}
-        name='ownerName'
-        containerClassName=' flex-1'
-        label='Projects Owner'
-      />
-
-      {formik.touched.ownerName && formik.errors.ownerName && (
-        <div className='text-red-400'>{formik.errors.ownerName}</div>
-      )}
-      <div className='flex w-full flex-col'>
+      <div className='mx-auto  mt-5 flex w-1/2 flex-col gap-2'>
         <TextInput
           onChange={formik.handleChange}
-          value={formik.values.area}
-          name='area'
-          containerClassName='w-full'
-          label='Area'
+          value={formik.values.name}
+          name='name'
+          containerClassName='flex-1'
+          label='Project Name'
+          // valid={errors.name && touched.name}
         />
-        {formik.touched.area && formik.errors.area && (
-          <div className='text-red-400'>{formik.errors.area}</div>
+
+        {formik.touched.name && formik.errors.name && (
+          <div className='text-red-400'>{formik.errors.name}</div>
         )}
-        {/* 
+
+        <TextInput
+          onChange={formik.handleChange}
+          value={formik.values.ownerName}
+          name='ownerName'
+          containerClassName=' flex-1'
+          label='Projects Owner'
+        />
+
+        {formik.touched.ownerName && formik.errors.ownerName && (
+          <div className='text-red-400'>{formik.errors.ownerName}</div>
+        )}
+        <div className='flex w-full flex-col'>
+          <TextInput
+            onChange={formik.handleChange}
+            value={formik.values.area}
+            name='area'
+            containerClassName='w-full'
+            label='Area'
+          />
+          {formik.touched.area && formik.errors.area && (
+            <div className='text-red-400'>{formik.errors.area}</div>
+          )}
+          {/* 
         <SelectOption
           onChange={formik.handleChange}
           title='Parent Project'
@@ -204,132 +207,133 @@ function AddProjectForm({
           containerClassName='mt-1 w-[50%]'
           name='parentProject'
         /> */}
-      </div>
-
-      <div className='flex w-full items-center justify-between gap-4'>
-        <div className='flex w-1/2 flex-col'>
-          <SelectOption
-            onChange={formik.handleChange}
-            title='Parent Project'
-            options={ParentProjects}
-            containerClassName='flex-1 mt-1 w-full'
-            name='parentProject'
-          />
         </div>
-        <div className='w-1/2'>
-          <SelectOption
-            onChange={formik.handleChange}
-            title='Project Status'
-            options={Status}
-            containerClassName='mt-1'
-            labelClassName='w-full'
-            name='status'
-          />
+
+        <div className='flex w-full items-center justify-between gap-4'>
+          <div className='flex w-1/2 flex-col'>
+            <SelectOption
+              onChange={formik.handleChange}
+              title='Parent Project'
+              options={ParentProjects}
+              containerClassName='flex-1 mt-1 w-full'
+              name='parentProject'
+            />
+          </div>
+          <div className='w-1/2'>
+            <SelectOption
+              onChange={formik.handleChange}
+              title='Project Status'
+              options={Status}
+              containerClassName='mt-1'
+              labelClassName='w-full'
+              name='status'
+            />
+          </div>
         </div>
-      </div>
 
-      <div className='flex w-full  gap-4'>
-        <div className='flex w-full flex-col'>
-          <TextInput
-            // onChange={formik.handleChange}
-            onChange={handlePinCodeApi}
-            value={formik.values.pincode}
-            name='pincode'
-            containerClassName='w-full'
-            label='Pincode'
-          />
-          {formik.touched.pincode && formik.errors.pincode && (
-            <div className='text-red-400'>{formik.errors.pincode}</div>
-          )}
+        <div className='flex w-full  gap-4'>
+          <div className='flex w-full flex-col'>
+            <TextInput
+              // onChange={formik.handleChange}
+              onChange={handlePinCodeApi}
+              value={formik.values.pincode}
+              name='pincode'
+              containerClassName='w-full'
+              label='Pincode'
+            />
+            {formik.touched.pincode && formik.errors.pincode && (
+              <div className='text-red-400'>{formik.errors.pincode}</div>
+            )}
+          </div>
+          <div className='flex w-full flex-col'>
+            <TextInput
+              onChange={formik.handleChange}
+              value={formik.values.dist}
+              name='dist'
+              containerClassName=' w-full'
+              label='District'
+            />
+            {formik.touched.dist && formik.errors.dist && (
+              <div className='text-red-400'>{formik.errors.dist}</div>
+            )}
+          </div>
+          <div className='flex w-full flex-col'>
+            <TextInput
+              onChange={formik.handleChange}
+              value={formik.values.state}
+              name='state'
+              containerClassName=' w-full'
+              label='State'
+            />
+            {formik.touched.state && formik.errors.state && (
+              <div className='text-red-400'>{formik.errors.state}</div>
+            )}
+          </div>
         </div>
-        <div className='flex w-full flex-col'>
-          <TextInput
-            onChange={formik.handleChange}
-            value={formik.values.dist}
-            name='dist'
-            containerClassName=' w-full'
-            label='District'
-          />
-          {formik.touched.dist && formik.errors.dist && (
-            <div className='text-red-400'>{formik.errors.dist}</div>
-          )}
-        </div>
-        <div className='flex w-full flex-col'>
-          <TextInput
-            onChange={formik.handleChange}
-            value={formik.values.state}
-            name='state'
-            containerClassName=' w-full'
-            label='State'
-          />
-          {formik.touched.state && formik.errors.state && (
-            <div className='text-red-400'>{formik.errors.state}</div>
-          )}
-        </div>
-      </div>
 
-      <TextInputArea
-        value={formik.values.address1}
-        name='address1'
-        containerClassName='flex-1 '
-        label='Address 1'
-        rows='1'
-        handleChange={formik.handleChange}
-      />
-      {formik.touched.address1 && formik.errors.address1 && (
-        <div className='text-red-400'>{formik.errors.address1}</div>
-      )}
-      <TextInputArea
-        value={formik.values.address2}
-        name='address2'
-        containerClassName='flex-1 '
-        label='Address 2'
-        rows='1'
-        handleChange={formik.handleChange}
-      />
+        <TextInputArea
+          value={formik.values.address1}
+          name='address1'
+          containerClassName='flex-1 '
+          label='Address 1'
+          rows='1'
+          handleChange={formik.handleChange}
+        />
+        {formik.touched.address1 && formik.errors.address1 && (
+          <div className='text-red-400'>{formik.errors.address1}</div>
+        )}
+        <TextInputArea
+          value={formik.values.address2}
+          name='address2'
+          containerClassName='flex-1 '
+          label='Address 2'
+          rows='1'
+          handleChange={formik.handleChange}
+        />
 
-      <TextInputArea
-        value={formik.values.description}
-        name='description'
-        containerClassName='flex-1 '
-        label='Description'
-        rows='3'
-        handleChange={formik.handleChange}
-      />
+        <TextInputArea
+          value={formik.values.description}
+          name='description'
+          containerClassName='flex-1 '
+          label='Description'
+          rows='3'
+          handleChange={formik.handleChange}
+        />
 
-      {editId ? (
-        <div className='flex w-full justify-between'>
-          <Button
-            size='regular'
-            layout='outline'
-            // onClick={() => onComplete('image')}
-            onClick={() => router.push('/admin/projects')}
-            className='col-span-2  mt-3'
-          >
-            Cancel
-          </Button>
+        {editId ? (
+          <div className='flex w-full justify-between'>
+            <Button
+              size='regular'
+              layout='outline'
+              // onClick={() => onComplete('image')}
+              onClick={() => router.push('/admin/projects')}
+              className='col-span-2  mt-3'
+            >
+              Cancel
+            </Button>
 
+            <Button
+              size='regular'
+              // onClick={() => onComplete('image')}
+              onClick={() => formik.handleSubmit()}
+              className='col-span-2  mt-3'
+            >
+              Update
+            </Button>
+          </div>
+        ) : (
           <Button
             size='regular'
             // onClick={() => onComplete('image')}
             onClick={() => formik.handleSubmit()}
-            className='col-span-2  mt-3'
+            className='col-span-2 ml-auto mt-3'
           >
-            Update
+            Proceed
           </Button>
-        </div>
-      ) : (
-        <Button
-          size='regular'
-          // onClick={() => onComplete('image')}
-          onClick={() => formik.handleSubmit()}
-          className='col-span-2 ml-auto mt-3'
-        >
-          Proceed
-        </Button>
-      )}
-      <SvmProjectToast />
-    </div>
+        )}
+        <SvmProjectToast />
+      </div>
+    </>
   );
 }
 

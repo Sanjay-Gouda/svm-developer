@@ -46,11 +46,13 @@ export default function Projects({
   repo,
   error,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  // console.log(repo, error, 'projects');
+  console.log(repo, 'projects');
   const routes = useRouter();
   const [projects, setProjects] = useState(repo);
 
   const handleEdit = (id: string) => {
+    // console.log(id, 'edit Id Project');
+
     routes.push(`realEstateProjects/projectForm/${id}`);
   };
 
@@ -63,6 +65,7 @@ export default function Projects({
           `${API_ENDPOINT.END_POINT}/project/list?searchString=${value}`
         );
         const data = res.data.result.list;
+        console.log(data);
 
         setProjects(data);
       } catch (err) {
@@ -91,7 +94,7 @@ export default function Projects({
           <ServerError />
         ) : (
           <>
-            {projects.length === 0 ? (
+            {projects?.length === 0 ? (
               <>
                 <EmptyState />
               </>

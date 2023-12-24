@@ -39,7 +39,7 @@ export default function LoginPage() {
       setLoader(false);
       const loginToken = res.data.result.accessToken;
       localStorage.setItem('loginToken', loginToken);
-      toast.success('Welcome to the Dashboard');
+      toast.success('Welcome to the Dashboard', { position: 'top-center' });
 
       setCookie('token', loginToken, { path: '/' });
       if (cookies) {

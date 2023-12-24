@@ -269,7 +269,7 @@ function AddProjectForm({
   });
 
   return (
-    <div className='mx-auto  flex w-1/2 flex-col gap-2'>
+    <div className='mx-auto mt-5  flex w-1/2 flex-col gap-2'>
       <TextInput
         onChange={handleName}
         value={nameValue}

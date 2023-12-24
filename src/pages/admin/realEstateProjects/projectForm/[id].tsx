@@ -1,13 +1,15 @@
 import { Card, CardBody } from '@windmill/react-ui';
 import React from 'react';
 
-import TestProjects from '@/components/TestProjects';
+import EditProjectCollection from '@/components/TestProjects/editProjectCollection';
 import Layout from '@/containers/Layout';
 
 import { httpInstance } from '@/constants/httpInstances';
 
 export async function getServerSideProps(context) {
   const id = context.params.id;
+
+  console.log(id, 'My ProjectEdit ID');
   const res = await httpInstance.get(`project/get/${id}`);
 
   const projectDetails = res.data.result;
@@ -68,7 +70,9 @@ const EditProject = ({ id, projectDetails }) => {
       <Card className='mx-auto  w-full p-2'>
         <CardBody>
           {/* <AddProjectForm editInitialValues={editInitialValues} editId={id} /> */}
-          <TestProjects editInitialValues={editInitialValues} editId={id} />
+          {/* <TestProjects editInitialValues={editInitialValues} editId={id} /> */}
+          <EditProjectCollection />
+          {/* <ProjectCollection /> */}
         </CardBody>
       </Card>
     </Layout>

@@ -1,7 +1,7 @@
 import { Card, CardBody } from '@windmill/react-ui';
 import React from 'react';
 
-import TestProjects from '@/components/TestProjects';
+import ProjectCollection from '@/components/TestProjects/projectCollection';
 import Layout from '@/containers/Layout';
 
 export type ProjectFormTypes = 'form' | 'image' | 'siteImages';
@@ -22,11 +22,12 @@ function SvmProjects() {
 
   return (
     <Layout>
-      <Card className='mx-auto  w-full p-2'>
+      <Card className='mx-auto   w-full p-2'>
         <CardBody>
           {/* <SectionTitle>Add Project Details</SectionTitle> */}
           {/* <Component onComplete={setPhase} /> */}
-          <TestProjects />
+          {/* <TestProjects /> */}
+          <ProjectCollection />
         </CardBody>
       </Card>
     </Layout>
