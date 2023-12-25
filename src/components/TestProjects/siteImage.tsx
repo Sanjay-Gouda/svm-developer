@@ -16,9 +16,6 @@ const SiteImage = ({ handleNextStep, projectId }: TLogo) => {
 
   const [siteImages, setSiteImages] = useState<any>([]);
 
-  /* [file][file][file][file] */
-  /* 'https:url.com' 'https:url.com' 'https:url.com' [file] [file]*/
-
   const handleSave = async () => {
     const formData = new FormData();
 

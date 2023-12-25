@@ -1,6 +1,9 @@
 import { Button } from '@windmill/react-ui';
 import React, { useEffect, useState } from 'react';
 
+import LogoContainer from '@/components/Projects/logoContainer';
+import UploadProjectImages from '@/components/Projects/uploadProjectImages';
+import UploadSiteImages from '@/components/Projects/uploadSiteImages';
 import EditTab from '@/components/Tabs/editTab';
 import TestProjects from '@/components/TestProjects';
 import ImageCard from '@/components/TestProjects/imageCard';
@@ -12,6 +15,12 @@ import { httpInstance } from '@/constants/httpInstances';
 type activeTabState = {
   info: boolean;
   images: boolean;
+};
+
+type TModal = {
+  logoModal: boolean;
+  planningModal: boolean;
+  siteImageModal: boolean;
 };
 
 type TEditResponse = {
@@ -38,14 +47,26 @@ const EditProjectCollection = ({
   const Tabs = ['Project Info', 'Images'];
   const [currentTab, setCurrentTab] = useState<string>('Project Info');
   const [activeTab, setActiveTab] = useState<activeTabState>({
-    info: false,
+    info: true,
     images: false,
   });
 
+  const [openImageModal, setOpenImageModal] = useState<TModal>({
+    logoModal: false,
+    planningModal: false,
+    siteImageModal: false,
+  });
+
   const [projectImages, setProjectImages] = useState<TEditProjectImages>();
+  const [projectLogo, setProjectLogo] = useState<any>([]);
+  const [planningImages, setPlanningImages] = useState<any>([]);
+  const [siteImages, setSiteImages] = useState<any>([]);
 
   const handleTabChange = (tabId: string) => {
     setCurrentTab(tabId);
+    tabId === 'Project Info'
+      ? setActiveTab({ images: false, info: true })
+      : setActiveTab({ images: true, info: false });
   };
 
   const getImages = async () => {
@@ -59,18 +80,109 @@ const EditProjectCollection = ({
     }
   };
 
+  const handleOpenLogoModal = () => {
+    setOpenImageModal({
+      ...openImageModal,
+      logoModal: true,
+    });
+  };
+
+  const handlePlanningModal = () => {
+    setOpenImageModal({
+      ...openImageModal,
+      planningModal: true,
+    });
+  };
+  const handleSiteImageModal = () => {
+    setOpenImageModal({
+      ...openImageModal,
+      siteImageModal: true,
+    });
+  };
+
+  function closeModal() {
+    // setIsModalOpen(false);
+    setOpenImageModal({
+      logoModal: false,
+      planningModal: false,
+      siteImageModal: false,
+    });
+    setProjectLogo([]);
+    setPlanningImages([]);
+  }
+
+  const handleLogoUpload = async () => {
+    const formData = new FormData();
+
+    for (let i = 0; i < projectLogo.length; i++) {
+      formData.append('logo', projectLogo[i]);
+    }
+
+    try {
+      const res = await httpInstance.patch(
+        `project/upload/logo/${editId}`,
+        formData,
+
+        { headers: { 'Content-Type': 'multipart/form-data' } }
+      );
+      console.log(res);
+      // handleNextStep();
+      closeModal();
+    } catch (err) {
+      closeModal();
+      console.log(err);
+    }
+  };
+
+  const handlePlanningImageUpload = async () => {
+    const formData = new FormData();
+
+    for (let i = 0; i < planningImages.length; i++) {
+      formData.append('planningImages', planningImages[i]);
+    }
+
+    try {
+      const res = await httpInstance.patch(
+        `project/upload/project-images/${editId}`,
+        formData,
+
+        { headers: { 'Content-Type': 'multipart/form-data' } }
+      );
+      console.log(res);
+      // handleNextStep();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleSiteImageUpload = async () => {
+    const formData = new FormData();
+
+    for (let i = 0; i < siteImages.length; i++) {
+      formData.append('siteImages', siteImages[i]);
+    }
+
+    try {
+      const res = await httpInstance.patch(
+        `project/upload/project-images/${editId}`,
+        formData,
+
+        { headers: { 'Content-Type': 'multipart/form-data' } }
+      );
+      console.log(res);
+      // handleNextStep();
+
+      // setTimeout(() => {
+      //   router.push('/admin/projects');
+      // }, 1000);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   useEffect(() => {
     getImages();
-  }, [editId]);
-
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  function openModal() {
-    setIsModalOpen(true);
-  }
-  function closeModal() {
-    setIsModalOpen(false);
-  }
+  }, [editId, projectLogo, planningImages]);
 
   return (
     <>
@@ -84,6 +196,7 @@ const EditProjectCollection = ({
         <TestProjects editInitialValues={editInitialValues} editId={editId} />
       ) : (
         <div className='flex w-full flex-col items-center justify-center gap-6'>
+          {/* Logo */}
           <div className='flex w-[80%] flex-col'>
             <div className='flex w-full'>
               <p className=' inline-flex w-full items-center text-sm font-semibold text-white transition-colors duration-150 '>
@@ -91,7 +204,7 @@ const EditProjectCollection = ({
               </p>
               <div className='flex w-[80%]'>
                 <Button
-                  onClick={openModal}
+                  onClick={handleOpenLogoModal}
                   size='regular'
                   className='col-span-2 ml-auto mt-3'
                 >
@@ -108,13 +221,18 @@ const EditProjectCollection = ({
             </div>
           </div>
 
+          {/* Planning Image */}
           <div className='flex w-[80%] flex-col'>
             <div className='flex w-full'>
               <p className=' inline-flex w-full items-center text-sm font-semibold text-white transition-colors duration-150 '>
                 Planning Images
               </p>
               <div className='flex w-[80%]'>
-                <Button size='regular' className='col-span-2 ml-auto mt-3'>
+                <Button
+                  size='regular'
+                  onClick={handlePlanningModal}
+                  className='col-span-2 ml-auto mt-3'
+                >
                   Add Images
                 </Button>
               </div>
@@ -127,13 +245,19 @@ const EditProjectCollection = ({
               </div>
             </div>
           </div>
+
+          {/* Site Image */}
           <div className='flex w-[80%] flex-col'>
             <div className='flex w-full'>
               <p className=' inline-flex w-full items-center text-sm font-semibold text-white transition-colors duration-150 '>
                 Site Images
               </p>
               <div className='flex w-[80%]'>
-                <Button size='regular' className='col-span-2 ml-auto mt-3'>
+                <Button
+                  size='regular'
+                  onClick={handleSiteImageModal}
+                  className='col-span-2 ml-auto mt-3'
+                >
                   Add Images
                 </Button>
               </div>
@@ -149,7 +273,39 @@ const EditProjectCollection = ({
         </div>
       )}
 
-      <ImageModal isModalOpen={isModalOpen} handleClose={closeModal} />
+      <ImageModal
+        isModalOpen={openImageModal.logoModal}
+        handleClose={closeModal}
+        handleUpload={handleLogoUpload}
+        modalBody={
+          <LogoContainer
+            projectLogo={projectLogo}
+            setProjectLogo={setProjectLogo}
+          />
+        }
+      />
+      <ImageModal
+        isModalOpen={openImageModal.planningModal}
+        handleClose={closeModal}
+        handleUpload={handlePlanningImageUpload}
+        modalBody={
+          <UploadProjectImages
+            setPlanImages={setPlanningImages}
+            planImages={planningImages}
+          />
+        }
+      />
+      <ImageModal
+        isModalOpen={openImageModal.siteImageModal}
+        handleClose={closeModal}
+        handleUpload={handleSiteImageUpload}
+        modalBody={
+          <UploadSiteImages
+            projectDevelopementImages={siteImages}
+            setProjectDevelopementImages={setSiteImages}
+          />
+        }
+      />
     </>
   );
 };

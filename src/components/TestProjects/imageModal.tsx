@@ -5,28 +5,26 @@ import {
   ModalFooter,
   ModalHeader,
 } from '@windmill/react-ui';
-import React, { useState } from 'react';
-
-import LogoContainer from '@/components/Projects/logoContainer';
+import React from 'react';
 
 type TModel = {
   isModalOpen: boolean;
   handleClose: () => void;
+  modalBody: any;
+  handleUpload: () => void;
 };
 
-const ImageModal = ({ handleClose, isModalOpen, openModal }: TModel) => {
-  const [projectLogo, setProjectLogo] = useState<any>([]);
-
+const ImageModal = ({
+  handleClose,
+  isModalOpen,
+  modalBody,
+  handleUpload,
+}: TModel) => {
   return (
     <>
       <Modal isOpen={isModalOpen} onClose={handleClose}>
         <ModalHeader>Update Logo</ModalHeader>
-        <ModalBody>
-          <LogoContainer
-            projectLogo={projectLogo}
-            setProjectLogo={setProjectLogo}
-          />
-        </ModalBody>
+        <ModalBody>{modalBody}</ModalBody>
         <ModalFooter>
           <Button
             className='w-full sm:w-auto'
@@ -35,7 +33,9 @@ const ImageModal = ({ handleClose, isModalOpen, openModal }: TModel) => {
           >
             Cancel
           </Button>
-          <Button className='w-full sm:w-auto'>Accept</Button>
+          <Button className='w-full sm:w-auto' onClick={handleUpload}>
+            Upload
+          </Button>
         </ModalFooter>
       </Modal>
     </>
