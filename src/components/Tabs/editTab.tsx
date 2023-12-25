@@ -7,7 +7,6 @@ type TEditTab = {
 };
 
 const EditTab = ({ tabs, onTabChange, activeTab }: TEditTab) => {
-  console.log(activeTab, 'tab');
   return (
     <>
       <div className='flex w-full flex-col items-center justify-center'>

@@ -4,7 +4,7 @@ const UploadPlaceholder = ({ rootProps, inputProps }) => {
   return (
     <>
       <div
-        className='flex w-[80%] flex-col items-center justify-center'
+        className='flex w-full flex-col items-center justify-center'
         {...rootProps()}
       >
         <label

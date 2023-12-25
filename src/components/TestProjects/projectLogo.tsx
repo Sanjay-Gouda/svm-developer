@@ -42,7 +42,7 @@ const ProjectLogo = ({ projectId, handleNextStep, handleBack }: TLogo) => {
   return (
     <>
       <div className='flex w-full flex-col items-center justify-center'>
-        <div className='flex w-full flex-col items-center justify-center'>
+        <div className='flex w-[80%] flex-col items-center justify-center'>
           <LogoContainer
             projectLogo={projectLogo}
             setProjectLogo={setProjectLogo}

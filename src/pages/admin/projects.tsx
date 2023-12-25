@@ -116,7 +116,7 @@ export default function Projects({
                     </tr>
                   </TableHeader>
                   <TableBody>
-                    {projects.map((data: any, ind: number) => {
+                    {projects?.map((data: any, ind: number) => {
                       return (
                         <TableRow key={ind}>
                           <TableCell>{data?.name}</TableCell>

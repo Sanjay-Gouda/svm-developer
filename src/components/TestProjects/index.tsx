@@ -202,7 +202,7 @@ const TestProjects = ({
 
     console.log(values, 'project update');
 
-    const payload: payloadProps = {
+    const payload = {
       address1: address1,
       area: area,
       name: name,
@@ -212,43 +212,25 @@ const TestProjects = ({
       status: status,
       unit: unit,
       address2: address2,
-      logo: projectLogo,
-      planningImages: planningImages,
       location: 'location',
       downPayment: +downPayment,
       emiAmt: +emiAmt,
       totalAmt: +totalAmt,
     };
 
-    const formData = new FormData();
-
-    Object.entries(payload).forEach(([key, value]: any) => {
-      if (key !== 'planningImages' && key !== 'logo') {
-        formData.append(key, value);
-      }
-    });
-
-    for (let i = 0; i < planningImages.length; i++) {
-      formData.append('planningImages', planningImages[i]);
-    }
-    for (let i = 0; i < projectLogo.length; i++) {
-      formData.append('logo', projectLogo[i]);
-    }
-
     try {
       // console.log(formData);
-      const res = await httpInstance.put(`project/update/${editId}`, formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
+      const res = await httpInstance.put(`project/update/${editId}`, payload);
       const isNotify = res.data.isNotify;
       const successMessage = isNotify
         ? res?.data?.message
         : 'Project updated successfully';
       toast.success(successMessage);
+
       setLoader(false);
-      setTimeout(() => {
-        routes.push('/admin/projects');
-      }, 1000);
+      // setTimeout(() => {
+      //   routes.push('/admin/projects');
+      // }, 1000);
 
       console.log(res);
     } catch (error) {

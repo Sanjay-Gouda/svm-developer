@@ -68,7 +68,7 @@ const UploadSiteImages = ({
       </div> */}
 
       {projectDevelopementImages?.length > 0 ? (
-        <div className='auto  flex w-[80%] flex-wrap gap-6  rounded-lg  border-2 border-gray-300 px-2 py-5  dark:border-gray-600'>
+        <div className='auto  flex w-full flex-wrap gap-6  rounded-lg  border-2 border-gray-300 px-2 py-5  dark:border-gray-600'>
           {projectDevelopementImages?.map((file: any, ind: any) => {
             return (
               <>
@@ -88,7 +88,7 @@ const UploadSiteImages = ({
         />
       )}
 
-      <div className='flex w-[80%] justify-end gap-2'>
+      <div className='flex w-full justify-end gap-2'>
         <Button
           size='regular'
           onClick={() => handleClearImages()}

@@ -24,7 +24,7 @@ const LogoContainer = ({ projectLogo, setProjectLogo }: TLogo) => {
   });
 
   return (
-    <div className='mt-5 h-56 w-[80%]'>
+    <div className='mt-5 h-56 w-[100%]'>
       {projectLogo?.length > 0 ? (
         <>
           <div className='auto  flex w-full flex-wrap gap-6  rounded-lg  border-2 border-gray-300 px-2 py-5  dark:border-gray-600'>

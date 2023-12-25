@@ -36,7 +36,7 @@ const PlanningImage = ({ projectId, handleNextStep }: TLogo) => {
   return (
     <>
       <div className='flex w-full flex-col items-center justify-center'>
-        <div className='mt-5 flex w-full flex-col items-center justify-center'>
+        <div className='mt-5 flex w-[80%] flex-col items-center justify-center'>
           <UploadProjectImages
             setPlanImages={setPlanningImages}
             planImages={planningImages}

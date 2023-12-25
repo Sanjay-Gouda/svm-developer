@@ -16,6 +16,9 @@ const SiteImage = ({ handleNextStep, projectId }: TLogo) => {
 
   const [siteImages, setSiteImages] = useState<any>([]);
 
+  /* [file][file][file][file] */
+  /* 'https:url.com' 'https:url.com' 'https:url.com' [file] [file]*/
+
   const handleSave = async () => {
     const formData = new FormData();
 
@@ -44,13 +47,13 @@ const SiteImage = ({ handleNextStep, projectId }: TLogo) => {
   return (
     <>
       <div className='flex w-full flex-col items-center justify-center'>
-        <div className='mt-8 flex w-full flex-col items-center justify-center gap-3'>
+        <div className='mt-8 flex w-[80%] flex-col items-center justify-center gap-3'>
           <UploadSiteImages
             projectDevelopementImages={siteImages}
             setProjectDevelopementImages={setSiteImages}
           />
 
-          <div className='mt-3 flex w-[80%] items-center justify-between'>
+          <div className='mt-3 flex w-full items-center justify-between'>
             <Button
               size='regular'
               // onClick={() => onComplete('image')}

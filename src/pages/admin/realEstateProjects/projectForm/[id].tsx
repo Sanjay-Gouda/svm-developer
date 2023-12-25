@@ -2,6 +2,7 @@ import { Card, CardBody } from '@windmill/react-ui';
 import React from 'react';
 
 import EditProjectCollection from '@/components/TestProjects/editProjectCollection';
+import { TProjectResponse } from '@/components/TestProjects/types';
 import Layout from '@/containers/Layout';
 
 import { httpInstance } from '@/constants/httpInstances';
@@ -10,7 +11,7 @@ export async function getServerSideProps(context) {
   const id = context.params.id;
 
   console.log(id, 'My ProjectEdit ID');
-  const res = await httpInstance.get(`project/get/${id}`);
+  const res = await httpInstance.get(`project/get-details/${id}`);
 
   const projectDetails = res.data.result;
 
@@ -44,11 +45,9 @@ const EditProject = ({ id, projectDetails }) => {
     emiAmt,
     totalAmt,
     location,
-    logoUrl,
-    projectImages,
   } = projectDetails;
 
-  const editInitialValues = {
+  const editInitialValues: TProjectResponse = {
     name: name,
     ownerName: ownerName,
     // parentProject: 'none',
@@ -61,8 +60,8 @@ const EditProject = ({ id, projectDetails }) => {
     description: description,
     status: status,
     address1: address1,
-    logoUrl: logoUrl,
-    projectImages: projectImages,
+    address2: address2,
+    location: location,
   };
 
   return (
@@ -71,7 +70,10 @@ const EditProject = ({ id, projectDetails }) => {
         <CardBody>
           {/* <AddProjectForm editInitialValues={editInitialValues} editId={id} /> */}
           {/* <TestProjects editInitialValues={editInitialValues} editId={id} /> */}
-          <EditProjectCollection />
+          <EditProjectCollection
+            editInitialValues={editInitialValues}
+            editId={id}
+          />
           {/* <ProjectCollection /> */}
         </CardBody>
       </Card>

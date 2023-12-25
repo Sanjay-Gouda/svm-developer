@@ -40,7 +40,7 @@ const UploadProjectImages = ({ setPlanImages, planImages }) => {
       </div> */}
 
       {planImages?.length > 0 ? (
-        <div className='auto  flex w-[80%] flex-wrap gap-6  rounded-lg  border-2 border-gray-300 px-2 py-5  dark:border-gray-600'>
+        <div className='auto  flex w-full flex-wrap gap-6  rounded-lg  border-2 border-gray-300 px-2 py-5  dark:border-gray-600'>
           {planImages?.map((file, ind) => {
             return (
               <>
