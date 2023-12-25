@@ -5,9 +5,9 @@ import LogoContainer from '@/components/Projects/logoContainer';
 import UploadProjectImages from '@/components/Projects/uploadProjectImages';
 import UploadSiteImages from '@/components/Projects/uploadSiteImages';
 import EditTab from '@/components/Tabs/editTab';
-import TestProjects from '@/components/TestProjects';
-import ImageCard from '@/components/TestProjects/imageCard';
-import ImageModal from '@/components/TestProjects/imageModal';
+import TestProjects from '@/components/TestProjects/CreateProject';
+import ImageCard from '@/components/TestProjects/EditProject/imageCard';
+import ImageModal from '@/components/TestProjects/EditProject/imageModal';
 import { TProjectResponse } from '@/components/TestProjects/types';
 
 import { httpInstance } from '@/constants/httpInstances';

@@ -9,7 +9,7 @@ import * as Yup from 'yup';
 import 'react-toastify/dist/ReactToastify.css';
 
 import { TDetailValues } from '@/components/Projects/projectDetailType';
-import AddProjectForm from '@/components/TestProjects/addProjectForm';
+import AddProjectForm from '@/components/TestProjects/CreateProject/addProjectForm';
 import { TCreateProject } from '@/components/TestProjects/types';
 import { SvmProjectToast } from '@/components/Toast/Toast';
 
@@ -99,14 +99,8 @@ const TestProjects = ({
   handleNextStep,
   setProjectFormValues,
 }: editProps) => {
-  const router = useRouter();
-  const [planningImages, setPlanningImages] = useState<any>([]);
-  const [siteImages, setSiteImages] = useState<any>([]);
   const [loader, setLoader] = useState(false);
 
-  const [projectLogo, setProjectLogo] = useState<any>([]);
-
-  const [showImageUpload, setShowImageUpload] = useState(false);
   const [isformikError, setIsFromikError] = useState<number>();
   const routes = useRouter();
 
@@ -143,21 +137,6 @@ const TestProjects = ({
       totalAmt: totalAmt,
     };
 
-    // const formData = new FormData();
-
-    // Object.entries(payLoads).forEach(([key, value]: any) => {
-    //   if (key !== 'planningImages' && key !== 'logo') {
-    //     formData.append(key, value);
-    //   }
-    // });
-
-    // for (let i = 0; i < planningImages.length; i++) {
-    //   formData.append('planningImages', planningImages[i]);
-    // }
-    // for (let i = 0; i < projectLogo.length; i++) {
-    //   formData.append('logo', projectLogo[i]);
-    // }
-
     try {
       // console.log(formData);
       const res = await httpInstance.post(`project/create`, payLoads);
@@ -168,17 +147,10 @@ const TestProjects = ({
         : 'Project Created successfully';
       toast.success(successMessage);
       setLoader(false);
-
       handleNextStep();
-      // setTimeout(() => {
-      //   routes.push('/admin/projects');
-      // }, 1000);
-
-      console.log(res);
     } catch (error) {
       console.log(error, 'Error project');
       toast.error('Something went wrong');
-
       console.log(error);
     }
   };
@@ -246,22 +218,7 @@ const TestProjects = ({
     initialValues: formInitialValue,
     validationSchema,
     onSubmit: (values: TCreateProject) => {
-      console.log(values, 'Values');
-      // setProjectFormValues(values);
-      // addProject(values);
       editId ? updateProjectDetials(values) : addProject(values);
-
-      // setCounter((counter) => counter + 1);
-      // if (isformikError === 0) {
-      //   setShowImageUpload(true);
-      //   setEnableSubmit(true);
-      // }
-
-      // if (enableSubmit && showImageUpload) {
-      //   // addProject(values);
-
-      //   editId ? updateProjectDetials(values) : addProject(values);
-      // }
     },
   });
 

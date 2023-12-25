@@ -1,7 +1,7 @@
 import { Card, CardBody } from '@windmill/react-ui';
 import React from 'react';
 
-import EditProjectCollection from '@/components/TestProjects/editProjectCollection';
+import EditProjectCollection from '@/components/TestProjects/EditProject/editProjectCollection';
 import { TProjectResponse } from '@/components/TestProjects/types';
 import Layout from '@/containers/Layout';
 

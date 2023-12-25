@@ -1,10 +1,10 @@
 import { useState } from 'react';
 
 import Stepper from '@/components/Stepper/Stepper';
-import TestProjects from '@/components/TestProjects';
-import PlanningImage from '@/components/TestProjects/planningImage';
-import ProjectLogo from '@/components/TestProjects/projectLogo';
-import SiteImage from '@/components/TestProjects/siteImage';
+import TestProjects from '@/components/TestProjects/CreateProject';
+import PlanningImage from '@/components/TestProjects/Images/planningImage';
+import ProjectLogo from '@/components/TestProjects/Images/projectLogo';
+import SiteImage from '@/components/TestProjects/Images/siteImage';
 import { TCreateProject } from '@/components/TestProjects/types';
 
 const ProjectCollection = () => {

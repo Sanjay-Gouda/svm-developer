@@ -26,7 +26,6 @@ const PlanningImage = ({ projectId, handleNextStep }: TLogo) => {
 
         { headers: { 'Content-Type': 'multipart/form-data' } }
       );
-      console.log(res);
       handleNextStep();
     } catch (err) {
       console.log(err);
