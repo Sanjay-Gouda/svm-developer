@@ -1,73 +1,20 @@
 import { Button } from '@windmill/react-ui';
-import axios from 'axios';
-import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import React from 'react';
-import { useDispatch } from 'react-redux';
-import { toast } from 'react-toastify';
-import * as Yup from 'yup';
 
 import 'react-toastify/dist/ReactToastify.css';
 
-import { TDetailValues } from '@/components/Projects/projectDetailType';
 import { SvmProjectToast } from '@/components/Toast/Toast';
 import { TextInput } from '@/components/ui-blocks';
 import { SelectOption, TextInputArea } from '@/components/ui-blocks/input';
 
-import { setProjectinfo } from '@/store/projectSlices/projectDetail';
-
-import { API_ENDPOINT } from '@/const/APIRoutes';
-import { ProjectFormTypes } from '@/pages/admin/realEstateProjects/projectForm/add';
-
-type formProps = {
-  onComplete?: (type: ProjectFormTypes) => void;
-};
-
-const validationSchema = Yup.object().shape({
-  name: Yup.string().required('Project Name is required'),
-  // parentProject: Yup.string().required('Parent Project is required'),
-  // status: Yup.string().required('status is required'),
-  ownerName: Yup.string().required('Owner Name is required'),
-
-  area: Yup.number().required('Area must be in number'),
-  emiAmt: Yup.number().required('Amount must be in number'),
-  downPayment: Yup.number().required(' Amount must be in number'),
-  totalAmt: Yup.number().required('Amount must be in number'),
-  // location: Yup.number().required('Area must be in number'),
-
-  // projectStatus: Yup.string().required('Project Status is required'),
-  pincode: Yup.string().required('Pincode is required'),
-  // state: Yup.string().required('state is required'),
-  // dist: Yup.string().required('district is required'),
-  address1: Yup.string().required('address is required'),
-});
-
 const Status = ['ACTIVE', 'COMPLETED', 'UPCOMING'];
 const ParentProjects = ['pp1', 'pp2', 'pp3'];
 
-const addInitialValues: TDetailValues = {
-  name: '',
-  ownerName: '',
-  parentProject: 'none',
-  area: undefined,
-  pincode: undefined,
-  unit: 'meter',
-  state: '',
-  dist: '',
-  description: '',
-  status: 'upcomming',
-  address1: undefined,
-  emiAmt: undefined,
-  downPayment: undefined,
-  totalAmt: undefined,
-  location: '',
-};
-
 type projectProps = {
-  onComplete?: formProps;
   editInitialValues?: any;
   editId?: string;
-
+  loader: boolean;
   handleName: (e: any) => void;
   nameValue: string;
   nameError: boolean;
@@ -110,7 +57,6 @@ type projectProps = {
 
   handleState: (e: any) => void;
   stateValue: string;
-
   addressValue: string | undefined;
   handleAddress: (e: any) => void;
   addressError: boolean;
@@ -124,9 +70,6 @@ type projectProps = {
 };
 
 function AddProjectForm({
-  onComplete,
-  editId,
-  editInitialValues,
   handleName,
   nameValue,
   nameError,
@@ -172,101 +115,10 @@ function AddProjectForm({
   totalAmt,
   totalAmtError,
   totalAmtErrorMessage,
+  loader,
+  editId,
 }: projectProps) {
-  const dispatch = useDispatch();
   const router = useRouter();
-  // const [pincodeQuery, setPincodeQuery] = useState();
-
-  // const handlePinCodeApi = async (e) => {
-  //   const query = e.target.value;
-  //   setPincodeQuery(query);
-
-  //   formik.setFieldValue('pincode', query);
-  // };
-
-  // useEffect(() => {
-  //   const timer = setTimeout(async () => {
-  //     await axios({
-  //       method: 'get',
-  //       url: `${API_ENDPOINT.END_POINT}/appConfig/pincode?zip=${pincodeQuery}`,
-  //     })
-  //       .then((res) => {
-  //         // console.log(res);
-
-  //         formik.setFieldValue('state', res?.data?.result[0].State);
-  //         formik.setFieldValue('dist', res?.data?.result[0].District);
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //       });
-  //   }, 200);
-
-  //   return () => {
-  //     clearTimeout(timer);
-  //   };
-  // }, [pincodeQuery]);
-
-  const formValues = editId ? editInitialValues : addInitialValues;
-
-  /* Update List */
-  const updateProjectDetials = async (values) => {
-    const {
-      name,
-      area,
-      address1,
-      address2,
-      unit,
-      status,
-      pincode,
-      description,
-      ownerName,
-    } = values;
-
-    const payload = {
-      address1: address1,
-      area: area,
-      name: name,
-      description: description,
-      ownerName: ownerName,
-      pincode: pincode,
-      status: status,
-      unit: unit,
-      address2: address2,
-    };
-
-    await axios({
-      method: 'put',
-      url: `${API_ENDPOINT.END_POINT}project/update/${editId}`,
-      data: payload,
-      headers: { 'Content-Type': 'application/json' },
-    })
-      .then((res) => {
-        toast.success('Data updated successfully');
-        setTimeout(() => {
-          router.push('/admin/projects');
-        }, 1000);
-      })
-      .catch((err) => {
-        toast.error('Something went wrong');
-      });
-  };
-
-  const formik = useFormik({
-    initialValues: formValues,
-    validationSchema,
-    onSubmit: (values: TDetailValues, { setSubmitting }) => {
-      if (editId) {
-        console.log(values);
-        updateProjectDetials(values);
-      } else {
-        dispatch(setProjectinfo(values));
-        if (Object.keys(formik.errors).length === 0) {
-          onComplete('image');
-        }
-      }
-      setSubmitting(false);
-    },
-  });
 
   return (
     <div className='mx-auto mt-5  flex w-1/2 flex-col gap-2'>
@@ -431,38 +283,30 @@ function AddProjectForm({
         handleChange={handleDesc}
       />
 
-      {editId ? (
-        <div className='flex w-full justify-between'>
-          <Button
-            size='regular'
-            layout='outline'
-            // onClick={() => onComplete('image')}
-            onClick={() => router.push('/admin/projects')}
-            className='col-span-2  mt-3'
-          >
-            Cancel
-          </Button>
-
-          <Button
-            size='regular'
-            // onClick={() => onComplete('image')}
-            onClick={() => formik.handleSubmit()}
-            className='col-span-2  mt-3'
-          >
-            Update
-          </Button>
-        </div>
-      ) : (
+      <div className='flex w-full justify-between'>
         <Button
           size='regular'
-          // onClick={() => onComplete('image')}
-          // onClick={() => formik.handleSubmit()}
-          onClick={handleProceed}
-          className='col-span-2 ml-auto mt-3'
+          layout='outline'
+          onClick={() => router.push('/admin/projects')}
+          className='col-span-2  mt-3'
         >
-          Proceed
+          Cancel
         </Button>
-      )}
+        {loader ? (
+          <Button className=' col-span-2 ml-auto mt-3'>
+            Saving...
+            {/* <ClipLoader size={20} color='white' /> */}
+          </Button>
+        ) : (
+          <Button
+            size='regular'
+            onClick={handleProceed}
+            className='col-span-2 ml-auto mt-3'
+          >
+            {editId ? 'Update' : 'Save & Next'}
+          </Button>
+        )}
+      </div>
       <SvmProjectToast />
     </div>
   );

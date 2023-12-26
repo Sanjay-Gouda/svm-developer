@@ -1,11 +1,13 @@
 import { Button } from '@windmill/react-ui';
-import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import LogoContainer from '@/components/Projects/logoContainer';
 import UploadProjectImages from '@/components/Projects/uploadProjectImages';
 import UploadSiteImages from '@/components/Projects/uploadSiteImages';
 import EditTab from '@/components/Tabs/editTab';
 import TestProjects from '@/components/TestProjects/CreateProject';
+import EmptyImage from '@/components/TestProjects/EditProject/emptyImage';
 import ImageCard from '@/components/TestProjects/EditProject/imageCard';
 import ImageModal from '@/components/TestProjects/EditProject/imageModal';
 import { TProjectResponse } from '@/components/TestProjects/types';
@@ -44,6 +46,7 @@ const EditProjectCollection = ({
   editInitialValues,
   editId,
 }: TEditResponse) => {
+  const router = useRouter();
   const Tabs = ['Project Info', 'Images'];
   const [currentTab, setCurrentTab] = useState<string>('Project Info');
   const [activeTab, setActiveTab] = useState<activeTabState>({
@@ -69,7 +72,7 @@ const EditProjectCollection = ({
       : setActiveTab({ images: true, info: false });
   };
 
-  const getImages = async () => {
+  const getImages = useCallback(async () => {
     try {
       const res = await httpInstance.get(`project/get-images/${editId}`);
       console.log(res);
@@ -78,7 +81,7 @@ const EditProjectCollection = ({
     } catch (err) {
       console.log(err);
     }
-  };
+  }, [editId, projectLogo, planningImages, siteImages]);
 
   const handleOpenLogoModal = () => {
     setOpenImageModal({
@@ -112,77 +115,94 @@ const EditProjectCollection = ({
   }
 
   const handleLogoUpload = async () => {
-    const formData = new FormData();
+    if (projectLogo.length === 0) {
+      alert('please select a Logo');
+    } else {
+      const formData = new FormData();
 
-    for (let i = 0; i < projectLogo.length; i++) {
-      formData.append('logo', projectLogo[i]);
-    }
+      for (let i = 0; i < projectLogo.length; i++) {
+        formData.append('logo', projectLogo[i]);
+      }
 
-    try {
-      const res = await httpInstance.patch(
-        `project/upload/logo/${editId}`,
-        formData,
+      try {
+        const res = await httpInstance.patch(
+          `project/upload/logo/${editId}`,
+          formData,
 
-        { headers: { 'Content-Type': 'multipart/form-data' } }
-      );
-      console.log(res);
-      // handleNextStep();
-      closeModal();
-    } catch (err) {
-      closeModal();
-      console.log(err);
+          { headers: { 'Content-Type': 'multipart/form-data' } }
+        );
+        console.log(res);
+        // handleNextStep();
+        closeModal();
+      } catch (err) {
+        closeModal();
+        console.log(err);
+      }
     }
   };
 
   const handlePlanningImageUpload = async () => {
-    const formData = new FormData();
+    if (planningImages.length === 0) {
+      alert('please select image to upload');
+    } else {
+      const formData = new FormData();
 
-    for (let i = 0; i < planningImages.length; i++) {
-      formData.append('planningImages', planningImages[i]);
-    }
+      for (let i = 0; i < planningImages.length; i++) {
+        formData.append('planningImages', planningImages[i]);
+      }
 
-    try {
-      const res = await httpInstance.patch(
-        `project/upload/project-images/${editId}`,
-        formData,
+      try {
+        const res = await httpInstance.patch(
+          `project/upload/project-images/${editId}`,
+          formData,
 
-        { headers: { 'Content-Type': 'multipart/form-data' } }
-      );
-      console.log(res);
-      // handleNextStep();
-    } catch (err) {
-      console.log(err);
+          { headers: { 'Content-Type': 'multipart/form-data' } }
+        );
+
+        closeModal();
+        // handleNextStep();
+      } catch (err) {
+        closeModal();
+        console.log(err);
+      }
     }
   };
 
   const handleSiteImageUpload = async () => {
-    const formData = new FormData();
+    if (siteImages.length === 0) {
+      alert('please select image to upload');
+    } else {
+      const formData = new FormData();
 
-    for (let i = 0; i < siteImages.length; i++) {
-      formData.append('siteImages', siteImages[i]);
-    }
+      for (let i = 0; i < siteImages.length; i++) {
+        formData.append('siteImages', siteImages[i]);
+      }
 
-    try {
-      const res = await httpInstance.patch(
-        `project/upload/project-images/${editId}`,
-        formData,
+      try {
+        const res = await httpInstance.patch(
+          `project/upload/project-images/${editId}`,
+          formData,
 
-        { headers: { 'Content-Type': 'multipart/form-data' } }
-      );
-      console.log(res);
-      // handleNextStep();
+          { headers: { 'Content-Type': 'multipart/form-data' } }
+        );
+        // console.log(res);
+        closeModal();
 
-      // setTimeout(() => {
-      //   router.push('/admin/projects');
-      // }, 1000);
-    } catch (err) {
-      console.log(err);
+        // handleNextStep();
+
+        // setTimeout(() => {
+        //   router.push('/admin/projects');
+        // }, 1000);
+      } catch (err) {
+        console.log(err);
+        closeModal();
+      }
     }
   };
 
   useEffect(() => {
     getImages();
-  }, [editId, projectLogo, planningImages]);
+  }, [getImages]);
 
   return (
     <>
@@ -193,7 +213,11 @@ const EditProjectCollection = ({
       />
 
       {currentTab === 'Project Info' ? (
-        <TestProjects editInitialValues={editInitialValues} editId={editId} />
+        <TestProjects
+          editInitialValues={editInitialValues}
+          editId={editId}
+          handleTabChange={() => handleTabChange('Images')}
+        />
       ) : (
         <div className='flex w-full flex-col items-center justify-center gap-6'>
           {/* Logo */}
@@ -208,7 +232,7 @@ const EditProjectCollection = ({
                   size='regular'
                   className='col-span-2 ml-auto mt-3'
                 >
-                  Add Images
+                  Update
                 </Button>
               </div>
             </div>
@@ -239,9 +263,15 @@ const EditProjectCollection = ({
             </div>
             <div className='w-full'>
               <div className='flex w-full flex-wrap gap-2'>
-                {projectImages?.planningImages?.map((img) => (
-                  <ImageCard key={img.projectImageId} url={img?.url} />
-                ))}
+                {projectImages?.planningImages?.length !== 0 ? (
+                  <>
+                    {projectImages?.planningImages?.map((img) => (
+                      <ImageCard key={img.projectImageId} url={img?.url} />
+                    ))}
+                  </>
+                ) : (
+                  <EmptyImage title='Upload Planning Images' />
+                )}
               </div>
             </div>
           </div>
@@ -264,14 +294,28 @@ const EditProjectCollection = ({
             </div>
             <div className='w-full'>
               <div className='flex w-full flex-wrap gap-2'>
-                {projectImages?.siteImages?.map((img) => (
-                  <ImageCard key={img.projectImageId} url={img?.url} />
-                ))}
+                {projectImages?.siteImages?.length !== 0 ? (
+                  <>
+                    {projectImages?.siteImages?.map((img) => (
+                      <ImageCard key={img.projectImageId} url={img?.url} />
+                    ))}
+                  </>
+                ) : (
+                  <EmptyImage title='Upload Site Images' />
+                )}
               </div>
             </div>
           </div>
         </div>
       )}
+
+      <div className='mt-8 flex w-full items-center justify-center'>
+        <div className='flex  w-[80%] justify-center'>
+          <Button onClick={() => router.push('/admin/projects')}>
+            Back To Projects
+          </Button>
+        </div>
+      </div>
 
       <ImageModal
         isModalOpen={openImageModal.logoModal}

@@ -12,13 +12,7 @@ type TStepper = {
 };
 
 // import './styles.css';
-const Stepper = ({
-  steps,
-  currentStep,
-  complete,
-  handleNextStep,
-  handleComplete,
-}: TStepper) => {
+const Stepper = ({ steps, currentStep, complete }: TStepper) => {
   return (
     <>
       <div className='flex w-[80%] justify-between'>
@@ -36,16 +30,6 @@ const Stepper = ({
           </div>
         ))}
       </div>
-      {!complete && (
-        <button
-          className='btn'
-          onClick={() => {
-            currentStep === steps.length ? handleComplete() : handleNextStep();
-          }}
-        >
-          {currentStep === steps.length ? 'Finish' : 'Next'}
-        </button>
-      )}
     </>
   );
 };

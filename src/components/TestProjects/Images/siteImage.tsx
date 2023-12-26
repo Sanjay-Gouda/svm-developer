@@ -1,8 +1,10 @@
 import { Button } from '@windmill/react-ui';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
+import { toast } from 'react-toastify';
 
 import UploadSiteImages from '@/components/Projects/uploadSiteImages';
+import { SvmProjectToast } from '@/components/Toast/Toast';
 
 import { httpInstance } from '@/constants/httpInstances';
 
@@ -16,7 +18,9 @@ const SiteImage = ({ handleNextStep, projectId }: TLogo) => {
 
   const [siteImages, setSiteImages] = useState<any>([]);
 
+  const [loader, setLoader] = useState<boolean>(false);
   const handleSave = async () => {
+    setLoader(true);
     const formData = new FormData();
 
     for (let i = 0; i < siteImages.length; i++) {
@@ -30,14 +34,16 @@ const SiteImage = ({ handleNextStep, projectId }: TLogo) => {
 
         { headers: { 'Content-Type': 'multipart/form-data' } }
       );
-      console.log(res);
+      setLoader(false);
       handleNextStep();
 
       setTimeout(() => {
         router.push('/admin/projects');
       }, 1000);
     } catch (err) {
-      console.log(err);
+      setLoader(false);
+
+      toast.error('Something went wrong');
     }
   };
 
@@ -50,19 +56,37 @@ const SiteImage = ({ handleNextStep, projectId }: TLogo) => {
             setProjectDevelopementImages={setSiteImages}
           />
 
-          <div className='mt-3 flex w-full items-center justify-between'>
-            <Button
-              size='regular'
-              // onClick={() => onComplete('image')}
-              // onClick={() => formik.handleSubmit()}
-              onClick={handleSave}
-              className='col-span-2 ml-auto mt-3'
-            >
-              Save & Next
+          {loader ? (
+            <Button className=' col-span-2 ml-auto mt-4'>
+              Saving...
+              {/* <ClipLoader size={20} color='white' /> */}
             </Button>
-          </div>
+          ) : (
+            <div className='mt-8 flex w-full items-end justify-end'>
+              <Button
+                size='regular'
+                // onClick={() => onComplete('form')}
+                onClick={() => {
+                  router.push('/admin/projects');
+                }}
+                layout='link'
+                className='mr-auto'
+              >
+                Skip
+              </Button>
+
+              <Button
+                size='regular'
+                onClick={handleSave}
+                className='col-span-2 ml-auto mt-4'
+              >
+                Save & Next
+              </Button>
+            </div>
+          )}
         </div>
       </div>
+      <SvmProjectToast />
     </>
   );
 };

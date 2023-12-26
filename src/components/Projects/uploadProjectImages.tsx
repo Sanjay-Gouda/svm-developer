@@ -20,6 +20,10 @@ const UploadProjectImages = ({ setPlanImages, planImages }) => {
     // noClick: true,
   });
 
+  const handleAddImagesClick = () => {
+    // Open the file selector
+    open();
+  };
   const handleClearImages = () => {
     setPlanImages([]);
   };
@@ -33,12 +37,6 @@ const UploadProjectImages = ({ setPlanImages, planImages }) => {
 
   return (
     <>
-      {/* <div className=' mb-2 flex items-center justify-between gap-2'>
-        <label className='block text-lg font-medium leading-6 text-gray-900 dark:text-gray-300'>
-          Upload Planning Images
-        </label>
-      </div> */}
-
       {planImages?.length > 0 ? (
         <div className='auto  flex w-full flex-wrap gap-6  rounded-lg  border-2 border-gray-300 px-2 py-5  dark:border-gray-600'>
           {planImages?.map((file, ind) => {
@@ -60,7 +58,7 @@ const UploadProjectImages = ({ setPlanImages, planImages }) => {
         />
       )}
 
-      <div className='mt-3 flex w-[80%] justify-end gap-2'>
+      <div className='mt-3 flex w-full justify-end gap-2'>
         <Button
           size='regular'
           onClick={() => handleClearImages()}
@@ -68,10 +66,10 @@ const UploadProjectImages = ({ setPlanImages, planImages }) => {
         >
           Clear Images
         </Button>
-        <Button size='regular' {...getRootProps()}>
+        <Button size='regular' onClick={handleAddImagesClick}>
           Add Images
-          <input {...getInputProps()} className='hidden' />
         </Button>
+        <input {...getInputProps()} className='hidden' />
       </div>
     </>
   );

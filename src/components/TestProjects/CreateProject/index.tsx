@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { useFormik } from 'formik';
-import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 // import Stepper from 'react-stepper-horizontal';
 import { toast } from 'react-toastify';
@@ -41,7 +40,7 @@ const addInitialValues: TDetailValues = {
   state: '',
   dist: '',
   description: '',
-  status: 'upcomming',
+  status: 'ACTIVE',
   address1: undefined,
   downPayment: undefined,
   totalAmt: undefined,
@@ -49,47 +48,11 @@ const addInitialValues: TDetailValues = {
   location: '',
 };
 
-// interface payloadProps {
-//   address1: string | undefined;
-//   area: number | undefined | string;
-//   name: string;
-//   description?: string | undefined;
-//   ownerName: string;
-//   pincode: number | undefined;
-//   status: string;
-//   unit: string;
-//   address2?: string | undefined;
-//   parentId?: string;
-//   siteImages?: string[];
-//   planningImages?: string[];
-//   logo?: string[];
-//   location?: string;
-//   emiAmt: number;
-//   downPayment: number;
-//   totalAmt: number;
-// }
-
-// type TCreateProject = {
-//   name: string;
-//   description?: string | undefined;
-//   parentId?: string | undefined;
-//   ownerName: string;
-//   area?: number | string;
-//   unit: string;
-//   status: string;
-//   address1?: string;
-//   address2?: string;
-//   pincode?: number;
-//   emiAmt: number;
-//   downPayment: number;
-//   totalAmt: number;
-//   location: string;
-// };
-
 type editProps = {
   editInitialValues?: any;
   editId?: string;
   handleNextStep?: () => void;
+  handleTabChange?: () => void;
   setProjectFormValues?: (value: TCreateProject) => void;
 };
 
@@ -98,11 +61,9 @@ const TestProjects = ({
   editInitialValues,
   handleNextStep,
   setProjectFormValues,
+  handleTabChange,
 }: editProps) => {
   const [loader, setLoader] = useState(false);
-
-  const [isformikError, setIsFromikError] = useState<number>();
-  const routes = useRouter();
 
   const addProject = async (values: TCreateProject) => {
     setLoader(true);
@@ -149,9 +110,9 @@ const TestProjects = ({
       setLoader(false);
       handleNextStep();
     } catch (error) {
-      console.log(error, 'Error project');
+      setLoader(false);
+
       toast.error('Something went wrong');
-      console.log(error);
     }
   };
 
@@ -171,8 +132,6 @@ const TestProjects = ({
       totalAmt,
       emiAmt,
     } = values;
-
-    console.log(values, 'project update');
 
     const payload = {
       address1: address1,
@@ -198,17 +157,10 @@ const TestProjects = ({
         ? res?.data?.message
         : 'Project updated successfully';
       toast.success(successMessage);
-
+      handleTabChange();
       setLoader(false);
-      // setTimeout(() => {
-      //   routes.push('/admin/projects');
-      // }, 1000);
-
-      console.log(res);
     } catch (error) {
       toast.error('Something went wrong');
-
-      console.log(error);
     }
   };
 
@@ -218,16 +170,10 @@ const TestProjects = ({
     initialValues: formInitialValue,
     validationSchema,
     onSubmit: (values: TCreateProject) => {
+      // console.log(values, 'Update Values');
       editId ? updateProjectDetials(values) : addProject(values);
     },
   });
-
-  useEffect(() => {
-    const errors = formik.errors;
-    const errorLength = Object.keys(errors).length;
-    // console.log(errorLength);
-    setIsFromikError(errorLength);
-  }, [formik.handleSubmit]);
 
   const [pincodeQuery, setPincodeQuery] = useState<string>();
 
@@ -272,32 +218,10 @@ const TestProjects = ({
     }
   }, [pincodeQuery, editId]);
 
-  /* set Logo if editId exist */
-
   return (
     <>
-      {/* <div className='flex items-center justify-center'>
-        <Stepper />
-      </div>
-      {!showImageUpload ? (
-        
-      ) : (
-      )} */}
-      {/* <ProjectImages
-        isEditActive={editId}
-        loader={loader}
-        projectLogo={projectLogo}
-        setProjectLogo={setProjectLogo}
-        planImages={planningImages}
-        handleGoBack={() => setShowImageUpload(false)}
-        handleSubmit={() => formik.handleSubmit()}
-        setPlanImages={setPlanningImages}
-        setProjectDevelopementImages={setSiteImages}
-        projectDevelopementImages={siteImages}
-      /> */}
-
       <AddProjectForm
-        // handleProceed={() => setShowImageUpload(true)}
+        editId={editId}
         handleProceed={() => formik.handleSubmit()}
         handleName={formik.handleChange}
         nameValue={formik.values.name}
@@ -310,6 +234,7 @@ const TestProjects = ({
         downPaymentError={
           formik.touched.downPayment && formik.errors.downPayment ? true : false
         }
+        loader={loader}
         downPaymentErrorMessage={formik.errors.downPayment}
         totalAmt={formik.values.totalAmt}
         handleTotalAmount={formik.handleChange}
@@ -321,7 +246,6 @@ const TestProjects = ({
           formik.touched.emiAmt && formik.errors.emiAmt ? true : false
         }
         emiErrorMessage={formik.errors.emiAmt}
-        // nameErrorMessage={fieldError?.name}
         ownerNameValue={formik.values.ownerName}
         handleOwnerName={formik.handleChange}
         ownerNameError={

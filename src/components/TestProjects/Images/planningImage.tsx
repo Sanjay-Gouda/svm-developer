@@ -1,7 +1,9 @@
 import { Button } from '@windmill/react-ui';
 import React, { useState } from 'react';
+import { toast } from 'react-toastify';
 
 import UploadProjectImages from '@/components/Projects/uploadProjectImages';
+import { SvmProjectToast } from '@/components/Toast/Toast';
 
 import { httpInstance } from '@/constants/httpInstances';
 
@@ -11,8 +13,10 @@ type TLogo = {
 };
 const PlanningImage = ({ projectId, handleNextStep }: TLogo) => {
   const [planningImages, setPlanningImages] = useState<any>([]);
+  const [loader, setLoading] = useState<boolean>(false);
 
   const handleSave = async () => {
+    setLoading(true);
     const formData = new FormData();
 
     for (let i = 0; i < planningImages.length; i++) {
@@ -26,9 +30,11 @@ const PlanningImage = ({ projectId, handleNextStep }: TLogo) => {
 
         { headers: { 'Content-Type': 'multipart/form-data' } }
       );
+      setLoading(false);
       handleNextStep();
     } catch (err) {
-      console.log(err);
+      setLoading(false);
+      toast.error('Something went wrong');
     }
   };
 
@@ -41,19 +47,36 @@ const PlanningImage = ({ projectId, handleNextStep }: TLogo) => {
             planImages={planningImages}
           />
 
-          <div className='mt-3 flex w-[80%] items-center justify-between'>
-            <Button
-              size='regular'
-              // onClick={() => onComplete('image')}
-              // onClick={() => formik.handleSubmit()}
-              onClick={handleSave}
-              className='col-span-2 ml-auto mt-3'
-            >
-              Save & Next
+          {loader ? (
+            <Button className=' col-span-2 ml-auto mt-4'>
+              Saving...
+              {/* <ClipLoader size={20} color='white' /> */}
             </Button>
-          </div>
+          ) : (
+            <div className='mt-8 flex w-full items-end justify-end'>
+              <Button
+                size='regular'
+                // onClick={() => onComplete('form')}
+                onClick={handleNextStep}
+                layout='link'
+                className='mr-auto'
+              >
+                Skip
+              </Button>
+
+              <Button
+                size='regular'
+                onClick={handleSave}
+                className='col-span-2 ml-auto mt-4'
+              >
+                Save & Next
+              </Button>
+            </div>
+          )}
         </div>
       </div>
+
+      <SvmProjectToast />
     </>
   );
 };
