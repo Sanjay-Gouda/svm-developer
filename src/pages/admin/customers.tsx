@@ -33,7 +33,7 @@ type customerListProps = {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   try {
     const token = context.req.headers.cookie?.split('=')[1];
-    console.log(token, 'FROM');
+
     httpInstance.defaults.headers.common['Authorization'] = 'Bearer ' + token;
 
     const res = await httpInstance.get(`/customer/advance-list`);

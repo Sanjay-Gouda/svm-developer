@@ -6,7 +6,6 @@ import * as Yup from 'yup';
 
 import 'react-toastify/dist/ReactToastify.css';
 
-import UploadDocuments from '@/components/Booking/uploadDocuments';
 import { SvmProjectToast } from '@/components/Toast/Toast';
 import { TextInput } from '@/components/ui-blocks';
 
@@ -249,17 +248,6 @@ function CustomerForm({ editInitialValues, editId }: editValueProps) {
     setShowUploadDoc(false);
   };
 
-  // const handleDocumentSubmit = () => {
-  //   console.log({
-  //     passPhoto,
-  //     secondPassPhoto,
-  //     thirdPassphoto,
-  //     frontAadharCard,
-  //     backAadharCard,
-  //     panCard,
-  //   });
-  // };
-
   useEffect(() => {
     const errors = formik.errors;
     const errorLength = Object.keys(errors).length;
@@ -268,79 +256,78 @@ function CustomerForm({ editInitialValues, editId }: editValueProps) {
 
   return (
     <>
-      {!showUploadDoc ? (
-        <div className='mx-auto flex w-1/3 flex-col gap-2'>
-          <div className='flex flex-col'>
-            <TextInput
-              type='text'
-              name='firstName'
-              label='FirstName'
-              onChange={formik.handleChange}
-              value={formik.values.firstName}
-            />
-            {formik.touched.firstName && formik.errors.firstName && (
-              <div className='text-red-400'>{formik.errors.firstName}</div>
-            )}
-          </div>
-          <div className='flex flex-col'>
-            <TextInput
-              type='text'
-              name='lastName'
-              label='LastName'
-              onChange={formik.handleChange}
-              value={formik.values.lastName}
-            />
-            {formik.touched.lastName && formik.errors.lastName && (
-              <div className='text-red-400'>{formik.errors.lastName}</div>
-            )}
-          </div>
-          <div className='flex flex-col'>
-            <TextInput
-              type='text'
-              name='phone'
-              label='Mobile No'
-              onChange={formik.handleChange}
-              value={formik.values.phone}
-            />
-            {formik.touched.phone && formik.errors.phone && (
-              <div className='text-red-400'>{formik.errors.phone}</div>
-            )}
-          </div>
-          <div className='flex flex-col'>
-            <TextInput
-              type='text'
-              name='aadharNo'
-              label='Aadhar No'
-              onChange={formik.handleChange}
-              value={formik.values.aadharNo}
-            />
-            {formik.touched.aadharNo && formik.errors.aadharNo && (
-              <div className='text-red-400'>{formik.errors.aadharNo}</div>
-            )}
-          </div>
+      <div className='mx-auto mt-5 flex w-1/3 flex-col gap-2'>
+        <div className='flex flex-col'>
+          <TextInput
+            type='text'
+            name='firstName'
+            label='FirstName'
+            onChange={formik.handleChange}
+            value={formik.values.firstName}
+          />
+          {formik.touched.firstName && formik.errors.firstName && (
+            <div className='text-red-400'>{formik.errors.firstName}</div>
+          )}
+        </div>
+        <div className='flex flex-col'>
+          <TextInput
+            type='text'
+            name='lastName'
+            label='LastName'
+            onChange={formik.handleChange}
+            value={formik.values.lastName}
+          />
+          {formik.touched.lastName && formik.errors.lastName && (
+            <div className='text-red-400'>{formik.errors.lastName}</div>
+          )}
+        </div>
+        <div className='flex flex-col'>
+          <TextInput
+            type='text'
+            name='phone'
+            label='Mobile No'
+            onChange={formik.handleChange}
+            value={formik.values.phone}
+          />
+          {formik.touched.phone && formik.errors.phone && (
+            <div className='text-red-400'>{formik.errors.phone}</div>
+          )}
+        </div>
+        <div className='flex flex-col'>
+          <TextInput
+            type='text'
+            name='aadharNo'
+            label='Aadhar No'
+            onChange={formik.handleChange}
+            value={formik.values.aadharNo}
+          />
+          {formik.touched.aadharNo && formik.errors.aadharNo && (
+            <div className='text-red-400'>{formik.errors.aadharNo}</div>
+          )}
+        </div>
 
-          <div className='flex flex-col'>
-            <TextInput
-              type='email'
-              name='email'
-              label='Email'
-              onChange={formik.handleChange}
-              value={formik.values.email}
-            />
-            {formik.touched.email && formik.errors.email && (
-              <div className='text-red-400'>{formik.errors.email}</div>
-            )}
-          </div>
+        <div className='flex flex-col'>
+          <TextInput
+            type='email'
+            name='email'
+            label='Email'
+            onChange={formik.handleChange}
+            value={formik.values.email}
+          />
+          {formik.touched.email && formik.errors.email && (
+            <div className='text-red-400'>{formik.errors.email}</div>
+          )}
+        </div>
 
-          <Button
-            onClick={() => {
-              formik.handleSubmit();
-            }}
-          >
-            Proceed
-          </Button>
+        <Button
+          onClick={() => {
+            formik.handleSubmit();
+          }}
+        >
+          Proceed
+        </Button>
 
-          {/* <Button
+        {/* <Button
           onClick={() => {
             formik.handleSubmit();
           }}
@@ -356,26 +343,7 @@ function CustomerForm({ editInitialValues, editId }: editValueProps) {
             Cancel
           </Button>
         ) : null} */}
-        </div>
-      ) : (
-        <UploadDocuments
-          passPhoto={passPhoto}
-          setPassphoto={setPassPhoto}
-          secondPassphoto={secondPassPhoto}
-          setSecondPassphoto={setSecondPassPhoto}
-          thirdPassphoto={thirdPassphoto}
-          setThirdPassphoto={setThirdPassphoto}
-          frontAadharCard={frontAadharCard}
-          setFrontAadharCard={setFrontAadharCard}
-          backAadharCard={backAadharCard}
-          setBackAadharCard={setBackAadharCard}
-          panCard={panCard}
-          setPanCard={setPanCard}
-          handleDocumentSubmit={() => formik.handleSubmit()}
-          // setDocuments={setDocuments}
-          handleGoBack={handleGoBack}
-        />
-      )}
+      </div>
 
       <SvmProjectToast />
     </>

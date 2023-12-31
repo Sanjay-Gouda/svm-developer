@@ -14,6 +14,7 @@ const cookies = new Cookies();
 
 const httpInstance = axios.create({
   baseURL: 'https://svmdevelopers.in/api/',
+  // baseURL: 'http://localhost:3060/api/',
 });
 
 // httpInstance.interceptors.request.use(function (config) {

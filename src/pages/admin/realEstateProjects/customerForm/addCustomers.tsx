@@ -1,7 +1,7 @@
 import { Card, CardBody } from '@windmill/react-ui';
 import React from 'react';
 
-import CustomerForm from '@/components/Customers/customerForm';
+import CustomerCollection from '@/components/Customers';
 import Layout from '@/containers/Layout';
 
 const AddCustomers = () => {
@@ -10,7 +10,8 @@ const AddCustomers = () => {
       <Layout>
         <Card className='mx-auto  w-full p-2'>
           <CardBody>
-            <CustomerForm />
+            {/* <CustomerForm /> */}
+            <CustomerCollection />
           </CardBody>
         </Card>
       </Layout>
