@@ -11,7 +11,6 @@ import {
   TBookingProps,
 } from '@/components/Booking/bookingFormTypes';
 import { validationSchema } from '@/components/Booking/bookingFormValidationSchema';
-import UploadDocuments from '@/components/Booking/uploadDocuments';
 import BookingForm from '@/components/TestBooking/bookingForm';
 
 import { API_ENDPOINT } from '@/const/APIRoutes';
@@ -48,7 +47,7 @@ type editProps = {
 
 const TestBooking = ({ editInitialValues, editId }: editProps) => {
   const [showUploadDocument, setShowUploadDocument] = useState(true);
-  const [pincodeQuery, setPincodeQuery] = useState();
+  const [pincodeQuery, setPincodeQuery] = useState<string>();
 
   const [paymentTypeError, setPaymentTypeError] = useState({
     chequeNo: false,
@@ -123,7 +122,7 @@ const TestBooking = ({ editInitialValues, editId }: editProps) => {
     } catch (err) {
       // setLoader(false);
       toast.error('Something went wrong');
-      routes.push('/admin/booking');
+      // routes.push('/admin/booking');
     }
   };
   const updateBookingData = async (values: TBookingProps) => {
@@ -233,10 +232,12 @@ const TestBooking = ({ editInitialValues, editId }: editProps) => {
           bAcNo: true,
         });
       } else {
-        setShowUploadDocument(false);
-        console.log(values);
-        // editId ? updateBookingData(values) : addBookingData(values);
-        // addBookingData(values);
+        // setShowUploadDocument(false);
+        // console.log(values);
+        // // editId ? updateBookingData(values) : addBookingData(values);
+        // // addBookingData(values);
+
+        addBookingData(values);
       }
     },
   });
@@ -277,30 +278,35 @@ const TestBooking = ({ editInitialValues, editId }: editProps) => {
 
   const handlePinCodeApi = async (e: any) => {
     const query = e.target.value;
+    if (query.length < 6) {
+      formik.setFieldValue('state', '');
+      formik.setFieldValue('city', '');
+    }
     setPincodeQuery(query);
-
     formik.setFieldValue('pincode', query);
   };
 
   /* pincode API */
   useEffect(() => {
-    const timer = setTimeout(async () => {
-      await axios({
-        method: 'get',
-        url: `${API_ENDPOINT.END_POINT}/appConfig/pincode?zip=${pincodeQuery}`,
-      })
-        .then((res) => {
-          formik.setFieldValue('state', res?.data?.result[0].State);
-          formik.setFieldValue('city', res?.data?.result[0].District);
+    if (pincodeQuery?.length === 6) {
+      const timer = setTimeout(async () => {
+        await axios({
+          method: 'get',
+          url: `${API_ENDPOINT.END_POINT}/appConfig/pincode?zip=${pincodeQuery}`,
         })
-        .catch((err) => {
-          console.log(err);
-        });
-    }, 200);
+          .then((res) => {
+            formik.setFieldValue('state', res?.data?.result[0].State);
+            formik.setFieldValue('city', res?.data?.result[0].District);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }, 200);
 
-    return () => {
-      clearTimeout(timer);
-    };
+      return () => {
+        clearTimeout(timer);
+      };
+    }
   }, [pincodeQuery]);
   /* pincode API */
 
@@ -327,108 +333,108 @@ const TestBooking = ({ editInitialValues, editId }: editProps) => {
 
   return (
     <>
-      {showUploadDocument ? (
-        <BookingForm
-          handleMoveToUpload={formik.handleSubmit}
-          clientSelect={formik.values.customerName}
-          setClientSelect={(person: customerNameProps) => {
-            formik.setFieldValue('customerName', person);
-          }}
-          selectProject={formik.values.projectName}
-          setSelectedProject={(project: customerNameProps) => {
-            formik.setFieldValue('projectName', project);
-          }}
-          areaValue={formik.values.area}
-          handleArea={formik.handleChange}
-          areaError={formik.touched.area && formik.errors.area ? true : false}
-          areaErrorMessage={formik.errors.area}
-          pincodeValue={pincodeQuery}
-          handlePincode={handlePinCodeApi}
-          pincodeError={
-            formik.touched.pincode && formik.errors.pincode ? true : false
-          }
-          pincodeErrorMessage={formik.errors.pincode}
-          state={formik.values.state}
-          city={formik.values.city}
-          landmarkValue={formik.values.landmark}
-          handleLandmark={formik.handleChange}
-          landmarkError={
-            formik.touched.landmark && formik.errors.landmark ? true : false
-          }
-          landmarkErrorMessage={formik.errors.landmark}
-          addressValue={formik.values.address}
-          handleAddress={formik.handleChange}
-          addressError={
-            formik.touched.address && formik.errors.address ? true : false
-          }
-          addressErrorMessage={formik.errors.address}
-          selectBankAccount={formik.values.bankAccount}
-          setSelectedBankAccount={(account: customerNameProps) => {
-            formik.setFieldValue('bankAccount', account);
-          }}
-          bankAccountError={
-            formik.touched.bankAccount && formik.errors.bankAccount
-              ? true
-              : false
-          }
-          bankAccountErrorMessage={formik.errors.bankAccount}
-          totalAmtValue={formik.values.totalAmt}
-          handleTotalAmt={formik.handleChange}
-          totalAmtError={
-            formik.touched.totalAmt && formik.errors.totalAmt ? true : false
-          }
-          totalAmtErrorMessage={formik.errors.totalAmt}
-          paidAmtValue={formik.values.paidAmt}
-          handlePaidAmt={formik.handleChange}
-          paidAmtError={
-            formik.touched.paidAmt && formik.errors.paidAmt ? true : false
-          }
-          paidAmtErrorMessage={formik.errors.paidAmt}
-          remainAmtValue={formik.values.remainingAmt}
-          remainingAmtError={
-            formik.touched.remainingAmt && formik.errors.remainingAmt
-              ? true
-              : false
-          }
-          remainingAmtErrorMessage={formik.errors.remainingAmt}
-          handlePaymentMethod={handlePaymentMethod}
-          paymentMethodType={formik.values.paymentMethod}
-          chequeNoValue={formik.values.cheuqeNo}
-          handlechequeNo={formik.handleChange}
-          chequeNoError={paymentTypeError.chequeNo}
-          cBankNameValue={formik.values.cBankName}
-          handleCBankName={formik.handleChange}
-          cBankNameError={paymentTypeError.cBankName}
-          upiValue={formik.values.UPIId}
-          handleUpi={formik.handleChange}
-          upiIdError={paymentTypeError.UPIId}
-          btAcNoValue={formik.values.BTAcNo}
-          handleBtAcNo={formik.handleChange}
-          btAcNoError={paymentTypeError.bAcNo}
-          btBankNameValue={formik.values.BTBankName}
-          handleBtBankName={formik.handleChange}
-          btBankNameError={paymentTypeError.bBankName}
-          noOfInstallMentValue={formik.values.noOfInstallment}
-          handleNoOfInstallment={formik.handleChange}
-          installmentError={
-            formik.touched.noOfInstallment && formik.errors.noOfInstallment
-              ? true
-              : false
-          }
-          installmentErrorMessage={formik.errors.noOfInstallment}
-          amtPerInstallmentValue={formik.values.amtPerInstallment}
-          handleAmtPerInstallment={formik.handleChange}
-          amtPerInstallError={
-            formik.touched.amtPerInstallment && formik.errors.amtPerInstallment
-              ? true
-              : false
-          }
-          amtPerInstallmentMessage={formik.errors.amtPerInstallment}
-          handleSelectOption={formik.handleChange}
-        />
+      {/* {showUploadDocument ? (
+        
       ) : (
         <UploadDocuments handleGoBack={handleGoBack} />
-      )}
+      )} */}
+
+      <BookingForm
+        handleMoveToUpload={formik.handleSubmit}
+        clientSelect={formik.values.customerName}
+        setClientSelect={(person: customerNameProps) => {
+          formik.setFieldValue('customerName', person);
+        }}
+        selectProject={formik.values.projectName}
+        setSelectedProject={(project: customerNameProps) => {
+          formik.setFieldValue('projectName', project);
+        }}
+        areaValue={formik.values.area}
+        handleArea={formik.handleChange}
+        areaError={formik.touched.area && formik.errors.area ? true : false}
+        areaErrorMessage={formik.errors.area}
+        pincodeValue={pincodeQuery}
+        handlePincode={handlePinCodeApi}
+        pincodeError={
+          formik.touched.pincode && formik.errors.pincode ? true : false
+        }
+        pincodeErrorMessage={formik.errors.pincode}
+        state={formik.values.state}
+        city={formik.values.city}
+        landmarkValue={formik.values.landmark}
+        handleLandmark={formik.handleChange}
+        landmarkError={
+          formik.touched.landmark && formik.errors.landmark ? true : false
+        }
+        landmarkErrorMessage={formik.errors.landmark}
+        addressValue={formik.values.address}
+        handleAddress={formik.handleChange}
+        addressError={
+          formik.touched.address && formik.errors.address ? true : false
+        }
+        addressErrorMessage={formik.errors.address}
+        selectBankAccount={formik.values.bankAccount}
+        setSelectedBankAccount={(account: customerNameProps) => {
+          formik.setFieldValue('bankAccount', account);
+        }}
+        bankAccountError={
+          formik.touched.bankAccount && formik.errors.bankAccount ? true : false
+        }
+        bankAccountErrorMessage={formik.errors.bankAccount}
+        totalAmtValue={formik.values.totalAmt}
+        handleTotalAmt={formik.handleChange}
+        totalAmtError={
+          formik.touched.totalAmt && formik.errors.totalAmt ? true : false
+        }
+        totalAmtErrorMessage={formik.errors.totalAmt}
+        paidAmtValue={formik.values.paidAmt}
+        handlePaidAmt={formik.handleChange}
+        paidAmtError={
+          formik.touched.paidAmt && formik.errors.paidAmt ? true : false
+        }
+        paidAmtErrorMessage={formik.errors.paidAmt}
+        remainAmtValue={formik.values.remainingAmt}
+        remainingAmtError={
+          formik.touched.remainingAmt && formik.errors.remainingAmt
+            ? true
+            : false
+        }
+        remainingAmtErrorMessage={formik.errors.remainingAmt}
+        handlePaymentMethod={handlePaymentMethod}
+        paymentMethodType={formik.values.paymentMethod}
+        chequeNoValue={formik.values.cheuqeNo}
+        handlechequeNo={formik.handleChange}
+        chequeNoError={paymentTypeError.chequeNo}
+        cBankNameValue={formik.values.cBankName}
+        handleCBankName={formik.handleChange}
+        cBankNameError={paymentTypeError.cBankName}
+        upiValue={formik.values.UPIId}
+        handleUpi={formik.handleChange}
+        upiIdError={paymentTypeError.UPIId}
+        btAcNoValue={formik.values.BTAcNo}
+        handleBtAcNo={formik.handleChange}
+        btAcNoError={paymentTypeError.bAcNo}
+        btBankNameValue={formik.values.BTBankName}
+        handleBtBankName={formik.handleChange}
+        btBankNameError={paymentTypeError.bBankName}
+        noOfInstallMentValue={formik.values.noOfInstallment}
+        handleNoOfInstallment={formik.handleChange}
+        installmentError={
+          formik.touched.noOfInstallment && formik.errors.noOfInstallment
+            ? true
+            : false
+        }
+        installmentErrorMessage={formik.errors.noOfInstallment}
+        amtPerInstallmentValue={formik.values.amtPerInstallment}
+        handleAmtPerInstallment={formik.handleChange}
+        amtPerInstallError={
+          formik.touched.amtPerInstallment && formik.errors.amtPerInstallment
+            ? true
+            : false
+        }
+        amtPerInstallmentMessage={formik.errors.amtPerInstallment}
+        handleSelectOption={formik.handleChange}
+      />
     </>
   );
 };

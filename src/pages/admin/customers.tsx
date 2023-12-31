@@ -19,6 +19,7 @@ import ServerError from '@/components/Error/500Error';
 import Layout from '@/containers/Layout';
 
 import { API_ENDPOINT } from '@/const/APIRoutes';
+import { httpInstance } from '@/constants/httpInstances';
 
 type customerListProps = {
   aadharNo: string;
@@ -29,12 +30,13 @@ type customerListProps = {
   phone: string;
 };
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
   try {
-    const res = await axios.get(
-      `${API_ENDPOINT.END_POINT}/customer/advance-list`
-    );
+    const token = context.req.headers.cookie?.split('=')[1];
+    console.log(token, 'FROM');
+    httpInstance.defaults.headers.common['Authorization'] = 'Bearer ' + token;
 
+    const res = await httpInstance.get(`/customer/advance-list`);
     const data = res.data.result.list;
 
     return { props: { data } };
@@ -52,6 +54,8 @@ export default function Customers({
   data,
   error,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  console.log(data, 'customerData');
+
   const route = useRouter();
   const [customerData, setCustomerData] = useState<any>(data);
 

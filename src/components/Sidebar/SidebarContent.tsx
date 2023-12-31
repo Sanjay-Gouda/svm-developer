@@ -36,8 +36,6 @@ function SidebarContent() {
 }
 
 const SideTab: FC<{ tab: (typeof AdminSidebarTabs)[number] }> = ({ tab }) => {
-  console.log(tab, 'Sidetab');
-
   const segments = usePathname()?.split('/');
 
   const lastSegment = segments ? segments[segments.length - 1] : '';

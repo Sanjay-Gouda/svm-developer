@@ -567,7 +567,7 @@ const BookingForm = ({
             // }}
             onClick={() => handleMoveToUpload()}
           >
-            Upload Documents
+            Submit
             {loader && <ClipLoader size={20} color='white' />}
           </Button>
         ) : (

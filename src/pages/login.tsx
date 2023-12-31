@@ -5,6 +5,7 @@ import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { useCookies } from 'react-cookie';
+import { useDispatch } from 'react-redux';
 import { ClipLoader } from 'react-spinners';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
@@ -29,6 +30,7 @@ type TLogin = {
 
 export default function LoginPage() {
   const [loader, setLoader] = useState(false);
+  const dispatch = useDispatch();
   const routes = useRouter();
   const [cookies, setCookie] = useCookies(['token']);
   const LoginUser = async (values: TLogin) => {
@@ -39,6 +41,7 @@ export default function LoginPage() {
       setLoader(false);
       const loginToken = res.data.result.accessToken;
       localStorage.setItem('loginToken', loginToken);
+
       toast.success('Welcome to the Dashboard', { position: 'top-center' });
 
       setCookie('token', loginToken, { path: '/' });
