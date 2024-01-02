@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Cookies } from 'react-cookie';
 
 import { httpInstance } from '@/constants/httpInstances';
 
@@ -6,6 +7,8 @@ type customerProps = {
   id: string;
   name: string;
 }[];
+
+const cookies = new Cookies();
 
 export const useCustomerDetails = () => {
   const [customerList, setCustomerList] = useState<customerProps>([]);
@@ -16,6 +19,9 @@ export const useCustomerDetails = () => {
 
   const getCustomerList = async () => {
     try {
+      // const token = cookies.get('token');
+      // httpInstance.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+
       const res = await httpInstance.get(`customer/advance-list`);
       const list = res?.data?.result?.list;
 

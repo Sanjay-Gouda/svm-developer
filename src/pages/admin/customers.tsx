@@ -59,11 +59,11 @@ export default function Customers({
   const route = useRouter();
   const [customerData, setCustomerData] = useState<any>(data);
 
-  const handleEdit = (id) => {
+  const handleEdit = (id: string) => {
     route.push(`realEstateProjects/customerForm/${id}`);
   };
 
-  const handleView = (id) => {
+  const handleView = (id: string) => {
     route.push(`realEstateProjects/bookingPDF/${id}`);
   };
 

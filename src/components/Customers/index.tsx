@@ -9,6 +9,7 @@ import Stepper from '@/components/Stepper/Stepper';
 const CustomerCollection = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [complete, setComplete] = useState(false);
+  const [customerDetails, setCustomerDetails] = useState<any>([]);
 
   const steps = [
     'Customer Info',
@@ -46,13 +47,22 @@ const CustomerCollection = () => {
       </div>
 
       {currentStep === 1 ? (
-        <CustomerForm />
+        <CustomerForm
+          handleNextStep={handleNextStep}
+          setCustomerDetails={setCustomerDetails}
+        />
       ) : currentStep === 2 ? (
-        <PassPhotoContainer />
+        <PassPhotoContainer
+          handleNextStep={handleNextStep}
+          customerId={customerDetails?.customerId || ''}
+        />
       ) : currentStep === 3 ? (
-        <AadharcardContainer />
+        <AadharcardContainer
+          handleNextStep={handleNextStep}
+          customerId={customerDetails?.customerId || ''}
+        />
       ) : (
-        <PancardContainer />
+        <PancardContainer customerId={customerDetails?.customerId || ''} />
       )}
     </>
   );

@@ -2,6 +2,7 @@ import { Button } from '@windmill/react-ui';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
+import { Cookies } from 'react-cookie';
 import * as Yup from 'yup';
 
 import 'react-toastify/dist/ReactToastify.css';
@@ -42,6 +43,8 @@ const addInitialValues: formProps = {
 type editValueProps = {
   editInitialValues?: any;
   editId?: string;
+  handleNextStep?: () => void;
+  setCustomerDetails?: any;
 };
 
 type Tpayload = {
@@ -50,12 +53,17 @@ type Tpayload = {
   aadharNo: string;
   email: string;
   phone: string;
-  aadharImages: any;
-  panImages: any;
-  customerImage: any;
+  // aadharImages: any;
+  // panImages: any;
+  // customerImage: any;
 };
 
-function CustomerForm({ editInitialValues, editId }: editValueProps) {
+function CustomerForm({
+  editInitialValues,
+  editId,
+  handleNextStep,
+  setCustomerDetails,
+}: editValueProps) {
   // console.log(editInitialValues, 'image');
 
   const [isDataSubmitted, setIsDataSubmitted] = useState(false);
@@ -108,48 +116,52 @@ function CustomerForm({ editInitialValues, editId }: editValueProps) {
       aadharNo: aadharNo,
       email: email,
       phone: phone,
-      aadharImages: frontAadharCard,
-      panImages: panCard,
-      customerImage: passPhoto,
+      // aadharImages: frontAadharCard,
+      // panImages: panCard,
+      // customerImage: passPhoto,
       // customerImage: secondPassPhoto,
     };
 
-    const formData = new FormData();
+    // const formData = new FormData();
 
-    Object.entries(payload).forEach(([key, value]: any) => {
-      if (
-        key !== 'aadharImages' &&
-        key !== 'panImages' &&
-        key !== 'customerImage'
-      ) {
-        formData.append(key, value);
-      }
-    });
+    // Object.entries(payload).forEach(([key, value]: any) => {
+    //   if (
+    //     key !== 'aadharImages' &&
+    //     key !== 'panImages' &&
+    //     key !== 'customerImage'
+    //   ) {
+    //     formData.append(key, value);
+    //   }
+    // });
 
-    for (let i = 0; i < frontAadharCard.length; i++) {
-      formData.append('aadharImages', frontAadharCard[i]);
-    }
-    for (let i = 0; i < backAadharCard.length; i++) {
-      formData.append('aadharImages', backAadharCard[i]);
-    }
-    for (let i = 0; i < panCard.length; i++) {
-      formData.append('panImages', panCard[i]);
-    }
-    for (let i = 0; i < passPhoto.length; i++) {
-      formData.append('customerImage', passPhoto[i]);
-    }
-    for (let i = 0; i < secondPassPhoto.length; i++) {
-      formData.append('customerImage', secondPassPhoto[i]);
-    }
-    for (let i = 0; i < thirdPassphoto.length; i++) {
-      formData.append('customerImage', thirdPassphoto[i]);
-    }
+    // for (let i = 0; i < frontAadharCard.length; i++) {
+    //   formData.append('aadharImages', frontAadharCard[i]);
+    // }
+    // for (let i = 0; i < backAadharCard.length; i++) {
+    //   formData.append('aadharImages', backAadharCard[i]);
+    // }
+    // for (let i = 0; i < panCard.length; i++) {
+    //   formData.append('panImages', panCard[i]);
+    // }
+    // for (let i = 0; i < passPhoto.length; i++) {
+    //   formData.append('customerImage', passPhoto[i]);
+    // }
+    // for (let i = 0; i < secondPassPhoto.length; i++) {
+    //   formData.append('customerImage', secondPassPhoto[i]);
+    // }
+    // for (let i = 0; i < thirdPassphoto.length; i++) {
+    //   formData.append('customerImage', thirdPassphoto[i]);
+    // }
+
+    const cookies = new Cookies();
+    const token = cookies.get('token');
 
     try {
-      const res = await httpInstance.post(`/customer/create`, formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
+      const res = await httpInstance.post(`/customer/create`, payload, {
+        headers: { Authorization: `Bearer ${token}` },
       });
-
+      handleNextStep();
+      setCustomerDetails(res.data.result);
       console.log({ res });
     } catch (err) {
       console.log(err, 'error');
@@ -225,16 +237,18 @@ function CustomerForm({ editInitialValues, editId }: editValueProps) {
     initialValues: formValues,
     validationSchema,
     onSubmit: (values: formProps, { setSubmitting, resetForm }) => {
-      if (isformikError === 0) {
-        setShowUploadDoc(true);
-        setEnableSubmit(true);
-      }
+      addCustomers(values);
 
-      if (enableSubmit && showUploadDoc) {
-        // console.log(values);
-        editId ? updateCustomers(values) : addCustomers(values);
-        // addCustomers(values);
-      }
+      // if (isformikError === 0) {
+      //   setShowUploadDoc(true);
+      //   setEnableSubmit(true);
+      // }
+
+      // if (enableSubmit && showUploadDoc) {
+      //   // console.log(values);
+      //   editId ? updateCustomers(values) : addCustomers(values);
+      //   // addCustomers(values);
+      // }
 
       // if (isDataSubmitted) {
       //   resetForm();
@@ -324,7 +338,7 @@ function CustomerForm({ editInitialValues, editId }: editValueProps) {
             formik.handleSubmit();
           }}
         >
-          Proceed
+          Save & Next
         </Button>
 
         {/* <Button
