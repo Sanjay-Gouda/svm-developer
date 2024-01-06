@@ -81,6 +81,9 @@ function CustomerForm({
   const [backAadharCard, setBackAadharCard] = useState<any>([]);
   const [panCard, setPanCard] = useState<any>([]);
 
+  const cookies = new Cookies();
+  const token = cookies.get('token');
+
   // const editImageField = () => {
   //   const editImages: any = {};
   //   editInitialValues?.customerImage.forEach((image: any) => {
@@ -116,10 +119,6 @@ function CustomerForm({
       aadharNo: aadharNo,
       email: email,
       phone: phone,
-      // aadharImages: frontAadharCard,
-      // panImages: panCard,
-      // customerImage: passPhoto,
-      // customerImage: secondPassPhoto,
     };
 
     // const formData = new FormData();
@@ -153,9 +152,6 @@ function CustomerForm({
     //   formData.append('customerImage', thirdPassphoto[i]);
     // }
 
-    const cookies = new Cookies();
-    const token = cookies.get('token');
-
     try {
       const res = await httpInstance.post(`/customer/create`, payload, {
         headers: { Authorization: `Bearer ${token}` },
@@ -181,48 +177,14 @@ function CustomerForm({
       aadharNo: aadharNo,
       email: email,
       phone: phone,
-      aadharImages: frontAadharCard,
-      panImages: panCard,
-      customerImage: passPhoto,
     };
-
-    const formData = new FormData();
-
-    Object.entries(payload).forEach(([key, value]: any) => {
-      if (
-        key !== 'aadharImages' &&
-        key !== 'panImages' &&
-        key !== 'customerImage'
-      ) {
-        formData.append(key, value);
-      }
-    });
-
-    for (let i = 0; i < frontAadharCard.length; i++) {
-      formData.append('aadharImages', frontAadharCard[i]);
-    }
-    for (let i = 0; i < backAadharCard.length; i++) {
-      formData.append('aadharImages', backAadharCard[i]);
-    }
-    for (let i = 0; i < panCard.length; i++) {
-      formData.append('panImages', panCard[i]);
-    }
-    for (let i = 0; i < passPhoto.length; i++) {
-      formData.append('customerImage', passPhoto[i]);
-    }
-    for (let i = 0; i < secondPassPhoto.length; i++) {
-      formData.append('customerImage', secondPassPhoto[i]);
-    }
-    for (let i = 0; i < thirdPassphoto.length; i++) {
-      formData.append('customerImage', thirdPassphoto[i]);
-    }
 
     try {
       const res = await httpInstance.put(
         `/customer/update/${editId}`,
-        formData,
+        payload,
         {
-          headers: { 'Content-Type': 'multipart/form-data' },
+          headers: { Authorization: `Bearer ${token}` },
         }
       );
       console.log({ res });
@@ -237,7 +199,7 @@ function CustomerForm({
     initialValues: formValues,
     validationSchema,
     onSubmit: (values: formProps, { setSubmitting, resetForm }) => {
-      addCustomers(values);
+      editId ? updateCustomers(values) : addCustomers(values);
 
       // if (isformikError === 0) {
       //   setShowUploadDoc(true);
@@ -333,13 +295,23 @@ function CustomerForm({
           )}
         </div>
 
-        <Button
-          onClick={() => {
-            formik.handleSubmit();
-          }}
-        >
-          Save & Next
-        </Button>
+        {editId ? (
+          <Button
+            onClick={() => {
+              formik.handleSubmit();
+            }}
+          >
+            Update
+          </Button>
+        ) : (
+          <Button
+            onClick={() => {
+              formik.handleSubmit();
+            }}
+          >
+            Save & Next
+          </Button>
+        )}
 
         {/* <Button
           onClick={() => {

@@ -66,7 +66,7 @@ const AadharcardContainer = ({ customerId, handleNextStep }: Tdocument) => {
           },
         }
       );
-      // handleNextStep();
+      handleNextStep();
 
       console.log(res);
     } catch (err) {
@@ -94,7 +94,7 @@ const AadharcardContainer = ({ customerId, handleNextStep }: Tdocument) => {
         </div>
 
         <div className='mt-8 flex w-[60%] items-end justify-end'>
-          <Button
+          {/* <Button
             size='regular'
             // onClick={() => onComplete('form')}
             // onClick={handleNextStep}
@@ -102,7 +102,7 @@ const AadharcardContainer = ({ customerId, handleNextStep }: Tdocument) => {
             className='mr-auto'
           >
             Skip
-          </Button>
+          </Button> */}
 
           <Button
             size='regular'
