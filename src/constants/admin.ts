@@ -1,14 +1,7 @@
 import { BsBank2 } from 'react-icons/bs';
-import { FaUserCog, FaUsers } from 'react-icons/fa';
-import { HiCircleStack } from 'react-icons/hi2';
-import { MdHomeFilled, MdTempleHindu } from 'react-icons/md';
-import {
-  TbBrandBooking,
-  TbBuildingEstate,
-  TbFileInvoice,
-} from 'react-icons/tb';
-
-import { MoneyIcon } from '@/icons';
+import { FaUsers } from 'react-icons/fa';
+import { MdHomeFilled } from 'react-icons/md';
+import { TbBrandBooking, TbBuildingEstate } from 'react-icons/tb';
 
 interface AdminTabsProps {
   name: string;
@@ -29,54 +22,57 @@ export const AdminSidebarTabs: AdminTabsProps[] = [
     icon: TbBuildingEstate,
   },
   {
-    name: 'Happy Customers',
-    to: 'happyCustomers',
-    icon: FaUsers,
-  },
-  {
-    name: 'Booking',
-    to: 'booking',
-    icon: TbBrandBooking,
-  },
-  {
-    name: 'Installment',
-    to: 'installment',
-    icon: TbFileInvoice,
-  },
-  {
     name: 'Customers',
     to: 'customers',
     icon: FaUsers,
   },
-  {
-    name: 'Referral',
-    to: 'referral',
-    icon: MoneyIcon,
-  },
+  // {
+  //   name: 'Happy Customers',
+  //   to: 'happyCustomers',
+  //   icon: FaUsers,
+  // },
+
   {
     name: 'Accounts',
     to: 'accounts',
     icon: BsBank2,
   },
   {
-    name: 'Expenses',
-    to: 'expanses',
-    icon: TbFileInvoice,
+    name: 'Booking',
+    to: 'booking',
+    icon: TbBrandBooking,
   },
-  {
-    name: 'Festival',
-    to: 'festival',
-    icon: MdTempleHindu,
-  },
+  // {
+  //   name: 'Installment',
+  //   to: 'installment',
+  //   icon: TbFileInvoice,
+  // },
 
-  {
-    name: 'Users',
-    to: 'users/manageUser',
-    icon: FaUserCog,
-  },
-  {
-    name: 'Roles',
-    to: 'Roles/manageRoles',
-    icon: HiCircleStack,
-  },
+  // {
+  //   name: 'Referral',
+  //   to: 'referral',
+  //   icon: MoneyIcon,
+  // },
+
+  // {
+  //   name: 'Expenses',
+  //   to: 'expanses',
+  //   icon: TbFileInvoice,
+  // },
+  // {
+  //   name: 'Festival',
+  //   to: 'festival',
+  //   icon: MdTempleHindu,
+  // },
+
+  // {
+  //   name: 'Users',
+  //   to: 'users/manageUser',
+  //   icon: FaUserCog,
+  // },
+  // {
+  //   name: 'Roles',
+  //   to: 'Roles/manageRoles',
+  //   icon: HiCircleStack,
+  // },
 ];

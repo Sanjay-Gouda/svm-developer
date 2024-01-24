@@ -9,6 +9,7 @@ type customerProps = {
 }[];
 
 const cookies = new Cookies();
+const token = cookies.get('token');
 
 export const useCustomerDetails = () => {
   const [customerList, setCustomerList] = useState<customerProps>([]);
@@ -22,7 +23,11 @@ export const useCustomerDetails = () => {
       // const token = cookies.get('token');
       // httpInstance.defaults.headers.common['Authorization'] = 'Bearer ' + token;
 
-      const res = await httpInstance.get(`customer/advance-list`);
+      const res = await httpInstance.get(`customer/advance-list`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       const list = res?.data?.result?.list;
 
       if (list && list?.length > 0) {

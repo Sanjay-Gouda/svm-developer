@@ -237,7 +237,9 @@ const TestBooking = ({ editInitialValues, editId }: editProps) => {
         // // editId ? updateBookingData(values) : addBookingData(values);
         // // addBookingData(values);
 
-        addBookingData(values);
+        // addBookingData(values);
+
+        editId ? updateBookingData(values) : addBookingData(values);
       }
     },
   });

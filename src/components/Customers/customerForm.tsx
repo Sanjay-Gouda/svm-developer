@@ -1,8 +1,9 @@
 import { Button } from '@windmill/react-ui';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Cookies } from 'react-cookie';
+import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 
 import 'react-toastify/dist/ReactToastify.css';
@@ -64,48 +65,14 @@ function CustomerForm({
   handleNextStep,
   setCustomerDetails,
 }: editValueProps) {
+  const router = useRouter();
+
   // console.log(editInitialValues, 'image');
 
-  const [isDataSubmitted, setIsDataSubmitted] = useState(false);
-  const routes = useRouter();
-  const [isformikError, setIsFromikError] = useState<number>();
-  const [showUploadDoc, setShowUploadDoc] = useState(false);
   const [loader, setLoader] = useState(false);
-  const [enableSubmit, setEnableSubmit] = useState(false);
-
-  const [passPhoto, setPassPhoto] = useState<any>([]);
-  const [thirdPassphoto, setThirdPassphoto] = useState<any>([]);
-  const [secondPassPhoto, setSecondPassPhoto] = useState<any>([]);
-
-  const [frontAadharCard, setFrontAadharCard] = useState<any>([]);
-  const [backAadharCard, setBackAadharCard] = useState<any>([]);
-  const [panCard, setPanCard] = useState<any>([]);
 
   const cookies = new Cookies();
   const token = cookies.get('token');
-
-  // const editImageField = () => {
-  //   const editImages: any = {};
-  //   editInitialValues?.customerImage.forEach((image: any) => {
-  //     if (!editImages[image.type]) editImages[image.type] = [];
-  //     editImages[image.type].push(image);
-  //   });
-
-  //   editImages?.AADHAR?.map((img) => setFrontAadharCard([img?.imageUrl]));
-
-  //   editImages?.PAN?.map((img) => {
-  //     setPanCard([window.URL.createObjectURL(img?.imageUrl)]);
-  //   });
-
-  //   editImages?.PHOTO?.map((img, ind) => {
-  //     ind === 0 && setPassPhoto([img?.imageUrl]);
-  //     ind === 1 && setSecondPassPhoto([img?.imageUrl]);
-  //     ind === 2 && setThirdPassphoto([img?.imageUrl]);
-  //   });
-  // };
-  // useEffect(() => {
-  //   editImageField();
-  // }, [editId]);
 
   /* Add Customer  */
   const addCustomers = async (details: formProps) => {
@@ -156,11 +123,12 @@ function CustomerForm({
       const res = await httpInstance.post(`/customer/create`, payload, {
         headers: { Authorization: `Bearer ${token}` },
       });
+      setLoader(false);
       handleNextStep();
       setCustomerDetails(res.data.result);
-      console.log({ res });
     } catch (err) {
-      console.log(err, 'error');
+      setLoader(false);
+      toast.error('something went wrong');
     }
   };
 
@@ -170,7 +138,6 @@ function CustomerForm({
 
     const { aadharNo, email, firstName, lastName, phone } = details;
 
-    console.log(frontAadharCard, passPhoto, 'Update Images');
     const payload: Tpayload = {
       firstName: firstName,
       lastName: lastName,
@@ -187,9 +154,10 @@ function CustomerForm({
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      console.log({ res });
+      setLoader(false);
+      router.push('/admin/customers');
     } catch (err) {
-      console.log(err, 'error');
+      toast.error('something went wrong');
     }
   };
 
@@ -200,35 +168,18 @@ function CustomerForm({
     validationSchema,
     onSubmit: (values: formProps, { setSubmitting, resetForm }) => {
       editId ? updateCustomers(values) : addCustomers(values);
-
-      // if (isformikError === 0) {
-      //   setShowUploadDoc(true);
-      //   setEnableSubmit(true);
-      // }
-
-      // if (enableSubmit && showUploadDoc) {
-      //   // console.log(values);
-      //   editId ? updateCustomers(values) : addCustomers(values);
-      //   // addCustomers(values);
-      // }
-
-      // if (isDataSubmitted) {
-      //   resetForm();
-      // }
-
-      // setSubmitting(true);
     },
   });
 
-  const handleGoBack = () => {
-    setShowUploadDoc(false);
-  };
+  // const handleGoBack = () => {
+  //   setShowUploadDoc(false);
+  // };
 
-  useEffect(() => {
-    const errors = formik.errors;
-    const errorLength = Object.keys(errors).length;
-    setIsFromikError(errorLength);
-  }, [formik.handleSubmit]);
+  // useEffect(() => {
+  //   const errors = formik.errors;
+  //   const errorLength = Object.keys(errors).length;
+  //   setIsFromikError(errorLength);
+  // }, [formik.handleSubmit]);
 
   return (
     <>
@@ -301,7 +252,8 @@ function CustomerForm({
               formik.handleSubmit();
             }}
           >
-            Update
+            {loader ? 'Updateing...' : 'Update'}
+            {/* Update */}
           </Button>
         ) : (
           <Button
