@@ -39,7 +39,7 @@ const PancardContainer = ({ customerId }: Tdocument) => {
       const cookies = new Cookies();
       const token = cookies.get('token');
       const res = await httpInstance.patch(
-        `customer/upload/aadhar-image/${customerId}`,
+        `customer/upload/pan-image/${customerId}`,
         formData,
         {
           headers: {

@@ -81,6 +81,7 @@ const PassPhotoContainer = ({ customerId, handleNextStep }: Tpassphoto) => {
         {
           headers: {
             'Content-Type': 'multipart/form-data',
+            "ngrok-skip-browser-warning": "69420",
             Authorization: `Bearer ${token}`,
           },
         }

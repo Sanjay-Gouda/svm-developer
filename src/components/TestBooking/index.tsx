@@ -46,6 +46,8 @@ type editProps = {
 };
 
 const TestBooking = ({ editInitialValues, editId }: editProps) => {
+  console.log(editInitialValues, 'Booking Values');
+
   const [showUploadDocument, setShowUploadDocument] = useState(true);
   const [pincodeQuery, setPincodeQuery] = useState<string>();
 

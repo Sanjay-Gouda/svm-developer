@@ -13,7 +13,8 @@ import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
-import { MdDelete, MdModeEditOutline } from 'react-icons/md';
+import { FaFileDownload } from 'react-icons/fa';
+import { MdModeEditOutline } from 'react-icons/md';
 
 import EmptyState from '@/components/Empty';
 import ServerError from '@/components/Error/500Error';
@@ -45,8 +46,12 @@ export default function Booking({
 
   const route = useRouter();
 
-  const handleEdit = (id) => {
+  const handleEdit = (id: string) => {
     route.push(`realEstateProjects/bookingForm/${id}`);
+  };
+
+  const handlePdfView = (id: string) => {
+    route.push(`realEstateProjects/bookingForm/pdf/${id}`);
   };
 
   const handleSearch = async (e: any) => {
@@ -144,10 +149,12 @@ export default function Booking({
                               className='cursor-pointer'
                               style={{ color: ' #30bcc2' }}
                             />
-                            <MdDelete
+
+                            <FaFileDownload
                               size='24'
+                              style={{ color: ' #17A34B' }}
+                              onClick={() => handlePdfView(list?.bookingId)}
                               className='cursor-pointer'
-                              style={{ color: ' #F38C7F' }}
                             />
                           </TableCell>
                         </TableRow>

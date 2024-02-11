@@ -14,6 +14,7 @@ const cookies = new Cookies();
 
 const httpInstance = axios.create({
   baseURL: 'https://svmdevelopers.in/api/',
+  // baseURL: 'https://754d-14-192-30-188.ngrok-free.app/api/',
   // baseURL: 'http://localhost:3060/api/',
 });
 

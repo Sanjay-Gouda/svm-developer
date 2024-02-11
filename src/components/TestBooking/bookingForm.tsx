@@ -159,8 +159,6 @@ const BookingForm = ({
   handleAmtPerInstallment,
   handleSelectOption,
 }: EditFormProps) => {
-  console.log(cBankNameError, 'error');
-
   const routes = useRouter();
   const customerList = useCustomerDetails();
 

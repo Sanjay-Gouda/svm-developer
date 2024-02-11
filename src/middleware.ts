@@ -9,9 +9,9 @@ export function middleware(request: NextRequest) {
   // const token = localStorage.getItem('loginToken');
   // const token = request.cookies.getAll();
   const isTokenAvailable = request.cookies.has('token');
-  console.log(isTokenAvailable, 'middleware');
+  // const isTokenAvailable = true;
+  // console.log(isTokenAvailable, 'middleware');
   const currentURL = request.nextUrl.clone();
-
   if (isTokenAvailable) {
     if (request.nextUrl.pathname === '/admin/:path*') {
       return NextResponse.redirect(currentURL);
