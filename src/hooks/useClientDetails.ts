@@ -34,6 +34,8 @@ export const useCustomerDetails = () => {
         const data = list?.map((payload) => ({
           name: payload.firstName,
           id: payload.customerId,
+          fullName: payload.firstName + ' ' + payload.lastName,
+          email: payload.email,
         }));
 
         setCustomerList(data);

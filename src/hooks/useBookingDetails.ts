@@ -18,14 +18,15 @@ export const useBookingDetails = () => {
     try {
       const res = await httpInstance.get(`booking/list`);
       const list = res.data.result.list;
+      console.log(list, 'Booking');
 
       if (list && list?.length > 0) {
         const data = list?.map((payload) => ({
           name: payload.customerName,
           id: payload.bookingId,
+          fullName: payload.projectName,
         }));
         setBookingDetails(data);
-        console.log(data);
       }
     } catch (err) {
       console.log(err);

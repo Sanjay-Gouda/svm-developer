@@ -8,9 +8,16 @@ import {
 } from '@react-pdf/renderer';
 import React from 'react';
 
-export const Booking = ({ details }: any) => {
-  console.log(details);
+// import Nato from '../../assets/Noto_Sans_Gujarati/static/NotoSansGujarati-Light.ttf';
+// import Nato from '../../assets/fonts/NotoSansGujarati_Condensed-Light.ttf';
 
+// Font.register({
+//   family: 'Nato Sans Gujarati',
+//   src: Nato,
+//   format: 'truetype',
+// });
+
+export const Booking = ({ details }: any) => {
   const {
     customerName,
     projectName,
@@ -25,15 +32,27 @@ export const Booking = ({ details }: any) => {
     page: {
       backgroundColor: '#fff',
       fontFamily: 'Helvetica',
+      // fontFamily: 'Nato Sans Gujarati',
       fontSize: 12,
       position: 'relative',
-      // paddingTop: 30,
-      // paddingLeft: 50,
-      // paddingRight: 50,
+
       lineHeight: 1.5,
       flexDirection: 'column',
       // Set your desired border style
       boxSizing: 'border-box',
+    },
+
+    termsHeading: {
+      fontSize: '28px',
+      textAlign: 'center',
+      textDecoration: 'underline',
+    },
+
+    termBox: {
+      width: '100%',
+      // padding: '10px',
+      height: '300px',
+      // marginTop: '248px',
     },
     ml: {
       marginLeft: '20px',
@@ -198,6 +217,7 @@ export const Booking = ({ details }: any) => {
               src='https://svmdevelopers.in/static/media/svm-new-logo.7feceb34130b3cfbc944.png'
               // alt='Logo'
             />
+            {/* <Image style={styles.logo} src={Logo} /> */}
           </View>
           <View style={styles.flexCenter}>
             <Text style={styles.companyName}>SVM BUILDERS & DEVELOPER</Text>
@@ -298,6 +318,12 @@ export const Booking = ({ details }: any) => {
             <Text style={styles.headingText}>Customer's Sign:</Text>
             <View style={styles.halfDiv}></View>
           </View>
+        </View>
+        {/* <View style={styles.termBox}></View> */}
+      </Page>
+      <Page size='A4' style={styles.page}>
+        <View style={styles.termBox}>
+          <Text style={styles.termsHeading}></Text>
         </View>
       </Page>
     </Document>

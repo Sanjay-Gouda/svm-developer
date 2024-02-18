@@ -18,11 +18,14 @@ export const useProjectDetails = () => {
     try {
       const res = await httpInstance.get(`project/list`);
       const list = res?.data?.result?.list;
+      console.log(list, 'Project');
 
       if (list && list?.length > 0) {
         const data = list?.map((payload) => ({
           name: payload.name,
+          fullName: payload.name,
           id: payload.projectId,
+          status: payload.status,
         }));
 
         setProjectList(data);
