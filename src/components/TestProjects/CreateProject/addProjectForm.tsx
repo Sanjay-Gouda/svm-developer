@@ -196,6 +196,7 @@ function AddProjectForm({
             onChange={handleDist}
             value={distValue}
             name='dist'
+            disabled
             containerClassName=' w-full'
             label='District'
           />
@@ -208,6 +209,7 @@ function AddProjectForm({
             onChange={handleState}
             value={stateValue}
             name='state'
+            disabled
             containerClassName=' w-full'
             label='State'
           />

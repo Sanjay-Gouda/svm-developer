@@ -1,6 +1,7 @@
 import dynamic from 'next/dynamic';
 import { useParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
+ 
 
 import { httpInstance } from '@/constants/httpInstances';
 
@@ -20,7 +21,6 @@ const PDF = dynamic(() => import('@/components/PDF/bookinfPDF'), {
 
 const BookingPDF = () => {
   const param = useParams();
-  console.log(param);
   const [data, setData] = useState([]);
 
   const getBookingDetails = async () => {
