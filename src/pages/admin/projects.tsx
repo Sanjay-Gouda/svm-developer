@@ -23,10 +23,6 @@ import { API_ENDPOINT } from '@/const/APIRoutes';
 import { httpInstance } from '@/constants/httpInstances';
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  // const res = await axios.get(`${API_ENDPOINT.END_POINT}project/list`);
-  // const repo = res.data.result.list;
-  // return { props: { repo } };
-
   try {
     const res = await httpInstance.get(`/project/list`);
     const repo = res.data.result.list;
