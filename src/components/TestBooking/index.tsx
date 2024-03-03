@@ -46,7 +46,7 @@ type editProps = {
 };
 
 const TestBooking = ({ editInitialValues, editId }: editProps) => {
-  console.log(editInitialValues, 'Booking Values');
+  const [loader, setLoader] = useState(false);
 
   const [showUploadDocument, setShowUploadDocument] = useState(true);
   const [pincodeQuery, setPincodeQuery] = useState<string>();
@@ -128,7 +128,7 @@ const TestBooking = ({ editInitialValues, editId }: editProps) => {
     }
   };
   const updateBookingData = async (values: TBookingProps) => {
-    // setLoader(true);
+    setLoader(true);
     const {
       address,
       bankAccount,
@@ -189,12 +189,12 @@ const TestBooking = ({ editInitialValues, editId }: editProps) => {
         : 'Booking Updated successfully';
 
       toast.success(successMessage);
-      // setLoader(false);
+      setLoader(false);
       setTimeout(() => {
         routes.push('/admin/booking');
       }, 1000);
     } catch (err) {
-      // setLoader(false);
+      setLoader(false);
       toast.success('Something went wrong');
       routes.push('/admin/booking');
     }
@@ -344,6 +344,8 @@ const TestBooking = ({ editInitialValues, editId }: editProps) => {
       )} */}
 
       <BookingForm
+        editId={editId}
+        loader={loader}
         handleMoveToUpload={formik.handleSubmit}
         clientSelect={formik.values.customerName}
         setClientSelect={(person: customerNameProps) => {

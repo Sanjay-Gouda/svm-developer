@@ -54,6 +54,7 @@ export default function Booking({
 
   const handlePdfView = (id: string) => {
     route.push(`realEstateProjects/bookingForm/pdf/${id}`);
+    // window.open(`realEstateProjects/bookingForm/pdf/${id}`, '_blank');
   };
 
   const handleSearch = async (e: any) => {
@@ -151,7 +152,16 @@ export default function Booking({
                               className='cursor-pointer'
                               style={{ color: ' #30bcc2' }}
                             />
-
+                            {/* <Link
+                              href={`realEstateProjects/bookingForm/pdf/${list?.bookingId}`}
+                            >
+                              <FaFileDownload
+                                size='24'
+                                style={{ color: ' #17A34B' }}
+                                // onClick={() => handlePdfView(list?.bookingId)}
+                                className='cursor-pointer'
+                              />
+                            </Link> */}
                             <FaFileDownload
                               size='24'
                               style={{ color: ' #17A34B' }}

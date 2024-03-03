@@ -8,10 +8,9 @@ import { httpInstance } from '@/constants/httpInstances';
 
 export async function getServerSideProps(params: any) {
   const EditId = params?.params.id;
+  console.log(EditId, '----ID-----');
   const res = await httpInstance.get(`customer/get/${EditId}`);
   const customerDetails = res?.data?.result;
-
-  console.log(customerDetails);
 
   return {
     props: { EditId, customerDetails },

@@ -16,6 +16,7 @@ import { TextInput } from '@/components/ui-blocks';
 import { SelectOption, TextInputArea } from '@/components/ui-blocks/input';
 
 type EditFormProps = {
+  loader: boolean;
   editInitialValues?: any;
   editId?: string;
   clientSelect?: customerNameProps;
@@ -93,6 +94,7 @@ type EditFormProps = {
 
 const BookingForm = ({
   editId,
+  loader,
   editInitialValues,
   clientSelect,
   setClientSelect,
@@ -164,8 +166,6 @@ const BookingForm = ({
 
   const projectList = useProjectDetails();
   const accountList = useBankDetails();
-
-  const [loader, setLoader] = useState(false);
 
   // const [pincodeQuery, setPincodeQuery] = useState();
   const [query, setQuery] = useState('');
@@ -558,33 +558,24 @@ const BookingForm = ({
           )} */}
         </div>
 
-        {!editId ? (
-          <Button
-            // onClick={() => {
-            //   formik.handleSubmit();
-            // }}
-            onClick={() => handleMoveToUpload()}
-          >
-            Submit
-            {loader && <ClipLoader size={20} color='white' />}
-          </Button>
-        ) : (
+        {editId ? (
           <>
-            <Button
-              // onClick={() => {
-              //   formik.handleSubmit();
-              // }}
-
-              onClick={handleMoveToUpload}
-            >
-              Update
-              {loader && <ClipLoader size={20} color='white' />}
+            <Button onClick={handleMoveToUpload}>
+              {/* Update */}
+              {loader ? 'Saving...' : 'Update'}
             </Button>
             <Button
               layout='outline'
               onClick={() => routes.push('/admin/booking')}
             >
               Cancel
+            </Button>
+          </>
+        ) : (
+          <>
+            <Button onClick={() => handleMoveToUpload()}>
+              Submit
+              {loader && <ClipLoader size={20} color='white' />}
             </Button>
           </>
         )}

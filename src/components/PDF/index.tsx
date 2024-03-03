@@ -67,7 +67,14 @@ export const Booking = ({ details }: any) => {
     installmentAmt,
     area,
     address1,
+    phone,
+
+    customerImage,
   } = details;
+
+  const passphoto = customerImage?.map((passphoto) => passphoto.imageUrl);
+
+  // console.log(passphoto[0], 'URL');
 
   const styles = StyleSheet.create({
     page: {
@@ -267,7 +274,13 @@ export const Booking = ({ details }: any) => {
 
         <View style={styles.companyLogo}>
           <View style={styles.passPhotoWrapper}>
-            <View style={styles.passPhotoContainer}></View>
+            <View style={styles.passPhotoContainer}>
+              <Image
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                src={passphoto[0] || null}
+                alt='passphoto'
+              />
+            </View>
           </View>
         </View>
 
@@ -292,7 +305,9 @@ export const Booking = ({ details }: any) => {
             </View>
 
             <Text style={styles.headingText}>Mobile:</Text>
-            <View style={styles.halfDiv}></View>
+            <View style={styles.halfDiv}>
+              <Text style={styles.ml}>{phone}</Text>
+            </View>
           </View>
 
           <View style={styles.secondRowWrapper}>

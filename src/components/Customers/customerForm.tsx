@@ -171,16 +171,6 @@ function CustomerForm({
     },
   });
 
-  // const handleGoBack = () => {
-  //   setShowUploadDoc(false);
-  // };
-
-  // useEffect(() => {
-  //   const errors = formik.errors;
-  //   const errorLength = Object.keys(errors).length;
-  //   setIsFromikError(errorLength);
-  // }, [formik.handleSubmit]);
-
   return (
     <>
       <div className='mx-auto mt-5 flex w-1/3 flex-col gap-2'>
@@ -247,14 +237,22 @@ function CustomerForm({
         </div>
 
         {editId ? (
-          <Button
-            onClick={() => {
-              formik.handleSubmit();
-            }}
-          >
-            {loader ? 'Updateing...' : 'Update'}
-            {/* Update */}
-          </Button>
+          <>
+            <Button
+              onClick={() => {
+                formik.handleSubmit();
+              }}
+            >
+              {loader ? 'Updateing...' : 'Update'}
+              {/* Update */}
+            </Button>
+            <Button
+              layout='outline'
+              onClick={() => router.push('/admin/customers')}
+            >
+              Cancel
+            </Button>
+          </>
         ) : (
           <Button
             onClick={() => {

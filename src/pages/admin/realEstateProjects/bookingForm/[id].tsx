@@ -15,7 +15,7 @@ export async function getServerSideProps(params: any) {
 }
 
 export const EditBookingDetails = ({ EditId, bookingDetails }) => {
-  console.log(bookingDetails, 'details');
+  console.log(EditId, 'details');
 
   const {
     bookingId,
