@@ -1,0 +1,22 @@
+name: Deploy to Digital Ocean
+
+on:
+  push:
+    branches:
+      - prod
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Install Dependencies
+        run: yarn install
+
+      - name: Build Project
+        run: yarn run build
+
+# todo: add remaining ci-cd
