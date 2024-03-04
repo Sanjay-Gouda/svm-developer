@@ -19,4 +19,14 @@ jobs:
       - name: Build Project
         run: yarn run build
 
+      - name: Deploy to Digital Ocean
+        run: |
+          mkdir -p ~/.ssh
+          echo "$DEPLOYMENT_SSH_KEY" > ~/.ssh/next
+          chmod 600 ~/.ssh/next
+
+          scp -r -i ~/.ssh/next ./build/* root@your-droplet-ip:/frontend
+
+
+
 # todo: add remaining ci-cd
