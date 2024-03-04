@@ -22,8 +22,9 @@ jobs:
       - name: Deploy to Digital Ocean
         run: |
           mkdir -p ~/.ssh
-          echo "$DEPLOYMENT_SSH_KEY" > ~/.ssh/next
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/next
           chmod 600 ~/.ssh/next
+          ssh-keyscan 128.199.20.118 >> ~/.ssh/known_hosts
 
           scp -v -r -i ~/.ssh/next ./build/* root@128.199.20.118:/frontend/
 
