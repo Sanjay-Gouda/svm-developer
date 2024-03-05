@@ -28,7 +28,7 @@ jobs:
           chmod 600 ~/.ssh/next
           ssh-keyscan 128.199.20.118 >> ~/.ssh/known_hosts
 
-          scp -v -r -i ~/.ssh/next ./build/* root@128.199.20.118:/frontend/
+          scp -v -r -i ~/.ssh/next ./build/* root@128.199.20.118:frontend/
 
 
 
