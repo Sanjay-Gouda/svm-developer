@@ -1,10 +1,4 @@
-import {
-  Avatar,
-  Badge,
-  Dropdown,
-  DropdownItem,
-  Input,
-} from '@windmill/react-ui';
+import { Avatar, Badge, Dropdown, DropdownItem } from '@windmill/react-ui';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { useCookies } from 'react-cookie';
@@ -70,11 +64,11 @@ export const Header = () => {
             <div className='absolute inset-y-0 flex items-center pl-2'>
               {/* <SearchIcon className='h-4 w-4' aria-hidden='true' /> */}
             </div>
-            <Input
+            {/* <Input
               className='pl-8 text-gray-700'
               placeholder='Search for projects'
               aria-label='Search'
-            />
+            /> */}
           </div>
         </div>
         <ul className='flex flex-shrink-0 items-center space-x-6'>

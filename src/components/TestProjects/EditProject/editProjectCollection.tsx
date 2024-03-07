@@ -1,6 +1,7 @@
 import { Button } from '@windmill/react-ui';
 import { useRouter } from 'next/router';
 import React, { useCallback, useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 
 import LogoContainer from '@/components/Projects/logoContainer';
 import UploadProjectImages from '@/components/Projects/uploadProjectImages';
@@ -11,6 +12,7 @@ import EmptyImage from '@/components/TestProjects/EditProject/emptyImage';
 import ImageCard from '@/components/TestProjects/EditProject/imageCard';
 import ImageModal from '@/components/TestProjects/EditProject/imageModal';
 import { TProjectResponse } from '@/components/TestProjects/types';
+import { SvmProjectToast } from '@/components/Toast/Toast';
 
 import { httpInstance } from '@/constants/httpInstances';
 
@@ -131,12 +133,11 @@ const EditProjectCollection = ({
 
           { headers: { 'Content-Type': 'multipart/form-data' } }
         );
-        console.log(res);
-        // handleNextStep();
+        toast.success('Logo Updated Successfully');
         closeModal();
       } catch (err) {
         closeModal();
-        console.log(err);
+        toast.error('Something went wrong');
       }
     }
   };
@@ -186,15 +187,12 @@ const EditProjectCollection = ({
           { headers: { 'Content-Type': 'multipart/form-data' } }
         );
         // console.log(res);
+        toast.success('Images uploaded Successfully');
+
         closeModal();
-
-        // handleNextStep();
-
-        // setTimeout(() => {
-        //   router.push('/admin/projects');
-        // }, 1000);
       } catch (err) {
-        console.log(err);
+        toast.error('Something went wrong');
+
         closeModal();
       }
     }
@@ -203,6 +201,8 @@ const EditProjectCollection = ({
   useEffect(() => {
     getImages();
   }, [getImages]);
+
+  console.log(projectImages?.planningImages?.length);
 
   return (
     <>
@@ -318,6 +318,7 @@ const EditProjectCollection = ({
       </div>
 
       <ImageModal
+        title='Upload Logo'
         isModalOpen={openImageModal.logoModal}
         handleClose={closeModal}
         handleUpload={handleLogoUpload}
@@ -329,6 +330,7 @@ const EditProjectCollection = ({
         }
       />
       <ImageModal
+        title='Upload Planning Images'
         isModalOpen={openImageModal.planningModal}
         handleClose={closeModal}
         handleUpload={handlePlanningImageUpload}
@@ -340,6 +342,7 @@ const EditProjectCollection = ({
         }
       />
       <ImageModal
+        title='Upload Site Images'
         isModalOpen={openImageModal.siteImageModal}
         handleClose={closeModal}
         handleUpload={handleSiteImageUpload}
@@ -350,6 +353,8 @@ const EditProjectCollection = ({
           />
         }
       />
+
+      <SvmProjectToast />
     </>
   );
 };

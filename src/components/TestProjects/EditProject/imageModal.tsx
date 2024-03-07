@@ -8,6 +8,7 @@ import {
 import React from 'react';
 
 type TModel = {
+  title: string;
   isModalOpen: boolean;
   handleClose: () => void;
   modalBody: any;
@@ -19,11 +20,12 @@ const ImageModal = ({
   isModalOpen,
   modalBody,
   handleUpload,
+  title,
 }: TModel) => {
   return (
     <>
       <Modal isOpen={isModalOpen} onClose={handleClose}>
-        <ModalHeader>Update Logo</ModalHeader>
+        <ModalHeader>{title}</ModalHeader>
         <ModalBody>{modalBody}</ModalBody>
         <ModalFooter>
           <Button

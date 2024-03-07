@@ -60,13 +60,6 @@ const UploadSiteImages = ({
 
   return (
     <>
-      {/* <div className=' mb-2 flex items-center justify-between gap-2'>
-        <label className='block text-lg font-medium leading-6 text-gray-900 dark:text-gray-300'>
-          Upload Site Images
-        </label>
-     
-      </div> */}
-
       {projectDevelopementImages?.length > 0 ? (
         <div className='auto  flex w-full flex-wrap gap-6  rounded-lg  border-2 border-gray-300 px-2 py-5  dark:border-gray-600'>
           {projectDevelopementImages?.map((file: any, ind: any) => {
@@ -88,7 +81,7 @@ const UploadSiteImages = ({
         />
       )}
 
-      <div className='flex w-full justify-end gap-2'>
+      <div className='mt-2 flex w-full justify-end gap-2'>
         <Button
           size='regular'
           onClick={() => handleClearImages()}
@@ -98,8 +91,8 @@ const UploadSiteImages = ({
         </Button>
         <Button size='regular' {...getRootProps()}>
           Add Images
-          <input {...getInputProps()} className='hidden' />
         </Button>
+        <input {...getInputProps()} className='hidden' />
       </div>
 
       <SvmProjectToast />

@@ -66,7 +66,11 @@ const UploadProjectImages = ({ setPlanImages, planImages }) => {
         >
           Clear Images
         </Button>
-        <Button size='regular' onClick={handleAddImagesClick}>
+        <Button
+          size='regular'
+          {...getRootProps()}
+          onClick={handleAddImagesClick}
+        >
           Add Images
         </Button>
         <input {...getInputProps()} className='hidden' />

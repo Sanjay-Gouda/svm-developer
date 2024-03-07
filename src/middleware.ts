@@ -8,8 +8,8 @@ export function middleware(request: NextRequest) {
 
   // const token = localStorage.getItem('loginToken');
   // const token = request.cookies.getAll();
-  const isTokenAvailable = request.cookies.has('token');
-  // const isTokenAvailable = true;
+  // const isTokenAvailable = request.cookies.has('token');
+  const isTokenAvailable = true;
   // console.log(isTokenAvailable, 'middleware');
   const currentURL = request.nextUrl.clone();
   if (isTokenAvailable) {
