@@ -17,9 +17,6 @@ jobs:
 
       - name: Install Dependencies
         run: yarn install
-
-      - name: Build Project
-        run: yarn run build
       
       - name: Print Current Working Directory
         run: |
@@ -33,8 +30,25 @@ jobs:
           chmod 600 ~/.ssh/next
           ssh-keyscan 128.199.20.118 >> ~/.ssh/known_hosts
 
-          scp -v -r -i ~/.ssh/next ./* root@128.199.20.118:frontend/
-
+          # Build your project
+          echo "Build init"
+          yarn run build
+      
+          # Create a compressed archive (tar.gz) of the build files
+          echo "Start process to compress files"
+          tar -czf build.tar.gz ./*
+      
+          # Transfer the compressed archive to the remote server
+          echo "Start transfer process of compressed files"
+          scp -v -i ~/.ssh/next build.tar.gz root@128.199.20.118:~/frontend/
+      
+          # Connect to the remote server and extract the archive
+          echo "Start extraction process of compress files"
+          ssh -i ~/.ssh/next root@128.199.20.118 'cd ~/frontend/ && tar -xzf build.tar.gz'
+      
+          # Remove the compressed archive on the remote server
+          echo "Start process to remove compressed file"
+          ssh -i ~/.ssh/next root@128.199.20.118 'rm ~/frontend/build.tar.gz'
 
 
 # todo: add remaining ci-cd
