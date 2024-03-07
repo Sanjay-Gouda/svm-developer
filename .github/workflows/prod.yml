@@ -20,6 +20,10 @@ jobs:
 
       - name: Build Project
         run: yarn run build
+      
+      - name: Print Current Working Directory
+        run: |
+          pwd
 
       - name: Deploy to Digital Ocean
         run: |
