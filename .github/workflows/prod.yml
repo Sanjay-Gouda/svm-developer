@@ -24,6 +24,7 @@ jobs:
       - name: Print Current Working Directory
         run: |
           pwd
+          ls
 
       - name: Deploy to Digital Ocean
         run: |
