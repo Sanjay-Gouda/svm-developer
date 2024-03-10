@@ -1,5 +1,5 @@
 import { Button } from '@windmill/react-ui';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
 import LogoContainer from '@/components/Projects/logoContainer';
@@ -16,6 +16,15 @@ type TLogo = {
 const ProjectLogo = ({ projectId, handleNextStep, handleBack }: TLogo) => {
   const [projectLogo, setProjectLogo] = useState<any>([]);
   const [loader, setLoader] = useState<boolean>(false);
+  const [isDisable, setIsDisable] = useState<boolean>(true);
+
+  useEffect(() => {
+    if (projectLogo.length > 0) {
+      setIsDisable(false);
+    } else {
+      setIsDisable(true);
+    }
+  }, [projectLogo]);
 
   const handleSave = async () => {
     if (projectLogo.length === 0) {
@@ -60,6 +69,7 @@ const ProjectLogo = ({ projectId, handleNextStep, handleBack }: TLogo) => {
             <Button
               size='regular'
               onClick={handleSave}
+              disabled={isDisable}
               className='col-span-2 ml-auto mt-8'
             >
               Save & Next
