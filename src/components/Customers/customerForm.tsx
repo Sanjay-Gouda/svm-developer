@@ -67,8 +67,6 @@ function CustomerForm({
 }: editValueProps) {
   const router = useRouter();
 
-  // console.log(editInitialValues, 'image');
-
   const [loader, setLoader] = useState(false);
 
   const cookies = new Cookies();
@@ -87,37 +85,6 @@ function CustomerForm({
       email: email,
       phone: phone,
     };
-
-    // const formData = new FormData();
-
-    // Object.entries(payload).forEach(([key, value]: any) => {
-    //   if (
-    //     key !== 'aadharImages' &&
-    //     key !== 'panImages' &&
-    //     key !== 'customerImage'
-    //   ) {
-    //     formData.append(key, value);
-    //   }
-    // });
-
-    // for (let i = 0; i < frontAadharCard.length; i++) {
-    //   formData.append('aadharImages', frontAadharCard[i]);
-    // }
-    // for (let i = 0; i < backAadharCard.length; i++) {
-    //   formData.append('aadharImages', backAadharCard[i]);
-    // }
-    // for (let i = 0; i < panCard.length; i++) {
-    //   formData.append('panImages', panCard[i]);
-    // }
-    // for (let i = 0; i < passPhoto.length; i++) {
-    //   formData.append('customerImage', passPhoto[i]);
-    // }
-    // for (let i = 0; i < secondPassPhoto.length; i++) {
-    //   formData.append('customerImage', secondPassPhoto[i]);
-    // }
-    // for (let i = 0; i < thirdPassphoto.length; i++) {
-    //   formData.append('customerImage', thirdPassphoto[i]);
-    // }
 
     try {
       const res = await httpInstance.post(`/customer/create`, payload, {
@@ -262,23 +229,6 @@ function CustomerForm({
             {loader ? 'Saving...' : 'Save & Next'}
           </Button>
         )}
-
-        {/* <Button
-          onClick={() => {
-            formik.handleSubmit();
-          }}
-        >
-          {editId ? 'Update' : 'Submit'}
-          {loader && <ClipLoader size={20} color='white' />}
-        </Button>
-        {editId ? (
-          <Button
-            layout='outline'
-            onClick={() => routes.push('/admin/customers')}
-          >
-            Cancel
-          </Button>
-        ) : null} */}
       </div>
 
       <SvmProjectToast />

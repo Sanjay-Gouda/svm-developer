@@ -240,8 +240,8 @@ const TestBooking = ({ editInitialValues, editId }: editProps) => {
         // // addBookingData(values);
 
         // addBookingData(values);
-
-        editId ? updateBookingData(values) : addBookingData(values);
+        console.log(values);
+        // editId ? updateBookingData(values) : addBookingData(values);
       }
     },
   });
@@ -354,6 +354,12 @@ const TestBooking = ({ editInitialValues, editId }: editProps) => {
         loader={loader}
         handleMoveToUpload={formik.handleSubmit}
         clientSelect={formik.values.customerName}
+        clientError={
+          formik.touched.customerName && formik.errors.customerName
+            ? true
+            : false
+        }
+        clientErrorMessage={formik.errors.customerName}
         setClientSelect={(person: customerNameProps) => {
           formik.setFieldValue('customerName', person);
         }}

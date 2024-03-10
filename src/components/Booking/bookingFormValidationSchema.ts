@@ -1,7 +1,7 @@
 import * as Yup from 'yup';
 
 export const validationSchema = Yup.object().shape({
-  customerName: Yup.mixed().required('Customer Name is required'),
+  customerName: Yup.object().nullable().required('Customer Name is required'),
   projectName: Yup.mixed().required('Project Name is required'),
   bankAccount: Yup.mixed().required('Please Selct Bank Account'),
   area: Yup.number().required('Area must be in number'),

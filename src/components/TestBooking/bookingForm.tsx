@@ -16,8 +16,10 @@ import { SelectOption, TextInputArea } from '@/components/ui-blocks/input';
 
 type EditFormProps = {
   loader: boolean;
+  clientError: boolean;
   editInitialValues?: any;
   editId?: string;
+  clientErrorMessage: string;
   clientSelect?: customerNameProps;
   setClientSelect?: (person: customerNameProps) => void;
   selectProject?: customerNameProps;
@@ -94,6 +96,7 @@ type EditFormProps = {
 const BookingForm = ({
   editId,
   loader,
+  clientError,
   editInitialValues,
   clientSelect,
   setClientSelect,
@@ -159,6 +162,7 @@ const BookingForm = ({
   amtPerInstallmentValue,
   handleAmtPerInstallment,
   handleSelectOption,
+  clientErrorMessage,
 }: EditFormProps) => {
   const routes = useRouter();
   const customerList = useCustomerDetails();
@@ -213,8 +217,8 @@ const BookingForm = ({
             setSelected={setClientSelect}
           />
 
-          {/* {formik.touched.customerName && formik.errors.customerName && (
-            <div className='text-red-400'>{formik.errors.customerName}</div>
+          {/* {!clientSelect && (
+            <div className='text-red-400'>{clientErrorMessage}</div>
           )} */}
         </div>
         <div className='flex flex-col'>
