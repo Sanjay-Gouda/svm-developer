@@ -21,6 +21,7 @@ const LogoContainer = ({ projectLogo, setProjectLogo }: TLogo) => {
   const logoDropZone = useDropzone({
     onDrop: handleLogo,
     multiple: false,
+    accept: { 'image/png': ['.png', '.jpg', '.jpeg'] },
   });
 
   return (

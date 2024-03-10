@@ -17,6 +17,8 @@ const UploadProjectImages = ({ setPlanImages, planImages }) => {
 
   const { getRootProps, getInputProps, isDragActive, open } = useDropzone({
     onDrop: handleDrop,
+    accept: { 'image/png': ['.png', '.jpg', '.jpeg'] },
+
     // noClick: true,
   });
 
@@ -66,14 +68,14 @@ const UploadProjectImages = ({ setPlanImages, planImages }) => {
         >
           Clear Images
         </Button>
-        <Button
+        {/* <Button
           size='regular'
           {...getRootProps()}
           onClick={handleAddImagesClick}
         >
           Add Images
         </Button>
-        <input {...getInputProps()} className='hidden' />
+        <input {...getInputProps()} className='hidden' /> */}
       </div>
     </>
   );

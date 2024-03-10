@@ -1,6 +1,6 @@
 import { Button } from '@windmill/react-ui';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
 import UploadSiteImages from '@/components/Projects/uploadSiteImages';
@@ -15,10 +15,19 @@ type TLogo = {
 
 const SiteImage = ({ handleNextStep, projectId }: TLogo) => {
   const router = useRouter();
+  const [isDisable, setIsDisable] = useState(true);
 
   const [siteImages, setSiteImages] = useState<any>([]);
 
   const [loader, setLoader] = useState<boolean>(false);
+  useEffect(() => {
+    if (siteImages.length > 0) {
+      setIsDisable(false);
+    } else {
+      setIsDisable(true);
+    }
+  }, [siteImages]);
+
   const handleSave = async () => {
     setLoader(true);
     const formData = new FormData();
@@ -57,20 +66,16 @@ const SiteImage = ({ handleNextStep, projectId }: TLogo) => {
           />
 
           {loader ? (
-            <Button className=' col-span-2 ml-auto mt-4'>
-              Saving...
-              {/* <ClipLoader size={20} color='white' /> */}
-            </Button>
+            <Button className=' col-span-2 ml-auto mt-4'>Saving...</Button>
           ) : (
-            <div className='mt-8 flex w-full items-end justify-end'>
+            <div className='mt-8 flex w-full items-end justify-end gap-5'>
               <Button
                 size='regular'
-                // onClick={() => onComplete('form')}
                 onClick={() => {
                   router.push('/admin/projects');
                 }}
                 layout='link'
-                className='mr-auto'
+                // className='mr-auto'
               >
                 Skip
               </Button>
@@ -78,7 +83,8 @@ const SiteImage = ({ handleNextStep, projectId }: TLogo) => {
               <Button
                 size='regular'
                 onClick={handleSave}
-                className='col-span-2 ml-auto mt-4'
+                disabled={isDisable}
+                className='col-span-2 mt-4'
               >
                 Save & Next
               </Button>

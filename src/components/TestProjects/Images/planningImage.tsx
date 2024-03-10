@@ -1,5 +1,5 @@
 import { Button } from '@windmill/react-ui';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
 import UploadProjectImages from '@/components/Projects/uploadProjectImages';
@@ -14,27 +14,40 @@ type TLogo = {
 const PlanningImage = ({ projectId, handleNextStep }: TLogo) => {
   const [planningImages, setPlanningImages] = useState<any>([]);
   const [loader, setLoading] = useState<boolean>(false);
+  const [isDisable, setIsDisable] = useState(true);
+
+  useEffect(() => {
+    if (planningImages.length > 0) {
+      setIsDisable(false);
+    } else {
+      setIsDisable(true);
+    }
+  }, [planningImages]);
 
   const handleSave = async () => {
-    setLoading(true);
-    const formData = new FormData();
+    if (planningImages?.length === 0) {
+      alert('Please upload planning images');
+    } else {
+      setLoading(true);
+      const formData = new FormData();
 
-    for (let i = 0; i < planningImages.length; i++) {
-      formData.append('planningImages', planningImages[i]);
-    }
+      for (let i = 0; i < planningImages.length; i++) {
+        formData.append('planningImages', planningImages[i]);
+      }
 
-    try {
-      const res = await httpInstance.patch(
-        `project/upload/project-images/${projectId}`,
-        formData,
+      try {
+        const res = await httpInstance.patch(
+          `project/upload/project-images/${projectId}`,
+          formData,
 
-        { headers: { 'Content-Type': 'multipart/form-data' } }
-      );
-      setLoading(false);
-      handleNextStep();
-    } catch (err) {
-      setLoading(false);
-      toast.error('Something went wrong');
+          { headers: { 'Content-Type': 'multipart/form-data' } }
+        );
+        setLoading(false);
+        handleNextStep();
+      } catch (err) {
+        setLoading(false);
+        toast.error('Something went wrong');
+      }
     }
   };
 
@@ -53,13 +66,13 @@ const PlanningImage = ({ projectId, handleNextStep }: TLogo) => {
               {/* <ClipLoader size={20} color='white' /> */}
             </Button>
           ) : (
-            <div className='mt-8 flex w-full items-end justify-end'>
+            <div className='mt-8 flex w-full items-end justify-end gap-5'>
               <Button
                 size='regular'
                 // onClick={() => onComplete('form')}
                 onClick={handleNextStep}
                 layout='link'
-                className='mr-auto'
+                // className='mr-auto'
               >
                 Skip
               </Button>
@@ -67,7 +80,8 @@ const PlanningImage = ({ projectId, handleNextStep }: TLogo) => {
               <Button
                 size='regular'
                 onClick={handleSave}
-                className='col-span-2 ml-auto mt-4'
+                disabled={isDisable}
+                className='col-span-2  mt-4'
               >
                 Save & Next
               </Button>

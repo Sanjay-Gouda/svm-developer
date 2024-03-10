@@ -89,10 +89,10 @@ const UploadSiteImages = ({
         >
           Clear Images
         </Button>
-        <Button size='regular' {...getRootProps()}>
+        {/* <Button size='regular' {...getRootProps()}>
           Add Images
-        </Button>
-        <input {...getInputProps()} className='hidden' />
+          <input {...getInputProps()} className='hidden' />
+        </Button> */}
       </div>
 
       <SvmProjectToast />
