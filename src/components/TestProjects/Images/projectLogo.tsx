@@ -66,14 +66,19 @@ const ProjectLogo = ({ projectId, handleNextStep, handleBack }: TLogo) => {
           {loader ? (
             <Button className=' col-span-2 ml-auto mt-8'>Saving...</Button>
           ) : (
-            <Button
-              size='regular'
-              onClick={handleSave}
-              disabled={isDisable}
-              className='col-span-2 ml-auto mt-8'
-            >
-              Save & Next
-            </Button>
+            <div className='mt-8 flex w-full items-end justify-end gap-2'>
+              <Button size='regular' onClick={handleNextStep} layout='link'>
+                Skip
+              </Button>
+              <Button
+                size='regular'
+                onClick={handleSave}
+                disabled={isDisable}
+                className='col-span-2 mt-8'
+              >
+                Save & Next
+              </Button>
+            </div>
           )}
         </div>
       </div>

@@ -202,7 +202,7 @@ const BookingForm = ({
     <>
       <div className='mx-auto flex w-1/3 flex-col gap-2'>
         <div className='flex flex-col'>
-          <Label>Client Name</Label>
+          <Label>Client Name *</Label>
           <ComboBox
             placeholder='Search Client'
             data={filteredCustomer}
@@ -218,7 +218,7 @@ const BookingForm = ({
           )} */}
         </div>
         <div className='flex flex-col'>
-          <Label>Project Name</Label>
+          <Label>Project Name *</Label>
           <ComboBox
             placeholder='Search Project'
             data={filterProjects}
@@ -238,7 +238,7 @@ const BookingForm = ({
             type='text'
             name='area'
             label='Area'
-            placeholder='e.g 30 sq.meter'
+            placeholder='area'
             value={areaValue}
             onChange={handleArea}
           />
@@ -319,7 +319,7 @@ const BookingForm = ({
         )}
 
         <div className='flex flex-col'>
-          <Label>Bank Account</Label>
+          <Label>Bank Account *</Label>
           <ComboBox
             placeholder='Select Account'
             data={filterAccounts}
@@ -338,7 +338,7 @@ const BookingForm = ({
             // value={totalAmt}
             type='text'
             name='totalAmt'
-            label='Total Amount'
+            label='Total Amount *'
             // onChange={handleTotalAmtChange}
             value={totalAmtValue}
             onChange={handleTotalAmt}
@@ -354,7 +354,7 @@ const BookingForm = ({
             // onChange={handlePaidAmtChange}
             type='text'
             name='paidAmt'
-            label='Paid Amount'
+            label='Paid Amount *'
             value={paidAmtValue}
             onChange={handlePaidAmt}
           />
@@ -384,7 +384,7 @@ const BookingForm = ({
           <TextInput
             type='text'
             name='amtPerInstallment'
-            label='Amount Per Installment'
+            label='Amount Per Installment *'
             value={amtPerInstallmentValue}
             onChange={handleAmtPerInstallment}
           />
@@ -432,7 +432,7 @@ const BookingForm = ({
                 name='paymentMehod'
                 checked={paymentMethodType === 'CHEQUE'}
               />
-              <span className='ml-2'>Cheuqe</span>
+              <span className='ml-2'>Cheque</span>
             </Label>
             <Label radio>
               <Input
@@ -469,7 +469,7 @@ const BookingForm = ({
                   name='cheuqeNo'
                   value={chequeNoValue}
                   onChange={handlechequeNo}
-                  label='Cheuqe No'
+                  label='Cheque No'
                 />
 
                 {chequeNoError && (

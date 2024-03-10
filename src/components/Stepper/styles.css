@@ -13,9 +13,9 @@
 .complete .step {
   @apply bg-green-600;
 }
-.complete p {
+/* .complete p {
   @apply text-white;
-}
+} */
 .complete:not(:first-child):before,
 .active:not(:first-child):before {
   @apply bg-green-600;

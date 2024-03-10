@@ -84,7 +84,7 @@ export default function Booking({
         pageTitle='Bookings'
         right={
           <Link href='realEstateProjects/bookingForm/registerForm'>
-            <Button>Booking</Button>
+            <Button>Add Booking</Button>
           </Link>
         }
         isShowSearchBar={true}

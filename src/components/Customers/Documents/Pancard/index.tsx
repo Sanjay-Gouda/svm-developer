@@ -1,6 +1,6 @@
 import { Button } from '@windmill/react-ui';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Cookies } from 'react-cookie';
 import { useDropzone } from 'react-dropzone';
 import { toast } from 'react-toastify';
@@ -18,6 +18,7 @@ const PancardContainer = ({ customerId }: Tdocument) => {
 
   const [panCard, setPanCard] = useState<any>([]);
   const [loader, setLoader] = useState(false);
+  const [isDisable, setIsDisable] = useState(true);
 
   const handlePanCard = (acceptedFiles: any) => {
     setPanCard((prevFiles: any) => [
@@ -32,6 +33,14 @@ const PancardContainer = ({ customerId }: Tdocument) => {
     onDrop: handlePanCard,
     multiple: false,
   });
+
+  useEffect(() => {
+    if (panCard.length > 0) {
+      setIsDisable(false);
+    } else {
+      setIsDisable(true);
+    }
+  }, [panCard]);
 
   const handleUpload = async () => {
     setLoader(true);
@@ -98,6 +107,7 @@ const PancardContainer = ({ customerId }: Tdocument) => {
             size='regular'
             onClick={handleUpload}
             className='col-span-2 mt-4'
+            disabled={isDisable}
           >
             {loader ? 'Saving...' : 'Save & Next'}
           </Button>
