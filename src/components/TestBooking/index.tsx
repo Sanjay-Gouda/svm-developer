@@ -62,7 +62,7 @@ const TestBooking = ({ editInitialValues, editId }: editProps) => {
   const routes = useRouter();
 
   const addBookingData = async (values: TBookingProps) => {
-    // setLoader(true);
+    setLoader(true);
     const {
       address,
       bankAccount,
@@ -117,12 +117,12 @@ const TestBooking = ({ editInitialValues, editId }: editProps) => {
         ? res?.data?.message
         : 'Booking completed successfully';
       toast.success(successMessage);
-      // setLoader(false);
+      setLoader(false);
       setTimeout(() => {
         routes.push('/admin/booking');
       }, 1000);
     } catch (err) {
-      // setLoader(false);
+      setLoader(false);
       toast.error('Something went wrong');
       // routes.push('/admin/booking');
     }
@@ -331,18 +331,24 @@ const TestBooking = ({ editInitialValues, editId }: editProps) => {
     // return amount;
   };
 
+  const calculateInstallmentCount = () => {
+    const remainingAmt = +formik.values.remainingAmt;
+    const amtPerInstallment = +formik.values.amtPerInstallment;
+    const noOfInstallment = Math.ceil(remainingAmt / amtPerInstallment); // Round up to ensure all installments are covered
+    console.log(noOfInstallment, 'INSTALLMENTS');
+    formik.setFieldValue('noOfInstallment', noOfInstallment.toString());
+  };
+
+  useEffect(() => {
+    calculateInstallmentCount();
+  }, [formik.values.amtPerInstallment]);
+
   useEffect(() => {
     calculateRemainingAmt(formik.values.totalAmt, formik.values.paidAmt);
-  }, [formik.values.paidAmt, formik.values.totalAmt]);
+  }, [formik.values.paidAmt, formik.values.amtPerInstallment]);
 
   return (
     <>
-      {/* {showUploadDocument ? (
-        
-      ) : (
-        <UploadDocuments handleGoBack={handleGoBack} />
-      )} */}
-
       <BookingForm
         editId={editId}
         loader={loader}

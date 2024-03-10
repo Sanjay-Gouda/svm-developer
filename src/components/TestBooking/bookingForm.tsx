@@ -1,7 +1,6 @@
 import { Button, Input, Label } from '@windmill/react-ui';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { ClipLoader } from 'react-spinners';
 
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -372,11 +371,41 @@ const BookingForm = ({
             name='remainingAmt'
             label='Remaining Amount'
             value={remainAmtValue}
+            disabled
             // onChange={formik.handleChange}
           />
 
           {remainingAmtError && (
             <div className='text-red-400'>{remainingAmtErrorMessage}</div>
+          )}
+        </div>
+
+        <div className='flex flex-col'>
+          <TextInput
+            type='text'
+            name='amtPerInstallment'
+            label='Amount Per Installment'
+            value={amtPerInstallmentValue}
+            onChange={handleAmtPerInstallment}
+          />
+
+          {amtPerInstallError && (
+            <div className='text-red-400'>{amtPerInstallmentMessage}</div>
+          )}
+        </div>
+
+        <div className='flex flex-col'>
+          <TextInput
+            type='text'
+            name='noOfInstallment'
+            label='No.Of Installment'
+            disabled
+            value={noOfInstallMentValue}
+            onChange={handleNoOfInstallment}
+          />
+
+          {installmentError && (
+            <div className='text-red-400'>{installmentErrorMessage}</div>
           )}
         </div>
 
@@ -517,33 +546,6 @@ const BookingForm = ({
         </>
 
         <div className='flex flex-col'>
-          <TextInput
-            type='text'
-            name='noOfInstallment'
-            label='No.Of Installment'
-            value={noOfInstallMentValue}
-            onChange={handleNoOfInstallment}
-          />
-
-          {installmentError && (
-            <div className='text-red-400'>{installmentErrorMessage}</div>
-          )}
-        </div>
-
-        <div className='flex flex-col'>
-          <TextInput
-            type='text'
-            name='amtPerInstallment'
-            label='Amount Per Installment'
-            value={amtPerInstallmentValue}
-            onChange={handleAmtPerInstallment}
-          />
-
-          {amtPerInstallError && (
-            <div className='text-red-400'>{amtPerInstallmentMessage}</div>
-          )}
-        </div>
-        <div className='flex flex-col'>
           <SelectOption
             options={['COMPLETED', 'PENDING', 'PARTIAL']}
             title='Payment Status'
@@ -574,8 +576,7 @@ const BookingForm = ({
         ) : (
           <>
             <Button onClick={() => handleMoveToUpload()}>
-              Submit
-              {loader && <ClipLoader size={20} color='white' />}
+              {loader ? 'Saving...' : 'Submit'}
             </Button>
           </>
         )}
