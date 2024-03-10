@@ -19,9 +19,9 @@ const validationSchema = Yup.object().shape({
   phone: Yup.string()
     .matches(/^[0-9]{10}$/, 'Invalid Mobile number')
     .required('Customer Mobile Number is required'),
-  // aadharNo: Yup.string()
-  //   .matches(/^[2-9]{1}[0-9]{3}\s[0-9]{4}\s[0-9]{4}$/, 'Invalid Aadhaar number')
-  //   .required('Aadhar Card number is required '),
+  aadharNo: Yup.string()
+    .matches(/^\d{12}$/, 'Aadhaar number must be exactly 12 digits')
+    .required('Aadhaar number is required'),
   email: Yup.string().email('Invalid email address'),
 });
 
@@ -259,7 +259,7 @@ function CustomerForm({
               formik.handleSubmit();
             }}
           >
-            Save & Next
+            {loader ? 'Saving...' : 'Save & Next'}
           </Button>
         )}
 

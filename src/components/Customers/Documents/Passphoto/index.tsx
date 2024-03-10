@@ -1,5 +1,5 @@
 import { Button } from '@windmill/react-ui';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Cookies } from 'react-cookie';
 import { useDropzone } from 'react-dropzone';
 
@@ -16,7 +16,8 @@ const PassPhotoContainer = ({ customerId, handleNextStep }: Tpassphoto) => {
   const [passPhoto, setPassPhoto] = useState<any>([]);
   const [thirdPassphoto, setThirdPassphoto] = useState<any>([]);
   const [secondPassphoto, setSecondPassphoto] = useState<any>([]);
-
+  const [isDisable, setIsDisable] = useState(true);
+  const [loader, setLoader] = useState(false);
   const handleFirstpassPhoto = (acceptedFiles: any) => {
     setPassPhoto((prevFiles: any) => [
       ...prevFiles,
@@ -59,8 +60,21 @@ const PassPhotoContainer = ({ customerId, handleNextStep }: Tpassphoto) => {
     multiple: false,
   });
 
+  useEffect(() => {
+    if (
+      passPhoto.length > 0 ||
+      secondPassphoto.length > 0 ||
+      thirdPassphoto.length > 0
+    ) {
+      setIsDisable(false);
+    } else {
+      setIsDisable(true);
+    }
+  }, [passPhoto, secondPassphoto, thirdPassphoto]);
+
   const handleUpload = async () => {
     const formData = new FormData();
+    setLoader(true);
 
     for (let i = 0; i < passPhoto.length; i++) {
       formData.append('customerImage', passPhoto[i]);
@@ -86,12 +100,12 @@ const PassPhotoContainer = ({ customerId, handleNextStep }: Tpassphoto) => {
           },
         }
       );
-      handleNextStep();
+      setLoader(false);
 
-      console.log(res);
+      handleNextStep();
     } catch (err) {
       handleNextStep();
-      console.log(err);
+      setLoader(false);
     }
   };
 
@@ -118,21 +132,18 @@ const PassPhotoContainer = ({ customerId, handleNextStep }: Tpassphoto) => {
             placeholder='Upload Clients third passphoto'
           />
         </div>
-        <div className='flex w-[60%]'>
+        <div className='mt-8 flex w-[60%] items-end justify-end gap-5'>
+          <Button size='regular' onClick={handleNextStep} layout='link'>
+            Skip
+          </Button>
           <Button
             size='regular'
             onClick={handleUpload}
-            className='col-span-2 ml-auto mt-8'
+            disabled={isDisable}
+            className='col-span-2  mt-8'
           >
-            Save & Next
+            {loader ? 'Saving...' : 'Save & Next'}
           </Button>
-          {/* <Button
-            size='regular'
-            onClick={handleUpload}
-            className='col-span-2 ml-auto mt-8'
-          >
-            Skip
-          </Button> */}
         </div>
       </div>
     </>

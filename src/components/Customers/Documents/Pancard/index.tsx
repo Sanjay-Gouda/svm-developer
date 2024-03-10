@@ -17,6 +17,7 @@ const PancardContainer = ({ customerId }: Tdocument) => {
   const router = useRouter();
 
   const [panCard, setPanCard] = useState<any>([]);
+  const [loader, setLoader] = useState(false);
 
   const handlePanCard = (acceptedFiles: any) => {
     setPanCard((prevFiles: any) => [
@@ -33,6 +34,7 @@ const PancardContainer = ({ customerId }: Tdocument) => {
   });
 
   const handleUpload = async () => {
+    setLoader(true);
     const formData = new FormData();
 
     for (let i = 0; i < panCard.length; i++) {
@@ -52,6 +54,7 @@ const PancardContainer = ({ customerId }: Tdocument) => {
           },
         }
       );
+      setLoader(false);
       // toast.success('Customer details added successfully');
       setTimeout(() => {
         router.push('/admin/customers');
@@ -59,6 +62,7 @@ const PancardContainer = ({ customerId }: Tdocument) => {
 
       console.log(res);
     } catch (err) {
+      setLoader(false);
       toast.error('Something went wrong');
     }
   };
@@ -78,14 +82,14 @@ const PancardContainer = ({ customerId }: Tdocument) => {
           />
         </div>
 
-        <div className='mt-8 flex w-[60%] items-end justify-end'>
+        <div className='mt-8 flex w-[60%] items-end justify-end gap-2'>
           <Button
             size='regular'
             // onClick={() => onComplete('form')}
             // onClick={handleNextStep}
             onClick={() => router.push('/admin/customers')}
             layout='link'
-            className='mr-auto'
+            // className='mr-auto'
           >
             Skip
           </Button>
@@ -93,9 +97,9 @@ const PancardContainer = ({ customerId }: Tdocument) => {
           <Button
             size='regular'
             onClick={handleUpload}
-            className='col-span-2 ml-auto mt-4'
+            className='col-span-2 mt-4'
           >
-            Save & Next
+            {loader ? 'Saving...' : 'Save & Next'}
           </Button>
         </div>
       </div>

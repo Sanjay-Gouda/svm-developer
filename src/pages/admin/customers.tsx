@@ -34,13 +34,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   try {
     const token = context.req.headers.cookie?.split('=')[1];
 
-    console.log(token, 'Token');
     httpInstance.defaults.headers.common['Authorization'] = 'Bearer ' + token;
 
     const res = await httpInstance.get(`/customer/advance-list`);
     const data = res.data.result.list;
 
-    return { props: { data } };
+    return { props: { data, token } };
   } catch (err) {
     console.log(err);
   }
@@ -54,10 +53,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 export default function Customers({
   data,
   error,
+  token,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  console.log(data, 'customerData');
-
   const route = useRouter();
+
   const [customerData, setCustomerData] = useState<any>(data);
 
   const handleEdit = (id: string) => {
@@ -74,7 +73,12 @@ export default function Customers({
     const timer = setTimeout(async () => {
       try {
         const res = await axios.get(
-          `${API_ENDPOINT.END_POINT}/customer/advance-list?searchString=${value}`
+          `${API_ENDPOINT.END_POINT}/customer/advance-list?searchString=${value}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
         const data = res.data.result.list;
 

@@ -1,5 +1,5 @@
 import { Button } from '@windmill/react-ui';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Cookies } from 'react-cookie';
 import { useDropzone } from 'react-dropzone';
 
@@ -15,6 +15,17 @@ type Tdocument = {
 const AadharcardContainer = ({ customerId, handleNextStep }: Tdocument) => {
   const [frontAadharCard, setFrontAadharCard] = useState<any>([]);
   const [backAadharCard, setBackAadharCard] = useState<any>([]);
+  const [loader, setLoader] = useState(false);
+
+  const [isDisable, setIsDisable] = useState(true);
+
+  useEffect(() => {
+    if (frontAadharCard.length > 0) {
+      setIsDisable(false);
+    } else {
+      setIsDisable(true);
+    }
+  }, [frontAadharCard]);
 
   const handleFrontSideAadharCard = (acceptedFiles: any) => {
     setFrontAadharCard((prevFiles: any) => [
@@ -44,6 +55,7 @@ const AadharcardContainer = ({ customerId, handleNextStep }: Tdocument) => {
   });
 
   const handleUpload = async () => {
+    setLoader(true);
     const formData = new FormData();
 
     for (let i = 0; i < frontAadharCard.length; i++) {
@@ -67,12 +79,11 @@ const AadharcardContainer = ({ customerId, handleNextStep }: Tdocument) => {
           },
         }
       );
+      setLoader(false);
       handleNextStep();
-
-      console.log(res);
     } catch (err) {
+      setLoader(false);
       // handleNextStep();
-      console.log(err);
     }
   };
 
@@ -94,23 +105,23 @@ const AadharcardContainer = ({ customerId, handleNextStep }: Tdocument) => {
           />
         </div>
 
-        <div className='mt-8 flex w-[60%] items-end justify-end'>
-          {/* <Button
+        <div className='mt-8 flex w-[60%] items-end justify-end gap-2'>
+          <Button
             size='regular'
             // onClick={() => onComplete('form')}
-            // onClick={handleNextStep}
+            onClick={handleNextStep}
             layout='link'
-            className='mr-auto'
           >
             Skip
-          </Button> */}
+          </Button>
 
           <Button
             size='regular'
             onClick={handleUpload}
-            className='col-span-2 ml-auto mt-4'
+            disabled={isDisable}
+            className='col-span-2  mt-4'
           >
-            Save & Next
+            {loader ? 'Saving...' : 'Save & Next'}
           </Button>
         </div>
       </div>
