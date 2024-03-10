@@ -72,9 +72,7 @@ export const Booking = ({ details }: any) => {
     customerImage,
   } = details;
 
-  const passphoto = customerImage?.map((passphoto) => passphoto.imageUrl);
-
-  // console.log(passphoto[0], 'URL');
+  // const passphoto = customerImage?.map((passphoto) => passphoto.imageUrl);
 
   const styles = StyleSheet.create({
     page: {
@@ -274,13 +272,15 @@ export const Booking = ({ details }: any) => {
 
         <View style={styles.companyLogo}>
           <View style={styles.passPhotoWrapper}>
-            <View style={styles.passPhotoContainer}>
-              <Image
-                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                src={passphoto[0] || null}
-                alt='passphoto'
-              />
-            </View>
+            {customerImage?.slice(0, 1).map((img, ind) => (
+              <View style={styles.passPhotoContainer} key={ind}>
+                <Image
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  src={img?.imageUrl}
+                  alt='passphoto'
+                />
+              </View>
+            ))}
           </View>
         </View>
 

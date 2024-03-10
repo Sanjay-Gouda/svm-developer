@@ -62,7 +62,7 @@ const AadharcardContainer = ({ customerId, handleNextStep }: Tdocument) => {
         {
           headers: {
             'Content-Type': 'multipart/form-data',
-            "ngrok-skip-browser-warning": "69420",
+            // "ngrok-skip-browser-warning": "69420",
             Authorization: `Bearer ${token}`,
           },
         }

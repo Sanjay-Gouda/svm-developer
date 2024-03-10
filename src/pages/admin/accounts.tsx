@@ -12,7 +12,7 @@ import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { MdDelete, MdModeEditOutline } from 'react-icons/md';
+import { MdModeEditOutline } from 'react-icons/md';
 
 import EmptyState from '@/components/Empty';
 import ServerError from '@/components/Error/500Error';
@@ -142,11 +142,11 @@ export default function Account({
                                 handleEdit(details?.adminAccountId);
                               }}
                             />
-                            <MdDelete
+                            {/* <MdDelete
                               size='24'
                               className='cursor-pointer'
                               style={{ color: ' #F38C7F' }}
-                            />
+                            /> */}
                           </TableCell>
                         </TableRow>
                       );

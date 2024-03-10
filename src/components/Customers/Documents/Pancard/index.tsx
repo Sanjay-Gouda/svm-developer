@@ -1,7 +1,9 @@
 import { Button } from '@windmill/react-ui';
+import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { Cookies } from 'react-cookie';
 import { useDropzone } from 'react-dropzone';
+import { toast } from 'react-toastify';
 
 import AadharCardPlaceholder from '@/components/Booking/aadharCardPlaceholder';
 
@@ -12,6 +14,8 @@ type Tdocument = {
 };
 
 const PancardContainer = ({ customerId }: Tdocument) => {
+  const router = useRouter();
+
   const [panCard, setPanCard] = useState<any>([]);
 
   const handlePanCard = (acceptedFiles: any) => {
@@ -48,12 +52,14 @@ const PancardContainer = ({ customerId }: Tdocument) => {
           },
         }
       );
-      // handleNextStep();
+      // toast.success('Customer details added successfully');
+      setTimeout(() => {
+        router.push('/admin/customers');
+      }, 1000);
 
       console.log(res);
     } catch (err) {
-      // handleNextStep();
-      console.log(err);
+      toast.error('Something went wrong');
     }
   };
 
@@ -77,6 +83,7 @@ const PancardContainer = ({ customerId }: Tdocument) => {
             size='regular'
             // onClick={() => onComplete('form')}
             // onClick={handleNextStep}
+            onClick={() => router.push('/admin/customers')}
             layout='link'
             className='mr-auto'
           >

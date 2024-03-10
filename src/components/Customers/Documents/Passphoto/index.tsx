@@ -81,7 +81,7 @@ const PassPhotoContainer = ({ customerId, handleNextStep }: Tpassphoto) => {
         {
           headers: {
             'Content-Type': 'multipart/form-data',
-            "ngrok-skip-browser-warning": "69420",
+            // "ngrok-skip-browser-warning": "69420",
             Authorization: `Bearer ${token}`,
           },
         }
@@ -126,6 +126,13 @@ const PassPhotoContainer = ({ customerId, handleNextStep }: Tpassphoto) => {
           >
             Save & Next
           </Button>
+          {/* <Button
+            size='regular'
+            onClick={handleUpload}
+            className='col-span-2 ml-auto mt-8'
+          >
+            Skip
+          </Button> */}
         </div>
       </div>
     </>

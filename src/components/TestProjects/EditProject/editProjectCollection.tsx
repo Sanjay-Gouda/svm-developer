@@ -121,7 +121,6 @@ const EditProjectCollection = ({
       alert('please select a Logo');
     } else {
       const formData = new FormData();
-
       for (let i = 0; i < projectLogo.length; i++) {
         formData.append('logo', projectLogo[i]);
       }

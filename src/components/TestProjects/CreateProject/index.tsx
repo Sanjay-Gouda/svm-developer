@@ -117,6 +117,7 @@ const TestProjects = ({
   };
 
   const updateProjectDetials = async (values: TDetailValues) => {
+    console.log('values', values);
     setLoader(true);
     const {
       address1,

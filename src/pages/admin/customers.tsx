@@ -12,7 +12,7 @@ import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
-import { MdDelete, MdModeEditOutline } from 'react-icons/md';
+import { MdModeEditOutline } from 'react-icons/md';
 
 import EmptyState from '@/components/Empty';
 import ServerError from '@/components/Error/500Error';
@@ -137,19 +137,19 @@ export default function Customers({
                           <TableCell>{list?.phone}</TableCell>
                           <TableCell>{list?.aadharNo}</TableCell>
                           <TableCell>{list?.email}</TableCell>
-                          <TableCell className='flex gap-5'>
+                          <TableCell className='flex  justify-start '>
                             <MdModeEditOutline
                               onClick={() => handleEdit(list?.customerId)}
                               size='24'
                               className='cursor-pointer'
                               style={{ color: ' #30bcc2' }}
                             />
-                            <MdDelete
+                            {/* <MdDelete
                               onClick={() => handleView(list?.customerId)}
                               size='24'
                               className='cursor-pointer'
                               style={{ color: ' #F38C7F' }}
-                            />
+                            /> */}
                           </TableCell>
                         </TableRow>
                       );
