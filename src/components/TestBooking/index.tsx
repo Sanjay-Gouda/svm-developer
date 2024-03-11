@@ -240,8 +240,8 @@ const TestBooking = ({ editInitialValues, editId }: editProps) => {
         // // addBookingData(values);
 
         // addBookingData(values);
-        console.log(values);
-        // editId ? updateBookingData(values) : addBookingData(values);
+        // console.log(values);
+        editId ? updateBookingData(values) : addBookingData(values);
       }
     },
   });

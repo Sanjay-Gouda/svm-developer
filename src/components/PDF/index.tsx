@@ -276,7 +276,7 @@ export const Booking = ({ details }: any) => {
               <View style={styles.passPhotoContainer} key={ind}>
                 <Image
                   style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                  src={img?.imageUrl}
+                  src={img?.imageUrl || null}
                   alt='passphoto'
                 />
               </View>
