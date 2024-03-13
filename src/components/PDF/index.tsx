@@ -50,6 +50,18 @@ const termsAndCondition = [
     id: 10,
     term: 'કોઈ પણ ગ્રાહક ના પ્લોટ નું પૂરું પેમેન્ટ અગર પ્રોજેક્ટ ના સમય પુરા થાય પછી કરે છે તો ગ્રાહકે રૂ.૧૦૦૦/- (પ્લોટ દીઠ ) દર મહિને અલગ થી ચુકવાના રહેશે.',
   },
+  {
+    id: 11,
+    term: 'વેચાણ આપેલ પ્લોટની રકમ 36 મહિનામાં પૂર્ણ કરી દસ્તાવેજ કરાવવાનું રહેશે.',
+  },
+  {
+    id: 12,
+    term: 'પહેલા પક્ષનાએ યાને ખરીદનાર પાર્ટીએ દર માસના ઈ.એમ.આઈ સમયસર ભરવાના રહેશે. અને જો ઈ.એમ.આઈ. ભરવામાં નિષ્ફળ અથવા મોડું થાય તો ઈ.એમ.આઈ સાથે 500 રૂ. લેટ પેમેન્ટ ચાર્જ તરીકે અલગથી ચૂકવવાનો રહેશે',
+  },
+  {
+    id: 13,
+    term: 'પહેલા પક્ષનાએ યાને ખરીદનાર પાર્ટીએ કોઈપણ ચેક દ્વારા હપ્તાનું પેમેન્ટ કરેલું હોય અને કોઈપણ કારણસર ચેક બાઉન્સ થાય તો 500 રૂ. ચેકબાઉન્સ ચાર્જ + 18% ટેક્સ સાથે ૨કમ ચૂકવાણી રહેશે.',
+  },
 ];
 
 Font.register({
@@ -264,8 +276,8 @@ export const Booking = ({ details }: any) => {
             />
           </View>
           <View style={styles.flexCenter}>
-            <Text style={styles.companyName}>SVM BUILDERS & DEVELOPER</Text>
             <Text style={styles.bookingHeading}>BOOKING FORM</Text>
+            <Text style={styles.companyName}>SVM BUILDERS & DEVELOPER</Text>
           </View>
         </View>
         <View style={styles.footer}></View>
@@ -405,7 +417,7 @@ export const Booking = ({ details }: any) => {
             display: 'flex',
             justifyContent: 'flex-start',
             alignItems: 'flex-start',
-            gap: '16px',
+            gap: '8px',
             paddingLeft: '20px',
             paddingRight: '20px',
             paddingTop: '20px',
@@ -421,7 +433,7 @@ export const Booking = ({ details }: any) => {
               <Text>•</Text>
 
               <Text
-                style={{ fontFamily: 'Nato Sans Gujarati', fontSize: '16px' }}
+                style={{ fontFamily: 'Nato Sans Gujarati', fontSize: '14px' }}
               >
                 {term.term}
               </Text>
@@ -429,7 +441,7 @@ export const Booking = ({ details }: any) => {
           ))}
         </View>
 
-        <View
+        {/* <View
           style={{
             display: 'flex',
             justifyContent: 'center',
@@ -446,7 +458,7 @@ export const Booking = ({ details }: any) => {
           >
             Thank You , Visit Again
           </Text>
-        </View>
+        </View> */}
       </Page>
     </Document>
   );
