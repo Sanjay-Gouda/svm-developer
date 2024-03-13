@@ -4,6 +4,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
 import LogoContainer from '@/components/Projects/logoContainer';
+import PdfViewer from '@/components/Projects/pdfViewer';
 import UploadProjectImages from '@/components/Projects/uploadProjectImages';
 import UploadSiteImages from '@/components/Projects/uploadSiteImages';
 import EditTab from '@/components/Tabs/editTab';
@@ -187,10 +188,11 @@ const EditProjectCollection = ({
         );
         // console.log(res);
         toast.success('Images uploaded Successfully');
-
+        setSiteImages([]);
         closeModal();
       } catch (err) {
         toast.error('Something went wrong');
+        setSiteImages([]);
 
         closeModal();
       }
@@ -200,8 +202,6 @@ const EditProjectCollection = ({
   useEffect(() => {
     getImages();
   }, [getImages]);
-
-  console.log(projectImages?.planningImages?.length);
 
   return (
     <>
@@ -238,7 +238,10 @@ const EditProjectCollection = ({
             <div className='w-full'>
               <div className='flex w-full flex-wrap gap-2'>
                 <div className='h-36 w-[230px] overflow-hidden  rounded-lg border-2 border-gray-300  dark:border-gray-600'>
-                  <ImageCard url={projectImages?.logoUrl} />
+                  <ImageCard
+                    url={projectImages?.logoUrl}
+                    isShowDeleteIcon={false}
+                  />
                 </div>
               </div>
             </div>
@@ -247,7 +250,7 @@ const EditProjectCollection = ({
           {/* Planning Image */}
           <div className='flex w-[80%] flex-col'>
             <div className='flex w-full'>
-              <p className=' inline-flex w-full items-center text-sm font-semibold text-white transition-colors duration-150 '>
+              <p className=' inline-flex w-full items-center text-sm text-xl font-semibold text-black transition-colors duration-150 dark:text-white '>
                 Planning Images
               </p>
               <div className='flex w-[80%]'>
@@ -264,8 +267,16 @@ const EditProjectCollection = ({
               <div className='flex w-full flex-wrap gap-2'>
                 {projectImages?.planningImages?.length !== 0 ? (
                   <>
-                    {projectImages?.planningImages?.map((img) => (
-                      <ImageCard key={img.projectImageId} url={img?.url} />
+                    {projectImages?.planningImages?.map((img, ind) => (
+                      // <ImageCard key={img.projectImageId} url={img?.url} />
+                      <PdfViewer
+                        key={img.projectImageId}
+                        name={`Planning PDF ${ind + 1}`}
+                        url={img?.url}
+                        handleRemove={() => {
+                          console.log('');
+                        }}
+                      />
                     ))}
                   </>
                 ) : (
@@ -296,7 +307,11 @@ const EditProjectCollection = ({
                 {projectImages?.siteImages?.length !== 0 ? (
                   <>
                     {projectImages?.siteImages?.map((img) => (
-                      <ImageCard key={img.projectImageId} url={img?.url} />
+                      <ImageCard
+                        isShowDeleteIcon={true}
+                        key={img.projectImageId}
+                        url={img?.url}
+                      />
                     ))}
                   </>
                 ) : (

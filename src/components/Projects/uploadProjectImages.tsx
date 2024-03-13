@@ -2,11 +2,12 @@ import { Button } from '@windmill/react-ui';
 import React from 'react';
 import { useDropzone } from 'react-dropzone';
 
-import ImageContainer from '@/components/Booking/imageContainer';
+import PdfViewer from '@/components/Projects/pdfViewer';
 import UploadPlaceholder from '@/components/Projects/uploadPlaceholder';
 
 const UploadProjectImages = ({ setPlanImages, planImages }) => {
   const handleDrop = (acceptedFiles: any) => {
+    console.log(acceptedFiles, 'FILES');
     setPlanImages((prevFiles: any) => [
       ...prevFiles,
       ...acceptedFiles.map((file: any) =>
@@ -15,17 +16,13 @@ const UploadProjectImages = ({ setPlanImages, planImages }) => {
     ]);
   };
 
+  const acceptedFileTypes = '.pdf';
+
   const { getRootProps, getInputProps, isDragActive, open } = useDropzone({
     onDrop: handleDrop,
-    accept: { 'image/png': ['.png', '.jpg', '.jpeg'] },
-
-    // noClick: true,
+    accept: { 'application/pdf': ['.pdf'] },
   });
 
-  const handleAddImagesClick = () => {
-    // Open the file selector
-    open();
-  };
   const handleClearImages = () => {
     setPlanImages([]);
   };
@@ -40,13 +37,14 @@ const UploadProjectImages = ({ setPlanImages, planImages }) => {
   return (
     <>
       {planImages?.length > 0 ? (
-        <div className='auto  flex w-full flex-wrap gap-6  rounded-lg  border-2 border-gray-300 px-2 py-5  dark:border-gray-600'>
+        <div className='auto  flex w-full flex-col flex-wrap items-center justify-start gap-2  rounded-lg  border-2 border-gray-300 px-2 py-5  dark:border-gray-600'>
           {planImages?.map((file, ind) => {
             return (
               <>
-                <ImageContainer
+                <PdfViewer
                   key={ind}
-                  file={file?.preview || file.url}
+                  name={file?.name}
+                  url={file?.preview}
                   handleRemove={() => handleRemove(file?.name)}
                 />
               </>

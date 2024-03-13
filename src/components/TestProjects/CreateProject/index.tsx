@@ -20,9 +20,9 @@ const validationSchema = Yup.object().shape({
   // status: Yup.string().required('status is required'),
   ownerName: Yup.string().required('Owner Name is required'),
   area: Yup.number().required('Area must be in number'),
-  emiAmt: Yup.number().required('Amount must be in number'),
-  downPayment: Yup.number().required(' Amount must be in number'),
-  totalAmt: Yup.number().required('Amount must be in number'),
+  emiAmt: Yup.number().typeError('Amount must be in number'),
+  downPayment: Yup.number().typeError(' Amount must be in number'),
+  totalAmt: Yup.number().typeError('Amount must be in number'),
   // projectStatus: Yup.string().required('Project Status is required'),
   pincode: Yup.string().required('Pincode is required'),
   // state: Yup.string().required('state is required'),
@@ -117,7 +117,6 @@ const TestProjects = ({
   };
 
   const updateProjectDetials = async (values: TDetailValues) => {
-    console.log('values', values);
     setLoader(true);
     const {
       address1,

@@ -156,7 +156,7 @@ function AddProjectForm({
       </div>
 
       <div className='flex w-full items-center justify-between gap-4'>
-        <div className='flex w-1/2 flex-col'>
+        {/* <div className='flex w-1/2 flex-col'>
           <SelectOption
             onChange={handleParentProject}
             title='Parent Project'
@@ -164,8 +164,8 @@ function AddProjectForm({
             containerClassName='flex-1 mt-1 w-full'
             name='parentProject'
           />
-        </div>
-        <div className='w-1/2'>
+        </div> */}
+        <div className='w-full'>
           <SelectOption
             onChange={handleStatus}
             title='Project Status'
