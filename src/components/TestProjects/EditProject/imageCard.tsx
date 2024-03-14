@@ -3,7 +3,7 @@ import React from 'react';
 import { ImCancelCircle } from 'react-icons/im';
 
 type TImageCard = {
-  key: string;
+  key?: string;
   url: string;
   isShowDeleteIcon?: boolean;
 };
@@ -22,12 +22,6 @@ const ImageCard = ({ url, isShowDeleteIcon }: TImageCard) => {
             className='absolute right-[2px] top-0 cursor-pointer  text-gray-950  dark:text-gray-50'
           />
         )}
-        {/* <button
-          // onClick={onClick}
-          className='rounded-full border border-red-500 px-4 py-2 text-red-500 transition duration-300 ease-in-out hover:bg-red-500 hover:text-white focus:outline-none'
-        >
-          Remove
-        </button> */}
       </div>
     </>
   );

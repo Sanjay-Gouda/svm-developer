@@ -180,6 +180,58 @@ function CustomerForm({
         <div className='flex flex-col'>
           <TextInput
             type='text'
+            name='phone'
+            label='Alternative Mobile No'
+            // onChange={formik.handleChange}
+            value={formik.values.phone}
+          />
+          {/* {formik.touched.phone && formik.errors.phone && (
+            <div className='text-red-400'>{formik.errors.phone}</div>
+          )} */}
+        </div>
+        <div className='flex flex-col'>
+          <TextInput
+            type='text'
+            name='pincode'
+            label='Pincode'
+            placeholder='e.g 394230'
+            // value={pincodeValue}
+            // value={formik.values.pincode}
+            // onChange={handlePincode}
+          />
+          {/* {formik.touched.phone && formik.errors.phone && (
+            <div className='text-red-400'>{formik.errors.phone}</div>
+          )} */}
+        </div>
+        <div className='flex flex-col'>
+          <TextInput
+            type='text'
+            name='state'
+            label='State'
+            placeholder='state'
+            disabled
+            // disabled={state ? true : false}
+            // value={formik.values.pincode}
+            // value={bookingState}
+            // value={state}
+          />
+        </div>
+        <div className='flex flex-col'>
+          <TextInput
+            type='text'
+            name='state'
+            label='State'
+            placeholder='state'
+            disabled
+            // disabled={state ? true : false}
+            // value={formik.values.pincode}
+            // value={bookingState}
+            // value={state}
+          />
+        </div>
+        <div className='flex flex-col'>
+          <TextInput
+            type='text'
             name='aadharNo'
             label='Aadhar No'
             onChange={formik.handleChange}

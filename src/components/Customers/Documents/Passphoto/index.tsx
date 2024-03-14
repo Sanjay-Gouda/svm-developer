@@ -89,13 +89,12 @@ const PassPhotoContainer = ({ customerId, handleNextStep }: Tpassphoto) => {
     try {
       const cookies = new Cookies();
       const token = cookies.get('token');
-      const res = await httpInstance.patch(
+      await httpInstance.patch(
         `customer/upload/customer-image/${customerId}`,
         formData,
         {
           headers: {
             'Content-Type': 'multipart/form-data',
-            // "ngrok-skip-browser-warning": "69420",
             Authorization: `Bearer ${token}`,
           },
         }

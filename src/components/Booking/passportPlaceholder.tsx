@@ -31,9 +31,8 @@ const PassportPlaceholder = ({
               onClick={() => handleRemove(files[0]?.name)}
               className=' absolute right-[-18px] top-[-14px] cursor-pointer text-gray-950 dark:text-gray-50'
             />
-            ;
+
             {files?.map((files, ind) => {
-              // console.log(files.name);
               return (
                 <div
                   className='h-48 w-48 overflow-hidden  rounded-lg border-2 border-gray-300  dark:border-gray-600'

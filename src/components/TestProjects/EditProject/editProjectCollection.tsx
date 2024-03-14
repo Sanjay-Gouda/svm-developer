@@ -219,7 +219,7 @@ const EditProjectCollection = ({
         />
       ) : (
         <div className='flex w-full flex-col items-center justify-center gap-6'>
-          {/* Logo */}
+          {/* Logo */}'
           <div className='flex w-[80%] flex-col'>
             <div className='flex w-full'>
               <p className=' inline-flex w-full items-center text-sm font-semibold text-white transition-colors duration-150 '>
@@ -246,7 +246,6 @@ const EditProjectCollection = ({
               </div>
             </div>
           </div>
-
           {/* Planning Image */}
           <div className='flex w-[80%] flex-col'>
             <div className='flex w-full'>
@@ -285,7 +284,6 @@ const EditProjectCollection = ({
               </div>
             </div>
           </div>
-
           {/* Site Image */}
           <div className='flex w-[80%] flex-col'>
             <div className='flex w-full'>

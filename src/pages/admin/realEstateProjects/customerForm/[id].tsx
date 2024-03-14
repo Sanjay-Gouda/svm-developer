@@ -1,7 +1,7 @@
 import { Card, CardBody } from '@windmill/react-ui';
 import React from 'react';
 
-import CustomerForm from '@/components/Customers/customerForm';
+import EditCustomerCollection from '@/components/Customers/EditCustomer/editCustomerCollection';
 import Layout from '@/containers/Layout';
 
 import { httpInstance } from '@/constants/httpInstances';
@@ -49,7 +49,7 @@ const EditCustomer = ({ EditId, customerDetails }: editCustomerprops) => {
       <Layout>
         <Card className='mx-auto  w-full p-2'>
           <CardBody>
-            <CustomerForm
+            <EditCustomerCollection
               editInitialValues={customerEditInitialValues}
               editId={EditId}
             />
