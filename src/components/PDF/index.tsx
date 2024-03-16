@@ -100,6 +100,18 @@ export const Booking = ({ details }: any) => {
       boxSizing: 'border-box',
     },
 
+    note: {
+      width: '90%',
+      padding: '6px ',
+      margin: '0 auto',
+      marginTop: '20px',
+      backgroundColor: '#fff',
+      border: '2px solid black',
+      borderRadius: '10px',
+      // boxShadow: '-5px 5px 10px red',
+      boxShadow: '10px 10px',
+    },
+
     termsHeading: {
       fontSize: '28px',
       textAlign: 'center',
@@ -150,9 +162,12 @@ export const Booking = ({ details }: any) => {
       flexDirection: 'row',
       width: '100%',
       justifyContent: 'flex-start',
-      gap: '10px',
+      // border: '1px solid red',
+      // gap: '10px',
       marginTop: '100px',
       alignItems: 'center',
+      marginLeft: '20px',
+      // marginRight: '20px',
     },
 
     logo: {
@@ -233,6 +248,7 @@ export const Booking = ({ details }: any) => {
       paddingLeft: 20,
       paddingRight: 20,
       lineHeight: 1.5,
+      // border: '1px solid red',
     },
 
     secondRowWrapper: {
@@ -441,24 +457,18 @@ export const Booking = ({ details }: any) => {
           ))}
         </View>
 
-        {/* <View
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            width: '100%',
-          }}
-        >
+        <View style={styles.note}>
           <Text
             style={{
-              // fontFamily: "Nato Sans Gujarati",
-              fontWeight: 'extrabold',
-              fontSize: '20px',
+              fontFamily: 'Nato Sans Gujarati',
+              fontWeight: 'heavy',
+              fontSize: '16px',
             }}
           >
-            Thank You , Visit Again
+            Note: ઉપર દર્શાવેલ તમામ શરતો અને નિયમો મને સારી રીતે સમજાય છે. અને આ
+            તમામ શરતો અને નિયમઓ મને મંજૂર છે.
           </Text>
-        </View> */}
+        </View>
       </Page>
     </Document>
   );

@@ -48,16 +48,19 @@ const PassPhotoContainer = ({ customerId, handleNextStep }: Tpassphoto) => {
   const firstPassphotoDropzone = useDropzone({
     onDrop: handleFirstpassPhoto,
     multiple: false,
+    accept: { 'image/png': ['.png', '.jpg', '.jpeg'] },
   });
 
   const secondPassphotoDropzone = useDropzone({
     onDrop: handleSecondpassPhoto,
     multiple: false,
+    accept: { 'image/png': ['.png', '.jpg', '.jpeg'] },
   });
 
   const thirdPassPhotoDropZone = useDropzone({
     onDrop: handleThirdPassPhoto,
     multiple: false,
+    accept: { 'image/png': ['.png', '.jpg', '.jpeg'] },
   });
 
   useEffect(() => {

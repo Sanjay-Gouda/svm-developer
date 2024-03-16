@@ -251,6 +251,17 @@ const BookingForm = ({
         <div className='flex flex-col'>
           <TextInput
             type='text'
+            name='area'
+            label='Plot No/Room No'
+            placeholder='Plot No/Room No'
+            // value={areaValue}
+            // onChange={handleArea}
+          />
+          {/* {areaError && <div className='text-red-400'>{areaErrorMessage}</div>} */}
+        </div>
+        <div className='flex flex-col'>
+          <TextInput
+            type='text'
             name='pincode'
             label='Pincode'
             placeholder='e.g 394230'

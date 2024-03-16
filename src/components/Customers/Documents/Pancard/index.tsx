@@ -32,6 +32,7 @@ const PancardContainer = ({ customerId }: Tdocument) => {
   const panCardDropZone = useDropzone({
     onDrop: handlePanCard,
     multiple: false,
+    accept: { 'image/png': ['.png', '.jpg', '.jpeg'] },
   });
 
   useEffect(() => {
