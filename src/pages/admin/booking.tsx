@@ -96,7 +96,11 @@ export default function Booking({
           <>
             {list?.length === 0 ? (
               <>
-                <EmptyState />
+                <EmptyState
+                  btnLable='Add Bookings '
+                  heading='Create New Bookings'
+                  redirectLink='realEstateProjects/bookingForm/registerForm'
+                />
               </>
             ) : (
               <TableContainer>

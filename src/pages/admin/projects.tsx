@@ -92,7 +92,11 @@ export default function Projects({
           <>
             {projects?.length === 0 ? (
               <>
-                <EmptyState />
+                <EmptyState
+                  btnLable='Add projects '
+                  heading='Add New Projects'
+                  redirectLink='realEstateProjects/projectForm/add'
+                />
               </>
             ) : (
               <TableContainer className='mb-8'>

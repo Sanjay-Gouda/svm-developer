@@ -46,7 +46,7 @@ const SideTab: FC<{ tab: (typeof AdminSidebarTabs)[number] }> = ({ tab }) => {
   return (
     <li
       className={`relative border-l-4 border-transparent px-6 py-3 ${
-        active && ' border-purple-600 bg-purple-50 dark:bg-gray-700'
+        active && ' border-purple-600 bg-purple-200 dark:bg-gray-700'
       }`}
     >
       <Link
@@ -57,12 +57,12 @@ const SideTab: FC<{ tab: (typeof AdminSidebarTabs)[number] }> = ({ tab }) => {
         // activeClassName=''
       >
         <tab.icon
-          className='h-5 w-5'
+          className='h-5 w-5 text-black dark:text-gray-200'
           aria-hidden='true'
           size={20}
           //icon={route.icon}
         />
-        <span className='ml-4'>{tab.name}</span>
+        <span className='ml-4 text-black dark:text-gray-200'>{tab.name}</span>
       </Link>
     </li>
   );

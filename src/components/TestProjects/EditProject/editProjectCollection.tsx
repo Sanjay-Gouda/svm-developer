@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import React, { useCallback, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
+import HeaderWrapper from '@/components/Customers/EditCustomer/headerWrapper';
 import LogoContainer from '@/components/Projects/logoContainer';
 import PdfViewer from '@/components/Projects/pdfViewer';
 import UploadProjectImages from '@/components/Projects/uploadProjectImages';
@@ -80,6 +81,7 @@ const EditProjectCollection = ({
       const res = await httpInstance.get(`project/get-images/${editId}`);
       console.log(res);
       const imageData = res.data.result;
+
       setProjectImages(imageData);
     } catch (err) {
       console.log(err);
@@ -159,6 +161,7 @@ const EditProjectCollection = ({
 
           { headers: { 'Content-Type': 'multipart/form-data' } }
         );
+        toast.success('Planning Image uploaded Successfully');
 
         closeModal();
         // handleNextStep();
@@ -180,14 +183,14 @@ const EditProjectCollection = ({
       }
 
       try {
-        const res = await httpInstance.patch(
+        await httpInstance.patch(
           `project/upload/project-images/${editId}`,
           formData,
 
           { headers: { 'Content-Type': 'multipart/form-data' } }
         );
         // console.log(res);
-        toast.success('Images uploaded Successfully');
+        toast.success('SiteImages uploaded Successfully');
         setSiteImages([]);
         closeModal();
       } catch (err) {
@@ -202,6 +205,16 @@ const EditProjectCollection = ({
   useEffect(() => {
     getImages();
   }, [getImages]);
+
+  const handleRemove = async (id: string) => {
+    try {
+      await httpInstance.delete(`project/delete-image/${id}`);
+      getImages();
+      toast.success('Image deleted successfully');
+    } catch (err) {
+      toast.error('something went wrong');
+    }
+  };
 
   return (
     <>
@@ -221,20 +234,12 @@ const EditProjectCollection = ({
         <div className='flex w-full flex-col items-center justify-center gap-6'>
           {/* Logo */}'
           <div className='flex w-[80%] flex-col'>
-            <div className='flex w-full'>
-              <p className=' inline-flex w-full items-center text-sm font-semibold text-white transition-colors duration-150 '>
-                Logo
-              </p>
-              <div className='flex w-[80%]'>
-                <Button
-                  onClick={handleOpenLogoModal}
-                  size='regular'
-                  className='col-span-2 ml-auto mt-3'
-                >
-                  Update
-                </Button>
-              </div>
-            </div>
+            <HeaderWrapper
+              heading='Logo'
+              btnLable='Update '
+              onClick={handleOpenLogoModal}
+            />
+
             <div className='w-full'>
               <div className='flex w-full flex-wrap gap-2'>
                 <div className='h-36 w-[230px] overflow-hidden  rounded-lg border-2 border-gray-300  dark:border-gray-600'>
@@ -247,33 +252,24 @@ const EditProjectCollection = ({
             </div>
           </div>
           {/* Planning Image */}
-          <div className='flex w-[80%] flex-col'>
-            <div className='flex w-full'>
-              <p className=' inline-flex w-full items-center text-sm text-xl font-semibold text-black transition-colors duration-150 dark:text-white '>
-                Planning Images
-              </p>
-              <div className='flex w-[80%]'>
-                <Button
-                  size='regular'
-                  onClick={handlePlanningModal}
-                  className='col-span-2 ml-auto mt-3'
-                >
-                  Add Images
-                </Button>
-              </div>
-            </div>
+          <div className='flex w-[80%] flex-col gap-5'>
+            <HeaderWrapper
+              heading='Planning Images'
+              btnLable='Add Images'
+              onClick={handlePlanningModal}
+            />
+
             <div className='w-full'>
               <div className='flex w-full flex-wrap gap-2'>
                 {projectImages?.planningImages?.length !== 0 ? (
                   <>
                     {projectImages?.planningImages?.map((img, ind) => (
-                      // <ImageCard key={img.projectImageId} url={img?.url} />
                       <PdfViewer
                         key={img.projectImageId}
-                        name={`Planning PDF ${ind + 1}`}
+                        name={img?.url?.split('svm/')[1].split('%').join('')}
                         url={img?.url}
                         handleRemove={() => {
-                          console.log('');
+                          handleRemove(img.projectImageId);
                         }}
                       />
                     ))}
@@ -285,21 +281,13 @@ const EditProjectCollection = ({
             </div>
           </div>
           {/* Site Image */}
-          <div className='flex w-[80%] flex-col'>
-            <div className='flex w-full'>
-              <p className=' inline-flex w-full items-center text-sm font-semibold text-white transition-colors duration-150 '>
-                Site Images
-              </p>
-              <div className='flex w-[80%]'>
-                <Button
-                  size='regular'
-                  onClick={handleSiteImageModal}
-                  className='col-span-2 ml-auto mt-3'
-                >
-                  Add Images
-                </Button>
-              </div>
-            </div>
+          <div className='flex w-[80%] flex-col gap-5'>
+            <HeaderWrapper
+              heading='Site Images'
+              btnLable='Add Images'
+              onClick={handleSiteImageModal}
+            />
+
             <div className='w-full'>
               <div className='flex w-full flex-wrap gap-2'>
                 {projectImages?.siteImages?.length !== 0 ? (
@@ -309,6 +297,7 @@ const EditProjectCollection = ({
                         isShowDeleteIcon={true}
                         key={img.projectImageId}
                         url={img?.url}
+                        handleRemove={() => handleRemove(img?.projectImageId)}
                       />
                     ))}
                   </>

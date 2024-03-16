@@ -113,7 +113,11 @@ export default function Customers({
           <>
             {data?.length === 0 ? (
               <>
-                <EmptyState />
+                <EmptyState
+                  btnLable='Add Customers '
+                  heading='Add New Customers'
+                  redirectLink='realEstateProjects/customerForm/addCustomers'
+                />
               </>
             ) : (
               <TableContainer>

@@ -48,7 +48,7 @@ export const Header = () => {
   };
 
   return (
-    <header className='shadow-bottom z-40 bg-white py-4 dark:bg-gray-800'>
+    <header className='shadow-bottom z-40 bg-white py-4 shadow dark:bg-gray-800'>
       <div className='container mx-auto flex h-full items-center justify-between px-6 text-purple-600 dark:text-purple-300'>
         {/* <!-- Mobile hamburger --> */}
         <button

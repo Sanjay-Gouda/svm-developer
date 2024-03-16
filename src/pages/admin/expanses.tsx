@@ -87,7 +87,11 @@ export default function Expanses({
           <>
             {data.length === 0 ? (
               <>
-                <EmptyState />
+                <EmptyState
+                  btnLable='Add Expanses '
+                  heading='Add your Project expanses '
+                  redirectLink='realEstateProjects/expanseForm/expanseListForm'
+                />
               </>
             ) : (
               <TableContainer>

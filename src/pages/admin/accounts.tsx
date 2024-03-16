@@ -111,7 +111,11 @@ export default function Account({
           <>
             {repo?.length === 0 ? (
               <>
-                <EmptyState />
+                <EmptyState
+                  btnLable='Add Accounts '
+                  heading='Add Your Bank Accounts'
+                  redirectLink='realEstateProjects/accountForm/addAccounts'
+                />
               </>
             ) : (
               <TableContainer>
