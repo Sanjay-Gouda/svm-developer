@@ -22,12 +22,11 @@ import { API_ENDPOINT } from '@/const/APIRoutes';
 import { httpInstance } from '@/constants/httpInstances';
 
 type customerListProps = {
-  aadharNo: string;
+  city: string;
   customerId: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
+  name: string;
+  state: string;
+  phone1: string;
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -126,25 +125,19 @@ export default function Customers({
                     <tr>
                       <TableCell className='text-[14px]'>Name</TableCell>
                       <TableCell className='text-[14px]'>Mobile No</TableCell>
-                      <TableCell className='text-[14px]'>
-                        Aadhar-Card No
-                      </TableCell>
-                      <TableCell className='text-[14px]'>Email Id </TableCell>
+                      <TableCell className='text-[14px]'>State</TableCell>
+                      <TableCell className='text-[14px]'>City </TableCell>
                       <TableCell className='text-[14px]'>Action </TableCell>
                     </tr>
                   </TableHeader>
                   <TableBody>
                     {customerData?.map((list: customerListProps) => {
-                      const { firstName, lastName } = list;
-
-                      const customerName = firstName + ' ' + lastName;
-
                       return (
                         <TableRow key={list?.customerId}>
-                          <TableCell>{customerName}</TableCell>
-                          <TableCell>{list?.phone}</TableCell>
-                          <TableCell>{list?.aadharNo}</TableCell>
-                          <TableCell>{list?.email}</TableCell>
+                          <TableCell>{list?.name}</TableCell>
+                          <TableCell>{list?.phone1}</TableCell>
+                          <TableCell>{list?.state}</TableCell>
+                          <TableCell>{list?.city}</TableCell>
                           <TableCell className='flex  justify-start '>
                             <MdModeEditOutline
                               onClick={() => handleEdit(list?.customerId)}

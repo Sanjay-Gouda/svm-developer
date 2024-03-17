@@ -18,11 +18,15 @@ export async function getServerSideProps(params: any) {
 }
 
 type customerProps = {
-  firstName: string;
-  lastName: string;
+  name: string;
   aadharNo: string;
-  phone: string;
+  phone1: string;
+  phone2: string;
+  pincode: string;
+  state: string;
+  city: string;
   email: string;
+  customerImage: string[];
 };
 
 type editCustomerprops = {
@@ -31,17 +35,28 @@ type editCustomerprops = {
 };
 
 const EditCustomer = ({ EditId, customerDetails }: editCustomerprops) => {
-  console.log(EditId, 'editId');
-  const { firstName, lastName, email, phone, aadharNo, customerImage } =
-    customerDetails;
+  const {
+    name,
+    email,
+    phone1,
+    phone2,
+    city,
+    state,
+    pincode,
+    aadharNo,
+    customerImage,
+  } = customerDetails;
 
   const customerEditInitialValues = {
-    firstName: firstName,
-    lastName: lastName,
+    name: name,
     email: email,
-    phone: phone,
+    phone: phone1,
+    alternativeNo: phone2,
     aadharNo: aadharNo,
     customerImage: customerImage,
+    pincode: pincode,
+    city: city,
+    state: state,
   };
 
   return (
