@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
@@ -13,7 +12,6 @@ import {
 import { validationSchema } from '@/components/Booking/bookingFormValidationSchema';
 import BookingForm from '@/components/TestBooking/bookingForm';
 
-import { API_ENDPOINT } from '@/const/APIRoutes';
 import { httpInstance } from '@/constants/httpInstances';
 
 const addInitialValues = {
@@ -21,11 +19,12 @@ const addInitialValues = {
   projectName: {},
   bankAccount: {},
   area: undefined,
-  landmark: '',
-  pincode: undefined,
-  state: '',
-  city: '',
-  address: '',
+  plotNo: undefined,
+  // landmark: '',
+  // pincode: undefined,
+  // state: '',
+  // city: '',
+  // address: '',
   totalAmt: 0,
   paidAmt: 0,
   paymentMethod: 'CHEQUE',
@@ -48,9 +47,6 @@ type editProps = {
 const TestBooking = ({ editInitialValues, editId }: editProps) => {
   const [loader, setLoader] = useState(false);
 
-  const [showUploadDocument, setShowUploadDocument] = useState(true);
-  const [pincodeQuery, setPincodeQuery] = useState<string>();
-
   const [paymentTypeError, setPaymentTypeError] = useState({
     chequeNo: false,
     cBankName: false,
@@ -72,8 +68,8 @@ const TestBooking = ({ editInitialValues, editId }: editProps) => {
       noOfInstallment,
       paidAmt,
       paymentStatus,
-      landmark,
-      pincode,
+      // landmark,
+      // pincode,
       projectName,
       remainingAmt,
       totalAmt,
@@ -83,6 +79,7 @@ const TestBooking = ({ editInitialValues, editId }: editProps) => {
       cBankName,
       BTAcNo,
       BTBankName,
+      plotNo,
     } = values;
 
     const projectId = projectName.id;
@@ -91,9 +88,10 @@ const TestBooking = ({ editInitialValues, editId }: editProps) => {
 
     const payload = {
       projectId: projectId,
-      address1: address,
-      address2: landmark,
-      pincode: pincode,
+      // address1: address,
+      // address2: landmark,
+      // pincode: pincode,
+      plotNo: plotNo,
       area: area,
       paidAmt: +paidAmt,
       totalAmt: +totalAmt,
@@ -206,10 +204,6 @@ const TestBooking = ({ editInitialValues, editId }: editProps) => {
     initialValues: formInitialValue,
     validationSchema,
     onSubmit: (values: TBookingProps, { setSubmitting }) => {
-      // console.log(errors);
-      // setShowUploadDocument(false);
-
-      // onComplete('imageUpload');
       if (formik.values.paymentMethod === 'UPI' && formik.values.UPIId === '') {
         setPaymentTypeError({
           ...paymentTypeError,
@@ -234,13 +228,6 @@ const TestBooking = ({ editInitialValues, editId }: editProps) => {
           bAcNo: true,
         });
       } else {
-        // setShowUploadDocument(false);
-        // console.log(values);
-        // // editId ? updateBookingData(values) : addBookingData(values);
-        // // addBookingData(values);
-
-        // addBookingData(values);
-        // console.log(values);
         editId ? updateBookingData(values) : addBookingData(values);
       }
     },
@@ -278,50 +265,6 @@ const TestBooking = ({ editInitialValues, editId }: editProps) => {
 
   const handlePaymentMethod = (e: any) => {
     formik?.setFieldValue('paymentMethod', e.target.value);
-  };
-
-  const handlePinCodeApi = async (e: any) => {
-    const query = e.target.value;
-    if (query.length < 6) {
-      formik.setFieldValue('state', '');
-      formik.setFieldValue('city', '');
-    }
-    setPincodeQuery(query);
-    formik.setFieldValue('pincode', query);
-  };
-
-  /* pincode API */
-  useEffect(() => {
-    if (pincodeQuery?.length === 6) {
-      const timer = setTimeout(async () => {
-        await axios({
-          method: 'get',
-          url: `${API_ENDPOINT.END_POINT}/appConfig/pincode?zip=${pincodeQuery}`,
-        })
-          .then((res) => {
-            formik.setFieldValue('state', res?.data?.result[0].State);
-            formik.setFieldValue('city', res?.data?.result[0].District);
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      }, 200);
-
-      return () => {
-        clearTimeout(timer);
-      };
-    }
-  }, [pincodeQuery]);
-  /* pincode API */
-
-  useEffect(() => {
-    setPincodeQuery(editInitialValues?.pincode);
-  }, [editId]);
-
-  // console.log(formik.errors);
-
-  const handleGoBack = () => {
-    setShowUploadDocument(true);
   };
 
   const calculateRemainingAmt = (total: number, paid: number) => {
@@ -371,14 +314,19 @@ const TestBooking = ({ editInitialValues, editId }: editProps) => {
         handleArea={formik.handleChange}
         areaError={formik.touched.area && formik.errors.area ? true : false}
         areaErrorMessage={formik.errors.area}
-        pincodeValue={pincodeQuery}
-        handlePincode={handlePinCodeApi}
+        handlePlotNo={formik.handleChange}
+        plotNoValue={formik.values.plotNo}
+        plotNoErrorMessage={
+          formik.touched.plotNo && formik.errors.plotNo ? true : false
+        }
+        // pincodeValue={pincodeQuery}
+        // handlePincode={handlePinCodeApi}
         pincodeError={
           formik.touched.pincode && formik.errors.pincode ? true : false
         }
-        pincodeErrorMessage={formik.errors.pincode}
-        state={formik.values.state}
-        city={formik.values.city}
+        // pincodeErrorMessage={formik.errors.pincode}
+        // state={formik.values.state}
+        // city={formik.values.city}
         landmarkValue={formik.values.landmark}
         handleLandmark={formik.handleChange}
         landmarkError={

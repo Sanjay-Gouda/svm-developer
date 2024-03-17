@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 
 import AadharCardPlaceholder from '@/components/Booking/aadharCardPlaceholder';
@@ -6,7 +6,10 @@ import PassportPlaceholder from '@/components/Booking/passportPlaceholder';
 import CustomerForm from '@/components/Customers/customerForm';
 import HeaderWrapper from '@/components/Customers/EditCustomer/headerWrapper';
 import EditTab from '@/components/Tabs/editTab';
+import EmptyImage from '@/components/TestProjects/EditProject/emptyImage';
 import ImageModal from '@/components/TestProjects/EditProject/imageModal';
+
+import { httpInstance } from '@/constants/httpInstances';
 
 type activeTabState = {
   info: boolean;
@@ -29,6 +32,45 @@ const EditCustomerCollection = ({
   editInitialValues,
 }: TEditResponse) => {
   const Tabs = ['Customer Info', 'Images'];
+
+  const [customerListImages, setCustomerListImages] = useState({
+    passPhoto: [],
+    aadharfront: [],
+    aadharback: [],
+    pancard: [],
+  });
+
+  const getImages = useCallback(() => {
+    const imageTypes = {
+      PHOTO: 'passPhoto',
+      AADHAR_FRONT: 'aadharfront',
+      AADHAR_REAR: 'aadharback',
+      PAN: 'pancard',
+    };
+
+    const filteredImages = {};
+    Object.keys(imageTypes).forEach((type) => {
+      const filtered = editInitialValues?.customerImage?.filter(
+        (item) => item?.type === type
+      );
+      if (filtered.length > 0) {
+        filteredImages[imageTypes[type]] = filtered;
+      }
+    });
+
+    setCustomerListImages(filteredImages);
+  }, [editId]);
+
+  // useEffect(() => {
+  //   if (editInitialValues?.customerImage?.length > 0) {
+  //     getImages();
+  //     console.log(editInitialValues?.customerImage);
+  //   }
+  // }, [editInitialValues]);
+
+  useEffect(() => {
+    getImages();
+  }, [getImages]);
 
   const [activeTab, setActiveTab] = useState<activeTabState>({
     info: true,
@@ -134,6 +176,40 @@ const EditCustomerCollection = ({
     accept: { 'image/png': ['.png', '.jpg', '.jpeg'] },
   });
 
+  function closeModal() {
+    // setIsModalOpen(false);
+    setOpenImageModal({
+      aadharCardModal: false,
+      panCardModal: false,
+      passphotoModal: false,
+    });
+    setCustomerListImages({
+      aadharback: [],
+      aadharfront: [],
+      pancard: [],
+      passPhoto: [],
+    });
+  }
+
+  const handleUploadPassPhoto = async () => {
+    const formData = new FormData();
+    for (let i = 0; i < passPhoto.length; i++) {
+      formData.append('customerImage', passPhoto[i]);
+    }
+    try {
+      const res = await httpInstance.patch(
+        `customer/upload/customer-image/${editId}`,
+        formData
+      );
+      console.log(res);
+
+      closeModal();
+    } catch (err) {
+      console.log(err);
+      closeModal();
+    }
+  };
+
   return (
     <>
       <EditTab
@@ -145,7 +221,7 @@ const EditCustomerCollection = ({
         <CustomerForm editInitialValues={editInitialValues} editId={editId} />
       ) : (
         <div className='flex w-full flex-col items-center justify-center gap-6 '>
-          {/* PassPhoto List  */}'
+          {/* PassPhoto List  */}
           <div className='flex w-[80%] flex-col'>
             <HeaderWrapper
               heading='Passphoto'
@@ -161,7 +237,7 @@ const EditCustomerCollection = ({
                 >
                   <img
                     className='h-full w-full  object-cover'
-                    src='https://svm-bucket.blr1.digitaloceanspaces.com/svm/Group%2021710331973723.jpg'
+                    src={customerListImages?.passPhoto[0]?.imageUrl}
                     alt='Passphoto'
                   />
                 </div>
@@ -176,15 +252,26 @@ const EditCustomerCollection = ({
               btnLable='Update'
               onClick={handleAadharCardModal}
             />
-            <div
-              className='h-48 w-96  overflow-hidden  rounded-lg border-2 border-gray-300  dark:border-gray-600'
-              // key={ind}
-            >
-              <img
-                className='h-full w-full  object-cover'
-                // src={files.preview}
-              />
-            </div>
+
+            {customerListImages?.aadharfront?.length === 0 ||
+            customerListImages?.aadharback?.length === 0 ? (
+              <EmptyImage title="Please Upload Client's Aadharcard" />
+            ) : (
+              <div className='flex gap-2'>
+                <div className='h-48 w-96  overflow-hidden  rounded-lg border-2 border-gray-300  dark:border-gray-600'>
+                  <img
+                    className='h-full w-full  object-cover'
+                    src={customerListImages?.aadharfront[0].imageUrl}
+                  />
+                </div>
+                <div className='h-48 w-96  overflow-hidden  rounded-lg border-2 border-gray-300  dark:border-gray-600'>
+                  <img
+                    className='h-full w-full  object-cover'
+                    src={customerListImages?.aadharback[0]?.imageUrl}
+                  />
+                </div>
+              </div>
+            )}
           </div>
           {/* Aadharcard */}
           {/* Pancard */}
@@ -194,15 +281,19 @@ const EditCustomerCollection = ({
               btnLable='Update'
               onClick={handlePancardModal}
             />
-            <div
-              className='h-48 w-96  overflow-hidden  rounded-lg border-2 border-gray-300  dark:border-gray-600'
-              // key={ind}
-            >
-              <img
-                className='h-full w-full  object-cover'
-                // src={files.preview}
-              />
-            </div>
+            {customerListImages?.pancard?.length === 0 ? (
+              <EmptyImage title='Upload Clients Pancard or Voter ID' />
+            ) : (
+              <div
+                className='h-48 w-96  overflow-hidden  rounded-lg border-2 border-gray-300  dark:border-gray-600'
+                // key={ind}
+              >
+                <img
+                  className='h-full w-full  object-cover'
+                  src={customerListImages?.pancard[0]?.imageUrl}
+                />
+              </div>
+            )}
           </div>
           {/* Pancard */}
         </div>
@@ -213,7 +304,7 @@ const EditCustomerCollection = ({
         handleClose={() =>
           setOpenImageModal({ ...openImageModal, passphotoModal: false })
         }
-        handleUpload={() => console.log('upload')}
+        handleUpload={handleUploadPassPhoto}
         isModalOpen={openImageModal.passphotoModal}
         title='Update Passphoto'
         modalBody={

@@ -8,11 +8,12 @@ export type TBookingProps = {
   projectName: customerNameProps;
   bankAccount: customerNameProps;
   area: undefined | number;
-  landmark: string;
-  pincode: undefined | number;
-  address: string;
-  state: string;
-  city: string;
+  plotNo: undefined | number;
+  // landmark: string;
+  // pincode: undefined | number;
+  // address: string;
+  // state: string;
+  // city: string;
   // totalAmt: undefined | number;
   totalAmt: any;
   paidAmt: any;

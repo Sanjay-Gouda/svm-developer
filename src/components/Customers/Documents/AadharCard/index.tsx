@@ -59,10 +59,10 @@ const AadharcardContainer = ({ customerId, handleNextStep }: Tdocument) => {
     const formData = new FormData();
 
     for (let i = 0; i < frontAadharCard.length; i++) {
-      formData.append('aadharImages', frontAadharCard[i]);
+      formData.append('aadharImageFront', frontAadharCard[i]);
     }
     for (let i = 0; i < backAadharCard.length; i++) {
-      formData.append('aadharImages', backAadharCard[i]);
+      formData.append('aadharImageRear', backAadharCard[i]);
     }
 
     try {
@@ -83,7 +83,8 @@ const AadharcardContainer = ({ customerId, handleNextStep }: Tdocument) => {
       handleNextStep();
     } catch (err) {
       setLoader(false);
-      // handleNextStep();
+
+      handleNextStep();
     }
   };
 

@@ -4,11 +4,13 @@ export const validationSchema = Yup.object().shape({
   customerName: Yup.object().nullable().required('Customer Name is required'),
   projectName: Yup.mixed().required('Project Name is required'),
   bankAccount: Yup.mixed().required('Please Selct Bank Account'),
-  area: Yup.number().required('Area must be in number'),
-  landmark: Yup.string().required('Landmark is required'),
-  pincode: Yup.string()
-    .required('Pincode is required')
-    .matches(/^\d{6}$/, 'Invalid PIN code. It must be a 6-digit number.'),
+  area: Yup.number().required('Please enter area'),
+  plotNo: Yup.number().required('Please enter Plotno'),
+
+  // landmark: Yup.string().required('Landmark is required'),
+  // pincode: Yup.string()
+  //   .required('Pincode is required')
+  //   .matches(/^\d{6}$/, 'Invalid PIN code. It must be a 6-digit number.'),
   // address: Yup.string().required('Address is required'),
   totalAmt: Yup.number()
     .positive('Amount must be positive')

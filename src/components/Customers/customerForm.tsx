@@ -156,7 +156,7 @@ function CustomerForm({
         headers: { Authorization: `Bearer ${token}` },
       });
       setLoader(false);
-      // handleNextStep();
+      handleNextStep();
       toast.success('Customer details addedd successfully');
       setCustomerDetails(res.data.result);
     } catch (err) {

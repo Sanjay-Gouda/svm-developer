@@ -14,8 +14,8 @@ type Tpassphoto = {
 
 const PassPhotoContainer = ({ customerId, handleNextStep }: Tpassphoto) => {
   const [passPhoto, setPassPhoto] = useState<any>([]);
-  const [thirdPassphoto, setThirdPassphoto] = useState<any>([]);
-  const [secondPassphoto, setSecondPassphoto] = useState<any>([]);
+  // const [thirdPassphoto, setThirdPassphoto] = useState<any>([]);
+  // const [secondPassphoto, setSecondPassphoto] = useState<any>([]);
   const [isDisable, setIsDisable] = useState(true);
   const [loader, setLoader] = useState(false);
   const handleFirstpassPhoto = (acceptedFiles: any) => {
@@ -27,23 +27,23 @@ const PassPhotoContainer = ({ customerId, handleNextStep }: Tpassphoto) => {
     ]);
   };
 
-  const handleThirdPassPhoto = (acceptedFiles: any) => {
-    setThirdPassphoto((prevFiles: any) => [
-      ...prevFiles,
-      ...acceptedFiles.map((file: any) =>
-        Object.assign(file, { preview: URL.createObjectURL(file) })
-      ),
-    ]);
-  };
+  // const handleThirdPassPhoto = (acceptedFiles: any) => {
+  //   setThirdPassphoto((prevFiles: any) => [
+  //     ...prevFiles,
+  //     ...acceptedFiles.map((file: any) =>
+  //       Object.assign(file, { preview: URL.createObjectURL(file) })
+  //     ),
+  //   ]);
+  // };
 
-  const handleSecondpassPhoto = (acceptedFiles: any) => {
-    setSecondPassphoto((prevFiles: any) => [
-      ...prevFiles,
-      ...acceptedFiles.map((file: any) =>
-        Object.assign(file, { preview: URL.createObjectURL(file) })
-      ),
-    ]);
-  };
+  // const handleSecondpassPhoto = (acceptedFiles: any) => {
+  //   setSecondPassphoto((prevFiles: any) => [
+  //     ...prevFiles,
+  //     ...acceptedFiles.map((file: any) =>
+  //       Object.assign(file, { preview: URL.createObjectURL(file) })
+  //     ),
+  //   ]);
+  // };
 
   const firstPassphotoDropzone = useDropzone({
     onDrop: handleFirstpassPhoto,
@@ -51,29 +51,25 @@ const PassPhotoContainer = ({ customerId, handleNextStep }: Tpassphoto) => {
     accept: { 'image/png': ['.png', '.jpg', '.jpeg'] },
   });
 
-  const secondPassphotoDropzone = useDropzone({
-    onDrop: handleSecondpassPhoto,
-    multiple: false,
-    accept: { 'image/png': ['.png', '.jpg', '.jpeg'] },
-  });
+  // const secondPassphotoDropzone = useDropzone({
+  //   onDrop: handleSecondpassPhoto,
+  //   multiple: false,
+  //   accept: { 'image/png': ['.png', '.jpg', '.jpeg'] },
+  // });
 
-  const thirdPassPhotoDropZone = useDropzone({
-    onDrop: handleThirdPassPhoto,
-    multiple: false,
-    accept: { 'image/png': ['.png', '.jpg', '.jpeg'] },
-  });
+  // const thirdPassPhotoDropZone = useDropzone({
+  //   onDrop: handleThirdPassPhoto,
+  //   multiple: false,
+  //   accept: { 'image/png': ['.png', '.jpg', '.jpeg'] },
+  // });
 
   useEffect(() => {
-    if (
-      passPhoto.length > 0 ||
-      secondPassphoto.length > 0 ||
-      thirdPassphoto.length > 0
-    ) {
+    if (passPhoto.length > 0) {
       setIsDisable(false);
     } else {
       setIsDisable(true);
     }
-  }, [passPhoto, secondPassphoto, thirdPassphoto]);
+  }, [passPhoto]);
 
   const handleUpload = async () => {
     const formData = new FormData();
@@ -82,17 +78,17 @@ const PassPhotoContainer = ({ customerId, handleNextStep }: Tpassphoto) => {
     for (let i = 0; i < passPhoto.length; i++) {
       formData.append('customerImage', passPhoto[i]);
     }
-    for (let i = 0; i < secondPassphoto.length; i++) {
-      formData.append('customerImage', secondPassphoto[i]);
-    }
-    for (let i = 0; i < thirdPassphoto.length; i++) {
-      formData.append('customerImage', thirdPassphoto[i]);
-    }
+    // for (let i = 0; i < secondPassphoto.length; i++) {
+    //   formData.append('customerImage', secondPassphoto[i]);
+    // }
+    // for (let i = 0; i < thirdPassphoto.length; i++) {
+    //   formData.append('customerImage', thirdPassphoto[i]);
+    // }
 
     try {
       const cookies = new Cookies();
       const token = cookies.get('token');
-      await httpInstance.patch(
+      const res = await httpInstance.patch(
         `customer/upload/customer-image/${customerId}`,
         formData,
         {
@@ -103,10 +99,10 @@ const PassPhotoContainer = ({ customerId, handleNextStep }: Tpassphoto) => {
         }
       );
       setLoader(false);
-
       handleNextStep();
     } catch (err) {
       handleNextStep();
+      console.log(err, 'ERROR IMAGE');
       setLoader(false);
     }
   };
@@ -119,9 +115,9 @@ const PassPhotoContainer = ({ customerId, handleNextStep }: Tpassphoto) => {
             files={passPhoto}
             setImageArray={setPassPhoto}
             {...firstPassphotoDropzone}
-            placeholder='Upload Clients first passphoto'
+            placeholder='Upload Clients passphoto'
           />
-          <PassportPlaceholder
+          {/* <PassportPlaceholder
             files={secondPassphoto}
             setImageArray={setSecondPassphoto}
             {...secondPassphotoDropzone}
@@ -132,7 +128,7 @@ const PassPhotoContainer = ({ customerId, handleNextStep }: Tpassphoto) => {
             files={thirdPassphoto}
             {...thirdPassPhotoDropZone}
             placeholder='Upload Clients third passphoto'
-          />
+          /> */}
         </div>
         <div className='mt-8 flex w-[60%] items-end justify-end gap-5'>
           <Button size='regular' onClick={handleNextStep} layout='link'>

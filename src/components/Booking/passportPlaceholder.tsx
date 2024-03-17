@@ -11,8 +11,6 @@ const PassportPlaceholder = ({
 }: any) => {
   // console.log(files[0]?.name);
 
-  console.log(setImageArray, 'array list');
-
   const handleRemove = (name) => {
     const remove = files.filter((images) => {
       return images.name !== name;

@@ -18,11 +18,8 @@ export const EditBookingDetails = ({ EditId, bookingDetails }) => {
   console.log(EditId, 'details');
 
   const {
-    bookingId,
     projectId,
-    address1,
-    address2,
-    pincode,
+    plotNo,
     area,
     totalAmt,
     paidAmt,
@@ -62,11 +59,7 @@ export const EditBookingDetails = ({ EditId, bookingDetails }) => {
     projectName: editProject,
     bankAccount: editBankAccount,
     area: area,
-    landmark: address2,
-    pincode: pincode,
-    state: 'state',
-    city: 'city',
-    address: address1,
+    plotNo: plotNo,
     totalAmt: totalAmt,
     paidAmt: paidAmt,
     paymentMethod: paymentType,
@@ -87,11 +80,6 @@ export const EditBookingDetails = ({ EditId, bookingDetails }) => {
       <Layout>
         <Card>
           <CardBody>
-            {/* <BookingForm
-              editInitialValues={bookingEditInitialValues}
-              editId={EditId}
-            /> */}
-
             <TestBooking
               editInitialValues={bookingEditInitialValues}
               editId={EditId}

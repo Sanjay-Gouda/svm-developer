@@ -32,9 +32,9 @@ export const useCustomerDetails = () => {
 
       if (list && list?.length > 0) {
         const data = list?.map((payload) => ({
-          name: payload.firstName,
+          name: payload.name,
           id: payload.customerId,
-          fullName: payload.firstName + ' ' + payload.lastName,
+          fullName: payload.name,
           email: payload.email,
         }));
 

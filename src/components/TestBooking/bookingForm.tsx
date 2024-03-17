@@ -12,7 +12,7 @@ import { customerNameProps } from '@/components/Booking/bookingFormTypes';
 import ComboBox from '@/components/ComboBox/comboBox';
 import { SvmProjectToast } from '@/components/Toast/Toast';
 import { TextInput } from '@/components/ui-blocks';
-import { SelectOption, TextInputArea } from '@/components/ui-blocks/input';
+import { SelectOption } from '@/components/ui-blocks/input';
 
 type EditFormProps = {
   loader: boolean;
@@ -29,20 +29,23 @@ type EditFormProps = {
   handleMoveToUpload?: () => void;
   areaErrorMessage?: string | undefined;
   areaError?: boolean;
-  pincodeValue?: string;
-  handlePincode: (e: any) => void;
-  pincodeError: boolean;
-  pincodeErrorMessage: string | undefined;
-  state: string;
-  city: string;
-  landmarkValue: string;
-  landmarkError: boolean;
-  landmarkErrorMessage: string | undefined;
-  handleLandmark: (e: any) => void;
-  addressValue: string | undefined;
-  handleAddress: (e: any) => void;
-  addressErrorMessage: string | undefined;
-  addressError: boolean;
+  handlePlotNo: (e: any) => void;
+  plotNoValue: number;
+  plotNoErrorMessage: boolean;
+  // pincodeValue?: string;
+  // handlePincode: (e: any) => void;
+  // pincodeError: boolean;
+  // pincodeErrorMessage: string | undefined;
+  // state: string;
+  // city: string;
+  // landmarkValue: string;
+  // landmarkError: boolean;
+  // landmarkErrorMessage: string | undefined;
+  // handleLandmark: (e: any) => void;
+  // addressValue: string | undefined;
+  // handleAddress: (e: any) => void;
+  // addressErrorMessage: string | undefined;
+  // addressError: boolean;
   selectBankAccount: customerNameProps;
   setSelectedBankAccount: (accounts: customerNameProps) => void;
   bankAccountError: boolean;
@@ -106,20 +109,25 @@ const BookingForm = ({
   areaValue,
   areaError,
   areaErrorMessage,
-  handlePincode,
-  pincodeError,
-  pincodeErrorMessage,
-  pincodeValue,
-  state,
-  city,
-  handleLandmark,
-  landmarkValue,
-  landmarkError,
-  landmarkErrorMessage,
-  addressError,
-  addressErrorMessage,
-  addressValue,
-  handleAddress,
+
+  handlePlotNo,
+  plotNoValue,
+  plotNoErrorMessage,
+
+  // handlePincode,
+  // pincodeError,
+  // pincodeErrorMessage,
+  // pincodeValue,
+  // state,
+  // city,
+  // handleLandmark,
+  // landmarkValue,
+  // landmarkError,
+  // landmarkErrorMessage,
+  // addressError,
+  // addressErrorMessage,
+  // addressValue,
+  // handleAddress,
   handleMoveToUpload,
   bankAccountError,
   bankAccountErrorMessage,
@@ -251,61 +259,18 @@ const BookingForm = ({
         <div className='flex flex-col'>
           <TextInput
             type='text'
-            name='area'
+            name='plotNo'
             label='Plot No/Room No'
             placeholder='Plot No/Room No'
-            // value={areaValue}
-            // onChange={handleArea}
+            value={plotNoValue}
+            onChange={handlePlotNo}
           />
-          {/* {areaError && <div className='text-red-400'>{areaErrorMessage}</div>} */}
-        </div>
-        <div className='flex flex-col'>
-          <TextInput
-            type='text'
-            name='pincode'
-            label='Pincode'
-            placeholder='e.g 394230'
-            value={pincodeValue}
-            // value={formik.values.pincode}
-            onChange={handlePincode}
-          />
-
-          {pincodeError && (
-            <div className='text-red-400'>{pincodeErrorMessage}</div>
+          {plotNoErrorMessage && (
+            <div className='text-red-400'>{areaErrorMessage}</div>
           )}
         </div>
-        <div className='flex flex-col'>
-          <TextInput
-            type='text'
-            name='state'
-            label='State'
-            placeholder='state'
-            disabled={state ? true : false}
-            // value={formik.values.pincode}
-            // value={bookingState}
-            value={state}
-          />
 
-          {/* {formik.touched.pincode && formik.errors.pincode && (
-            <div className='text-red-400'>{formik.errors.pincode}</div>
-          )} */}
-        </div>
-        <div className='flex flex-col'>
-          <TextInput
-            type='text'
-            name='city'
-            label='City'
-            placeholder='City'
-            disabled={city ? true : false}
-            // value={formik.values.pincode}
-            value={city}
-          />
-
-          {/* {formik.touched.pincode && formik.errors.pincode && (
-            <div className='text-red-400'>{formik.errors.pincode}</div>
-          )} */}
-        </div>
-        <div className='flex flex-col'>
+        {/* <div className='flex flex-col'>
           <TextInput
             type='text'
             name='landmark'
@@ -318,9 +283,9 @@ const BookingForm = ({
           {landmarkError && (
             <div className='text-red-400'>{landmarkErrorMessage}</div>
           )}
-        </div>
+        </div> */}
 
-        <TextInputArea
+        {/* <TextInputArea
           name='address'
           containerClassName='flex-1 '
           label='Address'
@@ -331,7 +296,7 @@ const BookingForm = ({
 
         {addressError && (
           <div className='text-red-400'>{addressErrorMessage}</div>
-        )}
+        )} */}
 
         <div className='flex flex-col'>
           <Label>Bank Account *</Label>

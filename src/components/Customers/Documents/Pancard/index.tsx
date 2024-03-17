@@ -65,6 +65,7 @@ const PancardContainer = ({ customerId }: Tdocument) => {
         }
       );
       setLoader(false);
+
       // toast.success('Customer details added successfully');
       setTimeout(() => {
         router.push('/admin/customers');
