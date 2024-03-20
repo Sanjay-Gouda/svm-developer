@@ -93,9 +93,9 @@ const TestProjects = ({
       unit: unit,
       address2: address2,
       location: 'location',
-      downPayment: downPayment,
-      emiAmt: emiAmt,
-      totalAmt: totalAmt,
+      // downPayment: downPayment,
+      // emiAmt: emiAmt,
+      // totalAmt: totalAmt,
     };
 
     try {

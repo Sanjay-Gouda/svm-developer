@@ -103,7 +103,7 @@ const TestBooking = ({ editInitialValues, editId }: editProps) => {
       accountNo: BTAcNo,
       bankName: cBankName || BTBankName,
       paymentStatus: paymentStatus,
-      customerId: customerId,
+      customerIds: [customerId],
       adminAccountId: accountId,
       installmentCount: noOfInstallment,
     };
@@ -172,7 +172,7 @@ const TestBooking = ({ editInitialValues, editId }: editProps) => {
 
       // paymentMethod:'paymentMethod',
       paymentStatus: paymentStatus,
-      customerId: customerId,
+      customerIds: [customerId],
       adminAccountId: accountId,
       installmentCount: noOfInstallment,
       paymentId: paymentId,
@@ -193,7 +193,7 @@ const TestBooking = ({ editInitialValues, editId }: editProps) => {
       }, 1000);
     } catch (err) {
       setLoader(false);
-      toast.success('Something went wrong');
+      toast.error('Something went wrong');
       routes.push('/admin/booking');
     }
   };

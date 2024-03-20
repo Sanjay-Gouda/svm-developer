@@ -403,6 +403,20 @@ export const Booking = ({ details }: any) => {
         </View>
         {/* <View style={styles.termBox}></View> */}
       </Page>
+
+      <Page size='A4' style={styles.page2}>
+        <View style={styles.footer}></View>
+        <View style={styles.parentView}>
+          <View
+            style={{
+              width: '200px',
+              height: '100px',
+              border: '1px solid black',
+            }}
+          ></View>
+        </View>
+      </Page>
+
       <Page size='A4' style={styles.page2}>
         <View style={styles.footer}></View>
         <View

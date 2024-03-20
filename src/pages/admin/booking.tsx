@@ -14,10 +14,12 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { FaFileDownload } from 'react-icons/fa';
-import { MdModeEditOutline } from 'react-icons/md';
+import { MdDelete, MdModeEditOutline } from 'react-icons/md';
+import { toast } from 'react-toastify';
 
 import EmptyState from '@/components/Empty';
 import ServerError from '@/components/Error/500Error';
+import { SvmProjectToast } from '@/components/Toast/Toast';
 import Layout from '@/containers/Layout';
 
 import { API_ENDPOINT } from '@/const/APIRoutes';
@@ -45,6 +47,7 @@ export default function Booking({
   error,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [bookingList, setBookingList] = useState(list);
+  console.log(bookingList, 'BOOKING LIST');
 
   const route = useRouter();
 
@@ -55,6 +58,27 @@ export default function Booking({
   const handlePdfView = (id: string) => {
     route.push(`realEstateProjects/bookingForm/pdf/${id}`);
     // window.open(`realEstateProjects/bookingForm/pdf/${id}`, '_blank');
+  };
+
+  const fetchData = async () => {
+    try {
+      const data = await httpInstance.get(`/booking/list`);
+      setBookingList(data?.data?.result?.list);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    console.log(id, 'BOOKING_ID');
+    try {
+      const res = await httpInstance.delete(`/booking/delete/${id}`);
+      toast.success(res?.data?.message || 'Booking info Deleted Successfully');
+      fetchData();
+    } catch (err) {
+      // console.log(err);
+      toast.error('Something Went wrong');
+    }
   };
 
   const handleSearch = async (e: any) => {
@@ -94,7 +118,7 @@ export default function Booking({
           <ServerError />
         ) : (
           <>
-            {list?.length === 0 ? (
+            {bookingList?.length === 0 || list?.length === 0 ? (
               <>
                 <EmptyState
                   btnLable='Add Bookings '
@@ -112,7 +136,6 @@ export default function Booking({
                       </TableCell>
                       <TableCell className='text-[14px]'>Project</TableCell>
                       <TableCell className='text-[14px]'>Area</TableCell>
-                      <TableCell className='text-[14px]'>Landmark</TableCell>
                       <TableCell className='text-[14px]'>Paid Amount</TableCell>
                       <TableCell className='text-[14px]'>
                         Payment Mode{' '}
@@ -120,47 +143,58 @@ export default function Booking({
                       <TableCell className='text-[14px]'>
                         Payment Status{' '}
                       </TableCell>
+                      <TableCell className='text-[14px]'>Download</TableCell>
                       <TableCell className='text-[14px]'>Action </TableCell>
                     </tr>
                   </TableHeader>
                   <TableBody>
-                    {bookingList?.map((list) => {
+                    {bookingList?.map((data) => {
                       return (
-                        <TableRow key={list?.bookingId}>
-                          <TableCell>{list?.customerName}</TableCell>
-                          <TableCell>{list?.projectName}</TableCell>
-                          <TableCell>{list?.area}sq.ft</TableCell>
-                          <TableCell>{list?.address2}</TableCell>
-                          <TableCell>{list?.paidAmt}</TableCell>
+                        <TableRow key={data?.bookingId}>
+                          <TableCell>{data?.customerName}</TableCell>
+                          <TableCell>{data?.projectName}</TableCell>
+                          <TableCell>{data?.area}sq.ft</TableCell>
+                          <TableCell>{data?.paidAmt}</TableCell>
                           <TableCell>
-                            {list?.paymentType.toLowerCase()}
+                            {data?.paymentType.toLowerCase()}
                           </TableCell>
+
                           <TableCell>
                             <Badge
                               className='flex w-[40%] items-center justify-center py-1 text-[16px]'
                               type={
-                                list?.paymentStatus === 'COMPLETED'
+                                data?.paymentStatus === 'COMPLETED'
                                   ? 'success'
-                                  : list?.paymentStatus === 'PENDING'
+                                  : data?.paymentStatus === 'PENDING'
                                   ? 'warning'
                                   : 'primary'
                               }
                             >
-                              {list?.paymentStatus.toLowerCase()}
+                              {data?.paymentStatus?.toLowerCase()}
                             </Badge>
                           </TableCell>
+
+                          <TableCell>
+                            <FaFileDownload
+                              size='24'
+                              style={{ color: ' #17A34B' }}
+                              onClick={() => handlePdfView(data?.bookingId)}
+                              className='cursor-pointer'
+                            />
+                          </TableCell>
+
                           <TableCell className='flex gap-5'>
                             <MdModeEditOutline
-                              onClick={() => handleEdit(list?.bookingId)}
+                              onClick={() => handleEdit(data?.bookingId)}
                               size='24'
                               className='cursor-pointer'
                               style={{ color: ' #30bcc2' }}
                             />
-                            <FaFileDownload
+                            <MdDelete
+                              onClick={() => handleDelete(data?.bookingId)}
                               size='24'
-                              style={{ color: ' #17A34B' }}
-                              onClick={() => handlePdfView(list?.bookingId)}
                               className='cursor-pointer'
+                              style={{ color: ' #F38C7F' }}
                             />
                           </TableCell>
                         </TableRow>
@@ -181,6 +215,7 @@ export default function Booking({
           </>
         )}
       </Layout>
+      <SvmProjectToast />
     </>
   );
 }

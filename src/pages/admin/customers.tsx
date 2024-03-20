@@ -12,10 +12,12 @@ import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
-import { MdModeEditOutline } from 'react-icons/md';
+import { MdDelete, MdModeEditOutline } from 'react-icons/md';
+import { toast } from 'react-toastify';
 
 import EmptyState from '@/components/Empty';
 import ServerError from '@/components/Error/500Error';
+import { SvmProjectToast } from '@/components/Toast/Toast';
 import Layout from '@/containers/Layout';
 
 import { API_ENDPOINT } from '@/const/APIRoutes';
@@ -57,13 +59,29 @@ export default function Customers({
   const route = useRouter();
 
   const [customerData, setCustomerData] = useState<any>(data);
-
+  // const [isSure,setIsSure] = useState(true);
   const handleEdit = (id: string) => {
     route.push(`realEstateProjects/customerForm/${id}`);
   };
 
-  const handleView = (id: string) => {
-    route.push(`realEstateProjects/bookingPDF/${id}`);
+  const fetchData = async () => {
+    try {
+      const data = await httpInstance.get(`/customer/advance-list`);
+      setCustomerData(data?.data?.result?.list);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    try {
+      const res = await httpInstance.delete(`/customer/delete/${id}`);
+      toast.success(res?.data?.message || 'Customer Deleted Successfully');
+      fetchData();
+    } catch (err) {
+      // console.log(err);
+      toast.success('Something Went wrong');
+    }
   };
 
   const handleSearch = async (e: any) => {
@@ -110,7 +128,7 @@ export default function Customers({
           </>
         ) : (
           <>
-            {data?.length === 0 ? (
+            {customerData?.length === 0 ? (
               <>
                 <EmptyState
                   btnLable='Add Customers '
@@ -138,19 +156,19 @@ export default function Customers({
                           <TableCell>{list?.phone1}</TableCell>
                           <TableCell>{list?.state}</TableCell>
                           <TableCell>{list?.city}</TableCell>
-                          <TableCell className='flex  justify-start '>
+                          <TableCell className='flex  justify-start gap-3 '>
                             <MdModeEditOutline
                               onClick={() => handleEdit(list?.customerId)}
                               size='24'
                               className='cursor-pointer'
                               style={{ color: ' #30bcc2' }}
                             />
-                            {/* <MdDelete
-                              onClick={() => handleView(list?.customerId)}
+                            <MdDelete
+                              onClick={() => handleDelete(list?.customerId)}
                               size='24'
                               className='cursor-pointer'
                               style={{ color: ' #F38C7F' }}
-                            /> */}
+                            />
                           </TableCell>
                         </TableRow>
                       );
@@ -162,6 +180,7 @@ export default function Customers({
           </>
         )}
       </Layout>
+      <SvmProjectToast />
     </>
   );
 }

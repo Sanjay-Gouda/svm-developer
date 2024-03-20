@@ -23,9 +23,9 @@ const validationSchema = Yup.object().shape({
     .matches(/^[0-9]{10}$/, 'Invalid Mobile number')
     .required('Customer Mobile Number is required'),
   alternativeNo: Yup.string().matches(/^[0-9]{10}$/, 'Invalid Mobile number'),
-  aadharNo: Yup.string()
-    .matches(/^\d{12}$/, 'Aadhaar number must be exactly 12 digits')
-    .required('Aadhaar number is required'),
+  // aadharNo: Yup.string()
+  //   .matches(/^\d{12}$/, 'Aadhaar number must be exactly 12 digits')
+  //   .required('Aadhaar number is required'),
   pincode: Yup.string()
     .required('Pincode is required')
     .matches(/^\d{6}$/, 'Invalid PIN code. It must be a 6-digit number.'),
@@ -47,7 +47,7 @@ type formProps = {
 const addInitialValues: formProps = {
   name: '',
   phone: '',
-  aadharNo: '',
+  // aadharNo: '',
   email: '',
   address: '',
   alternativeNo: '',
@@ -65,7 +65,7 @@ type editValueProps = {
 
 type Tpayload = {
   name: string;
-  aadharNo: string;
+  // aadharNo: string;
   email: string;
   phone1: string;
   phone2: string;
@@ -128,7 +128,7 @@ function CustomerForm({
     setLoader(true);
 
     const {
-      aadharNo,
+      // aadharNo,
       email,
       name,
       phone,
@@ -141,7 +141,7 @@ function CustomerForm({
 
     const payload: Tpayload = {
       name: name,
-      aadharNo: aadharNo,
+      // aadharNo: aadharNo,
       email: email,
       phone1: phone,
       address: address,
@@ -171,7 +171,7 @@ function CustomerForm({
     setLoader(true);
 
     const {
-      aadharNo,
+      // aadharNo,
       email,
       name,
       phone,
@@ -190,7 +190,7 @@ function CustomerForm({
       address: address,
       state: state,
       pincode: pincode,
-      aadharNo: aadharNo,
+      // aadharNo: aadharNo,
       email: email || 'example@gmail.com',
     };
 
