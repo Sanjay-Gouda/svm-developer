@@ -13,10 +13,12 @@ import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { MdModeEditOutline } from 'react-icons/md';
+import { MdDelete, MdModeEditOutline } from 'react-icons/md';
+import { toast } from 'react-toastify';
 
 import EmptyState from '@/components/Empty';
 import ServerError from '@/components/Error/500Error';
+import { SvmProjectToast } from '@/components/Toast/Toast';
 import Layout from '@/containers/Layout';
 
 import { API_ENDPOINT } from '@/const/APIRoutes';
@@ -42,7 +44,6 @@ export default function Projects({
   repo,
   error,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  console.log(repo, 'projects');
   const routes = useRouter();
   const [projects, setProjects] = useState(repo);
 
@@ -50,6 +51,26 @@ export default function Projects({
     // console.log(id, 'edit Id Project');
 
     routes.push(`realEstateProjects/projectForm/${id}`);
+  };
+
+  const fetchProjects = async () => {
+    try {
+      const res = await httpInstance.get('/project/list');
+      setProjects(res?.data?.result?.list);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    try {
+      const res = await httpInstance.delete(`/project/delete/${id}`);
+      toast.success(res?.data?.message);
+
+      fetchProjects();
+    } catch (err) {
+      toast.success('Something went wrong');
+    }
   };
 
   const handleSearch = async (e: any) => {
@@ -145,11 +166,12 @@ export default function Projects({
                               className='cursor-pointer'
                               style={{ color: ' #30bcc2' }}
                             />
-                            {/* <MdDelete
+                            <MdDelete
                               size='24'
+                              onClick={() => handleDelete(data.projectId)}
                               className='cursor-pointer'
                               style={{ color: ' #F38C7F' }}
-                            /> */}
+                            />
                           </TableCell>
                         </TableRow>
                       );
@@ -171,6 +193,8 @@ export default function Projects({
           </>
         )}
       </Layout>
+
+      <SvmProjectToast />
     </>
   );
 }
