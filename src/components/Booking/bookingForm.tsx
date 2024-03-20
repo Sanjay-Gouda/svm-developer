@@ -15,6 +15,7 @@ import { useProjectDetails } from '@/hooks/useProjectDetails';
 import { TBookingProps } from '@/components/Booking/bookingFormTypes';
 import { validationSchema } from '@/components/Booking/bookingFormValidationSchema';
 import ComboBox from '@/components/ComboBox/comboBox';
+import MultipleSelect from '@/components/ComboBox/multipleComboBox';
 import { SvmProjectToast } from '@/components/Toast/Toast';
 import { TextInput } from '@/components/ui-blocks';
 import { SelectOption, TextInputArea } from '@/components/ui-blocks/input';
@@ -249,7 +250,8 @@ const BookingForm = ({
           bAcNo: true,
         });
       } else {
-        editId ? updateBookingData(values) : addBookingData(values);
+        console.log(values);
+        // editId ? updateBookingData(values) : addBookingData(values);
       }
     },
   });
@@ -369,6 +371,7 @@ const BookingForm = ({
     <>
       <div className='mx-auto flex w-1/3 flex-col gap-2'>
         <div className='flex flex-col'>
+          <MultipleSelect />
           <Label>Client Name</Label>
           <ComboBox
             placeholder='Search Client'

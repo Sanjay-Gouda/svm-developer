@@ -1,13 +1,7 @@
-import {
-  Document,
-  Font,
-  Image,
-  Page,
-  StyleSheet,
-  Text,
-  View,
-} from '@react-pdf/renderer';
+import { Document, Font, Image, Page, Text, View } from '@react-pdf/renderer';
 import React from 'react';
+
+import { styles } from '@/components/PDF/bookingPdf-style';
 
 const termsAndCondition = [
   {
@@ -80,209 +74,215 @@ export const Booking = ({ details }: any) => {
     area,
     address1,
     phone,
+    customer,
 
     customerImage,
   } = details;
 
   // const passphoto = customerImage?.map((passphoto) => passphoto.imageUrl);
 
-  const styles = StyleSheet.create({
-    page: {
-      backgroundColor: '#fff',
-      fontFamily: 'Helvetica',
-      // fontFamily: 'Nato Sans Gujarati',
-      fontSize: 12,
-      position: 'relative',
+  // const styles = StyleSheet.create({
+  //   page: {
+  //     backgroundColor: '#fff',
+  //     fontFamily: 'Helvetica',
+  //     // fontFamily: 'Nato Sans Gujarati',
+  //     fontSize: 12,
+  //     position: 'relative',
 
-      lineHeight: 1.5,
-      flexDirection: 'column',
-      // Set your desired border style
-      boxSizing: 'border-box',
-    },
+  //     lineHeight: 1.5,
+  //     flexDirection: 'column',
+  //     // Set your desired border style
+  //     boxSizing: 'border-box',
+  //   },
 
-    note: {
-      width: '90%',
-      padding: '6px ',
-      margin: '0 auto',
-      marginTop: '20px',
-      backgroundColor: '#fff',
-      border: '2px solid black',
-      borderRadius: '10px',
-      // boxShadow: '-5px 5px 10px red',
-      boxShadow: '10px 10px',
-    },
+  //   note: {
+  //     width: '90%',
+  //     padding: '6px ',
+  //     margin: '0 auto',
+  //     marginTop: '20px',
+  //     backgroundColor: '#fff',
+  //     border: '2px solid black',
+  //     borderRadius: '10px',
+  //     // boxShadow: '-5px 5px 10px red',
+  //     boxShadow: '10px 10px',
+  //   },
 
-    termsHeading: {
-      fontSize: '28px',
-      textAlign: 'center',
-      textDecoration: 'underline',
-    },
+  //   termsHeading: {
+  //     fontSize: '28px',
+  //     textAlign: 'center',
+  //     textDecoration: 'underline',
+  //   },
 
-    termBox: {
-      width: '100%',
-      // padding: '10px',
-      height: '300px',
-      // marginTop: '248px',
-    },
-    ml: {
-      marginLeft: '20px',
-    },
+  //   termBox: {
+  //     width: '100%',
+  //     // padding: '10px',
+  //     height: '300px',
+  //     // marginTop: '248px',
+  //   },
+  //   ml: {
+  //     marginLeft: '20px',
+  //   },
 
-    headingText: {
-      fontSize: '12px',
-      fontWeight: 'extrabold',
-    },
+  //   headingText: {
+  //     fontSize: '12px',
+  //     fontWeight: 'extrabold',
+  //   },
 
-    header: {
-      width: '100%',
-      height: '80px',
-      // backgroundColor: "#F49614",
-      backgroundColor: '#17A34B',
-      position: 'absolute',
-      top: 0,
-      display: 'flex',
-      flexDirection: 'row',
-      justifyContent: 'flex-start',
-      gap: '10px',
-      // margin: "60px 0",
-      alignItems: 'center',
-    },
+  //   header: {
+  //     width: '100%',
+  //     height: '80px',
+  //     // backgroundColor: "#F49614",
+  //     // backgroundColor: '#17A34B',
+  //     position: 'absolute',
+  //     top: 0,
+  //     display: 'flex',
+  //     flexDirection: 'row',
+  //     justifyContent: 'flex-start',
+  //     gap: '10px',
+  //     // margin: "60px 0",
+  //     alignItems: 'center',
+  //   },
 
-    footer: {
-      width: '100%',
-      height: '30px',
-      // backgroundColor: "#F49614",
-      backgroundColor: '#17A34B',
-      position: 'absolute',
-      bottom: 0,
-    },
+  //   footer: {
+  //     width: '100%',
+  //     height: '30px',
+  //     // backgroundColor: "#F49614",
+  //     backgroundColor: '#17A34B',
+  //     position: 'absolute',
+  //     bottom: 0,
+  //   },
 
-    companyLogo: {
-      display: 'flex',
-      flexDirection: 'row',
-      width: '100%',
-      justifyContent: 'flex-start',
-      // border: '1px solid red',
-      // gap: '10px',
-      marginTop: '100px',
-      alignItems: 'center',
-      marginLeft: '20px',
-      // marginRight: '20px',
-    },
+  //   companyLogo: {
+  //     display: 'flex',
+  //     flexDirection: 'row',
+  //     width: '100%',
+  //     justifyContent: 'flex-start',
+  //     // border: '1px solid red',
+  //     // gap: '10px',
+  //     marginTop: '100px',
+  //     alignItems: 'center',
+  //     marginLeft: '20px',
+  //     // marginRight: '20px',
+  //   },
 
-    logo: {
-      width: '150px',
-      height: '80px',
-    },
+  //   logo: {
+  //     width: '150px',
+  //     height: '80px',
+  //   },
 
-    companyName: {
-      fontSize: '24px',
-      fontWeight: 'bold',
-      color: 'white',
-    },
+  //   companyName: {
+  //     fontSize: '24px',
+  //     fontWeight: 'bold',
+  //     color: '#3778C2',
+  //     letterSpacing: 3,
+  //   },
 
-    titleWrapper: {
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      width: '100%',
+  //   titleWrapper: {
+  //     display: 'flex',
+  //     justifyContent: 'center',
+  //     alignItems: 'center',
+  //     width: '100%',
 
-      marginTop: '-50px',
-    },
-    title: {
-      fontSize: '24px',
-      fontWeight: 'extrabold',
-      color: '#F49614',
-    },
+  //     marginTop: '-50px',
+  //   },
+  //   title: {
+  //     fontSize: '24px',
+  //     fontWeight: 'extrabold',
+  //     color: '#F49614',
+  //   },
 
-    passPhotoWrapper: {
-      display: 'flex',
-      width: '100%',
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      padding: '0 10px',
-      // marginTop: "-50px",
-    },
+  //   passPhotoWrapper: {
+  //     display: 'flex',
+  //     width: '100%',
+  //     flexDirection: 'row',
+  //     justifyContent: 'space-between',
+  //     padding: '0 10px',
+  //     // marginTop: "-50px",
+  //   },
 
-    passPhotoContainer: {
-      width: '100px',
-      height: '120px',
-      border: '1px solid black',
-      marginLeft: '80%',
-    },
+  //   passPhotoContainer: {
+  //     width: '100px',
+  //     height: '120px',
+  //     border: '1px solid black',
+  //     marginLeft: '80%',
+  //   },
 
-    date: {
-      fontSize: '12px',
-    },
+  //   date: {
+  //     fontSize: '12px',
+  //   },
 
-    detailTitle: {
-      borderBottom: '1px solid gray',
-    },
+  //   detailTitle: {
+  //     borderBottom: '1px solid gray',
+  //   },
 
-    headerContainer: {
-      // marginTop: "30%",
-      maxWidth: '100%',
-    },
+  //   headerContainer: {
+  //     // marginTop: "30%",
+  //     maxWidth: '100%',
+  //   },
 
-    fullWidthField: {
-      display: 'flex',
-      flexDirection: 'row',
-      width: '100%',
-      justifyContent: 'flex-start',
-      alignItems: 'flex-end',
-    },
-    flexCenter: {
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-    bookingHeading: {
-      fontSize: '18px',
-      color: 'white',
-      textAlign: 'center',
-      fontWeight: 'heavy',
-    },
+  //   fullWidthField: {
+  //     display: 'flex',
+  //     flexDirection: 'row',
+  //     width: '100%',
+  //     justifyContent: 'flex-start',
+  //     alignItems: 'flex-end',
+  //   },
+  //   flexCenter: {
+  //     display: 'flex',
+  //     justifyContent: 'center',
+  //     alignItems: 'center',
+  //   },
+  //   bookingHeading: {
+  //     fontSize: '18px',
+  //     textAlign: 'center',
+  //     fontWeight: 'heavy',
+  //     color: '#3778C2',
+  //   },
 
-    parentView: {
-      paddingTop: 20,
-      paddingLeft: 20,
-      paddingRight: 20,
-      lineHeight: 1.5,
-      // border: '1px solid red',
-    },
+  //   parentView: {
+  //     paddingTop: 20,
+  //     paddingLeft: 20,
+  //     paddingRight: 20,
+  //     lineHeight: 1.5,
+  //     // border: '1px solid red',
+  //   },
 
-    secondRowWrapper: {
-      marginTop: '30px',
-      display: 'flex',
-      flexDirection: 'row',
-      justifyContent: 'flex-start',
-      alignItems: 'flex-end',
-      // border: "2px solid red",
-    },
-    halfDiv: {
-      borderBottom: 1,
-      borderColor: 'black',
-      width: '40%',
-      position: 'relative',
-      bottom: 2,
-    },
-    addressDiv: {
-      borderBottom: 1,
-      borderColor: 'black',
-      width: '86%',
-      position: 'relative',
-      bottom: 2,
-    },
-    flexEnd: {
-      marginTop: '30px',
-      display: 'flex',
-      flexDirection: 'row',
-      alignItems: 'flex-end',
-    },
-  });
+  //   secondRowWrapper: {
+  //     marginTop: '30px',
+  //     display: 'flex',
+  //     flexDirection: 'row',
+  //     justifyContent: 'flex-start',
+  //     alignItems: 'flex-end',
+  //     // border: "2px solid red",
+  //   },
+  //   halfDiv: {
+  //     borderBottom: 1,
+  //     borderColor: 'black',
+  //     width: '40%',
+  //     position: 'relative',
+  //     bottom: 2,
+  //   },
+  //   addressDiv: {
+  //     borderBottom: 1,
+  //     borderColor: 'black',
+  //     width: '86%',
+  //     position: 'relative',
+  //     bottom: 2,
+  //   },
+  //   flexEnd: {
+  //     marginTop: '30px',
+  //     display: 'flex',
+  //     flexDirection: 'row',
+  //     alignItems: 'flex-end',
+  //   },
+  // });
   return (
     <Document>
       <Page size='A4' style={styles.page}>
+        <View>
+          <Text style={styles.bookingHeading}>BOOKING FORM</Text>
+        </View>
+
         <View style={styles.header}>
           <View>
             <Image
@@ -292,23 +292,27 @@ export const Booking = ({ details }: any) => {
             />
           </View>
           <View style={styles.flexCenter}>
-            <Text style={styles.bookingHeading}>BOOKING FORM</Text>
             <Text style={styles.companyName}>SVM BUILDERS & DEVELOPER</Text>
           </View>
         </View>
-        <View style={styles.footer}></View>
+        {/* <View style={styles.footer}></View> */}
+
+        <View style={styles.invoiceContainer}>
+          <Text style={styles.headingText}>Booking Date : 30/3/24</Text>
+        </View>
 
         <View style={styles.companyLogo}>
           <View style={styles.passPhotoWrapper}>
-            {customerImage?.slice(0, 1).map((img, ind) => (
-              <View style={styles.passPhotoContainer} key={ind}>
-                <Image
-                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                  src={img?.imageUrl || null}
-                  alt='passphoto'
-                />
-              </View>
-            ))}
+            <View style={styles.passPhotoContainer}>
+              <Image
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                src={
+                  `https://svm-bucket.blr1.digitaloceanspaces.com/svm/rohan1710871663693.jpg` ||
+                  null
+                }
+                alt='passphoto'
+              />
+            </View>
           </View>
         </View>
 
@@ -319,26 +323,28 @@ export const Booking = ({ details }: any) => {
               style={{
                 borderBottom: 1,
                 borderColor: 'black',
-                width: '80%',
+                width: '100%',
               }}
             >
               <Text style={styles.ml}> {projectName}</Text>
             </View>
           </View>
 
-          <View style={styles.secondRowWrapper}>
-            <Text style={styles.headingText}>Name:</Text>
-            <View style={styles.halfDiv}>
-              <Text style={styles.ml}>{customerName}</Text>
+          <View style={styles.flexEnd}>
+            <View style={styles.newHalfDivWrapper}>
+              <Text style={styles.headingText}>Name:</Text>
+              <View style={styles.halfDiv}></View>
             </View>
 
-            <Text style={styles.headingText}>Mobile:</Text>
-            <View style={styles.halfDiv}>
-              <Text style={styles.ml}>{phone}</Text>
+            <View style={styles.newHalfDivWrapper}>
+              <Text style={styles.headingText}>Mobile:</Text>
+              <View style={styles.halfDiv}>
+                <Text style={styles.ml}>{area} sq.ft</Text>
+              </View>
             </View>
           </View>
 
-          <View style={styles.secondRowWrapper}>
+          <View style={styles.fullWidthField}>
             <Text style={styles.headingText}>Address:</Text>
             <View style={styles.addressDiv}>
               <Text style={styles.ml}>{address1}</Text>
@@ -346,24 +352,26 @@ export const Booking = ({ details }: any) => {
           </View>
 
           <View style={styles.flexEnd}>
-            <Text style={styles.headingText}>Description:</Text>
-            <View style={styles.halfDiv}></View>
+            <View style={styles.newHalfDivWrapper}>
+              <Text style={styles.headingText}>House/Plot No:</Text>
+              <View style={styles.halfDiv}></View>
+            </View>
 
-            <Text style={styles.headingText}>Area:</Text>
-            <View style={styles.halfDiv}>
-              <Text style={styles.ml}>{area} sq.ft</Text>
+            <View style={styles.newHalfDivWrapper}>
+              <Text style={styles.headingText}>Area:</Text>
+              <View style={styles.halfDiv}>
+                <Text style={styles.ml}>{area} sq.ft</Text>
+              </View>
             </View>
           </View>
 
           <View style={styles.flexEnd}>
-            <Text style={styles.headingText}>House/Plot No:</Text>
+            <Text style={styles.headingText}>Description:</Text>
             <View
               style={{
                 borderBottom: 1,
                 borderColor: 'black',
-                width: '82%',
-                position: 'relative',
-                bottom: 2,
+                width: '100%',
               }}
             ></View>
           </View>
@@ -373,9 +381,7 @@ export const Booking = ({ details }: any) => {
               style={{
                 borderBottom: 1,
                 borderColor: 'black',
-                width: '82%',
-                position: 'relative',
-                bottom: 2,
+                width: '100%',
               }}
             >
               <Text style={styles.ml}>{totalAmt}</Text>
@@ -383,29 +389,37 @@ export const Booking = ({ details }: any) => {
           </View>
 
           <View style={styles.flexEnd}>
-            <Text style={styles.headingText}>Down Payment:</Text>
-            <View style={styles.halfDiv}>
-              <Text style={styles.ml}>{paidAmt}</Text>
+            <View style={styles.newHalfDivWrapper}>
+              <Text style={styles.headingText}>Down Payment:</Text>
+              <View style={styles.halfDiv}></View>
             </View>
 
-            <Text style={styles.headingText}>EMI:</Text>
-            <View style={styles.halfDiv}>
-              <Text style={styles.ml}>{installmentAmt}</Text>
+            <View style={styles.newHalfDivWrapper}>
+              <Text style={styles.headingText}>EMI:</Text>
+              <View style={styles.halfDiv}>
+                <Text style={styles.ml}>{area} </Text>
+              </View>
             </View>
           </View>
-          <View style={styles.flexEnd}>
-            <Text style={styles.headingText}>Owner's Sign:</Text>
-            <View style={styles.halfDiv}></View>
 
-            <Text style={styles.headingText}>Customer's Sign:</Text>
-            <View style={styles.halfDiv}></View>
+          <View style={styles.flexEnd}>
+            <View style={styles.newHalfDivWrapper}>
+              <Text style={styles.headingText}>Owner's Sign:</Text>
+              <View style={styles.halfDiv}></View>
+            </View>
+
+            <View style={styles.newHalfDivWrapper}>
+              <Text style={styles.headingText}>Customer's Sign:</Text>
+
+              <View style={styles.halfDiv}></View>
+            </View>
           </View>
         </View>
         {/* <View style={styles.termBox}></View> */}
       </Page>
 
-      <Page size='A4' style={styles.page2}>
-        <View style={styles.footer}></View>
+      <Page size='A4' style={styles.page}>
+        {/* <View style={styles.footer}></View> */}
         <View style={styles.parentView}>
           <View
             style={{

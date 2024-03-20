@@ -44,17 +44,16 @@ function InstallmentForm() {
 
   const addInstallments = async (values: TInstallment) => {
     const {
-      BTAcNo,
       BTBankName,
       UPIId,
       amt,
       bookingCustomer,
       cBankName,
+      BTAcNo,
       cheuqeNo,
       paymentMethod,
       penalty,
     } = values;
-    console.log(values);
 
     const { name, id } = bookingCustomer;
 
@@ -125,6 +124,8 @@ function InstallmentForm() {
   };
 
   const bookigDetails = useBookingDetails();
+
+  console.log(bookigDetails, 'BOOKING DETAILS');
   const [query, setQuery] = useState('');
 
   const hadnleSearchQuery = (e: any) => {
