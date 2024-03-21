@@ -10,6 +10,7 @@ import { useProjectDetails } from '@/hooks/useProjectDetails';
 
 import { customerNameProps } from '@/components/Booking/bookingFormTypes';
 import ComboBox from '@/components/ComboBox/comboBox';
+import MultipleSelect from '@/components/ComboBox/multipleComboBox';
 import { SvmProjectToast } from '@/components/Toast/Toast';
 import { TextInput } from '@/components/ui-blocks';
 import { SelectOption } from '@/components/ui-blocks/input';
@@ -21,7 +22,7 @@ type EditFormProps = {
   editId?: string;
   clientErrorMessage: string;
   clientSelect?: customerNameProps;
-  setClientSelect?: (person: customerNameProps) => void;
+  setClientSelect: (person: customerNameProps) => void;
   selectProject?: customerNameProps;
   setSelectedProject?: (person: customerNameProps) => void;
   areaValue?: string | undefined;
@@ -99,8 +100,7 @@ type EditFormProps = {
 const BookingForm = ({
   editId,
   loader,
-  clientError,
-  editInitialValues,
+
   clientSelect,
   setClientSelect,
   selectProject,
@@ -114,20 +114,6 @@ const BookingForm = ({
   plotNoValue,
   plotNoErrorMessage,
 
-  // handlePincode,
-  // pincodeError,
-  // pincodeErrorMessage,
-  // pincodeValue,
-  // state,
-  // city,
-  // handleLandmark,
-  // landmarkValue,
-  // landmarkError,
-  // landmarkErrorMessage,
-  // addressError,
-  // addressErrorMessage,
-  // addressValue,
-  // handleAddress,
   handleMoveToUpload,
   bankAccountError,
   bankAccountErrorMessage,
@@ -178,7 +164,6 @@ const BookingForm = ({
   const projectList = useProjectDetails();
   const accountList = useBankDetails();
 
-  // const [pincodeQuery, setPincodeQuery] = useState();
   const [query, setQuery] = useState('');
 
   const hadnleSearchQuery = (e: any) => {
@@ -214,8 +199,14 @@ const BookingForm = ({
     <>
       <div className='mx-auto flex w-1/3 flex-col gap-2'>
         <div className='flex flex-col'>
-          {/* <MyListbox /> */}
-          {/* <MultipleSelect /> */}
+          <MultipleSelect
+            filteredCustomer={filteredCustomer}
+            selected={clientSelect}
+            setSelected={setClientSelect}
+            query={query}
+            hadnleSearchQuery={hadnleSearchQuery}
+            afterLeave={afterLeave}
+          />
           <Label>Client Name *</Label>
           <ComboBox
             placeholder='Search Client'
@@ -223,8 +214,8 @@ const BookingForm = ({
             query={query}
             afterLeave={afterLeave}
             handleSearchQuery={hadnleSearchQuery}
-            selected={clientSelect}
-            setSelected={setClientSelect}
+            // selected={clientSelect}
+            // setSelected={setClientSelect}
           />
 
           {/* {!clientSelect && (
@@ -272,34 +263,6 @@ const BookingForm = ({
           )}
         </div>
 
-        {/* <div className='flex flex-col'>
-          <TextInput
-            type='text'
-            name='landmark'
-            label='Landmark'
-            placeholder='e.g Sachin'
-            value={landmarkValue}
-            onChange={handleLandmark}
-          />
-
-          {landmarkError && (
-            <div className='text-red-400'>{landmarkErrorMessage}</div>
-          )}
-        </div> */}
-
-        {/* <TextInputArea
-          name='address'
-          containerClassName='flex-1 '
-          label='Address'
-          rows='2'
-          value={addressValue}
-          handleChange={handleAddress}
-        />
-
-        {addressError && (
-          <div className='text-red-400'>{addressErrorMessage}</div>
-        )} */}
-
         <div className='flex flex-col'>
           <Label>Bank Account *</Label>
           <ComboBox
@@ -317,11 +280,9 @@ const BookingForm = ({
         </div>
         <div className='flex flex-col'>
           <TextInput
-            // value={totalAmt}
             type='text'
             name='totalAmt'
             label='Total Amount *'
-            // onChange={handleTotalAmtChange}
             value={totalAmtValue}
             onChange={handleTotalAmt}
           />

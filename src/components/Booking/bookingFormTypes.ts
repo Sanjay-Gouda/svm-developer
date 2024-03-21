@@ -1,7 +1,7 @@
 export type customerNameProps = {
   id?: string;
   name?: string;
-};
+}[];
 
 export type TBookingProps = {
   customerName: customerNameProps;

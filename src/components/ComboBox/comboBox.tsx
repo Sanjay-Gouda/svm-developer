@@ -2,14 +2,16 @@ import { Combobox, Transition } from '@headlessui/react';
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid';
 import { Fragment } from 'react';
 
+import { customerNameProps } from '@/components/Booking/bookingFormTypes';
+
 type Props = {
   placeholder: string;
-  data?: any;
+  data?: unknown;
   query?: string;
-  handleSearchQuery?: (e: any) => void;
+  handleSearchQuery?: (e: string) => void;
   afterLeave?: () => void;
-  selected?: any;
-  setSelected?: any;
+  selected?: unknown;
+  setSelected?: (person: customerNameProps) => void;
 };
 
 export default function ComboBox({
@@ -21,13 +23,9 @@ export default function ComboBox({
   selected,
   setSelected,
 }: Props) {
-  // console.log(data, 'data');
-
-  // const [selected, setSelected] = useState('');
-
   return (
     <div className=''>
-      <Combobox value={selected} onChange={setSelected} multiple>
+      <Combobox value={selected} onChange={setSelected}>
         <div className='relative mt-1'>
           <div className=''>
             <Combobox.Input

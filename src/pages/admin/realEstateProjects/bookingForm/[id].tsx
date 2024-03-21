@@ -38,12 +38,33 @@ export const EditBookingDetails = ({ EditId, bookingDetails }) => {
     upiId,
     accountNumber,
     paymentId,
-  } = bookingDetails;
 
-  const editCustomer = {
-    id: customerId,
-    name: customerName,
-  };
+    customer,
+  } = bookingDetails;
+  console.log(customer, 'EDIT BOOKING');
+
+  // const editcustomer = customer.map((customer) => {
+  //   return {
+  //     name: customer.name,
+  //     id: customer.phone1,
+  //   };
+  // });
+
+  // const editCustomer = [
+  //   { id: 1, name: 'Wade Cooper' },
+  //   { id: 2, name: 'Arlene Mccoy' },
+  //   { id: 3, name: 'Devon Webb' },
+  //   { id: 4, name: 'Tom Cook' },
+  //   { id: 5, name: 'Tanya Fox' },
+  //   { id: 6, name: 'Hellen Schmidt' },
+  // ];
+
+  // const editCustomer = [
+  //   {
+  //     id: '0daba17d-8d3c-480c-b191-0898b0a376f2',
+  //     name: 'Sahil',
+  //   },
+  // ];
   const editProject = {
     id: projectId,
     name: projectName,
@@ -55,7 +76,7 @@ export const EditBookingDetails = ({ EditId, bookingDetails }) => {
   };
 
   const bookingEditInitialValues = {
-    customerName: editCustomer,
+    customerName: customer,
     projectName: editProject,
     bankAccount: editBankAccount,
     area: area,
@@ -73,6 +94,7 @@ export const EditBookingDetails = ({ EditId, bookingDetails }) => {
     BTAcNo: accountNumber,
     BTBankName: bankName,
     paymentId: paymentId,
+    // customerName: customer,
   };
 
   return (

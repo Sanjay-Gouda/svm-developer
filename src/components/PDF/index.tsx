@@ -66,216 +66,17 @@ Font.register({
 
 export const Booking = ({ details }: any) => {
   const {
-    customerName,
     projectName,
     totalAmt,
-    paidAmt,
-    installmentAmt,
     area,
     address1,
-    phone,
     customer,
-
-    customerImage,
+    plotNo,
+    installmentAmt,
+    paidAmt,
+    description,
   } = details;
 
-  // const passphoto = customerImage?.map((passphoto) => passphoto.imageUrl);
-
-  // const styles = StyleSheet.create({
-  //   page: {
-  //     backgroundColor: '#fff',
-  //     fontFamily: 'Helvetica',
-  //     // fontFamily: 'Nato Sans Gujarati',
-  //     fontSize: 12,
-  //     position: 'relative',
-
-  //     lineHeight: 1.5,
-  //     flexDirection: 'column',
-  //     // Set your desired border style
-  //     boxSizing: 'border-box',
-  //   },
-
-  //   note: {
-  //     width: '90%',
-  //     padding: '6px ',
-  //     margin: '0 auto',
-  //     marginTop: '20px',
-  //     backgroundColor: '#fff',
-  //     border: '2px solid black',
-  //     borderRadius: '10px',
-  //     // boxShadow: '-5px 5px 10px red',
-  //     boxShadow: '10px 10px',
-  //   },
-
-  //   termsHeading: {
-  //     fontSize: '28px',
-  //     textAlign: 'center',
-  //     textDecoration: 'underline',
-  //   },
-
-  //   termBox: {
-  //     width: '100%',
-  //     // padding: '10px',
-  //     height: '300px',
-  //     // marginTop: '248px',
-  //   },
-  //   ml: {
-  //     marginLeft: '20px',
-  //   },
-
-  //   headingText: {
-  //     fontSize: '12px',
-  //     fontWeight: 'extrabold',
-  //   },
-
-  //   header: {
-  //     width: '100%',
-  //     height: '80px',
-  //     // backgroundColor: "#F49614",
-  //     // backgroundColor: '#17A34B',
-  //     position: 'absolute',
-  //     top: 0,
-  //     display: 'flex',
-  //     flexDirection: 'row',
-  //     justifyContent: 'flex-start',
-  //     gap: '10px',
-  //     // margin: "60px 0",
-  //     alignItems: 'center',
-  //   },
-
-  //   footer: {
-  //     width: '100%',
-  //     height: '30px',
-  //     // backgroundColor: "#F49614",
-  //     backgroundColor: '#17A34B',
-  //     position: 'absolute',
-  //     bottom: 0,
-  //   },
-
-  //   companyLogo: {
-  //     display: 'flex',
-  //     flexDirection: 'row',
-  //     width: '100%',
-  //     justifyContent: 'flex-start',
-  //     // border: '1px solid red',
-  //     // gap: '10px',
-  //     marginTop: '100px',
-  //     alignItems: 'center',
-  //     marginLeft: '20px',
-  //     // marginRight: '20px',
-  //   },
-
-  //   logo: {
-  //     width: '150px',
-  //     height: '80px',
-  //   },
-
-  //   companyName: {
-  //     fontSize: '24px',
-  //     fontWeight: 'bold',
-  //     color: '#3778C2',
-  //     letterSpacing: 3,
-  //   },
-
-  //   titleWrapper: {
-  //     display: 'flex',
-  //     justifyContent: 'center',
-  //     alignItems: 'center',
-  //     width: '100%',
-
-  //     marginTop: '-50px',
-  //   },
-  //   title: {
-  //     fontSize: '24px',
-  //     fontWeight: 'extrabold',
-  //     color: '#F49614',
-  //   },
-
-  //   passPhotoWrapper: {
-  //     display: 'flex',
-  //     width: '100%',
-  //     flexDirection: 'row',
-  //     justifyContent: 'space-between',
-  //     padding: '0 10px',
-  //     // marginTop: "-50px",
-  //   },
-
-  //   passPhotoContainer: {
-  //     width: '100px',
-  //     height: '120px',
-  //     border: '1px solid black',
-  //     marginLeft: '80%',
-  //   },
-
-  //   date: {
-  //     fontSize: '12px',
-  //   },
-
-  //   detailTitle: {
-  //     borderBottom: '1px solid gray',
-  //   },
-
-  //   headerContainer: {
-  //     // marginTop: "30%",
-  //     maxWidth: '100%',
-  //   },
-
-  //   fullWidthField: {
-  //     display: 'flex',
-  //     flexDirection: 'row',
-  //     width: '100%',
-  //     justifyContent: 'flex-start',
-  //     alignItems: 'flex-end',
-  //   },
-  //   flexCenter: {
-  //     display: 'flex',
-  //     justifyContent: 'center',
-  //     alignItems: 'center',
-  //   },
-  //   bookingHeading: {
-  //     fontSize: '18px',
-  //     textAlign: 'center',
-  //     fontWeight: 'heavy',
-  //     color: '#3778C2',
-  //   },
-
-  //   parentView: {
-  //     paddingTop: 20,
-  //     paddingLeft: 20,
-  //     paddingRight: 20,
-  //     lineHeight: 1.5,
-  //     // border: '1px solid red',
-  //   },
-
-  //   secondRowWrapper: {
-  //     marginTop: '30px',
-  //     display: 'flex',
-  //     flexDirection: 'row',
-  //     justifyContent: 'flex-start',
-  //     alignItems: 'flex-end',
-  //     // border: "2px solid red",
-  //   },
-  //   halfDiv: {
-  //     borderBottom: 1,
-  //     borderColor: 'black',
-  //     width: '40%',
-  //     position: 'relative',
-  //     bottom: 2,
-  //   },
-  //   addressDiv: {
-  //     borderBottom: 1,
-  //     borderColor: 'black',
-  //     width: '86%',
-  //     position: 'relative',
-  //     bottom: 2,
-  //   },
-  //   flexEnd: {
-  //     marginTop: '30px',
-  //     display: 'flex',
-  //     flexDirection: 'row',
-  //     alignItems: 'flex-end',
-  //   },
-  // });
   return (
     <Document>
       <Page size='A4' style={styles.page}>
@@ -319,27 +120,32 @@ export const Booking = ({ details }: any) => {
         <View style={styles.parentView}>
           <View style={styles.fullWidthField}>
             <Text style={styles.headingText}>Project Name:</Text>
-            <View
-              style={{
-                borderBottom: 1,
-                borderColor: 'black',
-                width: '100%',
-              }}
-            >
-              <Text style={styles.ml}> {projectName}</Text>
+            <View style={styles.halfDiv}>
+              <Text style={styles.valueText}> {projectName}</Text>
             </View>
           </View>
 
           <View style={styles.flexEnd}>
             <View style={styles.newHalfDivWrapper}>
               <Text style={styles.headingText}>Name:</Text>
-              <View style={styles.halfDiv}></View>
+
+              <View style={styles.halfDiv}>
+                {customer?.map((customer: unknown, ind: string) => (
+                  <Text style={styles.valueText} key={ind}>
+                    {customer.name}
+                  </Text>
+                ))}
+              </View>
             </View>
 
             <View style={styles.newHalfDivWrapper}>
               <Text style={styles.headingText}>Mobile:</Text>
               <View style={styles.halfDiv}>
-                <Text style={styles.ml}>{area} sq.ft</Text>
+                {customer?.map((customer, ind) => (
+                  <Text key={ind} style={styles.valueText}>
+                    {`${customer?.phone1} /${customer?.phone2} `}{' '}
+                  </Text>
+                ))}
               </View>
             </View>
           </View>
@@ -347,43 +153,35 @@ export const Booking = ({ details }: any) => {
           <View style={styles.fullWidthField}>
             <Text style={styles.headingText}>Address:</Text>
             <View style={styles.addressDiv}>
-              <Text style={styles.ml}>{address1}</Text>
+              <Text style={styles.valueText}> {address1}</Text>
             </View>
           </View>
 
           <View style={styles.flexEnd}>
             <View style={styles.newHalfDivWrapper}>
               <Text style={styles.headingText}>House/Plot No:</Text>
-              <View style={styles.halfDiv}></View>
+              <View style={styles.halfDiv}>
+                <Text style={styles.ml}> {plotNo}</Text>
+              </View>
             </View>
 
             <View style={styles.newHalfDivWrapper}>
               <Text style={styles.headingText}>Area:</Text>
               <View style={styles.halfDiv}>
-                <Text style={styles.ml}>{area} sq.ft</Text>
+                <Text style={styles.valueText}>{area} sq.ft</Text>
               </View>
             </View>
           </View>
 
           <View style={styles.flexEnd}>
             <Text style={styles.headingText}>Description:</Text>
-            <View
-              style={{
-                borderBottom: 1,
-                borderColor: 'black',
-                width: '100%',
-              }}
-            ></View>
+            <View style={styles.halfDiv}>
+              <Text style={styles.valueText}> {description}</Text>
+            </View>
           </View>
           <View style={styles.flexEnd}>
             <Text style={styles.headingText}>Total Amount:</Text>
-            <View
-              style={{
-                borderBottom: 1,
-                borderColor: 'black',
-                width: '100%',
-              }}
-            >
+            <View style={styles.halfDiv}>
               <Text style={styles.ml}>{totalAmt}</Text>
             </View>
           </View>
@@ -391,13 +189,15 @@ export const Booking = ({ details }: any) => {
           <View style={styles.flexEnd}>
             <View style={styles.newHalfDivWrapper}>
               <Text style={styles.headingText}>Down Payment:</Text>
-              <View style={styles.halfDiv}></View>
+              <View style={styles.halfDiv}>
+                <Text style={styles.ml}> {paidAmt}</Text>
+              </View>
             </View>
 
             <View style={styles.newHalfDivWrapper}>
               <Text style={styles.headingText}>EMI:</Text>
               <View style={styles.halfDiv}>
-                <Text style={styles.ml}>{area} </Text>
+                <Text style={styles.valueText}> {installmentAmt} </Text>
               </View>
             </View>
           </View>
@@ -420,82 +220,158 @@ export const Booking = ({ details }: any) => {
 
       <Page size='A4' style={styles.page}>
         {/* <View style={styles.footer}></View> */}
-        <View style={styles.parentView}>
-          <View
-            style={{
-              width: '200px',
-              height: '100px',
-              border: '1px solid black',
-            }}
-          ></View>
+        <View style={styles.documentParentView}>
+          <View style={styles.documentWrapper}>
+            {customer?.map((docs, ind) => (
+              <>
+                {docs?.images?.map((aadhar) => {
+                  if (aadhar.type === 'AADHAR_FRONT') {
+                    return (
+                      <>
+                        <View key={ind} style={styles.documentContainer}>
+                          <Image
+                            style={{
+                              width: '100%',
+                              height: '100%',
+                              objectFit: 'cover',
+                            }}
+                            src={aadhar?.imageUrl}
+                            alt='aadharCard-front'
+                          />
+                        </View>
+                      </>
+                    );
+                  }
+                })}
+              </>
+            ))}
+          </View>
+          <View style={styles.documentWrapper}>
+            {customer?.map((docs, ind) => (
+              <>
+                {docs?.images?.map((aadhar) => {
+                  if (aadhar.type === 'PAN') {
+                    return (
+                      <>
+                        <View key={ind} style={styles.documentContainer}>
+                          <Image
+                            style={{
+                              width: '100%',
+                              height: '100%',
+                              objectFit: 'cover',
+                            }}
+                            src={aadhar?.imageUrl}
+                            alt='aadharCard-front'
+                          />
+                        </View>
+                      </>
+                    );
+                  }
+                })}
+              </>
+            ))}
+          </View>
+          <View style={styles.documentWrapper}>
+            {customer?.map((docs, ind) => (
+              <>
+                {docs?.images?.map((aadhar) => {
+                  if (aadhar.type === 'AADHAR_REAR') {
+                    return (
+                      <>
+                        <View key={ind} style={styles.documentContainer}>
+                          <Image
+                            style={{
+                              width: '100%',
+                              height: '100%',
+                              objectFit: 'cover',
+                            }}
+                            src={aadhar?.imageUrl}
+                            alt='aadharCard-front'
+                          />
+                        </View>
+                      </>
+                    );
+                  }
+                })}
+              </>
+            ))}
+          </View>
         </View>
       </Page>
 
-      <Page size='A4' style={styles.page2}>
-        <View style={styles.footer}></View>
-        <View
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            width: '100%',
-            paddingTop: '20px',
-            backgroundColor: '#17A34B',
-          }}
-        >
-          <Text
-            style={{
-              fontFamily: 'Nato Sans Gujarati',
-              fontWeight: 'extrabold',
-              fontSize: '20px',
-              color: 'white',
-            }}
-          >
-            નિયમો અને શરતો
-          </Text>
-        </View>
+      <Page size='A4' style={styles.termPage}>
+        {/* <View style={styles.footer}></View> */}
 
         <View
           style={{
             width: '100%',
-            display: 'flex',
-            justifyContent: 'flex-start',
-            alignItems: 'flex-start',
-            gap: '8px',
-            paddingLeft: '20px',
-            paddingRight: '20px',
-            paddingTop: '20px',
-            // margin: "0 2 0px",
-            // border: "1px solid red",
+            margin: '0 auto',
+            padding: '0 15px',
           }}
         >
-          {termsAndCondition?.map((term, ind) => (
-            <View
-              key={ind}
-              style={{ display: 'flex', flexDirection: 'row', gap: '5px' }}
+          <View
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              width: '100%',
+              paddingTop: '20px',
+            }}
+          >
+            <Text
+              style={{
+                fontFamily: 'Nato Sans Gujarati',
+                fontWeight: 'extrabold',
+                fontSize: '20px',
+                color: '#091762',
+              }}
             >
-              <Text>•</Text>
+              નિયમો અને શરતો
+            </Text>
+          </View>
 
-              <Text
-                style={{ fontFamily: 'Nato Sans Gujarati', fontSize: '14px' }}
-              >
-                {term.term}
-              </Text>
-            </View>
-          ))}
-        </View>
-
-        <View style={styles.note}>
-          <Text
+          <View
             style={{
-              fontFamily: 'Nato Sans Gujarati',
-              fontWeight: 'heavy',
-              fontSize: '16px',
+              width: '100%',
+              display: 'flex',
+              justifyContent: 'flex-start',
+              alignItems: 'flex-start',
+              gap: '8px',
+              paddingLeft: '20px',
+              paddingRight: '20px',
+              paddingTop: '20px',
+              // margin: "0 2 0px",
+              // border: "1px solid red",
             }}
           >
-            Note: ઉપર દર્શાવેલ તમામ શરતો અને નિયમો મને સારી રીતે સમજાય છે. અને આ
-            તમામ શરતો અને નિયમઓ મને મંજૂર છે.
-          </Text>
+            {termsAndCondition?.map((term, ind) => (
+              <View
+                key={ind}
+                style={{ display: 'flex', flexDirection: 'row', gap: '5px' }}
+              >
+                <Text>•</Text>
+
+                <Text
+                  style={{ fontFamily: 'Nato Sans Gujarati', fontSize: '14px' }}
+                >
+                  {term.term}
+                </Text>
+              </View>
+            ))}
+          </View>
+
+          <View style={styles.note}>
+            <Text
+              style={{
+                fontFamily: 'Nato Sans Gujarati',
+                fontWeight: 'heavy',
+                fontSize: '16px',
+              }}
+            >
+              Note: ઉપર દર્શાવેલ તમામ શરતો અને નિયમો મને સારી રીતે સમજાય છે. અને
+              આ તમામ શરતો અને નિયમઓ મને મંજૂર છે.
+            </Text>
+          </View>
         </View>
       </Page>
     </Document>

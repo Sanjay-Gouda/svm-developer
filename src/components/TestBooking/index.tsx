@@ -15,7 +15,7 @@ import BookingForm from '@/components/TestBooking/bookingForm';
 import { httpInstance } from '@/constants/httpInstances';
 
 const addInitialValues = {
-  customerName: {},
+  customerName: [],
   projectName: {},
   bankAccount: {},
   area: undefined,
@@ -46,7 +46,6 @@ type editProps = {
 
 const TestBooking = ({ editInitialValues, editId }: editProps) => {
   const [loader, setLoader] = useState(false);
-
   const [paymentTypeError, setPaymentTypeError] = useState({
     chequeNo: false,
     cBankName: false,
@@ -59,6 +58,7 @@ const TestBooking = ({ editInitialValues, editId }: editProps) => {
 
   const addBookingData = async (values: TBookingProps) => {
     setLoader(true);
+
     const {
       address,
       bankAccount,
@@ -84,7 +84,7 @@ const TestBooking = ({ editInitialValues, editId }: editProps) => {
 
     const projectId = projectName.id;
     const accountId = bankAccount.id;
-    const customerId = customerName.id;
+    const customerIds = customerName?.map((customer) => customer.id);
 
     const payload = {
       projectId: projectId,
@@ -103,7 +103,7 @@ const TestBooking = ({ editInitialValues, editId }: editProps) => {
       accountNo: BTAcNo,
       bankName: cBankName || BTBankName,
       paymentStatus: paymentStatus,
-      customerIds: [customerId],
+      customerIds: customerIds,
       adminAccountId: accountId,
       installmentCount: noOfInstallment,
     };
@@ -127,8 +127,8 @@ const TestBooking = ({ editInitialValues, editId }: editProps) => {
   };
   const updateBookingData = async (values: TBookingProps) => {
     setLoader(true);
+
     const {
-      address,
       bankAccount,
       customerName,
       area,
@@ -136,8 +136,6 @@ const TestBooking = ({ editInitialValues, editId }: editProps) => {
       noOfInstallment,
       paidAmt,
       paymentStatus,
-      landmark,
-      pincode,
       projectName,
       remainingAmt,
       totalAmt,
@@ -152,13 +150,12 @@ const TestBooking = ({ editInitialValues, editId }: editProps) => {
 
     const projectId = projectName.id;
     const accountId = bankAccount.id;
-    const customerId = customerName.id;
+    const customerIds = customerName?.map((customer) => customer.id);
+    console.log(customerIds);
 
     const payload = {
       projectId: projectId,
-      address1: address,
-      address2: landmark,
-      pincode: pincode,
+
       area: area,
       paidAmt: paidAmt.toString(),
       totalAmt: totalAmt.toString(),
@@ -172,7 +169,7 @@ const TestBooking = ({ editInitialValues, editId }: editProps) => {
 
       // paymentMethod:'paymentMethod',
       paymentStatus: paymentStatus,
-      customerIds: [customerId],
+      customerIds: customerIds,
       adminAccountId: accountId,
       installmentCount: noOfInstallment,
       paymentId: paymentId,
@@ -204,6 +201,8 @@ const TestBooking = ({ editInitialValues, editId }: editProps) => {
     initialValues: formInitialValue,
     validationSchema,
     onSubmit: (values: TBookingProps, { setSubmitting }) => {
+      console.log('Called TOP', values);
+
       if (formik.values.paymentMethod === 'UPI' && formik.values.UPIId === '') {
         setPaymentTypeError({
           ...paymentTypeError,
@@ -228,6 +227,7 @@ const TestBooking = ({ editInitialValues, editId }: editProps) => {
           bAcNo: true,
         });
       } else {
+        console.log('Called ELSE');
         editId ? updateBookingData(values) : addBookingData(values);
       }
     },
@@ -278,7 +278,6 @@ const TestBooking = ({ editInitialValues, editId }: editProps) => {
     const remainingAmt = +formik.values.remainingAmt;
     const amtPerInstallment = +formik.values.amtPerInstallment;
     const noOfInstallment = Math.ceil(remainingAmt / amtPerInstallment); // Round up to ensure all installments are covered
-    console.log(noOfInstallment, 'INSTALLMENTS');
     formik.setFieldValue('noOfInstallment', noOfInstallment.toString());
   };
 
@@ -290,22 +289,24 @@ const TestBooking = ({ editInitialValues, editId }: editProps) => {
     calculateRemainingAmt(formik.values.totalAmt, formik.values.paidAmt);
   }, [formik.values.paidAmt, formik.values.amtPerInstallment]);
 
+  const handleClientSelect = (person: customerNameProps) => {
+    formik.setFieldValue('customerName', person);
+  };
+
   return (
     <>
       <BookingForm
         editId={editId}
         loader={loader}
         handleMoveToUpload={formik.handleSubmit}
-        clientSelect={formik.values.customerName}
         clientError={
           formik.touched.customerName && formik.errors.customerName
             ? true
             : false
         }
         clientErrorMessage={formik.errors.customerName}
-        setClientSelect={(person: customerNameProps) => {
-          formik.setFieldValue('customerName', person);
-        }}
+        clientSelect={formik.values.customerName}
+        setClientSelect={handleClientSelect}
         selectProject={formik.values.projectName}
         setSelectedProject={(project: customerNameProps) => {
           formik.setFieldValue('projectName', project);

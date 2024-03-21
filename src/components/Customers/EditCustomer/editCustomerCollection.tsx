@@ -27,50 +27,25 @@ type TModal = {
   panCardModal: boolean;
 };
 
+type TCustomerImage = {
+  createdAt: string;
+
+  customerId: string;
+
+  customerImageId: string;
+
+  imageUrl: string;
+
+  type: string;
+
+  updatedAt: string;
+};
+
 const EditCustomerCollection = ({
   editId,
   editInitialValues,
 }: TEditResponse) => {
   const Tabs = ['Customer Info', 'Images'];
-
-  const [customerListImages, setCustomerListImages] = useState({
-    passPhoto: [],
-    aadharfront: [],
-    aadharback: [],
-    pancard: [],
-  });
-
-  const getImages = useCallback(() => {
-    const imageTypes = {
-      PHOTO: 'passPhoto',
-      AADHAR_FRONT: 'aadharfront',
-      AADHAR_REAR: 'aadharback',
-      PAN: 'pancard',
-    };
-
-    const filteredImages = {};
-    Object.keys(imageTypes).forEach((type) => {
-      const filtered = editInitialValues?.customerImage?.filter(
-        (item) => item?.type === type
-      );
-      if (filtered.length > 0) {
-        filteredImages[imageTypes[type]] = filtered;
-      }
-    });
-
-    setCustomerListImages(filteredImages);
-  }, [editId]);
-
-  // useEffect(() => {
-  //   if (editInitialValues?.customerImage?.length > 0) {
-  //     getImages();
-  //     console.log(editInitialValues?.customerImage);
-  //   }
-  // }, [editInitialValues]);
-
-  useEffect(() => {
-    getImages();
-  }, [getImages]);
 
   const [activeTab, setActiveTab] = useState<activeTabState>({
     info: true,
@@ -79,6 +54,7 @@ const EditCustomerCollection = ({
 
   const [currentTab, setCurrentTab] = useState<string>('Customer Info');
   const [passPhoto, setPassPhoto] = useState<any>([]);
+  const [customerDocs, setCustomerDocs] = useState<TCustomerImage[]>({});
 
   const [panCard, setPanCard] = useState<any>([]);
 
@@ -90,6 +66,20 @@ const EditCustomerCollection = ({
 
   const [frontAadharCard, setFrontAadharCard] = useState<any>([]);
   const [backAadharCard, setBackAadharCard] = useState<any>([]);
+
+  const getImages = useCallback(async () => {
+    try {
+      const res = await httpInstance.get(`customer/get-images/${editId}`);
+      console.log(res);
+      setCustomerDocs(res?.data?.result);
+    } catch (err) {
+      console.log(err);
+    }
+  }, [passPhoto, panCard, frontAadharCard, backAadharCard]);
+
+  useEffect(() => {
+    getImages();
+  }, []);
 
   const handleTabChange = (tabId: string) => {
     setCurrentTab(tabId);
@@ -183,12 +173,12 @@ const EditCustomerCollection = ({
       panCardModal: false,
       passphotoModal: false,
     });
-    setCustomerListImages({
-      aadharback: [],
-      aadharfront: [],
-      pancard: [],
-      passPhoto: [],
-    });
+    // setCustomerListImages({
+    //   aadharback: [],
+    //   aadharfront: [],
+    //   pancard: [],
+    //   passPhoto: [],
+    // });
   }
 
   const handleUploadPassPhoto = async () => {
@@ -202,7 +192,7 @@ const EditCustomerCollection = ({
         formData
       );
       console.log(res);
-
+      getImages();
       closeModal();
     } catch (err) {
       console.log(err);
@@ -237,7 +227,7 @@ const EditCustomerCollection = ({
                 >
                   <img
                     className='h-full w-full  object-cover'
-                    src={customerListImages?.passPhoto[0]?.imageUrl}
+                    src={customerDocs[0].imageUrl}
                     alt='Passphoto'
                   />
                 </div>
@@ -253,22 +243,16 @@ const EditCustomerCollection = ({
               onClick={handleAadharCardModal}
             />
 
-            {customerListImages?.aadharfront?.length === 0 ||
-            customerListImages?.aadharback?.length === 0 ? (
+            {frontAadharCard?.length === 0 ||
+            frontAadharCard?.aadharback?.length === 0 ? (
               <EmptyImage title="Please Upload Client's Aadharcard" />
             ) : (
               <div className='flex gap-2'>
                 <div className='h-48 w-96  overflow-hidden  rounded-lg border-2 border-gray-300  dark:border-gray-600'>
-                  <img
-                    className='h-full w-full  object-cover'
-                    src={customerListImages?.aadharfront[0].imageUrl}
-                  />
+                  <img className='h-full w-full  object-cover' src={null} />
                 </div>
                 <div className='h-48 w-96  overflow-hidden  rounded-lg border-2 border-gray-300  dark:border-gray-600'>
-                  <img
-                    className='h-full w-full  object-cover'
-                    src={customerListImages?.aadharback[0]?.imageUrl}
-                  />
+                  <img className='h-full w-full  object-cover' src={null} />
                 </div>
               </div>
             )}
@@ -281,17 +265,14 @@ const EditCustomerCollection = ({
               btnLable='Update'
               onClick={handlePancardModal}
             />
-            {customerListImages?.pancard?.length === 0 ? (
+            {frontAadharCard?.length === 0 ? (
               <EmptyImage title='Upload Clients Pancard or Voter ID' />
             ) : (
               <div
                 className='h-48 w-96  overflow-hidden  rounded-lg border-2 border-gray-300  dark:border-gray-600'
                 // key={ind}
               >
-                <img
-                  className='h-full w-full  object-cover'
-                  src={customerListImages?.pancard[0]?.imageUrl}
-                />
+                <img className='h-full w-full  object-cover' src={null} />
               </div>
             )}
           </div>

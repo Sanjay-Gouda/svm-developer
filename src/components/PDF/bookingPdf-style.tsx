@@ -43,11 +43,18 @@ export const styles = StyleSheet.create({
   },
   ml: {
     marginLeft: '20px',
+    fontSize: '12px',
+    fontWeight: 'medium',
   },
 
   headingText: {
     fontSize: '12px',
     fontWeight: 'extrabold',
+  },
+  valueText: {
+    fontSize: '12px',
+    fontWeight: 'medium',
+    marginLeft: '10px',
   },
 
   header: {
@@ -176,6 +183,30 @@ export const styles = StyleSheet.create({
     marginLeft: 'auto',
     marginRight: 'auto',
   },
+  documentParentView: {
+    width: '100%',
+    marginTop: '20px',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '16px',
+  },
+
+  documentWrapper: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    marginBottom: '20px',
+  },
+
+  documentContainer: {
+    width: '300px',
+    height: '150px',
+    border: '1px solid black',
+  },
 
   secondRowWrapper: {
     marginTop: '30px',
@@ -190,6 +221,7 @@ export const styles = StyleSheet.create({
     borderColor: 'black',
     width: '100%',
   },
+
   addressDiv: {
     borderBottom: 1,
     borderColor: 'black',
@@ -216,5 +248,10 @@ export const styles = StyleSheet.create({
     // border: '1px solid red',
     justifyContent: 'space-between',
     // gap: '8px',
+  },
+
+  termPage: {
+    width: '100%',
+    margin: '0 auto',
   },
 });
