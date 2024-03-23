@@ -84,10 +84,11 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     width: '100%',
-    justifyContent: 'flex-start',
+    justifyContent: 'space-between',
     // border: '1px solid red',
     margin: '0 auto',
     alignItems: 'center',
+    padding: '0 8px',
 
     height: 150,
     backgroundColor: '#FFFF',
@@ -126,7 +127,8 @@ export const styles = StyleSheet.create({
     display: 'flex',
     width: '100%',
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end',
+    gap: '8px',
     // padding: '0 10px',
     // marginTop: "-50px",
   },
@@ -135,7 +137,7 @@ export const styles = StyleSheet.create({
     width: '100px',
     height: '120px',
     border: '1px solid black',
-    marginLeft: '80%',
+    // marginLeft: '80%',
   },
 
   date: {
@@ -159,6 +161,14 @@ export const styles = StyleSheet.create({
     alignItems: 'flex-end',
     marginTop: '30px',
   },
+  fullWidthFieldName: {
+    display: 'flex',
+    flexDirection: 'row',
+    width: '100%',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-end',
+    // marginTop: '30px',
+  },
   flexCenter: {
     display: 'flex',
     justifyContent: 'center',
@@ -167,6 +177,11 @@ export const styles = StyleSheet.create({
   bookingHeading: {
     fontSize: '18px',
     textAlign: 'center',
+    fontWeight: 'heavy',
+    color: '#091762',
+  },
+  projectLogoHeading: {
+    fontSize: '14px',
     fontWeight: 'heavy',
     color: '#091762',
   },
@@ -220,6 +235,8 @@ export const styles = StyleSheet.create({
     borderBottom: 1,
     borderColor: 'black',
     width: '100%',
+    display: 'flex',
+    flexDirection: 'row',
   },
 
   addressDiv: {

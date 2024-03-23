@@ -51,18 +51,6 @@ const PassPhotoContainer = ({ customerId, handleNextStep }: Tpassphoto) => {
     accept: { 'image/png': ['.png', '.jpg', '.jpeg'] },
   });
 
-  // const secondPassphotoDropzone = useDropzone({
-  //   onDrop: handleSecondpassPhoto,
-  //   multiple: false,
-  //   accept: { 'image/png': ['.png', '.jpg', '.jpeg'] },
-  // });
-
-  // const thirdPassPhotoDropZone = useDropzone({
-  //   onDrop: handleThirdPassPhoto,
-  //   multiple: false,
-  //   accept: { 'image/png': ['.png', '.jpg', '.jpeg'] },
-  // });
-
   useEffect(() => {
     if (passPhoto.length > 0) {
       setIsDisable(false);
@@ -78,12 +66,6 @@ const PassPhotoContainer = ({ customerId, handleNextStep }: Tpassphoto) => {
     for (let i = 0; i < passPhoto.length; i++) {
       formData.append('customerImage', passPhoto[i]);
     }
-    // for (let i = 0; i < secondPassphoto.length; i++) {
-    //   formData.append('customerImage', secondPassphoto[i]);
-    // }
-    // for (let i = 0; i < thirdPassphoto.length; i++) {
-    //   formData.append('customerImage', thirdPassphoto[i]);
-    // }
 
     try {
       const cookies = new Cookies();

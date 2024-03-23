@@ -5,7 +5,7 @@ export const validationSchema = Yup.object().shape({
   projectName: Yup.mixed().required('Project Name is required'),
   bankAccount: Yup.mixed().required('Please Selct Bank Account'),
   area: Yup.number().required('Please enter area'),
-  plotNo: Yup.number().required('Please enter Plotno'),
+  // plotNo: Yup.number().required('Please enter Plotno'),
 
   // landmark: Yup.string().required('Landmark is required'),
   // pincode: Yup.string()

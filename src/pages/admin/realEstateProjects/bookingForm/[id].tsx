@@ -43,12 +43,12 @@ export const EditBookingDetails = ({ EditId, bookingDetails }) => {
   } = bookingDetails;
   console.log(customer, 'EDIT BOOKING');
 
-  // const editcustomer = customer.map((customer) => {
-  //   return {
-  //     name: customer.name,
-  //     id: customer.phone1,
-  //   };
-  // });
+  const editcustomer = customer.map((customer) => {
+    return {
+      name: customer.name,
+      id: customer.customerId,
+    };
+  });
 
   // const editCustomer = [
   //   { id: 1, name: 'Wade Cooper' },
@@ -76,7 +76,7 @@ export const EditBookingDetails = ({ EditId, bookingDetails }) => {
   };
 
   const bookingEditInitialValues = {
-    customerName: customer,
+    customerName: editcustomer,
     projectName: editProject,
     bankAccount: editBankAccount,
     area: area,

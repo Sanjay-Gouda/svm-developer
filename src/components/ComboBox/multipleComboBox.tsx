@@ -35,15 +35,17 @@ export default function MultipleSelect({
   afterLeave,
   hadnleSearchQuery,
 }: TMultiSelectprops) {
-  const filteredPeople =
-    query === ''
-      ? filteredCustomer
-      : filteredCustomer.filter((person) =>
-          person.name
-            .toLowerCase()
+  console.log(selected, 'SELECTED ITEMS', filteredCustomer);
 
-            .includes(query.toLowerCase())
-        );
+  // const filteredPeople =
+  //   query === ''
+  //     ? filteredCustomer
+  //     : filteredCustomer.filter((person) =>
+  //         person.name
+  //           .toLowerCase()
+
+  //           .includes(query.toLowerCase())
+  //       );
 
   return (
     <>

@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
+import { toast } from 'react-toastify';
 
 import AadharCardPlaceholder from '@/components/Booking/aadharCardPlaceholder';
 import PassportPlaceholder from '@/components/Booking/passportPlaceholder';
@@ -8,6 +9,7 @@ import HeaderWrapper from '@/components/Customers/EditCustomer/headerWrapper';
 import EditTab from '@/components/Tabs/editTab';
 import EmptyImage from '@/components/TestProjects/EditProject/emptyImage';
 import ImageModal from '@/components/TestProjects/EditProject/imageModal';
+import { SvmProjectToast } from '@/components/Toast/Toast';
 
 import { httpInstance } from '@/constants/httpInstances';
 
@@ -41,6 +43,20 @@ type TCustomerImage = {
   updatedAt: string;
 };
 
+type TDoc = {
+  passPhoto: string;
+  aadharFront: string;
+  aadharback: string;
+  pan: string;
+};
+
+type Tdocument = {
+  PHOTO: string;
+  AADHAR_FRONT: string;
+  AADHAR_REAR: string;
+  PAN: string;
+};
+
 const EditCustomerCollection = ({
   editId,
   editInitialValues,
@@ -54,8 +70,13 @@ const EditCustomerCollection = ({
 
   const [currentTab, setCurrentTab] = useState<string>('Customer Info');
   const [passPhoto, setPassPhoto] = useState<any>([]);
-  const [customerDocs, setCustomerDocs] = useState<TCustomerImage[]>({});
 
+  const [customerDocs, setCustomerDocs] = useState<Tdocument>({
+    AADHAR_FRONT: '',
+    AADHAR_REAR: '',
+    PAN: '',
+    PHOTO: '',
+  });
   const [panCard, setPanCard] = useState<any>([]);
 
   const [openImageModal, setOpenImageModal] = useState<TModal>({
@@ -70,8 +91,20 @@ const EditCustomerCollection = ({
   const getImages = useCallback(async () => {
     try {
       const res = await httpInstance.get(`customer/get-images/${editId}`);
-      console.log(res);
-      setCustomerDocs(res?.data?.result);
+
+      const documents = res?.data?.result;
+
+      const docsObject = documents.reduce(
+        (acc: Record<string, string>, item: TCustomerImage) => {
+          acc[item.type] = item.imageUrl;
+          return acc;
+        },
+        {}
+      );
+
+      setCustomerDocs(docsObject);
+
+      // console.log(imageDocs);
     } catch (err) {
       console.log(err);
     }
@@ -80,6 +113,10 @@ const EditCustomerCollection = ({
   useEffect(() => {
     getImages();
   }, []);
+
+  useEffect(() => {
+    console.log(customerDocs, 'CUSTOMER DOCS');
+  }, [customerDocs]);
 
   const handleTabChange = (tabId: string) => {
     setCurrentTab(tabId);
@@ -173,12 +210,6 @@ const EditCustomerCollection = ({
       panCardModal: false,
       passphotoModal: false,
     });
-    // setCustomerListImages({
-    //   aadharback: [],
-    //   aadharfront: [],
-    //   pancard: [],
-    //   passPhoto: [],
-    // });
   }
 
   const handleUploadPassPhoto = async () => {
@@ -192,11 +223,75 @@ const EditCustomerCollection = ({
         formData
       );
       console.log(res);
+      toast.success('Passphoto uploaded successfully');
+      setPassPhoto([]);
       getImages();
       closeModal();
     } catch (err) {
       console.log(err);
+      toast.success('Something went wrong');
       closeModal();
+    }
+  };
+
+  const handleAadharCard = async () => {
+    const formData = new FormData();
+
+    for (let i = 0; i < frontAadharCard.length; i++) {
+      formData.append('aadharImageFront', frontAadharCard[i]);
+    }
+    for (let i = 0; i < backAadharCard.length; i++) {
+      formData.append('aadharImageRear', backAadharCard[i]);
+    }
+
+    try {
+      await httpInstance.patch(
+        `customer/upload/aadhar-image/${editId}`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      );
+
+      getImages();
+      setFrontAadharCard([]);
+      setBackAadharCard([]);
+      closeModal();
+      toast.success('Aadharcard uploaded successfully');
+    } catch (err) {
+      toast.error('Something went wrong');
+    }
+  };
+
+  const handlePanUpload = async () => {
+    const formData = new FormData();
+
+    for (let i = 0; i < panCard.length; i++) {
+      formData.append('panImages', panCard[i]);
+    }
+
+    try {
+      const res = await httpInstance.patch(
+        `customer/upload/pan-image/${editId}`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      );
+
+      getImages();
+      setPanCard([]);
+      closeModal();
+      toast.success('Pancard uploaded successfully');
+
+      console.log(res);
+    } catch (err) {
+      console.log(err);
+      toast.error('Something went wrong');
     }
   };
 
@@ -227,7 +322,7 @@ const EditCustomerCollection = ({
                 >
                   <img
                     className='h-full w-full  object-cover'
-                    src={customerDocs[0].imageUrl}
+                    src={customerDocs?.PHOTO}
                     alt='Passphoto'
                   />
                 </div>
@@ -243,16 +338,22 @@ const EditCustomerCollection = ({
               onClick={handleAadharCardModal}
             />
 
-            {frontAadharCard?.length === 0 ||
-            frontAadharCard?.aadharback?.length === 0 ? (
+            {customerDocs?.AADHAR_FRONT === '' ||
+            customerDocs?.AADHAR_REAR === '' ? (
               <EmptyImage title="Please Upload Client's Aadharcard" />
             ) : (
               <div className='flex gap-2'>
                 <div className='h-48 w-96  overflow-hidden  rounded-lg border-2 border-gray-300  dark:border-gray-600'>
-                  <img className='h-full w-full  object-cover' src={null} />
+                  <img
+                    className='h-full w-full  object-cover'
+                    src={customerDocs?.AADHAR_FRONT}
+                  />
                 </div>
                 <div className='h-48 w-96  overflow-hidden  rounded-lg border-2 border-gray-300  dark:border-gray-600'>
-                  <img className='h-full w-full  object-cover' src={null} />
+                  <img
+                    className='h-full w-full  object-cover'
+                    src={customerDocs?.AADHAR_REAR}
+                  />
                 </div>
               </div>
             )}
@@ -265,14 +366,17 @@ const EditCustomerCollection = ({
               btnLable='Update'
               onClick={handlePancardModal}
             />
-            {frontAadharCard?.length === 0 ? (
+            {customerDocs?.PAN === '0' ? (
               <EmptyImage title='Upload Clients Pancard or Voter ID' />
             ) : (
               <div
                 className='h-48 w-96  overflow-hidden  rounded-lg border-2 border-gray-300  dark:border-gray-600'
                 // key={ind}
               >
-                <img className='h-full w-full  object-cover' src={null} />
+                <img
+                  className='h-full w-full  object-cover'
+                  src={customerDocs?.PAN}
+                />
               </div>
             )}
           </div>
@@ -285,6 +389,7 @@ const EditCustomerCollection = ({
         handleClose={() =>
           setOpenImageModal({ ...openImageModal, passphotoModal: false })
         }
+        isDisabled={passPhoto?.length === 0}
         handleUpload={handleUploadPassPhoto}
         isModalOpen={openImageModal.passphotoModal}
         title='Update Passphoto'
@@ -305,7 +410,10 @@ const EditCustomerCollection = ({
         handleClose={() =>
           setOpenImageModal({ ...openImageModal, aadharCardModal: false })
         }
-        handleUpload={() => console.log('upload')}
+        handleUpload={handleAadharCard}
+        isDisabled={
+          frontAadharCard?.length === 0 && backAadharCard?.length === 0
+        }
         isModalOpen={openImageModal.aadharCardModal}
         title='Update AadharCard'
         modalBody={
@@ -331,9 +439,10 @@ const EditCustomerCollection = ({
         handleClose={() =>
           setOpenImageModal({ ...openImageModal, panCardModal: false })
         }
-        handleUpload={() => console.log('upload')}
+        isDisabled={panCard.length === 0}
+        handleUpload={handlePanUpload}
         isModalOpen={openImageModal.panCardModal}
-        title='Update AadharCard'
+        title='Update PanCard'
         modalBody={
           <div className='flex w-full flex-col items-center justify-between gap-8'>
             <AadharCardPlaceholder
@@ -345,6 +454,7 @@ const EditCustomerCollection = ({
           </div>
         }
       />
+      <SvmProjectToast />
     </>
   );
 };

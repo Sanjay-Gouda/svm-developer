@@ -64,6 +64,38 @@ Font.register({
   format: 'truetype',
 });
 
+type TImageType = 'FRONT_REAR' | 'FRONT_BACK' | 'PHOTO';
+
+type TCutomerImage = {
+  createdAt: string;
+
+  customerId: string;
+  customerImageId: string;
+
+  imageUrl: string;
+
+  type: TImageType;
+
+  updatedAt: string;
+};
+
+type TCustomerPDFDetail = {
+  address: string;
+  city: string;
+  customerId: string;
+  images: TCutomerImage[];
+  name: string;
+  phone1: string;
+  phone2: string;
+  pincode: string;
+  state: string;
+};
+
+type TcustomerMap = {
+  customer: TCustomerPDFDetail;
+  ind: string;
+};
+
 export const Booking = ({ details }: any) => {
   const {
     projectName,
@@ -103,17 +135,50 @@ export const Booking = ({ details }: any) => {
         </View>
 
         <View style={styles.companyLogo}>
-          <View style={styles.passPhotoWrapper}>
-            <View style={styles.passPhotoContainer}>
+          <View
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'start',
+              width: '100%',
+            }}
+          >
+            {/* <View>
+              <Text style={styles.projectLogoHeading}>PROJECT LOGO</Text>
+            </View> */}
+            <View>
               <Image
-                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                src={
-                  `https://svm-bucket.blr1.digitaloceanspaces.com/svm/rohan1710871663693.jpg` ||
-                  null
-                }
-                alt='passphoto'
+                style={styles.logo}
+                src='/images/SVM-Developers-Logo.png'
+                alt='Logo'
               />
             </View>
+          </View>
+
+          <View style={styles.passPhotoWrapper}>
+            {customer?.map((docs: TCustomerPDFDetail, ind: string) => (
+              <>
+                {docs?.images?.slice(0, 2).map((aadhar: TCutomerImage) => {
+                  if (aadhar.type === 'PHOTO') {
+                    return (
+                      <>
+                        <View key={ind} style={styles.passPhotoContainer}>
+                          <Image
+                            style={{
+                              width: '100%',
+                              height: '100%',
+                              objectFit: 'cover',
+                            }}
+                            src={aadhar?.imageUrl}
+                            alt='aadharCard-front'
+                          />
+                        </View>
+                      </>
+                    );
+                  }
+                })}
+              </>
+            ))}
           </View>
         </View>
 
@@ -125,14 +190,14 @@ export const Booking = ({ details }: any) => {
             </View>
           </View>
 
-          <View style={styles.flexEnd}>
+          {/* <View style={styles.flexEnd}>
             <View style={styles.newHalfDivWrapper}>
               <Text style={styles.headingText}>Name:</Text>
 
               <View style={styles.halfDiv}>
-                {customer?.map((customer: unknown, ind: string) => (
+                {customer?.map((customer: TCustomerPDFDetail, ind: string) => (
                   <Text style={styles.valueText} key={ind}>
-                    {customer.name}
+                    {customer?.name}
                   </Text>
                 ))}
               </View>
@@ -141,19 +206,45 @@ export const Booking = ({ details }: any) => {
             <View style={styles.newHalfDivWrapper}>
               <Text style={styles.headingText}>Mobile:</Text>
               <View style={styles.halfDiv}>
-                {customer?.map((customer, ind) => (
+                {customer?.map((customer: TCustomerPDFDetail, ind: string) => (
                   <Text key={ind} style={styles.valueText}>
-                    {`${customer?.phone1} /${customer?.phone2} `}{' '}
+                    {`${customer?.phone1} `}
                   </Text>
                 ))}
               </View>
             </View>
-          </View>
+          </View> */}
 
           <View style={styles.fullWidthField}>
+            <Text style={styles.headingText}>Name:</Text>
+            <View style={styles.halfDiv}>
+              {customer?.map((customer: TCustomerPDFDetail, ind: string) => (
+                <Text style={styles.valueText} key={ind}>
+                  {customer?.name}
+                </Text>
+              ))}
+            </View>
+          </View>
+          <View style={styles.fullWidthField}>
+            <Text style={styles.headingText}>Mobile No:</Text>
+            <View style={styles.halfDiv}>
+              {customer?.map((customer: TCustomerPDFDetail, ind: string) => (
+                <Text key={ind} style={styles.valueText}>
+                  {`${customer?.phone1} `}
+                </Text>
+              ))}
+            </View>
+          </View>
+          <View style={styles.fullWidthField}>
             <Text style={styles.headingText}>Address:</Text>
-            <View style={styles.addressDiv}>
-              <Text style={styles.valueText}> {address1}</Text>
+            <View style={styles.halfDiv}>
+              {customer
+                ?.slice(0, 1)
+                .map((customer: TCustomerPDFDetail, ind: string) => (
+                  <Text style={styles.valueText} key={ind}>
+                    {customer?.address}
+                  </Text>
+                ))}
             </View>
           </View>
 
@@ -222,9 +313,9 @@ export const Booking = ({ details }: any) => {
         {/* <View style={styles.footer}></View> */}
         <View style={styles.documentParentView}>
           <View style={styles.documentWrapper}>
-            {customer?.map((docs, ind) => (
+            {customer?.map((docs: TCustomerPDFDetail, ind: string) => (
               <>
-                {docs?.images?.map((aadhar) => {
+                {docs?.images?.map((aadhar: TCutomerImage) => {
                   if (aadhar.type === 'AADHAR_FRONT') {
                     return (
                       <>
@@ -246,11 +337,12 @@ export const Booking = ({ details }: any) => {
               </>
             ))}
           </View>
+
           <View style={styles.documentWrapper}>
-            {customer?.map((docs, ind) => (
+            {customer?.map((docs: TCustomerPDFDetail, ind: string) => (
               <>
-                {docs?.images?.map((aadhar) => {
-                  if (aadhar.type === 'PAN') {
+                {docs?.images?.map((aadhar: TCutomerImage) => {
+                  if (aadhar.type === 'AADHAR_REAR') {
                     return (
                       <>
                         <View key={ind} style={styles.documentContainer}>
@@ -271,11 +363,12 @@ export const Booking = ({ details }: any) => {
               </>
             ))}
           </View>
+
           <View style={styles.documentWrapper}>
-            {customer?.map((docs, ind) => (
+            {customer?.map((docs: TCustomerPDFDetail, ind: string) => (
               <>
-                {docs?.images?.map((aadhar) => {
-                  if (aadhar.type === 'AADHAR_REAR') {
+                {docs?.images?.map((aadhar: TCutomerImage) => {
+                  if (aadhar.type === 'PAN') {
                     return (
                       <>
                         <View key={ind} style={styles.documentContainer}>

@@ -13,6 +13,7 @@ type TModel = {
   handleClose: () => void;
   modalBody: any;
   handleUpload: () => void;
+  isDisabled?: boolean;
 };
 
 const ImageModal = ({
@@ -21,6 +22,7 @@ const ImageModal = ({
   modalBody,
   handleUpload,
   title,
+  isDisabled,
 }: TModel) => {
   return (
     <>
@@ -35,7 +37,11 @@ const ImageModal = ({
           >
             Cancel
           </Button>
-          <Button className='w-full sm:w-auto' onClick={handleUpload}>
+          <Button
+            className='w-full sm:w-auto'
+            onClick={handleUpload}
+            disabled={isDisabled}
+          >
             Upload
           </Button>
         </ModalFooter>

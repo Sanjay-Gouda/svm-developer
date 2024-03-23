@@ -92,7 +92,7 @@ const TestBooking = ({ editInitialValues, editId }: editProps) => {
       // address2: landmark,
       // pincode: pincode,
       plotNo: plotNo,
-      area: area,
+      area: +area,
       paidAmt: +paidAmt,
       totalAmt: +totalAmt,
       installmentAmt: amtPerInstallment,
@@ -150,13 +150,13 @@ const TestBooking = ({ editInitialValues, editId }: editProps) => {
 
     const projectId = projectName.id;
     const accountId = bankAccount.id;
+
     const customerIds = customerName?.map((customer) => customer.id);
-    console.log(customerIds);
 
     const payload = {
       projectId: projectId,
 
-      area: area,
+      area: +area,
       paidAmt: paidAmt.toString(),
       totalAmt: totalAmt.toString(),
       installmentAmt: amtPerInstallment,

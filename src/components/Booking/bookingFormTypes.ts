@@ -7,8 +7,8 @@ export type TBookingProps = {
   customerName: customerNameProps;
   projectName: customerNameProps;
   bankAccount: customerNameProps;
-  area: undefined | number;
-  plotNo: undefined | number;
+  area: number;
+  plotNo: number;
   // landmark: string;
   // pincode: undefined | number;
   // address: string;
