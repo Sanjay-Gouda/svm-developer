@@ -1,28 +1,16 @@
 import { Button, Input, Label } from '@windmill/react-ui';
 import { useFormik } from 'formik';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 
 import { useBookingDetails } from '@/hooks/useBookingDetails';
 
-import ComboBox from '@/components/ComboBox/comboBox';
 import { TextInput } from '@/components/ui-blocks';
 
 import { httpInstance } from '@/constants/httpInstances';
 
-type TInstallment = {
-  bookingCustomer: any;
-  amt: number;
-  UPIId: '';
-  cheuqeNo: undefined | number | '';
-  cBankName: '';
-  BTAcNo: undefined | number | '';
-  BTBankName: '';
-  penalty: undefined | number;
-  paymentMethod: 'CHEQUE' | 'CASH' | 'UPI' | 'BANK_TRANSFER';
-};
-
-const initialValues: TInstallment = {
-  bookingCustomer: {},
+const addInitialValues: TInstallment = {
+  bookingCustomer: [],
   amt: 0,
   paymentMethod: 'CASH',
   BTAcNo: '',
@@ -30,10 +18,45 @@ const initialValues: TInstallment = {
   cBankName: '',
   cheuqeNo: '',
   UPIId: '',
-  penalty: undefined,
+  penalty: 0,
 };
 
-function InstallmentForm() {
+export type TIBankDetails = {
+  paymentType: 'CHEQUE' | 'CASH' | 'UPI' | 'BANK_TRANSFER';
+  accountNumber?: string;
+  bankName?: string;
+  chequeNumber?: string;
+  upiId?: string;
+  penalty?: number;
+  installmentNo: number;
+};
+
+type TInstallment = {
+  bookingCustomer: string[];
+  amt: number;
+  UPIId: '';
+  cheuqeNo: '';
+  cBankName: '';
+  BTAcNo: '';
+  BTBankName: '';
+  penalty: number;
+  paymentMethod: 'CHEQUE' | 'CASH' | 'UPI' | 'BANK_TRANSFER';
+};
+
+export type TCreateInstallment = {
+  bookingId: string;
+  amount: number;
+  data: TIBankDetails[];
+};
+
+type TIBookingCustomerList = {
+  customerList?: TInstallment;
+  bookingId?: string;
+};
+
+function InstallmentForm({ customerList, bookingId }: TIBookingCustomerList) {
+  const router = useRouter();
+
   const [paymentTypeError, setPaymentTypeError] = useState({
     chequeNo: false,
     cBankName: false,
@@ -57,18 +80,20 @@ function InstallmentForm() {
 
     const { name, id } = bookingCustomer;
 
-    const payload = {
+    const payload: TCreateInstallment = {
       amount: amt,
       data: [
         {
           paymentType: paymentMethod,
-          accountNumber: 'string',
-          bankName: BTBankName || cBankName,
-          chequeNumber: 'string',
-          upiId: UPIId,
+          accountNumber: '9090990909',
+          // bankName: BTBankName || cBankName,
+          bankName: 'ICICI',
+          chequeNumber: '8908909809',
+          upiId: 'UPIId',
+          penalty: penalty,
+          installmentNo: 2,
         },
       ],
-      penalty: penalty,
       bookingId: id,
     };
 
@@ -111,8 +136,12 @@ function InstallmentForm() {
     }
   };
 
+  const initialvalues = bookingId ? customerList : addInitialValues;
+
+  console.log(initialvalues, 'INITIALVALUES');
+
   const formik = useFormik({
-    initialValues,
+    initialValues: initialvalues,
     onSubmit: (values: TInstallment) => {
       // console.log(values);
       handlePaymentMethodErrors(values);
@@ -125,7 +154,6 @@ function InstallmentForm() {
 
   const bookigDetails = useBookingDetails();
 
-  console.log(bookigDetails, 'BOOKING DETAILS');
   const [query, setQuery] = useState('');
 
   const hadnleSearchQuery = (e: any) => {
@@ -143,10 +171,14 @@ function InstallmentForm() {
           return person.name.toLowerCase().includes(query.toLowerCase());
         });
 
+  const handleCancel = () => {
+    router.push('/admin/booking');
+  };
+
   return (
     <>
       <div className='mx-auto flex w-1/3  flex-col gap-2'>
-        <div className='flex flex-col'>
+        {/* <div className='flex flex-col'>
           <Label>Select Booking Customer</Label>
           <ComboBox
             placeholder='Search Customer'
@@ -158,6 +190,16 @@ function InstallmentForm() {
             setSelected={(person) => {
               formik.setFieldValue('bookingCustomer', person);
             }}
+          />
+        </div> */}
+        <div className='flex flex-col'>
+          <TextInput
+            type='text'
+            name='bookingCustomer'
+            label='Booking Customer'
+            value={formik.values.bookingCustomer}
+            disabled
+            // onChange={formik.handleChange}
           />
         </div>
 
@@ -316,13 +358,9 @@ function InstallmentForm() {
           />
         </div>
 
-        <Button
-          onClick={() => {
-            formik.handleSubmit();
-          }}
-        >
-          Submit
-          {/* {loader && <ClipLoader size={20} color='white' />} */}
+        <Button onClick={() => formik.handleSubmit()}>Submit</Button>
+        <Button layout='outline' onClick={() => handleCancel()}>
+          Cancel
         </Button>
       </div>
     </>

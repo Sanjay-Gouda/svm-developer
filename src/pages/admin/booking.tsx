@@ -47,7 +47,6 @@ export default function Booking({
   error,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [bookingList, setBookingList] = useState(list);
-  console.log(bookingList, 'BOOKING LIST');
 
   const route = useRouter();
 
@@ -57,7 +56,9 @@ export default function Booking({
 
   const handlePdfView = (id: string) => {
     route.push(`realEstateProjects/bookingForm/pdf/${id}`);
-    // window.open(`realEstateProjects/bookingForm/pdf/${id}`, '_blank');
+  };
+  const handleAddInstallment = (id: string) => {
+    route.push(`realEstateProjects/bookingForm/installment/${id}`);
   };
 
   const fetchData = async () => {
@@ -70,7 +71,6 @@ export default function Booking({
   };
 
   const handleDelete = async (id: string) => {
-    console.log(id, 'BOOKING_ID');
     try {
       const res = await httpInstance.delete(`/booking/delete/${id}`);
       toast.success(res?.data?.message || 'Booking info Deleted Successfully');
@@ -143,6 +143,7 @@ export default function Booking({
                       <TableCell className='text-[14px]'>
                         Payment Status{' '}
                       </TableCell>
+                      <TableCell className='text-[14px]'>Installment</TableCell>
                       <TableCell className='text-[14px]'>Download</TableCell>
                       <TableCell className='text-[14px]'>Action </TableCell>
                     </tr>
@@ -174,6 +175,16 @@ export default function Booking({
                             </Badge>
                           </TableCell>
 
+                          <TableCell>
+                            <Button
+                              layout='outline'
+                              onClick={() =>
+                                handleAddInstallment(data?.bookingId)
+                              }
+                            >
+                              Add{' '}
+                            </Button>
+                          </TableCell>
                           <TableCell>
                             <FaFileDownload
                               size='24'

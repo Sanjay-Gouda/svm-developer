@@ -109,6 +109,7 @@ export const Booking = ({ details }: any) => {
     description,
   } = details;
 
+  console.log(customer, 'BOOKED CUSTOMER');
   return (
     <Document>
       <Page size='A4' style={styles.page}>
@@ -314,11 +315,21 @@ export const Booking = ({ details }: any) => {
         <View style={styles.documentParentView}>
           <View style={styles.documentWrapper}>
             {customer?.map((docs: TCustomerPDFDetail, ind: string) => (
-              <>
+              <View
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  width: '100%',
+                  gap: '10px',
+                }}
+                key={docs?.customerId}
+              >
                 {docs?.images?.map((aadhar: TCutomerImage) => {
-                  if (aadhar.type === 'AADHAR_FRONT') {
-                    return (
-                      <>
+                  return (
+                    <>
+                      {aadhar.type !== 'PHOTO' && (
                         <View key={ind} style={styles.documentContainer}>
                           <Image
                             style={{
@@ -330,63 +341,11 @@ export const Booking = ({ details }: any) => {
                             alt='aadharCard-front'
                           />
                         </View>
-                      </>
-                    );
-                  }
+                      )}
+                    </>
+                  );
                 })}
-              </>
-            ))}
-          </View>
-
-          <View style={styles.documentWrapper}>
-            {customer?.map((docs: TCustomerPDFDetail, ind: string) => (
-              <>
-                {docs?.images?.map((aadhar: TCutomerImage) => {
-                  if (aadhar.type === 'AADHAR_REAR') {
-                    return (
-                      <>
-                        <View key={ind} style={styles.documentContainer}>
-                          <Image
-                            style={{
-                              width: '100%',
-                              height: '100%',
-                              objectFit: 'cover',
-                            }}
-                            src={aadhar?.imageUrl}
-                            alt='aadharCard-front'
-                          />
-                        </View>
-                      </>
-                    );
-                  }
-                })}
-              </>
-            ))}
-          </View>
-
-          <View style={styles.documentWrapper}>
-            {customer?.map((docs: TCustomerPDFDetail, ind: string) => (
-              <>
-                {docs?.images?.map((aadhar: TCutomerImage) => {
-                  if (aadhar.type === 'PAN') {
-                    return (
-                      <>
-                        <View key={ind} style={styles.documentContainer}>
-                          <Image
-                            style={{
-                              width: '100%',
-                              height: '100%',
-                              objectFit: 'cover',
-                            }}
-                            src={aadhar?.imageUrl}
-                            alt='aadharCard-front'
-                          />
-                        </View>
-                      </>
-                    );
-                  }
-                })}
-              </>
+              </View>
             ))}
           </View>
         </View>

@@ -1,3 +1,5 @@
+import { Button } from '@windmill/react-ui';
+import { useRouter } from 'next/router';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { toast } from 'react-toastify';
@@ -6,6 +8,13 @@ import AadharCardPlaceholder from '@/components/Booking/aadharCardPlaceholder';
 import PassportPlaceholder from '@/components/Booking/passportPlaceholder';
 import CustomerForm from '@/components/Customers/customerForm';
 import HeaderWrapper from '@/components/Customers/EditCustomer/headerWrapper';
+import {
+  activeTabState,
+  TCustomerImage,
+  Tdocument,
+  TEditResponse,
+  TModal,
+} from '@/components/Customers/EditCustomer/types';
 import EditTab from '@/components/Tabs/editTab';
 import EmptyImage from '@/components/TestProjects/EditProject/emptyImage';
 import ImageModal from '@/components/TestProjects/EditProject/imageModal';
@@ -13,54 +22,11 @@ import { SvmProjectToast } from '@/components/Toast/Toast';
 
 import { httpInstance } from '@/constants/httpInstances';
 
-type activeTabState = {
-  info: boolean;
-  images: boolean;
-};
-
-type TEditResponse = {
-  editInitialValues: any;
-  editId: string;
-};
-
-type TModal = {
-  passphotoModal: boolean;
-  aadharCardModal: boolean;
-  panCardModal: boolean;
-};
-
-type TCustomerImage = {
-  createdAt: string;
-
-  customerId: string;
-
-  customerImageId: string;
-
-  imageUrl: string;
-
-  type: string;
-
-  updatedAt: string;
-};
-
-type TDoc = {
-  passPhoto: string;
-  aadharFront: string;
-  aadharback: string;
-  pan: string;
-};
-
-type Tdocument = {
-  PHOTO: string;
-  AADHAR_FRONT: string;
-  AADHAR_REAR: string;
-  PAN: string;
-};
-
 const EditCustomerCollection = ({
   editId,
   editInitialValues,
 }: TEditResponse) => {
+  const router = useRouter();
   const Tabs = ['Customer Info', 'Images'];
 
   const [activeTab, setActiveTab] = useState<activeTabState>({
@@ -69,7 +35,7 @@ const EditCustomerCollection = ({
   });
 
   const [currentTab, setCurrentTab] = useState<string>('Customer Info');
-  const [passPhoto, setPassPhoto] = useState<any>([]);
+  const [passPhoto, setPassPhoto] = useState<unknown>([]);
 
   const [customerDocs, setCustomerDocs] = useState<Tdocument>({
     AADHAR_FRONT: '',
@@ -77,7 +43,7 @@ const EditCustomerCollection = ({
     PAN: '',
     PHOTO: '',
   });
-  const [panCard, setPanCard] = useState<any>([]);
+  const [panCard, setPanCard] = useState<unknown>([]);
 
   const [openImageModal, setOpenImageModal] = useState<TModal>({
     aadharCardModal: false,
@@ -85,8 +51,8 @@ const EditCustomerCollection = ({
     passphotoModal: false,
   });
 
-  const [frontAadharCard, setFrontAadharCard] = useState<any>([]);
-  const [backAadharCard, setBackAadharCard] = useState<any>([]);
+  const [frontAadharCard, setFrontAadharCard] = useState<unknown>([]);
+  const [backAadharCard, setBackAadharCard] = useState<unknown>([]);
 
   const getImages = useCallback(async () => {
     try {
@@ -103,8 +69,6 @@ const EditCustomerCollection = ({
       );
 
       setCustomerDocs(docsObject);
-
-      // console.log(imageDocs);
     } catch (err) {
       console.log(err);
     }
@@ -113,10 +77,6 @@ const EditCustomerCollection = ({
   useEffect(() => {
     getImages();
   }, []);
-
-  useEffect(() => {
-    console.log(customerDocs, 'CUSTOMER DOCS');
-  }, [customerDocs]);
 
   const handleTabChange = (tabId: string) => {
     setCurrentTab(tabId);
@@ -204,7 +164,6 @@ const EditCustomerCollection = ({
   });
 
   function closeModal() {
-    // setIsModalOpen(false);
     setOpenImageModal({
       aadharCardModal: false,
       panCardModal: false,
@@ -273,7 +232,7 @@ const EditCustomerCollection = ({
     }
 
     try {
-      const res = await httpInstance.patch(
+      await httpInstance.patch(
         `customer/upload/pan-image/${editId}`,
         formData,
         {
@@ -287,10 +246,7 @@ const EditCustomerCollection = ({
       setPanCard([]);
       closeModal();
       toast.success('Pancard uploaded successfully');
-
-      console.log(res);
     } catch (err) {
-      console.log(err);
       toast.error('Something went wrong');
     }
   };
@@ -381,6 +337,14 @@ const EditCustomerCollection = ({
             )}
           </div>
           {/* Pancard */}
+
+          <div className='mt-8 flex w-full items-center justify-center'>
+            <div className='flex  w-[80%] justify-center'>
+              <Button onClick={() => router.push('/admin/customers')}>
+                Back To Customer
+              </Button>
+            </div>
+          </div>
         </div>
       )}
 
