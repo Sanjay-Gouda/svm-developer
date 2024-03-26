@@ -107,30 +107,3 @@ const InovieProjectDes = ({ logo }) => {
 };
 
 export default InovieProjectDes;
-
-{
-  /* <Svg height="210" width="500">
-          <Line
-            x1="0"
-            y1="0"
-            x2="91%"
-            y2="0 "
-            strokeWidth={2}
-            stroke="rgb(0,0,0)"
-            style={styles.line}
-          />
-        </Svg> */
-}
-
-// const styles = StyleSheet.create({
-//   reactangle: {
-//     marginTop: 10,
-//     marginLeft: "auto",
-//     marginRight: "auto",
-//     width: 400,
-//     height: 150,
-//     backgroundColor: "lightgray",
-//     borderRadius: 20,
-//     boxShadow: "1px 2px 9px #F4AAB9",
-//   },
-// });
