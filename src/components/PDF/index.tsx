@@ -91,11 +91,6 @@ type TCustomerPDFDetail = {
   state: string;
 };
 
-type TcustomerMap = {
-  customer: TCustomerPDFDetail;
-  ind: string;
-};
-
 export const Booking = ({ details }: any) => {
   const {
     projectName,

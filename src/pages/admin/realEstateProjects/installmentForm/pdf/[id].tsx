@@ -1,15 +1,43 @@
 import dynamic from 'next/dynamic';
+import { useParams } from 'next/navigation';
 
-const ReceiptPDF = dynamic(() => import('@/components/PDF/receiptPDF'), {
-  ssr: false,
-});
+import { httpInstance } from '@/constants/httpInstances';
 
-import React from 'react';
+const ReceiptPDF = dynamic(
+  () => import('@/components/PDF/GenerateInvoice/Invoice'),
+  {
+    ssr: false,
+  }
+);
+
+import React, { useEffect, useState } from 'react';
 
 const Receipt = () => {
+  const param = useParams();
+  const [installmentData, setInstallmentData] = useState([]);
+
+  const getBookingDetails = async () => {
+    try {
+      const res = await httpInstance.get(`installment/get/${param?.id}`, {
+        headers: {},
+      });
+
+      setInstallmentData(res.data.result);
+    } catch (err) {
+      console.log(err, 'ERROR');
+    }
+  };
+
+  useEffect(() => {
+    getBookingDetails();
+  }, []);
   return (
     <>
-      <ReceiptPDF />
+      {installmentData ? (
+        <ReceiptPDF installmentData={installmentData} />
+      ) : (
+        <h1>Loading....</h1>
+      )}
     </>
   );
 };

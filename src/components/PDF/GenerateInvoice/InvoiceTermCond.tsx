@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
-import { Text, View } from "@react-pdf/renderer";
-import React from "react";
+import { Text, View } from '@react-pdf/renderer';
+import React from 'react';
 
 const InvoiceTermCond = () => {
   return (
@@ -9,10 +9,10 @@ const InvoiceTermCond = () => {
         marginTop: 20,
       }}
     >
-      <Text>TERMS & CONDITION </Text>
+      <Text style={{ fontWeight: 'extrabold' }}>TERMS & CONDITION </Text>
       <Text>1) Receipt is valid on realization of Cheque. </Text>
       <Text>
-        2) Cancellation charge will be 10 of total Booking price & Taxes.
+        2) Cancellation charge will be 10% of total Booking price & Taxes.
       </Text>
     </View>
   );

@@ -1,14 +1,14 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
-import React from "react";
-import { Text, View, StyleSheet } from "@react-pdf/renderer";
+import { StyleSheet, Text, View } from '@react-pdf/renderer';
+import React from 'react';
 
 const styles = StyleSheet.create({
   invoiceContainer: {
     marginTop: 20,
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
 });
 

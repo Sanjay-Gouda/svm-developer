@@ -182,7 +182,7 @@ export default function Booking({
                                 handleAddInstallment(data?.bookingId)
                               }
                             >
-                              Add{' '}
+                              Add
                             </Button>
                           </TableCell>
                           <TableCell>

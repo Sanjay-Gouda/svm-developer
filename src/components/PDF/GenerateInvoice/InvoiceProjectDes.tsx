@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
-import { StyleSheet, Text, View } from '@react-pdf/renderer';
+import { Image, StyleSheet, Text, View } from '@react-pdf/renderer';
 import React from 'react';
 // import google from "../../assets/google.png";
 // import facebook from "../../assets/facebook.png";
@@ -38,6 +38,10 @@ const styles = StyleSheet.create({
     height: 20,
     marginRight: 10,
   },
+  projectLogo: {
+    width: '150px',
+    height: '80px',
+  },
   line: {
     borderTop: 1,
     borderColor: 'black',
@@ -45,13 +49,23 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: '75%',
   },
+
+  flexCenter: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+  },
 });
 
-const InovieProjectDes = () => {
+const InovieProjectDes = ({ logo }) => {
   return (
     <View style={styles.section}>
       <View style={styles.box}>
         <Text style={styles.text}>Project:-</Text>
+        <View style={styles.flexCenter}>
+          <Image style={styles.projectLogo} src={logo} alt='Logo' />
+        </View>
         <View style={styles.line}></View>
         <View
           style={{
@@ -73,11 +87,19 @@ const InovieProjectDes = () => {
           >
             Follow Us:
           </Text>
-          {/* <Image style={styles.logo} src={google} />
-          <Image style={styles.logo} src={facebook} />
-          <Image style={styles.logo} src={instagram} />
-          <Image style={styles.logo} src={twitter} />
-          <Image style={styles.logo} src={linkedin} /> */}
+          <Image style={styles.logo} src='/images/google.png' alt='google' />
+          <Image
+            style={styles.logo}
+            src='/images/facebook.png'
+            alt='facebook'
+          />
+          <Image style={styles.logo} src='/images/instagram.png' alt='insta' />
+          <Image style={styles.logo} src='/images/twitter.png' alt='X' />
+          <Image
+            style={styles.logo}
+            src='/images/linkedin.png'
+            alt='linkedin'
+          />
         </View>
       </View>
     </View>

@@ -9,6 +9,7 @@ import {
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
+import { FaFileDownload } from 'react-icons/fa';
 import { MdDelete, MdModeEditOutline } from 'react-icons/md';
 
 import Layout from '@/containers/Layout';
@@ -53,6 +54,10 @@ export default function Installment({
     router.push(`realEstateProjects/installmentForm/${editId}`);
   };
 
+  const handlePreviewReceipt = (id: string) => {
+    router.push(`realEstateProjects/installmentForm/pdf/${id}`);
+  };
+
   return (
     <>
       <Layout
@@ -67,6 +72,7 @@ export default function Installment({
                 <TableCell>Cusromer Name</TableCell>
                 <TableCell>Paid Amount</TableCell>
                 <TableCell>Payment Type</TableCell>
+                <TableCell>Receipt</TableCell>
                 <TableCell>Action</TableCell>
               </TableRow>
             </TableHeader>
@@ -76,6 +82,14 @@ export default function Installment({
                   <TableCell>Mehul</TableCell>
                   <TableCell>{item?.amount}</TableCell>
                   <TableCell>{item?.paymentType}</TableCell>
+                  <TableCell>
+                    <FaFileDownload
+                      size='24'
+                      style={{ color: ' #17A34B' }}
+                      onClick={() => handlePreviewReceipt(item?.installmentId)}
+                      className='cursor-pointer'
+                    />
+                  </TableCell>
                   <TableCell className='flex gap-5'>
                     <MdModeEditOutline
                       onClick={() => handleEdit(item?.installmentId)}
