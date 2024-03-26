@@ -62,15 +62,11 @@ const BookingInstallment = ({
   bookingId,
   bookingDetails,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  console.log(bookingDetails, 'DETAILS');
-
   const { customer } = bookingDetails;
 
   const customerNames = customer
     ?.map((customer: TCustomerPDFDetail) => customer.name)
     .join(', ');
-
-  console.log(customerNames);
 
   const installmentInitialValues: TInstallment = {
     bookingCustomer: customerNames,

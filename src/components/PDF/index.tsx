@@ -107,9 +107,16 @@ export const Booking = ({ details }: any) => {
     installmentAmt,
     paidAmt,
     description,
+    createdAt,
+    projectLogo,
   } = details;
 
-  console.log(customer, 'BOOKED CUSTOMER');
+  const bookingdate = createdAt
+    ?.split('T')[0]
+    ?.split('-')
+    ?.reverse()
+    ?.join('-');
+
   return (
     <Document>
       <Page size='A4' style={styles.page}>
@@ -132,7 +139,7 @@ export const Booking = ({ details }: any) => {
         {/* <View style={styles.footer}></View> */}
 
         <View style={styles.invoiceContainer}>
-          <Text style={styles.headingText}>Booking Date : 30/3/24</Text>
+          <Text style={styles.headingText}>Booking Date : {bookingdate}</Text>
         </View>
 
         <View style={styles.companyLogo}>
@@ -148,11 +155,7 @@ export const Booking = ({ details }: any) => {
               <Text style={styles.projectLogoHeading}>PROJECT LOGO</Text>
             </View> */}
             <View>
-              <Image
-                style={styles.logo}
-                src='/images/SVM-Developers-Logo.png'
-                alt='Logo'
-              />
+              <Image style={styles.logo} src={projectLogo} alt='Logo' />
             </View>
           </View>
 

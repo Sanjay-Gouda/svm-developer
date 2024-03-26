@@ -2,15 +2,20 @@ import { Button, Input, Label } from '@windmill/react-ui';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
+import { Cookies } from 'react-cookie';
+import { toast } from 'react-toastify';
 
-import { useBookingDetails } from '@/hooks/useBookingDetails';
-
+import { SvmProjectToast } from '@/components/Toast/Toast';
 import { TextInput } from '@/components/ui-blocks';
 
 import { httpInstance } from '@/constants/httpInstances';
 
+type TPaymentMethod = {
+  paymentmethod: 'CHEQUE' | 'CASH' | 'UPI' | 'BANK_TRANSFER';
+};
+
 const addInitialValues: TInstallment = {
-  bookingCustomer: [],
+  bookingCustomer: '',
   amt: 0,
   paymentMethod: 'CASH',
   BTAcNo: '',
@@ -22,17 +27,17 @@ const addInitialValues: TInstallment = {
 };
 
 export type TIBankDetails = {
-  paymentType: 'CHEQUE' | 'CASH' | 'UPI' | 'BANK_TRANSFER';
+  paymentType: TPaymentMethod;
   accountNumber?: string;
   bankName?: string;
   chequeNumber?: string;
   upiId?: string;
   penalty?: number;
-  installmentNo: number;
+  installmentNo?: number;
 };
 
 type TInstallment = {
-  bookingCustomer: string[];
+  bookingCustomer: string;
   amt: number;
   UPIId: '';
   cheuqeNo: '';
@@ -40,11 +45,11 @@ type TInstallment = {
   BTAcNo: '';
   BTBankName: '';
   penalty: number;
-  paymentMethod: 'CHEQUE' | 'CASH' | 'UPI' | 'BANK_TRANSFER';
+  paymentMethod: TPaymentMethod;
 };
 
 export type TCreateInstallment = {
-  bookingId: string;
+  bookingId?: string;
   amount: number;
   data: TIBankDetails[];
 };
@@ -52,10 +57,18 @@ export type TCreateInstallment = {
 type TIBookingCustomerList = {
   customerList?: TInstallment;
   bookingId?: string;
+  installmentId?: string;
 };
 
-function InstallmentForm({ customerList, bookingId }: TIBookingCustomerList) {
+function InstallmentForm({
+  customerList,
+  bookingId,
+  installmentId,
+}: TIBookingCustomerList) {
   const router = useRouter();
+
+  const cookies = new Cookies();
+  const token = cookies.get('token');
 
   const [paymentTypeError, setPaymentTypeError] = useState({
     chequeNo: false,
@@ -70,7 +83,6 @@ function InstallmentForm({ customerList, bookingId }: TIBookingCustomerList) {
       BTBankName,
       UPIId,
       amt,
-      bookingCustomer,
       cBankName,
       BTAcNo,
       cheuqeNo,
@@ -78,30 +90,59 @@ function InstallmentForm({ customerList, bookingId }: TIBookingCustomerList) {
       penalty,
     } = values;
 
-    const { name, id } = bookingCustomer;
-
     const payload: TCreateInstallment = {
-      amount: amt,
+      amount: +amt,
       data: [
         {
           paymentType: paymentMethod,
-          accountNumber: '9090990909',
-          // bankName: BTBankName || cBankName,
-          bankName: 'ICICI',
-          chequeNumber: '8908909809',
-          upiId: 'UPIId',
+          accountNumber: BTAcNo,
+          bankName: BTBankName || cBankName,
+          chequeNumber: cheuqeNo,
+          upiId: UPIId,
           penalty: penalty,
-          installmentNo: 2,
         },
       ],
-      bookingId: id,
+      bookingId: bookingId,
     };
 
     try {
-      const res = await httpInstance.post(`/installment/create`, payload);
-      console.log(res);
+      await httpInstance.post(`/installment/create`, payload);
+      toast.success('Installment added Successfully');
     } catch (err) {
-      console.log(err);
+      toast.error('Something went wrong');
+    }
+  };
+
+  const updateInstallment = async (values: TInstallment) => {
+    const {
+      BTBankName,
+      UPIId,
+      amt,
+      cBankName,
+      BTAcNo,
+      cheuqeNo,
+      paymentMethod,
+      penalty,
+    } = values;
+
+    const payload: TCreateInstallment = {
+      amount: +amt,
+      paymentType: paymentMethod,
+      accountNumber: BTAcNo,
+      bankName: BTBankName || cBankName,
+      chequeNumber: cheuqeNo,
+      upiId: UPIId,
+      penalty: penalty,
+      bookingId: bookingId,
+    };
+
+    try {
+      await httpInstance.put(`/installment/update/${installmentId}`, payload, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      toast.success('Installment Updated Successfully..');
+    } catch (err) {
+      toast.error('Something went wrong');
     }
   };
 
@@ -130,20 +171,15 @@ function InstallmentForm({ customerList, bookingId }: TIBookingCustomerList) {
         bAcNo: true,
       });
     } else {
-      addInstallments(values);
-
-      // editId ? updateBookingData(values) : addBookingData(values);
+      installmentId ? updateInstallment(values) : addInstallments(values);
     }
   };
 
   const initialvalues = bookingId ? customerList : addInitialValues;
 
-  console.log(initialvalues, 'INITIALVALUES');
-
   const formik = useFormik({
     initialValues: initialvalues,
     onSubmit: (values: TInstallment) => {
-      // console.log(values);
       handlePaymentMethodErrors(values);
     },
   });
@@ -152,25 +188,6 @@ function InstallmentForm({ customerList, bookingId }: TIBookingCustomerList) {
     formik?.setFieldValue('paymentMethod', e.target.value);
   };
 
-  const bookigDetails = useBookingDetails();
-
-  const [query, setQuery] = useState('');
-
-  const hadnleSearchQuery = (e: any) => {
-    setQuery(e.target.value);
-  };
-
-  const afterLeave = () => {
-    setQuery('');
-  };
-
-  const filteredCustomer =
-    query === ''
-      ? bookigDetails
-      : bookigDetails?.filter((person) => {
-          return person.name.toLowerCase().includes(query.toLowerCase());
-        });
-
   const handleCancel = () => {
     router.push('/admin/booking');
   };
@@ -178,20 +195,6 @@ function InstallmentForm({ customerList, bookingId }: TIBookingCustomerList) {
   return (
     <>
       <div className='mx-auto flex w-1/3  flex-col gap-2'>
-        {/* <div className='flex flex-col'>
-          <Label>Select Booking Customer</Label>
-          <ComboBox
-            placeholder='Search Customer'
-            data={filteredCustomer}
-            query={query}
-            afterLeave={afterLeave}
-            handleSearchQuery={hadnleSearchQuery}
-            selected={formik.values.bookingCustomer}
-            setSelected={(person) => {
-              formik.setFieldValue('bookingCustomer', person);
-            }}
-          />
-        </div> */}
         <div className='flex flex-col'>
           <TextInput
             type='text'
@@ -357,12 +360,17 @@ function InstallmentForm({ customerList, bookingId }: TIBookingCustomerList) {
             onChange={formik.handleChange}
           />
         </div>
-
-        <Button onClick={() => formik.handleSubmit()}>Submit</Button>
+        {installmentId ? (
+          <Button onClick={() => formik.handleSubmit()}>Update</Button>
+        ) : (
+          <Button onClick={() => formik.handleSubmit()}>Submit</Button>
+        )}
         <Button layout='outline' onClick={() => handleCancel()}>
           Cancel
         </Button>
       </div>
+
+      <SvmProjectToast />
     </>
   );
 }

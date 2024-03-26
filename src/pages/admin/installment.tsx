@@ -1,5 +1,4 @@
 import {
-  Button,
   Table,
   TableBody,
   TableCell,
@@ -8,13 +7,23 @@ import {
   TableRow,
 } from '@windmill/react-ui';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
-import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { MdDelete, MdModeEditOutline } from 'react-icons/md';
 
 import Layout from '@/containers/Layout';
 
 import { httpInstance } from '@/constants/httpInstances';
+
+type TinstallmentList = {
+  amount: string;
+  bookingId: string;
+  installmentId: string;
+  installmentNo: number;
+  isDelete: boolean;
+  paymentType: string;
+  penalty: number;
+};
 
 export const getServerSideProps: GetServerSideProps = async () => {
   try {
@@ -36,19 +45,19 @@ export default function Installment({
   list,
   error,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  console.log(list);
-  const [installmentList, setInstallmentList] = useState(list);
+  const [installmentList, setInstallmentList] =
+    useState<TinstallmentList[]>(list);
+
+  const router = useRouter();
+  const handleEdit = (editId: string) => {
+    router.push(`realEstateProjects/installmentForm/${editId}`);
+  };
 
   return (
     <>
       <Layout
         pageTitle='Installment'
-        right={
-          <Link href='realEstateProjects/installmentForm/addInstallment'>
-            <Button>Add Installment</Button>
-          </Link>
-        }
-        isShowSearchBar={true}
+        isShowSearchBar={false}
         // handleSearch={handleSearch}
       >
         <TableContainer>
@@ -62,25 +71,27 @@ export default function Installment({
               </TableRow>
             </TableHeader>
             <TableBody>
-              <TableRow>
-                <TableCell>Mehul</TableCell>
-                <TableCell>10000</TableCell>
-                <TableCell>Cash</TableCell>
-                <TableCell className='flex gap-5'>
-                  <MdModeEditOutline
-                    // onClick={() => handleEdit(list?.customerId)}
-                    size='24'
-                    className='cursor-pointer'
-                    style={{ color: ' #30bcc2' }}
-                  />
-                  <MdDelete
-                    // onClick={() => handleView(list?.customerId)}
-                    size='24'
-                    className='cursor-pointer'
-                    style={{ color: ' #F38C7F' }}
-                  />
-                </TableCell>
-              </TableRow>
+              {installmentList?.map((item: TinstallmentList) => (
+                <TableRow key={item.bookingId}>
+                  <TableCell>Mehul</TableCell>
+                  <TableCell>{item?.amount}</TableCell>
+                  <TableCell>{item?.paymentType}</TableCell>
+                  <TableCell className='flex gap-5'>
+                    <MdModeEditOutline
+                      onClick={() => handleEdit(item?.installmentId)}
+                      size='24'
+                      className='cursor-pointer'
+                      style={{ color: ' #30bcc2' }}
+                    />
+                    <MdDelete
+                      // onClick={() => handleView(list?.customerId)}
+                      size='24'
+                      className='cursor-pointer'
+                      style={{ color: ' #F38C7F' }}
+                    />
+                  </TableCell>
+                </TableRow>
+              ))}
             </TableBody>
           </Table>
         </TableContainer>

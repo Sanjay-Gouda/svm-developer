@@ -318,7 +318,7 @@ function CustomerForm({
           value={formik.values.address}
           handleChange={formik.handleChange}
         />
-        <div className='flex flex-col'>
+        {/* <div className='flex flex-col'>
           <TextInput
             type='text'
             name='aadharNo'
@@ -329,7 +329,7 @@ function CustomerForm({
           {formik.touched.aadharNo && formik.errors.aadharNo && (
             <div className='text-red-400'>{formik.errors.aadharNo}</div>
           )}
-        </div>
+        </div> */}
 
         <div className='flex flex-col'>
           <TextInput
