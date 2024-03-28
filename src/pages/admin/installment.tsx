@@ -10,8 +10,9 @@ import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { FaFileDownload } from 'react-icons/fa';
-import { MdDelete, MdModeEditOutline } from 'react-icons/md';
+import { MdModeEditOutline } from 'react-icons/md';
 
+import { SvmProjectToast } from '@/components/Toast/Toast';
 import Layout from '@/containers/Layout';
 
 import { httpInstance } from '@/constants/httpInstances';
@@ -24,6 +25,7 @@ type TinstallmentList = {
   isDelete: boolean;
   paymentType: string;
   penalty: number;
+  customer: unknown[];
 };
 
 export const getServerSideProps: GetServerSideProps = async () => {
@@ -48,6 +50,10 @@ export default function Installment({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [installmentList, setInstallmentList] =
     useState<TinstallmentList[]>(list);
+  const { customer } = installmentList;
+
+  const customerNames = customer?.map((customer) => customer.name).join(', ');
+  console.log(installmentList, 'LIST OF INSTALLMENT');
 
   const router = useRouter();
   const handleEdit = (editId: string) => {
@@ -57,6 +63,26 @@ export default function Installment({
   const handlePreviewReceipt = (id: string) => {
     router.push(`realEstateProjects/installmentForm/pdf/${id}`);
   };
+
+  // const fetchData = async () => {
+  //   try {
+  //     const data = await httpInstance.get(`/installment/list`);
+  //     setInstallmentList(data?.data?.result?.list);
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
+
+  // const handleDelete = async (id: string) => {
+  //   try {
+  //     const res = await httpInstance.delete(`installment/delete/${id}`);
+  //     toast.success(res?.data?.message || 'Customer Deleted Successfully');
+  //     fetchData();
+  //   } catch (err) {
+  //     console.log(err);
+  //     toast.error('Something Went wrong');
+  //   }
+  // };
 
   return (
     <>
@@ -79,7 +105,11 @@ export default function Installment({
             <TableBody>
               {installmentList?.map((item: TinstallmentList) => (
                 <TableRow key={item.bookingId}>
-                  <TableCell>Mehul</TableCell>
+                  <TableCell>
+                    {item?.customer
+                      ?.map((customer) => customer?.name)
+                      .join(', ')}
+                  </TableCell>
                   <TableCell>{item?.amount}</TableCell>
                   <TableCell>{item?.paymentType}</TableCell>
                   <TableCell>
@@ -97,12 +127,12 @@ export default function Installment({
                       className='cursor-pointer'
                       style={{ color: ' #30bcc2' }}
                     />
-                    <MdDelete
-                      // onClick={() => handleView(list?.customerId)}
+                    {/* <MdDelete
+                      onClick={() => handleDelete(item?.installmentId)}
                       size='24'
                       className='cursor-pointer'
                       style={{ color: ' #F38C7F' }}
-                    />
+                    /> */}
                   </TableCell>
                 </TableRow>
               ))}
@@ -110,6 +140,7 @@ export default function Installment({
           </Table>
         </TableContainer>
       </Layout>
+      <SvmProjectToast />
     </>
   );
 }

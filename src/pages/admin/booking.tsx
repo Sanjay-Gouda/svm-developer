@@ -48,6 +48,7 @@ export default function Booking({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [bookingList, setBookingList] = useState(list);
 
+  console.log(bookingList, 'BOOKING LIST');
   const route = useRouter();
 
   const handleEdit = (id: string) => {
@@ -152,7 +153,12 @@ export default function Booking({
                     {bookingList?.map((data) => {
                       return (
                         <TableRow key={data?.bookingId}>
-                          <TableCell>{data?.customerName}</TableCell>
+                          {/* <TableCell>{data?.customerName}</TableCell> */}
+                          <TableCell>
+                            {data?.customerName
+                              ?.map((customer) => customer)
+                              .join(', ')}
+                          </TableCell>
                           <TableCell>{data?.projectName}</TableCell>
                           <TableCell>{data?.area}sq.ft</TableCell>
                           <TableCell>{data?.paidAmt}</TableCell>
