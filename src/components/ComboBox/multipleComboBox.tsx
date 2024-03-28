@@ -37,7 +37,8 @@ export default function MultipleSelect({
   hadnleSearchQuery,
   placeholder,
 }: TMultiSelectprops) {
-  console.log(selected, 'SELECTED ITEMS', filteredCustomer);
+  console.log({ selected }, 'CUSTOMER');
+  // console.log(selected, 'SELECTED ITEMS', filteredCustomer);
 
   // const filteredPeople =
   //   query === ''
@@ -81,40 +82,46 @@ export default function MultipleSelect({
                     Nothing found.
                   </div>
                 ) : (
-                  filteredCustomer.map((person) => (
-                    <Combobox.Option
-                      key={person.id}
-                      className={({ active }) =>
-                        `relative cursor-default select-none py-2 pl-10 pr-4 ${
-                          active
-                            ? 'bg-blue-600 text-white dark:text-white'
-                            : 'text-black dark:text-white'
-                        }`
-                      }
-                      value={person}
-                    >
-                      {({ selected, active }) => (
-                        <>
-                          <span
-                            className={`block truncate ${
-                              selected ? 'font-medium' : 'font-normal'
-                            }`}
-                          >
-                            {person.name}
-                          </span>
-                          {selected ? (
+                  filteredCustomer.map((person) => {
+                    const valueExists = selected?.find(
+                      (item: any) => item.id === person.id
+                    );
+
+                    return (
+                      <Combobox.Option
+                        key={person.id}
+                        className={({ active }) =>
+                          `relative cursor-default select-none py-2 pl-10 pr-4 ${
+                            active
+                              ? 'bg-blue-600 text-white dark:text-white'
+                              : 'text-black dark:text-white'
+                          }`
+                        }
+                        value={person}
+                      >
+                        {({ selected, active }) => (
+                          <>
                             <span
-                              className={`absolute inset-y-0 left-0 flex items-center pl-3 ${
-                                active ? 'text-white' : 'text-teal-600'
+                              className={`block truncate ${
+                                selected ? 'font-medium' : 'font-normal'
                               }`}
                             >
-                              <CheckIcon className='h-5 w-5' />
+                              {person.name}
                             </span>
-                          ) : null}
-                        </>
-                      )}
-                    </Combobox.Option>
-                  ))
+                            {valueExists ? (
+                              <span
+                                className={`absolute inset-y-0 left-0 flex items-center pl-3 ${
+                                  active ? 'text-white' : 'text-teal-600'
+                                }`}
+                              >
+                                <CheckIcon className='h-5 w-5' />
+                              </span>
+                            ) : null}
+                          </>
+                        )}
+                      </Combobox.Option>
+                    );
+                  })
                 )}
               </Combobox.Options>
             </Transition>

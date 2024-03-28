@@ -77,7 +77,7 @@ const BookingInstallment = ({
     cBankName: '',
     cheuqeNo: '',
     UPIId: '',
-    penalty: '',
+    penalty: 0,
   };
 
   return (

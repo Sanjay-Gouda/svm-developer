@@ -131,7 +131,7 @@ const BillTo = ({ customer, amount, paymentType, plotNo }) => {
               bottom: 3,
             }}
           >
-            <Text>{paymentType.toLowerCase()}</Text>
+            <Text>{paymentType?.toLowerCase()}</Text>
           </View>
           <Text>Date</Text>
           <View

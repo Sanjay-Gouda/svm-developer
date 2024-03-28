@@ -10,7 +10,8 @@ import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { FaFileDownload } from 'react-icons/fa';
-import { MdModeEditOutline } from 'react-icons/md';
+import { MdDelete, MdModeEditOutline } from 'react-icons/md';
+import { toast } from 'react-toastify';
 
 import { SvmProjectToast } from '@/components/Toast/Toast';
 import Layout from '@/containers/Layout';
@@ -64,25 +65,25 @@ export default function Installment({
     router.push(`realEstateProjects/installmentForm/pdf/${id}`);
   };
 
-  // const fetchData = async () => {
-  //   try {
-  //     const data = await httpInstance.get(`/installment/list`);
-  //     setInstallmentList(data?.data?.result?.list);
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
+  const fetchData = async () => {
+    try {
+      const data = await httpInstance.get(`/installment/list`);
+      setInstallmentList(data?.data?.result?.list);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
-  // const handleDelete = async (id: string) => {
-  //   try {
-  //     const res = await httpInstance.delete(`installment/delete/${id}`);
-  //     toast.success(res?.data?.message || 'Customer Deleted Successfully');
-  //     fetchData();
-  //   } catch (err) {
-  //     console.log(err);
-  //     toast.error('Something Went wrong');
-  //   }
-  // };
+  const handleDelete = async (id: string) => {
+    try {
+      const res = await httpInstance.delete(`installment/delete/${id}`);
+      toast.success(res?.data?.message || 'Customer Deleted Successfully');
+      fetchData();
+    } catch (err) {
+      console.log(err);
+      toast.error('Something Went wrong');
+    }
+  };
 
   return (
     <>
@@ -127,12 +128,12 @@ export default function Installment({
                       className='cursor-pointer'
                       style={{ color: ' #30bcc2' }}
                     />
-                    {/* <MdDelete
+                    <MdDelete
                       onClick={() => handleDelete(item?.installmentId)}
                       size='24'
                       className='cursor-pointer'
                       style={{ color: ' #F38C7F' }}
-                    /> */}
+                    />
                   </TableCell>
                 </TableRow>
               ))}
