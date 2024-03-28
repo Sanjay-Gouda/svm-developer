@@ -199,6 +199,7 @@ const BookingForm = ({
     <>
       <div className='mx-auto flex w-1/3 flex-col gap-2'>
         <div className='flex flex-col'>
+          <Label>Client Name *</Label>
           <MultipleSelect
             filteredCustomer={filteredCustomer}
             selected={clientSelect}
@@ -206,17 +207,16 @@ const BookingForm = ({
             query={query}
             hadnleSearchQuery={hadnleSearchQuery}
             afterLeave={afterLeave}
-          />
-          <Label>Client Name *</Label>
-          <ComboBox
             placeholder='Search Client'
+          />
+          {/* <ComboBox
             data={filteredCustomer}
             query={query}
             afterLeave={afterLeave}
             handleSearchQuery={hadnleSearchQuery}
             // selected={clientSelect}
             // setSelected={setClientSelect}
-          />
+          /> */}
 
           {/* {!clientSelect && (
             <div className='text-red-400'>{clientErrorMessage}</div>

@@ -25,6 +25,7 @@ type TMultiSelectprops = {
   query: string;
   afterLeave: () => void;
   hadnleSearchQuery: (e: unknown) => void;
+  placeholder: string;
 };
 
 export default function MultipleSelect({
@@ -34,6 +35,7 @@ export default function MultipleSelect({
   query,
   afterLeave,
   hadnleSearchQuery,
+  placeholder,
 }: TMultiSelectprops) {
   console.log(selected, 'SELECTED ITEMS', filteredCustomer);
 
@@ -57,6 +59,7 @@ export default function MultipleSelect({
                 className='mt-1 block w-full rounded-md border-gray-300 bg-slate-50 text-sm leading-5 focus:border-purple-400 focus:outline-none focus:ring focus:ring-purple-300  dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:focus:border-gray-600 dark:focus:ring-gray-300'
                 value={selected?.map((person) => person.name).join(', ')}
                 onChange={hadnleSearchQuery}
+                placeholder={placeholder}
               />
               <Combobox.Button className='absolute inset-y-0 right-0 flex items-center pr-2'>
                 <ChevronUpDownIcon

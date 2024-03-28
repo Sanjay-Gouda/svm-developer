@@ -36,13 +36,13 @@ type TCustomerPDFDetail = {
 
 type TInstallment = {
   bookingCustomer: string[];
-  amt: number;
+  amt: number | string;
   UPIId: '';
   cheuqeNo: '';
   cBankName: '';
   BTAcNo: '';
   BTBankName: '';
-  penalty: number;
+  penalty: number | string;
   paymentMethod: 'CHEQUE' | 'CASH' | 'UPI' | 'BANK_TRANSFER';
 };
 
@@ -70,14 +70,14 @@ const BookingInstallment = ({
 
   const installmentInitialValues: TInstallment = {
     bookingCustomer: customerNames,
-    amt: 0,
+    amt: '',
     paymentMethod: 'CASH',
     BTAcNo: '',
     BTBankName: '',
     cBankName: '',
     cheuqeNo: '',
     UPIId: '',
-    penalty: 0,
+    penalty: '',
   };
 
   return (

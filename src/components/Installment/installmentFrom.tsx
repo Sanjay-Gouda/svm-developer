@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { Cookies } from 'react-cookie';
 import { toast } from 'react-toastify';
+import * as Yup from 'yup';
 
 import { SvmProjectToast } from '@/components/Toast/Toast';
 import { TextInput } from '@/components/ui-blocks';
@@ -14,9 +15,15 @@ type TPaymentMethod = {
   paymentmethod: 'CHEQUE' | 'CASH' | 'UPI' | 'BANK_TRANSFER';
 };
 
+const validationSchema = Yup.object().shape({
+  amt: Yup.string()
+    .required('Amount is required')
+    .typeError('Amount must be a number'),
+});
+
 const addInitialValues: TInstallment = {
   bookingCustomer: '',
-  amt: 0,
+  amt: '',
   paymentMethod: 'CASH',
   BTAcNo: '',
   BTBankName: '',
@@ -38,7 +45,7 @@ export type TIBankDetails = {
 
 type TInstallment = {
   bookingCustomer: string;
-  amt: number;
+  amt: number | string;
   UPIId: '';
   cheuqeNo: '';
   cBankName: '';
@@ -66,6 +73,7 @@ function InstallmentForm({
   installmentId,
 }: TIBookingCustomerList) {
   const router = useRouter();
+  const [loader, setLoader] = useState<boolean>(false);
 
   const cookies = new Cookies();
   const token = cookies.get('token');
@@ -79,6 +87,7 @@ function InstallmentForm({
   });
 
   const addInstallments = async (values: TInstallment) => {
+    setLoader(true);
     const {
       BTBankName,
       UPIId,
@@ -108,8 +117,12 @@ function InstallmentForm({
     try {
       await httpInstance.post(`/installment/create`, payload);
       toast.success('Installment added Successfully');
+      router.push('/admin/booking');
+      setLoader(false);
     } catch (err) {
+      setLoader(false);
       toast.error('Something went wrong');
+      router.push('/admin/booking');
     }
   };
 
@@ -124,6 +137,7 @@ function InstallmentForm({
       paymentMethod,
       penalty,
     } = values;
+    setLoader(true);
 
     const payload: TCreateInstallment = {
       amount: +amt,
@@ -140,9 +154,13 @@ function InstallmentForm({
       await httpInstance.put(`/installment/update/${installmentId}`, payload, {
         headers: { Authorization: `Bearer ${token}` },
       });
+      setLoader(false);
       toast.success('Installment Updated Successfully..');
+      router.push('/admin/installment');
     } catch (err) {
+      setLoader(false);
       toast.error('Something went wrong');
+      router.push('/admin/installment');
     }
   };
 
@@ -176,9 +194,9 @@ function InstallmentForm({
   };
 
   const initialvalues = bookingId ? customerList : addInitialValues;
-
   const formik = useFormik({
     initialValues: initialvalues,
+    validationSchema,
     onSubmit: (values: TInstallment) => {
       handlePaymentMethodErrors(values);
     },
@@ -210,10 +228,14 @@ function InstallmentForm({
           <TextInput
             type='text'
             name='amt'
-            label='Paid Amount'
+            label='Paid Amount *'
+            placeholder='add amount'
             value={formik.values.amt}
             onChange={formik.handleChange}
           />
+          {formik.touched.amt && formik.errors.amt && (
+            <div className='text-red-400'>{formik.errors.amt}</div>
+          )}
         </div>
 
         <div className='flex flex-col'>
@@ -356,14 +378,19 @@ function InstallmentForm({
             type='text'
             name='penalty'
             label='Penalty'
+            placeholder='Penalty'
             value={formik.values.penalty}
             onChange={formik.handleChange}
           />
         </div>
         {installmentId ? (
-          <Button onClick={() => formik.handleSubmit()}>Update</Button>
+          <Button onClick={() => formik.handleSubmit()}>
+            {loader ? 'Updating...' : 'Update'}
+          </Button>
         ) : (
-          <Button onClick={() => formik.handleSubmit()}>Submit</Button>
+          <Button onClick={() => formik.handleSubmit()}>
+            {loader ? 'Submitting...' : 'Submit'}
+          </Button>
         )}
         <Button layout='outline' onClick={() => handleCancel()}>
           Cancel
