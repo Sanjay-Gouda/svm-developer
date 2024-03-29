@@ -17,7 +17,7 @@ const validationSchema = Yup.object().shape({
   bankName: Yup.string().required('bankName is required'),
   accHolderName: Yup.string().required('AccHolderName is required'),
   accNo: Yup.string()
-    .matches(/^\d{10}$/, 'Bank account number must be 10 digits long')
+    .matches(/^\d{6,}$/, 'Bank account number atleast 6 digits long')
     .required('Bank account number is required'),
 });
 

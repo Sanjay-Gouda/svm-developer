@@ -48,10 +48,12 @@ const AadharcardContainer = ({ customerId, handleNextStep }: Tdocument) => {
   const frontSideAadharCard = useDropzone({
     onDrop: handleFrontSideAadharCard,
     multiple: false,
+    accept: { 'image/png': ['.png', '.jpg', '.jpeg'] },
   });
   const backSideAadharCard = useDropzone({
     onDrop: handleBackSideAadhardCard,
     multiple: false,
+    accept: { 'image/png': ['.png', '.jpg', '.jpeg'] },
   });
 
   const handleUpload = async () => {
