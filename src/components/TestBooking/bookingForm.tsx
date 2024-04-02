@@ -264,21 +264,6 @@ const BookingForm = ({
         </div>
 
         <div className='flex flex-col'>
-          <Label>Bank Account *</Label>
-          <ComboBox
-            placeholder='Select Account'
-            data={filterAccounts}
-            query={query}
-            afterLeave={afterLeave}
-            handleSearchQuery={hadnleSearchQuery}
-            selected={selectBankAccount}
-            setSelected={setSelectedBankAccount}
-          />
-          {bankAccountError && (
-            <div className='text-red-400'>{bankAccountErrorMessage}</div>
-          )}
-        </div>
-        <div className='flex flex-col'>
           <TextInput
             type='text'
             name='totalAmt'
@@ -401,6 +386,24 @@ const BookingForm = ({
             </Label>
           </div>
         </div>
+
+        {paymentMethodType !== 'CASH' && (
+          <div className='flex flex-col'>
+            <Label>Bank Account *</Label>
+            <ComboBox
+              placeholder='Select Account'
+              data={filterAccounts}
+              query={query}
+              afterLeave={afterLeave}
+              handleSearchQuery={hadnleSearchQuery}
+              selected={selectBankAccount}
+              setSelected={setSelectedBankAccount}
+            />
+            {bankAccountError && (
+              <div className='text-red-400'>{bankAccountErrorMessage}</div>
+            )}
+          </div>
+        )}
 
         {/* For Cheque */}
         <>

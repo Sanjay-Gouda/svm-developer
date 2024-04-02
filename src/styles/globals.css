@@ -24,3 +24,8 @@
 .active:not(:first-child):before {
   @apply bg-green-600;
 }
+
+
+.react-datepicker-wrapper{
+  width: 100%;
+}

@@ -1,4 +1,4 @@
-import { Button } from '@windmill/react-ui';
+import { Button, Label } from '@windmill/react-ui';
 import axios from 'axios';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
@@ -10,6 +10,7 @@ import * as Yup from 'yup';
 import 'react-toastify/dist/ReactToastify.css';
 
 import { SvmProjectToast } from '@/components/Toast/Toast';
+import DateSelector from '@/components/UI/DatePicker';
 import { TextInput, TextInputArea } from '@/components/ui-blocks';
 
 import { API_ENDPOINT } from '@/const/APIRoutes';
@@ -35,25 +36,25 @@ const validationSchema = Yup.object().shape({
 type formProps = {
   name: string;
   phone: string;
-  aadharNo: string;
   email: string;
   alternativeNo: string;
   address: string;
   pincode?: number;
   state: string;
   city: string;
+  dob?: Date | null;
 };
 
 const addInitialValues: formProps = {
   name: '',
   phone: '',
-  // aadharNo: '',
   email: '',
   address: '',
   alternativeNo: '',
   pincode: undefined,
   city: '',
   state: '',
+  dob: null,
 };
 
 type editValueProps = {
@@ -65,7 +66,6 @@ type editValueProps = {
 
 type Tpayload = {
   name: string;
-  // aadharNo: string;
   email: string;
   phone1: string;
   phone2: string;
@@ -85,6 +85,12 @@ function CustomerForm({
 
   const [loader, setLoader] = useState(false);
   const [pincodeQuery, setPincodeQuery] = useState<string>();
+
+  // // const [startDate, setStartDate] = useState<Date | null>(null);
+
+  // const handleStartDateChange = (date: Date) => {
+  //   setStartDate(date);
+  // };
 
   const cookies = new Cookies();
   const token = cookies.get('token');
@@ -218,7 +224,7 @@ function CustomerForm({
     initialValues: formValues,
     validationSchema,
     onSubmit: (values: formProps, { setSubmitting, resetForm }) => {
-      // console.log(values);
+      // console.log(values.dob);
       editId ? updateCustomers(values) : addCustomers(values);
     },
   });
@@ -239,18 +245,7 @@ function CustomerForm({
             <div className='text-red-400'>{formik.errors.name}</div>
           )}
         </div>
-        {/* <div className='flex flex-col'>
-          <TextInput
-            type='text'
-            name='lastName'
-            label='LastName'
-            onChange={formik.handleChange}
-            value={formik.values.lastName}
-          />
-          {formik.touched.lastName && formik.errors.lastName && (
-            <div className='text-red-400'>{formik.errors.lastName}</div>
-          )}
-        </div> */}
+
         <div className='flex flex-col'>
           <TextInput
             type='text'
@@ -274,6 +269,14 @@ function CustomerForm({
           {formik.touched.alternativeNo && formik.errors.alternativeNo && (
             <div className='text-red-400'>{formik.errors.alternativeNo}</div>
           )}
+        </div>
+        <div className='flex w-full flex-col'>
+          <Label>Select DOB</Label>
+          <DateSelector
+            name='dob'
+            selected={formik.values.dob}
+            onChange={(date) => formik.setFieldValue('dob', date)}
+          />
         </div>
 
         <div className='flex flex-col'>
@@ -318,18 +321,6 @@ function CustomerForm({
           value={formik.values.address}
           handleChange={formik.handleChange}
         />
-        {/* <div className='flex flex-col'>
-          <TextInput
-            type='text'
-            name='aadharNo'
-            label='Aadhar No'
-            onChange={formik.handleChange}
-            value={formik.values.aadharNo}
-          />
-          {formik.touched.aadharNo && formik.errors.aadharNo && (
-            <div className='text-red-400'>{formik.errors.aadharNo}</div>
-          )}
-        </div> */}
 
         <div className='flex flex-col'>
           <TextInput
