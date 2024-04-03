@@ -15,8 +15,11 @@ import React, { useState } from 'react';
 import { MdDelete, MdModeEditOutline } from 'react-icons/md';
 import { toast } from 'react-toastify';
 
+import { useModal } from '@/hooks/useModal';
+
 import EmptyState from '@/components/Empty';
 import ServerError from '@/components/Error/500Error';
+import DeleteModal from '@/components/Modal';
 import { SvmProjectToast } from '@/components/Toast/Toast';
 import Layout from '@/containers/Layout';
 
@@ -57,9 +60,11 @@ export default function Customers({
   token,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const route = useRouter();
+  const { isModalOpen, closeModal, openModal, deleteId, handleModalOpen } =
+    useModal();
 
   const [customerData, setCustomerData] = useState<any>(data);
-  // const [isSure,setIsSure] = useState(true);
+
   const handleEdit = (id: string) => {
     route.push(`realEstateProjects/customerForm/${id}`);
   };
@@ -73,11 +78,12 @@ export default function Customers({
     }
   };
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = async () => {
     try {
-      const res = await httpInstance.delete(`/customer/delete/${id}`);
+      const res = await httpInstance.delete(`/customer/delete/${deleteId}`);
       toast.success(res?.data?.message || 'Customer Deleted Successfully');
       fetchData();
+      closeModal();
     } catch (err) {
       // console.log(err);
       toast.success('Something Went wrong');
@@ -164,7 +170,7 @@ export default function Customers({
                               style={{ color: ' #30bcc2' }}
                             />
                             <MdDelete
-                              onClick={() => handleDelete(list?.customerId)}
+                              onClick={() => handleModalOpen(list?.customerId)}
                               size='24'
                               className='cursor-pointer'
                               style={{ color: ' #F38C7F' }}
@@ -181,6 +187,11 @@ export default function Customers({
         )}
       </Layout>
       <SvmProjectToast />
+      <DeleteModal
+        isModalOpen={isModalOpen}
+        closeModal={closeModal}
+        handleDelete={handleDelete}
+      />
     </>
   );
 }

@@ -17,8 +17,11 @@ import { FaFileDownload } from 'react-icons/fa';
 import { MdDelete, MdModeEditOutline } from 'react-icons/md';
 import { toast } from 'react-toastify';
 
+import { useModal } from '@/hooks/useModal';
+
 import EmptyState from '@/components/Empty';
 import ServerError from '@/components/Error/500Error';
+import DeleteModal from '@/components/Modal';
 import { SvmProjectToast } from '@/components/Toast/Toast';
 import Layout from '@/containers/Layout';
 
@@ -49,6 +52,8 @@ export default function Booking({
   const [bookingList, setBookingList] = useState(list);
 
   const route = useRouter();
+  const { isModalOpen, closeModal, openModal, deleteId, handleModalOpen } =
+    useModal();
 
   function truncateText(text: string) {
     if (text.length > 15) {
@@ -77,12 +82,14 @@ export default function Booking({
     }
   };
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = async () => {
     try {
-      const res = await httpInstance.delete(`/booking/delete/${id}`);
+      const res = await httpInstance.delete(`/booking/delete/${deleteId}`);
       toast.success(res?.data?.message || 'Booking info Deleted Successfully');
       fetchData();
+      closeModal();
     } catch (err) {
+      closeModal();
       // console.log(err);
       toast.error('Something Went wrong');
     }
@@ -215,7 +222,7 @@ export default function Booking({
                               style={{ color: ' #30bcc2' }}
                             />
                             <MdDelete
-                              onClick={() => handleDelete(data?.bookingId)}
+                              onClick={() => handleModalOpen(data?.bookingId)}
                               size='24'
                               className='cursor-pointer'
                               style={{ color: ' #F38C7F' }}
@@ -240,6 +247,11 @@ export default function Booking({
         )}
       </Layout>
       <SvmProjectToast />
+      <DeleteModal
+        isModalOpen={isModalOpen}
+        closeModal={closeModal}
+        handleDelete={handleDelete}
+      />
     </>
   );
 }

@@ -16,8 +16,11 @@ import { useState } from 'react';
 import { MdDelete, MdModeEditOutline } from 'react-icons/md';
 import { toast } from 'react-toastify';
 
+import { useModal } from '@/hooks/useModal';
+
 import EmptyState from '@/components/Empty';
 import ServerError from '@/components/Error/500Error';
+import DeleteModal from '@/components/Modal';
 import { SvmProjectToast } from '@/components/Toast/Toast';
 import Layout from '@/containers/Layout';
 
@@ -45,6 +48,7 @@ export default function Projects({
   error,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const routes = useRouter();
+  const { closeModal, deleteId, handleModalOpen, isModalOpen } = useModal();
   const [projects, setProjects] = useState(repo);
 
   const handleEdit = (id: string) => {
@@ -62,14 +66,16 @@ export default function Projects({
     }
   };
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = async () => {
     try {
-      const res = await httpInstance.delete(`/project/delete/${id}`);
+      const res = await httpInstance.delete(`/project/delete/${deleteId}`);
       toast.success(res?.data?.message);
 
       fetchProjects();
+      closeModal();
     } catch (err) {
-      toast.success('Something went wrong');
+      closeModal();
+      toast.error('Something went wrong');
     }
   };
 
@@ -168,7 +174,7 @@ export default function Projects({
                             />
                             <MdDelete
                               size='24'
-                              onClick={() => handleDelete(data.projectId)}
+                              onClick={() => handleModalOpen(data.projectId)}
                               className='cursor-pointer'
                               style={{ color: ' #F38C7F' }}
                             />
@@ -195,6 +201,11 @@ export default function Projects({
       </Layout>
 
       <SvmProjectToast />
+      <DeleteModal
+        isModalOpen={isModalOpen}
+        closeModal={closeModal}
+        handleDelete={handleDelete}
+      />
     </>
   );
 }
