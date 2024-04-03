@@ -117,7 +117,7 @@ const TestBooking = ({ editInitialValues, editId }: editProps) => {
     } catch (err) {
       setLoader(false);
 
-      toast.error('Something went wrong');
+      toast.error(err?.response?.data?.message);
       // routes.push('/admin/booking');
     }
   };

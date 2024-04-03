@@ -48,8 +48,14 @@ export default function Booking({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [bookingList, setBookingList] = useState(list);
 
-  console.log(bookingList, 'BOOKING LIST');
   const route = useRouter();
+
+  function truncateText(text: string) {
+    if (text.length > 15) {
+      return text.substring(0, 10) + '...';
+    }
+    return text;
+  }
 
   const handleEdit = (id: string) => {
     route.push(`realEstateProjects/bookingForm/${id}`);
@@ -156,9 +162,10 @@ export default function Booking({
                           {/* <TableCell>{data?.customerName}</TableCell> */}
                           <TableCell>
                             {data?.customerName
-                              ?.map((customer) => customer)
+                              ?.map((customer) => truncateText(customer))
                               .join(', ')}
                           </TableCell>
+
                           <TableCell>{data?.projectName}</TableCell>
                           <TableCell>{data?.area}sq.ft</TableCell>
                           <TableCell>{data?.paidAmt}</TableCell>
