@@ -11,7 +11,7 @@ export const styles = StyleSheet.create({
     lineHeight: 1.5,
     flexDirection: 'column',
     // Set your desired border style
-    // boxSizing: 'border-box',
+    boxSizing: 'border-box',
     paddingTop: 30,
     paddingLeft: 30,
     paddingRight: 30,
@@ -22,11 +22,12 @@ export const styles = StyleSheet.create({
     padding: '6px ',
     margin: '0 auto',
     marginTop: '20px',
-    backgroundColor: '#fff',
+    backgroundColor: '#000',
     border: '2px solid black',
     borderRadius: '10px',
+    boxShadow: ' -10px 10px 5px -5px rgba(0, 0, 0, 0.5)',
     // boxShadow: '-5px 5px 10px red',
-    boxShadow: '10px 10px',
+    // boxShadow: '10px 10px',
   },
 
   termsHeading: {
@@ -64,11 +65,11 @@ export const styles = StyleSheet.create({
 
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
     // gap: '10px',
-    alignItems: 'center',
-    borderRadius: 5,
-    border: '2px solid black',
+    alignItems: 'flex-end',
+    // borderRadius: 5,
+    borderBottom: '2px dashed black',
     marginBottom: '20px',
   },
 
@@ -78,6 +79,41 @@ export const styles = StyleSheet.create({
     backgroundColor: '#17A34B',
     position: 'absolute',
     bottom: 0,
+  },
+
+  projectDetailsWrapper: {
+    margin: '0 auto',
+    padding: '8px 0px',
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'row',
+    gap: '20px',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    // border: '1px solid black',
+    // height: 150,
+  },
+
+  detailsWrapper: {
+    width: '70%',
+    // border: '1px solid black',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '16px',
+  },
+  customerDetailWrapper: {
+    marginTop: '20px',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '8px',
+    width: '100%',
+  },
+  LogoWrapper: {
+    width: '30%',
+    overflow: 'hidden',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 
   companyLogo: {
@@ -108,6 +144,13 @@ export const styles = StyleSheet.create({
     color: '#091762',
     // letterSpacing: 3,
   },
+  formHeading: {
+    fontSize: '14px',
+    fontWeight: 'light',
+    color: '#091762',
+    // marginBottom: '10px',
+    // letterSpacing: 3,
+  },
 
   titleWrapper: {
     display: 'flex',
@@ -127,7 +170,7 @@ export const styles = StyleSheet.create({
     display: 'flex',
     width: '100%',
     flexDirection: 'row',
-    justifyContent: 'flex-end',
+    justifyContent: 'center',
     gap: '8px',
     // padding: '0 10px',
     // marginTop: "-50px",
@@ -153,13 +196,21 @@ export const styles = StyleSheet.create({
     maxWidth: '100%',
   },
 
+  detailFullWidthField: {
+    display: 'flex',
+    flexDirection: 'row',
+    width: '100%',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-end',
+  },
+
   fullWidthField: {
     display: 'flex',
     flexDirection: 'row',
     width: '100%',
     justifyContent: 'flex-start',
     alignItems: 'flex-end',
-    marginTop: '30px',
+    marginBottom: '18px',
   },
   fullWidthFieldName: {
     display: 'flex',
@@ -174,11 +225,38 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  headeingFlexCenter: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderBottom: '2px dashed black',
+  },
+
+  topWave: {
+    position: 'absolute',
+    top: 0,
+    width: '120%',
+    overflow: 'hidden',
+  },
+  bottomWave: {
+    position: 'absolute',
+    bottom: 0,
+    width: '120%',
+    overflow: 'hidden',
+  },
+
+  topWaveImage: {
+    width: '100%',
+    height: '100%',
+    objectFit: 'cover',
+  },
+
   bookingHeading: {
     fontSize: '18px',
     textAlign: 'center',
     fontWeight: 'heavy',
     color: '#091762',
+    marginTop: '20px',
   },
   projectLogoHeading: {
     fontSize: '14px',
@@ -194,7 +272,7 @@ export const styles = StyleSheet.create({
 
   parentView: {
     width: '100%',
-    marginTop: '20px',
+    // marginTop: '20px',
     marginLeft: 'auto',
     marginRight: 'auto',
   },
@@ -247,7 +325,7 @@ export const styles = StyleSheet.create({
     bottom: 2,
   },
   flexEnd: {
-    marginTop: '30px',
+    marginBottom: '18px',
     display: 'flex',
     flexDirection: 'row',
     // gap: '16px',
@@ -270,5 +348,6 @@ export const styles = StyleSheet.create({
   termPage: {
     width: '100%',
     margin: '0 auto',
+    position: 'relative',
   },
 });

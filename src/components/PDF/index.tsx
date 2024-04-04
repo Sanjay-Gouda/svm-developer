@@ -115,6 +115,20 @@ export const Booking = ({ details }: any) => {
   return (
     <Document>
       <Page size='A4' style={styles.page}>
+        <View style={styles.topWave}>
+          <Image
+            style={styles.topWaveImage}
+            src='/images/top-wave.png'
+            alt='Logo'
+          />
+        </View>
+        <View style={styles.bottomWave}>
+          <Image
+            style={styles.topWaveImage}
+            src='/images/bottom-wave.png'
+            alt='Logo'
+          />
+        </View>
         <View>
           <Text style={styles.bookingHeading}>BOOKING FORM</Text>
         </View>
@@ -137,62 +151,90 @@ export const Booking = ({ details }: any) => {
           <Text style={styles.headingText}>Booking Date : {bookingdate}</Text>
         </View>
 
-        <View style={styles.companyLogo}>
-          <View
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'start',
-              width: '100%',
-            }}
-          >
-            {/* <View>
-              <Text style={styles.projectLogoHeading}>PROJECT LOGO</Text>
-            </View> */}
-            <View>
-              <Image style={styles.logo} src={projectLogo} alt='Logo' />
+        <View style={styles.headeingFlexCenter}>
+          <Text style={styles.formHeading}>PROJECT DETAILS</Text>
+        </View>
+
+        <View style={styles.projectDetailsWrapper}>
+          <View style={styles.detailsWrapper}>
+            <View style={styles.detailFullWidthField}>
+              <Text style={styles.headingText}>Name:</Text>
+              <View style={styles.halfDiv}>
+                <Text style={styles.valueText}> {projectName}</Text>
+              </View>
+            </View>
+            <View style={styles.detailFullWidthField}>
+              <Text style={styles.headingText}>Area:</Text>
+              <View style={styles.halfDiv}>
+                <Text style={styles.valueText}> {area} sq.ft</Text>
+              </View>
+            </View>
+            <View style={styles.detailFullWidthField}>
+              <Text style={styles.headingText}>Description:</Text>
+              <View style={styles.halfDiv}>
+                <Text style={styles.valueText}> {description}</Text>
+              </View>
+            </View>
+            <View style={styles.detailFullWidthField}>
+              <Text style={styles.headingText}>Address:</Text>
+              <View style={styles.halfDiv}>
+                <Text style={styles.valueText}> Chavaj</Text>
+              </View>
             </View>
           </View>
-
-          <View style={styles.passPhotoWrapper}>
-            {customer?.map((docs: TCustomerPDFDetail, ind: string) => (
-              <>
-                {docs?.images?.slice(0, 2).map((aadhar: TCutomerImage) => {
-                  if (aadhar.type === 'PHOTO') {
-                    return (
-                      <>
-                        <View key={ind} style={styles.passPhotoContainer}>
-                          <Image
-                            style={{
-                              width: '100%',
-                              height: '100%',
-                              objectFit: 'cover',
-                            }}
-                            src={aadhar?.imageUrl}
-                            alt='aadharCard-front'
-                          />
-                        </View>
-                      </>
-                    );
-                  }
-                })}
-              </>
-            ))}
+          <View style={styles.LogoWrapper}>
+            <View
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+                width: '100%',
+              }}
+            >
+              <View>
+                <Image style={styles.logo} src={projectLogo} alt='Logo' />
+              </View>
+            </View>
           </View>
         </View>
 
-        <View style={styles.parentView}>
-          <View style={styles.fullWidthField}>
-            <Text style={styles.headingText}>Project Name:</Text>
-            <View style={styles.halfDiv}>
-              <Text style={styles.valueText}> {projectName}</Text>
+        <View style={styles.customerDetailWrapper}>
+          <View style={styles.headeingFlexCenter}>
+            <Text style={styles.formHeading}>CUSTOMER DETAILS</Text>
+          </View>
+
+          <View style={styles.projectDetailsWrapper}>
+            <View style={styles.passPhotoWrapper}>
+              {customer?.map((docs: TCustomerPDFDetail, ind: string) => (
+                <>
+                  {docs?.images?.slice(0, 2).map((aadhar: TCutomerImage) => {
+                    if (aadhar.type === 'PHOTO') {
+                      return (
+                        <>
+                          <View key={ind} style={styles.passPhotoContainer}>
+                            <Image
+                              style={{
+                                width: '100%',
+                                height: '100%',
+                                objectFit: 'cover',
+                              }}
+                              src={aadhar?.imageUrl}
+                              alt='aadharCard-front'
+                            />
+                          </View>
+                        </>
+                      );
+                    }
+                  })}
+                </>
+              ))}
             </View>
           </View>
 
-          {/* <View style={styles.flexEnd}>
-            <View style={styles.newHalfDivWrapper}>
+          <View style={styles.parentView}>
+            <View style={styles.fullWidthField}>
               <Text style={styles.headingText}>Name:</Text>
-
               <View style={styles.halfDiv}>
                 {customer?.map((customer: TCustomerPDFDetail, ind: string) => (
                   <Text style={styles.valueText} key={ind}>
@@ -201,9 +243,8 @@ export const Booking = ({ details }: any) => {
                 ))}
               </View>
             </View>
-
-            <View style={styles.newHalfDivWrapper}>
-              <Text style={styles.headingText}>Mobile:</Text>
+            <View style={styles.fullWidthField}>
+              <Text style={styles.headingText}>Mobile No:</Text>
               <View style={styles.halfDiv}>
                 {customer?.map((customer: TCustomerPDFDetail, ind: string) => (
                   <Text key={ind} style={styles.valueText}>
@@ -212,99 +253,89 @@ export const Booking = ({ details }: any) => {
                 ))}
               </View>
             </View>
-          </View> */}
+            <View style={styles.flexEnd}>
+              <View style={styles.newHalfDivWrapper}>
+                <Text style={styles.headingText}>DOB:</Text>
+                <View style={styles.halfDiv}>
+                  <Text style={styles.ml}> 15-02-1978</Text>
+                </View>
+              </View>
 
-          <View style={styles.fullWidthField}>
-            <Text style={styles.headingText}>Name:</Text>
-            <View style={styles.halfDiv}>
-              {customer?.map((customer: TCustomerPDFDetail, ind: string) => (
-                <Text style={styles.valueText} key={ind}>
-                  {customer?.name}
-                </Text>
-              ))}
-            </View>
-          </View>
-          <View style={styles.fullWidthField}>
-            <Text style={styles.headingText}>Mobile No:</Text>
-            <View style={styles.halfDiv}>
-              {customer?.map((customer: TCustomerPDFDetail, ind: string) => (
-                <Text key={ind} style={styles.valueText}>
-                  {`${customer?.phone1} `}
-                </Text>
-              ))}
-            </View>
-          </View>
-          <View style={styles.fullWidthField}>
-            <Text style={styles.headingText}>Address:</Text>
-            <View style={styles.halfDiv}>
-              {customer
-                ?.slice(0, 1)
-                .map((customer: TCustomerPDFDetail, ind: string) => (
-                  <Text style={styles.valueText} key={ind}>
-                    {customer?.address}
-                  </Text>
-                ))}
-            </View>
-          </View>
-
-          <View style={styles.flexEnd}>
-            <View style={styles.newHalfDivWrapper}>
-              <Text style={styles.headingText}>House/Plot No:</Text>
-              <View style={styles.halfDiv}>
-                <Text style={styles.ml}> {plotNo}</Text>
+              <View style={styles.newHalfDivWrapper}>
+                <Text style={styles.headingText}>Marital Status:</Text>
+                <View style={styles.halfDiv}>
+                  <Text style={styles.valueText}> Married </Text>
+                </View>
               </View>
             </View>
 
-            <View style={styles.newHalfDivWrapper}>
-              <Text style={styles.headingText}>Area:</Text>
+            <View style={styles.fullWidthField}>
+              <Text style={styles.headingText}>Address:</Text>
               <View style={styles.halfDiv}>
-                <Text style={styles.valueText}>{area} sq.ft</Text>
-              </View>
-            </View>
-          </View>
-
-          <View style={styles.flexEnd}>
-            <Text style={styles.headingText}>Description:</Text>
-            <View style={styles.halfDiv}>
-              <Text style={styles.valueText}> {description}</Text>
-            </View>
-          </View>
-          <View style={styles.flexEnd}>
-            <Text style={styles.headingText}>Total Amount:</Text>
-            <View style={styles.halfDiv}>
-              <Text style={styles.ml}>{totalAmt}</Text>
-            </View>
-          </View>
-
-          <View style={styles.flexEnd}>
-            <View style={styles.newHalfDivWrapper}>
-              <Text style={styles.headingText}>Down Payment:</Text>
-              <View style={styles.halfDiv}>
-                <Text style={styles.ml}> {paidAmt}</Text>
+                {customer
+                  ?.slice(0, 1)
+                  .map((customer: TCustomerPDFDetail, ind: string) => (
+                    <Text style={styles.valueText} key={ind}>
+                      {customer?.address}
+                    </Text>
+                  ))}
               </View>
             </View>
 
-            <View style={styles.newHalfDivWrapper}>
-              <Text style={styles.headingText}>EMI:</Text>
-              <View style={styles.halfDiv}>
-                <Text style={styles.valueText}> {installmentAmt} </Text>
+            <View style={styles.flexEnd}>
+              <View style={styles.newHalfDivWrapper}>
+                <Text style={styles.headingText}>House/Plot No:</Text>
+                <View style={styles.halfDiv}>
+                  <Text style={styles.ml}> {plotNo}</Text>
+                </View>
+              </View>
+
+              <View style={styles.newHalfDivWrapper}>
+                <Text style={styles.headingText}>Total Amount:</Text>
+                <View style={styles.halfDiv}>
+                  <Text style={styles.valueText}> {totalAmt} </Text>
+                </View>
               </View>
             </View>
-          </View>
 
-          <View style={styles.flexEnd}>
-            <View style={styles.newHalfDivWrapper}>
-              <Text style={styles.headingText}>Owner's Sign:</Text>
-              <View style={styles.halfDiv}></View>
+            {/* <View style={styles.flexEnd}>
+              <Text style={styles.headingText}>Total Amount:</Text>
+              <View style={styles.halfDiv}>
+                <Text style={styles.ml}>{totalAmt}</Text>
+              </View>
+            </View> */}
+
+            <View style={styles.flexEnd}>
+              <View style={styles.newHalfDivWrapper}>
+                <Text style={styles.headingText}>Down Payment:</Text>
+                <View style={styles.halfDiv}>
+                  <Text style={styles.ml}> {paidAmt}</Text>
+                </View>
+              </View>
+
+              <View style={styles.newHalfDivWrapper}>
+                <Text style={styles.headingText}>EMI:</Text>
+                <View style={styles.halfDiv}>
+                  <Text style={styles.valueText}> {installmentAmt} </Text>
+                </View>
+              </View>
             </View>
 
-            <View style={styles.newHalfDivWrapper}>
-              <Text style={styles.headingText}>Customer's Sign:</Text>
+            <View style={styles.flexEnd}>
+              <View style={styles.newHalfDivWrapper}>
+                <Text style={styles.headingText}>Owner's Sign:</Text>
+                <View style={styles.halfDiv}></View>
+              </View>
 
-              <View style={styles.halfDiv}></View>
+              <View style={styles.newHalfDivWrapper}>
+                <Text style={styles.headingText}>Customer's Sign:</Text>
+
+                <View style={styles.halfDiv}></View>
+              </View>
             </View>
           </View>
         </View>
+
         {/* <View style={styles.termBox}></View> */}
       </Page>
 
@@ -350,6 +381,20 @@ export const Booking = ({ details }: any) => {
       </Page>
 
       <Page size='A4' style={styles.termPage}>
+        <View style={styles.topWave}>
+          <Image
+            style={styles.topWaveImage}
+            src='/images/top-wave.png'
+            alt='Logo'
+          />
+        </View>
+        <View style={styles.bottomWave}>
+          <Image
+            style={styles.topWaveImage}
+            src='/images/bottom-wave.png'
+            alt='Logo'
+          />
+        </View>
         {/* <View style={styles.footer}></View> */}
 
         <View
@@ -365,7 +410,7 @@ export const Booking = ({ details }: any) => {
               justifyContent: 'center',
               alignItems: 'center',
               width: '100%',
-              paddingTop: '20px',
+              paddingTop: '50px',
             }}
           >
             <Text
@@ -416,6 +461,7 @@ export const Booking = ({ details }: any) => {
                 fontFamily: 'Nato Sans Gujarati',
                 fontWeight: 'heavy',
                 fontSize: '16px',
+                color: '#ffffff',
               }}
             >
               Note: ઉપર દર્શાવેલ તમામ શરતો અને નિયમો મને સારી રીતે સમજાય છે. અને
