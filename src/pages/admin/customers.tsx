@@ -7,11 +7,11 @@ import {
   TableHeader,
   TableRow,
 } from '@windmill/react-ui';
-import axios from 'axios';
+import debounce from 'lodash/debounce';
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { MdDelete, MdModeEditOutline } from 'react-icons/md';
 import { toast } from 'react-toastify';
 
@@ -23,7 +23,6 @@ import DeleteModal from '@/components/Modal';
 import { SvmProjectToast } from '@/components/Toast/Toast';
 import Layout from '@/containers/Layout';
 
-import { API_ENDPOINT } from '@/const/APIRoutes';
 import { httpInstance } from '@/constants/httpInstances';
 
 type customerListProps = {
@@ -62,6 +61,7 @@ export default function Customers({
   const route = useRouter();
   const { isModalOpen, closeModal, openModal, deleteId, handleModalOpen } =
     useModal();
+  const [searchQuery, setSearchQuery] = useState('');
 
   const [customerData, setCustomerData] = useState<any>(data);
 
@@ -90,31 +90,31 @@ export default function Customers({
     }
   };
 
-  const handleSearch = async (e: any) => {
-    const value = e.target.value;
-
-    const timer = setTimeout(async () => {
+  useEffect(() => {
+    const fetchData = async () => {
       try {
-        const res = await axios.get(
-          `${API_ENDPOINT.END_POINT}/customer/advance-list?searchString=${value}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
+        const res = await httpInstance.get(
+          `/customer/advance-list?searchString=${searchQuery}`
         );
+
         const data = res.data.result.list;
 
         setCustomerData(data);
       } catch (err) {
         console.log(err);
       }
-    }, 200);
-
-    return () => {
-      clearTimeout(timer);
     };
-  };
+
+    if (searchQuery) {
+      fetchData();
+    } else {
+      setCustomerData(data);
+    }
+  }, [searchQuery]);
+
+  const handleSearch = debounce((searchQuery: string) => {
+    setSearchQuery(searchQuery);
+  }, 300);
 
   return (
     <>
@@ -126,7 +126,7 @@ export default function Customers({
           </Link>
         }
         isShowSearchBar={true}
-        handleSearch={handleSearch}
+        handleSearch={(e) => handleSearch(e.target.value)}
       >
         {error ? (
           <>

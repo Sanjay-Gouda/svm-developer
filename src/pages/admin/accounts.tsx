@@ -8,10 +8,11 @@ import {
   TableRow,
 } from '@windmill/react-ui';
 import axios from 'axios';
+import debounce from 'lodash/debounce';
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { MdModeEditOutline } from 'react-icons/md';
 
 import EmptyState from '@/components/Empty';
@@ -19,6 +20,7 @@ import ServerError from '@/components/Error/500Error';
 import Layout from '@/containers/Layout';
 
 import { API_ENDPOINT } from '@/const/APIRoutes';
+import { httpInstance } from '@/constants/httpInstances';
 
 type accounrDetailProps = {
   accNo: string;
@@ -62,6 +64,7 @@ export default function Account({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [accountDetails, setAccountDetails] =
     useState<accounrDetailProps[]>(repo);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const router = useRouter();
 
@@ -69,13 +72,11 @@ export default function Account({
     router.push(`realEstateProjects/accountForm/${id}`);
   };
 
-  const handleSearch = async (e: any) => {
-    const value = e.target.value;
-
-    const timer = setTimeout(async () => {
+  useEffect(() => {
+    const fetchData = async () => {
       try {
-        const res = await axios.get(
-          `${API_ENDPOINT.END_POINT}/account/basic-list?searchString=${value}`
+        const res = await httpInstance.get(
+          `/account/basic-list?searchString=${searchQuery}`
         );
 
         const data = res.data.result;
@@ -84,12 +85,16 @@ export default function Account({
       } catch (err) {
         console.log(err);
       }
-    }, 200);
-
-    return () => {
-      clearTimeout(timer);
     };
-  };
+
+    if (searchQuery) {
+      fetchData();
+    }
+  }, [searchQuery]);
+
+  const handleSearch = debounce((searchQuery: string) => {
+    setSearchQuery(searchQuery);
+  }, 300);
 
   return (
     <>
@@ -101,7 +106,7 @@ export default function Account({
           </Link>
         }
         isShowSearchBar={true}
-        handleSearch={handleSearch}
+        handleSearch={(e) => handleSearch(e.target.value)}
       >
         {error ? (
           <>

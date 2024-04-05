@@ -8,11 +8,11 @@ import {
   TableHeader,
   TableRow,
 } from '@windmill/react-ui';
-import axios from 'axios';
+import debounce from 'lodash/debounce';
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaFileDownload } from 'react-icons/fa';
 import { MdDelete, MdModeEditOutline } from 'react-icons/md';
 import { toast } from 'react-toastify';
@@ -25,7 +25,6 @@ import DeleteModal from '@/components/Modal';
 import { SvmProjectToast } from '@/components/Toast/Toast';
 import Layout from '@/containers/Layout';
 
-import { API_ENDPOINT } from '@/const/APIRoutes';
 import { httpInstance } from '@/constants/httpInstances';
 
 export const getServerSideProps: GetServerSideProps = async () => {
@@ -50,7 +49,7 @@ export default function Booking({
   error,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [bookingList, setBookingList] = useState(list);
-
+  const [searchQuery, setSearchQuery] = useState('');
   const route = useRouter();
   const { isModalOpen, closeModal, openModal, deleteId, handleModalOpen } =
     useModal();
@@ -95,26 +94,31 @@ export default function Booking({
     }
   };
 
-  const handleSearch = async (e: any) => {
-    const value = e.target.value;
-
-    const timer = setTimeout(async () => {
+  useEffect(() => {
+    const fetchData = async () => {
       try {
-        const res = await axios.get(
-          `${API_ENDPOINT.END_POINT}/booking/list?searchString=${value}`
+        const res = await httpInstance.get(
+          `/booking/list?searchString=${searchQuery}`
         );
+
         const data = res.data.result.list;
 
         setBookingList(data);
       } catch (err) {
         console.log(err);
       }
-    }, 200);
-
-    return () => {
-      clearTimeout(timer);
     };
-  };
+
+    if (searchQuery) {
+      fetchData();
+    } else {
+      setBookingList(list);
+    }
+  }, [searchQuery]);
+
+  const handleSearch = debounce((searchQuery: string) => {
+    setSearchQuery(searchQuery);
+  }, 300);
 
   return (
     <>
@@ -126,7 +130,7 @@ export default function Booking({
           </Link>
         }
         isShowSearchBar={true}
-        handleSearch={handleSearch}
+        handleSearch={(e) => handleSearch(e.target.value)}
       >
         {error ? (
           <ServerError />
