@@ -1,6 +1,8 @@
 /* eslint-disable react/prop-types */
 import { StyleSheet, Text, View } from '@react-pdf/renderer';
 
+import { numberToWords } from '@/hooks/numberToWord';
+
 type TCustomerPDFDetail = {
   address: string;
   city: string;
@@ -11,6 +13,20 @@ type TCustomerPDFDetail = {
   pincode: string;
   state: string;
 };
+
+type TupiPayment = {
+  upiId: string;
+}[];
+
+type TReceipt = {
+  customer: TCustomerPDFDetail;
+
+  amount: number;
+  paymentType: 'UPI' | 'BANK_TRANSFER' | 'CASH';
+  plotNo: number;
+  upiPayment: TupiPayment;
+};
+
 const styles = StyleSheet.create({
   headerContainer: {
     marginTop: 10,
@@ -19,6 +35,13 @@ const styles = StyleSheet.create({
   line: {
     borderBottom: 1,
     borderColor: 'black',
+  },
+  paymentType: {
+    borderBottom: 1,
+    borderColor: 'black',
+    width: '60%',
+    position: 'relative',
+    bottom: 3,
   },
 });
 
@@ -29,7 +52,13 @@ const invoice = {
   cashCheque: 'Payment type',
   type: 'For Booking/ Plat/Flat/Shop/Row House No.',
 };
-const BillTo = ({ customer, amount, paymentType, plotNo }) => {
+const BillTo = ({
+  customer,
+  upiPayment,
+  amount,
+  paymentType,
+  plotNo,
+}: TReceipt) => {
   return (
     <>
       <View style={styles.headerContainer}>
@@ -58,35 +87,12 @@ const BillTo = ({ customer, amount, paymentType, plotNo }) => {
         </View>
       </View>
 
-      {/* <View style={styles.headerContainer}>
-        <View
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'flex-end',
-            justifyContent: 'space-around',
-          }}
-        >
-          <Text>{invoice.address}</Text>
-          <View
-            style={{
-              borderBottom: 1,
-              borderColor: 'black',
-              width: '95%',
-              position: 'relative',
-              bottom: 2,
-            }}
-          ></View>
-        </View>
-      </View> */}
-
       <View style={styles.headerContainer}>
         <View
           style={{
             display: 'flex',
             flexDirection: 'row',
             alignItems: 'flex-end',
-            // justifyContent: "space-around",
           }}
         >
           <Text>{invoice.sumofRupee}</Text>
@@ -108,7 +114,9 @@ const BillTo = ({ customer, amount, paymentType, plotNo }) => {
               position: 'relative',
               bottom: 3,
             }}
-          ></View>
+          >
+            <Text style={{ marginLeft: '20px' }}>{numberToWords(12100)}</Text>
+          </View>
         </View>
       </View>
 
@@ -126,33 +134,42 @@ const BillTo = ({ customer, amount, paymentType, plotNo }) => {
             style={{
               borderBottom: 1,
               borderColor: 'black',
-              width: '20%',
+              width: '40%',
               position: 'relative',
               bottom: 3,
             }}
           >
-            <Text>{paymentType?.toLowerCase()}</Text>
+            <Text style={{ marginLeft: '20px' }}>
+              {paymentType?.toLowerCase()}
+            </Text>
           </View>
-          <Text>Date</Text>
-          <View
-            style={{
-              borderBottom: 1,
-              borderColor: 'black',
-              width: '30%',
-              position: 'relative',
-              bottom: 3,
-            }}
-          ></View>
-          <Text>Bank</Text>
-          <View
-            style={{
-              borderBottom: 1,
-              borderColor: 'black',
-              width: '20%',
-              position: 'relative',
-              bottom: 3,
-            }}
-          ></View>
+
+          {paymentType === 'UPI' ? (
+            <>
+              <Text>UPI Id</Text>
+              <View style={styles.paymentType}>
+                {upiPayment?.map((id) => (
+                  <Text key={id.upiId} style={{ marginLeft: '20px' }}>
+                    {id?.upiId}
+                  </Text>
+                ))}
+              </View>
+            </>
+          ) : paymentType === 'BANK_TRANSFER' ? (
+            <>
+              <Text>Bank Name</Text>
+              <View style={styles.paymentType}>
+                <Text style={{ marginLeft: '20px' }}>hello</Text>
+              </View>
+            </>
+          ) : (
+            <>
+              <Text>Cash </Text>
+              <View style={styles.paymentType}>
+                <Text style={{ marginLeft: '20px' }}>Cash Deposite</Text>
+              </View>
+            </>
+          )}
         </View>
       </View>
 

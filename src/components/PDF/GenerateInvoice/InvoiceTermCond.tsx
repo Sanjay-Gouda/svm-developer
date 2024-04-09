@@ -12,7 +12,7 @@ const InvoiceTermCond = () => {
       <Text style={{ fontWeight: 'extrabold' }}>TERMS & CONDITION </Text>
       <Text>1) Receipt is valid on realization of Cheque. </Text>
       <Text>
-        2) Cancellation charge will be 10% of total Booking price & Taxes.
+        2) Cancellation charge will be according to the terms & condition.
       </Text>
     </View>
   );

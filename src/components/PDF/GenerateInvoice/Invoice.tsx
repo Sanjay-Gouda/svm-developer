@@ -46,6 +46,8 @@ const Reciept = ({ installmentData }: any) => {
     customer,
     paymentType,
     installmentNo,
+
+    upiPayment,
   } = installmentData;
   console.log(installmentData, projectLogo, 'DATA');
   const reciptdate = createdAt?.split('T')[0]?.split('-')?.reverse()?.join('-');
@@ -62,6 +64,7 @@ const Reciept = ({ installmentData }: any) => {
             amount={amount}
             paymentType={paymentType}
             plotNo={plotNo}
+            upiPayment={upiPayment}
           />
           <InvoiceTermCond />
           <InvoiceFooter />
