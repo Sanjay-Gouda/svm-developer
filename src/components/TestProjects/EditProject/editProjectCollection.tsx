@@ -63,6 +63,7 @@ const EditProjectCollection = ({
     planningModal: false,
     siteImageModal: false,
   });
+  const [loading, setLoading] = useState(false);
 
   const [projectImages, setProjectImages] = useState<TEditProjectImages>();
   const [projectLogo, setProjectLogo] = useState<any>([]);
@@ -120,8 +121,10 @@ const EditProjectCollection = ({
   }
 
   const handleLogoUpload = async () => {
+    setLoading(true);
     if (projectLogo.length === 0) {
       alert('please select a Logo');
+      setLoading(false);
     } else {
       const formData = new FormData();
       for (let i = 0; i < projectLogo.length; i++) {
@@ -135,17 +138,21 @@ const EditProjectCollection = ({
 
           { headers: { 'Content-Type': 'multipart/form-data' } }
         );
+        setLoading(false);
         toast.success('Logo Updated Successfully');
         closeModal();
       } catch (err) {
         closeModal();
-        toast.error('Something went wrong');
+        setLoading(false);
+        toast.error('Image Size can not be more than 1mb');
       }
     }
   };
 
   const handlePlanningImageUpload = async () => {
+    setLoading(true);
     if (planningImages.length === 0) {
+      setLoading(false);
       alert('please select image to upload');
     } else {
       const formData = new FormData();
@@ -161,19 +168,22 @@ const EditProjectCollection = ({
 
           { headers: { 'Content-Type': 'multipart/form-data' } }
         );
+        setLoading(false);
         toast.success('Planning Image uploaded Successfully');
 
         closeModal();
         // handleNextStep();
       } catch (err) {
         closeModal();
-        console.log(err);
+        setLoading(false);
       }
     }
   };
 
   const handleSiteImageUpload = async () => {
+    setLoading(true);
     if (siteImages.length === 0) {
+      setLoading(false);
       alert('please select image to upload');
     } else {
       const formData = new FormData();
@@ -192,11 +202,12 @@ const EditProjectCollection = ({
         // console.log(res);
         toast.success('SiteImages uploaded Successfully');
         setSiteImages([]);
+        setLoading(false);
         closeModal();
       } catch (err) {
-        toast.error('Something went wrong');
+        toast.error('Please Select 4 Images at once');
         setSiteImages([]);
-
+        setLoading(false);
         closeModal();
       }
     }
@@ -236,7 +247,7 @@ const EditProjectCollection = ({
           <div className='flex w-[80%] flex-col'>
             <HeaderWrapper
               heading='Logo'
-              btnLable='Update '
+              btnLable='Update'
               onClick={handleOpenLogoModal}
             />
 
@@ -320,6 +331,7 @@ const EditProjectCollection = ({
 
       <ImageModal
         title='Upload Logo'
+        isLoading={loading}
         isModalOpen={openImageModal.logoModal}
         handleClose={closeModal}
         handleUpload={handleLogoUpload}
@@ -331,6 +343,7 @@ const EditProjectCollection = ({
         }
       />
       <ImageModal
+        isLoading={loading}
         title='Upload Planning Images'
         isModalOpen={openImageModal.planningModal}
         handleClose={closeModal}
@@ -343,6 +356,7 @@ const EditProjectCollection = ({
         }
       />
       <ImageModal
+        isLoading={loading}
         title='Upload Site Images'
         isModalOpen={openImageModal.siteImageModal}
         handleClose={closeModal}

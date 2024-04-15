@@ -28,6 +28,7 @@ const EditCustomerCollection = ({
 }: TEditResponse) => {
   const router = useRouter();
   const Tabs = ['Customer Info', 'Images'];
+  const [loading, setLoading] = useState<boolean>(false);
 
   const [activeTab, setActiveTab] = useState<activeTabState>({
     info: true,
@@ -172,6 +173,7 @@ const EditCustomerCollection = ({
   }
 
   const handleUploadPassPhoto = async () => {
+    setLoading(true);
     const formData = new FormData();
     for (let i = 0; i < passPhoto.length; i++) {
       formData.append('customerImage', passPhoto[i]);
@@ -181,19 +183,20 @@ const EditCustomerCollection = ({
         `customer/upload/customer-image/${editId}`,
         formData
       );
-      console.log(res);
+      setLoading(false);
       toast.success('Passphoto uploaded successfully');
       setPassPhoto([]);
       getImages();
       closeModal();
     } catch (err) {
-      console.log(err);
-      toast.success('Something went wrong');
+      setLoading(false);
+      toast.success('Passphoto must be lessthan 1mb');
       closeModal();
     }
   };
 
   const handleAadharCard = async () => {
+    setLoading(true);
     const formData = new FormData();
 
     for (let i = 0; i < frontAadharCard.length; i++) {
@@ -213,6 +216,7 @@ const EditCustomerCollection = ({
           },
         }
       );
+      setLoading(false);
 
       getImages();
       setFrontAadharCard([]);
@@ -220,11 +224,13 @@ const EditCustomerCollection = ({
       closeModal();
       toast.success('Aadharcard uploaded successfully');
     } catch (err) {
+      setLoading(false);
       toast.error('Something went wrong');
     }
   };
 
   const handlePanUpload = async () => {
+    setLoading(true);
     const formData = new FormData();
 
     for (let i = 0; i < panCard.length; i++) {
@@ -241,12 +247,14 @@ const EditCustomerCollection = ({
           },
         }
       );
+      setLoading(false);
 
       getImages();
       setPanCard([]);
       closeModal();
       toast.success('Pancard uploaded successfully');
     } catch (err) {
+      setLoading(false);
       toast.error('Something went wrong');
     }
   };
@@ -350,6 +358,7 @@ const EditCustomerCollection = ({
 
       {/* Passphoto */}
       <ImageModal
+        isLoading={loading}
         handleClose={() =>
           setOpenImageModal({ ...openImageModal, passphotoModal: false })
         }
@@ -371,6 +380,7 @@ const EditCustomerCollection = ({
 
       {/*aadharCard  */}
       <ImageModal
+        isLoading={loading}
         handleClose={() =>
           setOpenImageModal({ ...openImageModal, aadharCardModal: false })
         }
@@ -400,6 +410,7 @@ const EditCustomerCollection = ({
 
       {/* Pancard */}
       <ImageModal
+        isLoading={loading}
         handleClose={() =>
           setOpenImageModal({ ...openImageModal, panCardModal: false })
         }

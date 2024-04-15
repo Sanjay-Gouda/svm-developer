@@ -12,6 +12,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { SvmProjectToast } from '@/components/Toast/Toast';
 import DateSelector from '@/components/UI/DatePicker';
 import { TextInput, TextInputArea } from '@/components/ui-blocks';
+import { SelectOption } from '@/components/ui-blocks/input';
 
 import { API_ENDPOINT } from '@/const/APIRoutes';
 import { httpInstance } from '@/constants/httpInstances';
@@ -43,6 +44,7 @@ type formProps = {
   state: string;
   city: string;
   dob?: Date | null;
+  martialStatus?: 'Married' | 'Unmarried';
 };
 
 const addInitialValues: formProps = {
@@ -55,6 +57,7 @@ const addInitialValues: formProps = {
   city: '',
   state: '',
   dob: null,
+  martialStatus: 'Unmarried',
 };
 
 type editValueProps = {
@@ -73,6 +76,8 @@ type Tpayload = {
   pincode?: number;
   state: string;
   city: string;
+  dob: any;
+  isMarried: boolean;
 };
 
 function CustomerForm({
@@ -85,12 +90,6 @@ function CustomerForm({
 
   const [loader, setLoader] = useState(false);
   const [pincodeQuery, setPincodeQuery] = useState<string>();
-
-  // // const [startDate, setStartDate] = useState<Date | null>(null);
-
-  // const handleStartDateChange = (date: Date) => {
-  //   setStartDate(date);
-  // };
 
   const cookies = new Cookies();
   const token = cookies.get('token');
@@ -143,11 +142,12 @@ function CustomerForm({
       state,
       pincode,
       address,
+      dob,
+      martialStatus,
     } = details;
 
     const payload: Tpayload = {
       name: name,
-      // aadharNo: aadharNo,
       email: email,
       phone1: phone,
       address: address,
@@ -155,6 +155,8 @@ function CustomerForm({
       city: city,
       state: state,
       pincode: pincode,
+      dob: dob,
+      isMarried: martialStatus === 'Married' ? true : false,
     };
 
     try {
@@ -186,6 +188,8 @@ function CustomerForm({
       city,
       state,
       pincode,
+      dob,
+      martialStatus,
     } = details;
 
     const payload: Tpayload = {
@@ -196,7 +200,8 @@ function CustomerForm({
       address: address,
       state: state,
       pincode: pincode,
-      // aadharNo: aadharNo,
+      dob: dob,
+      isMarried: martialStatus === 'Married' ? true : false,
       email: email || 'example@gmail.com',
     };
 
@@ -224,7 +229,7 @@ function CustomerForm({
     initialValues: formValues,
     validationSchema,
     onSubmit: (values: formProps, { setSubmitting, resetForm }) => {
-      // console.log(values.dob);
+      // console.log(values);
       editId ? updateCustomers(values) : addCustomers(values);
     },
   });
@@ -276,6 +281,16 @@ function CustomerForm({
             name='dob'
             selected={formik.values.dob}
             onChange={(date) => formik.setFieldValue('dob', date)}
+          />
+        </div>
+        <div className='flex w-full flex-col'>
+          <SelectOption
+            title='Martial Status'
+            onChange={formik.handleChange}
+            containerClassName='mt-1'
+            labelClassName='w-full'
+            name='martialStatus'
+            options={['Unmarried', 'Married']}
           />
         </div>
 

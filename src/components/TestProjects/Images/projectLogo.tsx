@@ -47,8 +47,7 @@ const ProjectLogo = ({ projectId, handleNextStep, handleBack }: TLogo) => {
         setLoader(true);
         handleNextStep();
       } catch (err) {
-        toast.error('Something went wrong');
-
+        toast.error('Image Size can not be more than 1mb');
         setLoader(false);
       }
     }

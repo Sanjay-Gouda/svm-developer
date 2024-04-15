@@ -10,7 +10,6 @@ export function middleware(request: NextRequest) {
   // const token = request.cookies.getAll();
   const isTokenAvailable = request.cookies.has('token');
   // const isTokenAvailable = true;
-  // console.log(isTokenAvailable, 'middleware');
   const currentURL = request.nextUrl.clone();
   if (isTokenAvailable) {
     if (request.nextUrl.pathname === '/admin/:path*') {

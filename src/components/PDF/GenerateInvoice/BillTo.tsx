@@ -115,7 +115,7 @@ const BillTo = ({
               bottom: 3,
             }}
           >
-            <Text style={{ marginLeft: '20px' }}>{numberToWords(12100)}</Text>
+            <Text style={{ marginLeft: '20px' }}>{numberToWords(amount)}</Text>
           </View>
         </View>
       </View>

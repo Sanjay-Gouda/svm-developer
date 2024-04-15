@@ -12,6 +12,7 @@ import { customerNameProps } from '@/components/Booking/bookingFormTypes';
 import ComboBox from '@/components/ComboBox/comboBox';
 import MultipleSelect from '@/components/ComboBox/multipleComboBox';
 import { SvmProjectToast } from '@/components/Toast/Toast';
+import DateSelector from '@/components/UI/DatePicker';
 import { TextInput } from '@/components/ui-blocks';
 import { SelectOption } from '@/components/ui-blocks/input';
 
@@ -100,7 +101,8 @@ type EditFormProps = {
 const BookingForm = ({
   editId,
   loader,
-
+  selectedDate,
+  onDateChange,
   clientSelect,
   setClientSelect,
   selectProject,
@@ -335,6 +337,15 @@ const BookingForm = ({
           {installmentError && (
             <div className='text-red-400'>{installmentErrorMessage}</div>
           )}
+        </div>
+
+        <div className='flex w-full flex-col'>
+          <Label>Select EMI Date</Label>
+          <DateSelector
+            name='emiDate'
+            selected={selectedDate}
+            onChange={onDateChange}
+          />
         </div>
 
         <div className='flex flex-col'>

@@ -68,14 +68,10 @@ type TImageType = 'FRONT_REAR' | 'FRONT_BACK' | 'PHOTO';
 
 type TCutomerImage = {
   createdAt: string;
-
   customerId: string;
   customerImageId: string;
-
   imageUrl: string;
-
   type: TImageType;
-
   updatedAt: string;
 };
 

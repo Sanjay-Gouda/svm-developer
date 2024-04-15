@@ -32,6 +32,7 @@ const addInitialValues = {
   cBankName: '',
   BTAcNo: undefined,
   BTBankName: '',
+  emiDate: null,
 };
 
 type editProps = {
@@ -75,6 +76,7 @@ const TestBooking = ({ editInitialValues, editId }: editProps) => {
       BTAcNo,
       BTBankName,
       plotNo,
+      emiDate,
     } = values;
 
     const projectId = projectName.id;
@@ -83,9 +85,7 @@ const TestBooking = ({ editInitialValues, editId }: editProps) => {
 
     const payload = {
       projectId: projectId,
-      // address1: address,
-      // address2: landmark,
-      // pincode: pincode,
+      installmentDate: emiDate,
       plotNo: plotNo,
       area: +area,
       paidAmt: +paidAmt,
@@ -224,7 +224,7 @@ const TestBooking = ({ editInitialValues, editId }: editProps) => {
           bAcNo: true,
         });
       } else {
-        console.log('Called ELSE');
+        // console.log('Called ELSE', values);
         editId ? updateBookingData(values) : addBookingData(values);
       }
     },
@@ -293,6 +293,8 @@ const TestBooking = ({ editInitialValues, editId }: editProps) => {
   return (
     <>
       <BookingForm
+        selectedDate={formik.values.emiDate}
+        onDateChange={(date: Date) => formik.setFieldValue('emiDate', date)}
         editId={editId}
         loader={loader}
         handleMoveToUpload={formik.handleSubmit}

@@ -63,8 +63,22 @@ const InovieProjectDes = ({ logo }) => {
     <View style={styles.section}>
       <View style={styles.box}>
         <Text style={styles.text}>Project:-</Text>
+
         <View style={styles.flexCenter}>
           <Image style={styles.projectLogo} src={logo} alt='Logo' />
+        </View>
+        <View
+          style={{
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            // marginTop: '10px',
+
+            padding: '10px',
+          }}
+        >
+          <Text style={{ fontWeight: 'bold' }}>Address : Muler</Text>
         </View>
         <View style={styles.line}></View>
         <View

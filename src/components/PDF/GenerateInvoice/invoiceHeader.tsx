@@ -19,9 +19,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     // gap: '10px',
-    alignItems: 'center',
+    alignItems: 'flex-end',
     borderRadius: 5,
-    border: '2px solid black',
+    borderBottom: '2px dashed black',
     marginBottom: '20px',
   },
   logo: {

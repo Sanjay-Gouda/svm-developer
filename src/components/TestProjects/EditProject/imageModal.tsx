@@ -14,6 +14,7 @@ type TModel = {
   modalBody: any;
   handleUpload: () => void;
   isDisabled?: boolean;
+  isLoading: boolean;
 };
 
 const ImageModal = ({
@@ -22,6 +23,7 @@ const ImageModal = ({
   modalBody,
   handleUpload,
   title,
+  isLoading,
   isDisabled,
 }: TModel) => {
   return (
@@ -42,7 +44,7 @@ const ImageModal = ({
             onClick={handleUpload}
             disabled={isDisabled}
           >
-            Upload
+            {isLoading ? 'Updating...' : 'Update'}
           </Button>
         </ModalFooter>
       </Modal>

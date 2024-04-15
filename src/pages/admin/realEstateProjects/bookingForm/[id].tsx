@@ -34,6 +34,7 @@ export const EditBookingDetails = ({ EditId, bookingDetails }) => {
     upiId,
     accountNumber,
     paymentId,
+    installmentDate,
 
     customer,
   } = bookingDetails;
@@ -74,6 +75,7 @@ export const EditBookingDetails = ({ EditId, bookingDetails }) => {
     BTAcNo: accountNumber,
     BTBankName: bankName,
     paymentId: paymentId,
+    emiDate: installmentDate,
     // customerName: customer,
   };
 

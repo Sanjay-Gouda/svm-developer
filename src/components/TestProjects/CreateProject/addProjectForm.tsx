@@ -218,7 +218,7 @@ function AddProjectForm({
           )} */}
         </div>
       </div>
-      <div className='flex w-full  gap-4'>
+      {/* <div className='flex w-full  gap-4'>
         <div className='flex w-full flex-col'>
           <TextInput
             onChange={handleEmi}
@@ -254,7 +254,7 @@ function AddProjectForm({
             <div className='text-red-400'>{totalAmtErrorMessage}</div>
           )}
         </div>
-      </div>
+      </div> */}
 
       <TextInputArea
         value={addressValue}

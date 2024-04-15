@@ -27,6 +27,8 @@ type customerProps = {
   city: string;
   email: string;
   customerImage: string[];
+  dob: Date | null;
+  isMarried: boolean;
 };
 
 type editCustomerprops = {
@@ -45,6 +47,8 @@ const EditCustomer = ({ EditId, customerDetails }: editCustomerprops) => {
     pincode,
     aadharNo,
     customerImage,
+    isMarried,
+    dob,
   } = customerDetails;
 
   const customerEditInitialValues = {
@@ -57,6 +61,8 @@ const EditCustomer = ({ EditId, customerDetails }: editCustomerprops) => {
     pincode: pincode,
     city: city,
     state: state,
+    dob: dob,
+    martialStatus: isMarried ? 'Married' : 'UnMarried',
   };
 
   return (
