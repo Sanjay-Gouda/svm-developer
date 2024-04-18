@@ -83,6 +83,9 @@ const TestBooking = ({ editInitialValues, editId }: editProps) => {
     const accountId = bankAccount.id;
     const customerIds = customerName?.map((customer) => customer.id);
 
+    const newPaymentStatus =
+      paymentStatus === 'IN PROGRESS' ? 'PARTIAL' : paymentStatus;
+
     const payload = {
       projectId: projectId,
       installmentDate: emiDate,
@@ -97,7 +100,7 @@ const TestBooking = ({ editInitialValues, editId }: editProps) => {
       chequeNo: cheuqeNo,
       accountNo: BTAcNo,
       bankName: cBankName || BTBankName,
-      paymentStatus: paymentStatus,
+      paymentStatus: newPaymentStatus,
       customerIds: customerIds,
       adminAccountId: accountId,
       installmentCount: noOfInstallment,
@@ -147,6 +150,9 @@ const TestBooking = ({ editInitialValues, editId }: editProps) => {
     const projectId = projectName.id;
     const accountId = bankAccount.id;
 
+    const newPaymentStatus =
+      paymentStatus === 'IN PROGRESS' ? 'PARTIAL' : paymentStatus;
+
     const customerIds = customerName?.map((customer) => customer.id);
 
     const payload = {
@@ -164,7 +170,7 @@ const TestBooking = ({ editInitialValues, editId }: editProps) => {
       bankName: cBankName || BTBankName,
 
       // paymentMethod:'paymentMethod',
-      paymentStatus: paymentStatus,
+      paymentStatus: newPaymentStatus,
       customerIds: customerIds,
       adminAccountId: accountId,
       installmentCount: noOfInstallment,
@@ -275,7 +281,7 @@ const TestBooking = ({ editInitialValues, editId }: editProps) => {
     const remainingAmt = +formik.values.remainingAmt;
     const amtPerInstallment = +formik.values.amtPerInstallment;
     const noOfInstallment = Math.ceil(remainingAmt / amtPerInstallment); // Round up to ensure all installments are covered
-    formik.setFieldValue('noOfInstallment', noOfInstallment.toString());
+    formik.setFieldValue('noOfInstallment', noOfInstallment);
   };
 
   useEffect(() => {
@@ -313,6 +319,10 @@ const TestBooking = ({ editInitialValues, editId }: editProps) => {
         areaValue={formik.values.area}
         handleArea={formik.handleChange}
         areaError={formik.touched.area && formik.errors.area ? true : false}
+        dateError={
+          formik.touched.emiDate && formik.errors.emiDate ? true : false
+        }
+        dateErrorMessage={formik.touched.emiDate}
         areaErrorMessage={formik.errors.area}
         handlePlotNo={formik.handleChange}
         plotNoValue={formik.values.plotNo}

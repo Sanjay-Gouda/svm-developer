@@ -34,20 +34,7 @@ type EditFormProps = {
   handlePlotNo: (e: any) => void;
   plotNoValue: number;
   plotNoErrorMessage: boolean;
-  // pincodeValue?: string;
-  // handlePincode: (e: any) => void;
-  // pincodeError: boolean;
-  // pincodeErrorMessage: string | undefined;
-  // state: string;
-  // city: string;
-  // landmarkValue: string;
-  // landmarkError: boolean;
-  // landmarkErrorMessage: string | undefined;
-  // handleLandmark: (e: any) => void;
-  // addressValue: string | undefined;
-  // handleAddress: (e: any) => void;
-  // addressErrorMessage: string | undefined;
-  // addressError: boolean;
+
   selectBankAccount: customerNameProps;
   setSelectedBankAccount: (accounts: customerNameProps) => void;
   bankAccountError: boolean;
@@ -80,6 +67,8 @@ type EditFormProps = {
   btAcNoValue: string | undefined;
   handleBtAcNo: (e: any) => void;
   btAcNoError: boolean;
+  dateError: boolean;
+  dateErrorMessage?: string;
 
   btBankNameValue: string | undefined;
   handleBtBankName: (e: any) => void;
@@ -111,11 +100,11 @@ const BookingForm = ({
   areaValue,
   areaError,
   areaErrorMessage,
-
   handlePlotNo,
   plotNoValue,
   plotNoErrorMessage,
-
+  dateErrorMessage,
+  dateError,
   handleMoveToUpload,
   bankAccountError,
   bankAccountErrorMessage,
@@ -346,6 +335,7 @@ const BookingForm = ({
             selected={selectedDate}
             onChange={onDateChange}
           />
+          {dateError && <div className='text-red-400'>{dateErrorMessage}</div>}
         </div>
 
         <div className='flex flex-col'>
@@ -504,7 +494,7 @@ const BookingForm = ({
 
         <div className='flex flex-col'>
           <SelectOption
-            options={['COMPLETED', 'PENDING', 'PARTIAL']}
+            options={['COMPLETED', 'PENDING', 'IN PROGRESS']}
             title='Payment Status'
             containerClassName='flex-1 mt-1 w-full'
             name='paymentStatus'

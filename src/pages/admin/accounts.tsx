@@ -7,7 +7,6 @@ import {
   TableHeader,
   TableRow,
 } from '@windmill/react-ui';
-import axios from 'axios';
 import debounce from 'lodash/debounce';
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import Link from 'next/link';
@@ -19,7 +18,6 @@ import EmptyState from '@/components/Empty';
 import ServerError from '@/components/Error/500Error';
 import Layout from '@/containers/Layout';
 
-import { API_ENDPOINT } from '@/const/APIRoutes';
 import { httpInstance } from '@/constants/httpInstances';
 
 type accounrDetailProps = {
@@ -31,20 +29,8 @@ type accounrDetailProps = {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  // const { req } = context;
-  // const { token } = req.cookies;
-
-  const axiosConfig = {
-    withCredentials: true,
-  };
-
-  // console.log(token, 'TOKEN');
-
   try {
-    const res = await axios.get(
-      `${API_ENDPOINT.END_POINT}/account/basic-list`,
-      axiosConfig
-    );
+    const res = httpInstance.get('/account/basic-list');
     const repo = res.data.result;
     return { props: { repo } };
   } catch (err) {
@@ -76,10 +62,10 @@ export default function Account({
     const fetchData = async () => {
       try {
         const res = await httpInstance.get(
-          `/account/basic-list?searchString=${searchQuery}`
+          `/account/advance-list?searchString=${searchQuery}`
         );
 
-        const data = res.data.result;
+        const data = res.data.result.list;
 
         setAccountDetails(data);
       } catch (err) {
@@ -89,6 +75,8 @@ export default function Account({
 
     if (searchQuery) {
       fetchData();
+    } else {
+      setAccountDetails(repo);
     }
   }, [searchQuery]);
 

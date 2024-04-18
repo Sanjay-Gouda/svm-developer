@@ -23,7 +23,7 @@ export type TBookingProps = {
   paymentId: any;
 
   paymentMethod: 'CASH' | 'BANK_TRANSFER' | 'CHEQUE' | 'UPI';
-  paymentStatus: 'PENDING' | 'PARTIAL' | 'COMPLETED';
+  paymentStatus: 'PENDING' | 'IN PROGRESS' | 'COMPLETED';
 
   cheuqeNo: undefined | number;
   /* C->Cheque */

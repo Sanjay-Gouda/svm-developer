@@ -156,12 +156,15 @@ export default function Booking({
                       <TableCell className='text-[14px]'>Area</TableCell>
                       <TableCell className='text-[14px]'>Paid Amount</TableCell>
                       <TableCell className='text-[14px]'>
-                        Payment Mode{' '}
+                        Payment Mode
                       </TableCell>
                       <TableCell className='text-[14px]'>
-                        Payment Status{' '}
+                        Payment Status
                       </TableCell>
                       <TableCell className='text-[14px]'>Installment</TableCell>
+                      <TableCell className='text-[14px]'>
+                        Installment History
+                      </TableCell>
                       <TableCell className='text-[14px]'>Download</TableCell>
                       <TableCell className='text-[14px]'>Action </TableCell>
                     </tr>
@@ -186,7 +189,7 @@ export default function Booking({
 
                           <TableCell>
                             <Badge
-                              className='flex w-[40%] items-center justify-center py-1 text-[16px]'
+                              className='flex w-[60%] items-center justify-center py-1 text-[16px]'
                               type={
                                 data?.paymentStatus === 'COMPLETED'
                                   ? 'success'
@@ -195,7 +198,10 @@ export default function Booking({
                                   : 'primary'
                               }
                             >
-                              {data?.paymentStatus?.toLowerCase()}
+                              {data?.paymentStatus === 'PARTIAL'
+                                ? 'In Progress'
+                                : data?.paymentStatus?.toLowerCase()}
+                              {/* {data?.paymentStatus?.toLowerCase()} */}
                             </Badge>
                           </TableCell>
 
@@ -207,6 +213,16 @@ export default function Booking({
                               }
                             >
                               Add
+                            </Button>
+                          </TableCell>
+                          <TableCell>
+                            <Button
+                              layout='outline'
+                              onClick={() =>
+                                handleAddInstallment(data?.bookingId)
+                              }
+                            >
+                              View
                             </Button>
                           </TableCell>
                           <TableCell>

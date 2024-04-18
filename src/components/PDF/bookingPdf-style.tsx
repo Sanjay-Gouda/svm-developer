@@ -57,6 +57,11 @@ export const styles = StyleSheet.create({
     fontWeight: 'medium',
     marginLeft: '10px',
   },
+  marriedText: {
+    fontSize: '12px',
+    fontWeight: 'medium',
+    marginLeft: '16px',
+  },
 
   header: {
     width: '100%',

@@ -96,10 +96,12 @@ export const Booking = ({ details }: any) => {
     customer,
     plotNo,
     installmentAmt,
+    isMarried,
     paidAmt,
     description,
     createdAt,
     projectLogo,
+    project,
   } = details;
 
   const bookingdate = createdAt
@@ -156,7 +158,7 @@ export const Booking = ({ details }: any) => {
             <View style={styles.detailFullWidthField}>
               <Text style={styles.headingText}>Name:</Text>
               <View style={styles.halfDiv}>
-                <Text style={styles.valueText}> {projectName}</Text>
+                <Text style={styles.valueText}> {project?.name}</Text>
               </View>
             </View>
             <View style={styles.detailFullWidthField}>
@@ -168,13 +170,13 @@ export const Booking = ({ details }: any) => {
             <View style={styles.detailFullWidthField}>
               <Text style={styles.headingText}>Description:</Text>
               <View style={styles.halfDiv}>
-                <Text style={styles.valueText}> {description}</Text>
+                <Text style={styles.valueText}> {project?.description}</Text>
               </View>
             </View>
             <View style={styles.detailFullWidthField}>
               <Text style={styles.headingText}>Address:</Text>
               <View style={styles.halfDiv}>
-                <Text style={styles.valueText}> Chavaj</Text>
+                <Text style={styles.valueText}> {project?.address2}</Text>
               </View>
             </View>
           </View>
@@ -189,7 +191,7 @@ export const Booking = ({ details }: any) => {
               }}
             >
               <View>
-                <Image style={styles.logo} src={projectLogo} alt='Logo' />
+                <Image style={styles.logo} src={project?.logo} alt='Logo' />
               </View>
             </View>
           </View>
@@ -260,7 +262,11 @@ export const Booking = ({ details }: any) => {
               <View style={styles.newHalfDivWrapper}>
                 <Text style={styles.headingText}>Marital Status:</Text>
                 <View style={styles.halfDiv}>
-                  <Text style={styles.valueText}> Married </Text>
+                  {customer?.map((detail, ind) => (
+                    <Text style={styles.marriedText} key={ind}>
+                      {detail?.isMarried ? 'Married' : 'UnMarried'}
+                    </Text>
+                  ))}
                 </View>
               </View>
             </View>
