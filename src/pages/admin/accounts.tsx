@@ -30,7 +30,7 @@ type accounrDetailProps = {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   try {
-    const res = httpInstance.get('/account/basic-list');
+    const res = await httpInstance.get('/account/basic-list');
     const repo = res.data.result;
     return { props: { repo } };
   } catch (err) {
@@ -50,6 +50,8 @@ export default function Account({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [accountDetails, setAccountDetails] =
     useState<accounrDetailProps[]>(repo);
+
+  console.log(repo, 'REPO');
   const [searchQuery, setSearchQuery] = useState('');
 
   const router = useRouter();
