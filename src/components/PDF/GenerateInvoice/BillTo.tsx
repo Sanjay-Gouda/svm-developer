@@ -17,14 +17,18 @@ type TCustomerPDFDetail = {
 type TupiPayment = {
   upiId: string;
 }[];
+type chequePayment = {
+  bankName: string;
+}[];
 
 type TReceipt = {
   customer: TCustomerPDFDetail;
-
   amount: number;
-  paymentType: 'UPI' | 'BANK_TRANSFER' | 'CASH';
+  paymentType: 'UPI' | 'BANK_TRANSFER' | 'CASH' | 'CHEQUE';
   plotNo: number;
   upiPayment: TupiPayment;
+  chequePayment: chequePayment;
+  bankPayment: chequePayment;
 };
 
 const styles = StyleSheet.create({
@@ -58,7 +62,10 @@ const BillTo = ({
   amount,
   paymentType,
   plotNo,
+  chequePayment,
+  bankPayment,
 }: TReceipt) => {
+  console.log(chequePayment);
   return (
     <>
       <View style={styles.headerContainer}>
@@ -78,11 +85,13 @@ const BillTo = ({
               width: '64%',
               position: 'relative',
               bottom: 2,
+              display: 'flex',
+              flexDirection: 'row',
             }}
           >
-            {customer?.map((customer: TCustomerPDFDetail, ind: string) => (
-              <Text key={ind}>{customer?.name}</Text>
-            ))}
+            <Text>
+              {customer?.map((customer) => customer?.name).join(', ')}
+            </Text>
           </View>
         </View>
       </View>
@@ -159,7 +168,22 @@ const BillTo = ({
             <>
               <Text>Bank Name</Text>
               <View style={styles.paymentType}>
-                <Text style={{ marginLeft: '20px' }}>hello</Text>
+                {bankPayment?.map((dt, ind) => (
+                  <Text key={ind} style={{ marginLeft: '20px' }}>
+                    {dt?.bankName}
+                  </Text>
+                ))}
+              </View>
+            </>
+          ) : paymentType === 'CHEQUE' ? (
+            <>
+              <Text>Bank Name</Text>
+              <View style={styles.paymentType}>
+                {chequePayment?.map((dt, ind) => (
+                  <Text key={ind} style={{ marginLeft: '20px' }}>
+                    {dt?.bankName}
+                  </Text>
+                ))}
               </View>
             </>
           ) : (

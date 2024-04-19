@@ -271,7 +271,7 @@ function AddProjectForm({
         value={secondaryAddressValue}
         name='address2'
         containerClassName='flex-1 '
-        label='Address 2'
+        label='Village Address'
         rows='1'
         handleChange={handleSecondaryAddress}
       />

@@ -4,7 +4,7 @@ import React from 'react';
 
 type TEmptyState = {
   heading: string;
-  redirectLink: string;
+  redirectLink?: string;
   btnLable: string;
 };
 

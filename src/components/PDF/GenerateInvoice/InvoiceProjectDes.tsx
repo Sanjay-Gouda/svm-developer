@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const InovieProjectDes = ({ logo }) => {
+const InovieProjectDes = ({ logo, address }) => {
   return (
     <View style={styles.section}>
       <View style={styles.box}>
@@ -78,7 +78,7 @@ const InovieProjectDes = ({ logo }) => {
             padding: '10px',
           }}
         >
-          <Text style={{ fontWeight: 'bold' }}>Address : Muler</Text>
+          <Text style={{ fontWeight: 'bold' }}>Address : {address}</Text>
         </View>
         <View style={styles.line}></View>
         <View

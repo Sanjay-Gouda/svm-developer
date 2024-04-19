@@ -156,11 +156,11 @@ function InstallmentForm({
       });
       setLoader(false);
       toast.success('Installment Updated Successfully..');
-      router.push('/admin/installment');
+      router.push('/admin/booking');
     } catch (err) {
       setLoader(false);
       toast.error('Something went wrong');
-      router.push('/admin/installment');
+      router.push('/admin/booking');
     }
   };
 

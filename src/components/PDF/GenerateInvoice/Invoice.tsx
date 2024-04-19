@@ -46,10 +46,13 @@ const Reciept = ({ installmentData }: any) => {
     customer,
     paymentType,
     installmentNo,
-
+    project,
+    chequePayment,
     upiPayment,
+
+    bankPayment,
   } = installmentData;
-  console.log(installmentData, projectLogo, 'DATA');
+  console.log(installmentData, 'DATA');
   const reciptdate = createdAt?.split('T')[0]?.split('-')?.reverse()?.join('-');
 
   return (
@@ -58,13 +61,15 @@ const Reciept = ({ installmentData }: any) => {
         <Page size='A4' style={styles.page}>
           <InvoiceHeader />
           <InvoiceNameDate receiptNo={installmentNo} date={reciptdate} />
-          <InovieProjectDes logo={projectLogo} />
+          <InovieProjectDes logo={project?.logo} address={project?.address2} />
           <BillTo
             customer={customer}
             amount={amount}
             paymentType={paymentType}
             plotNo={plotNo}
             upiPayment={upiPayment}
+            chequePayment={chequePayment}
+            bankPayment={bankPayment}
           />
           <InvoiceTermCond />
           <InvoiceFooter />

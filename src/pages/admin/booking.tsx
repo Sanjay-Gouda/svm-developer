@@ -69,7 +69,9 @@ export default function Booking({
     route.push(`realEstateProjects/bookingForm/pdf/${id}`);
   };
   const handleAddInstallment = (id: string) => {
-    route.push(`realEstateProjects/bookingForm/installment/${id}`);
+    route.push(
+      `realEstateProjects/bookingForm/installmentHistory/addInstallment/${id}`
+    );
   };
 
   const fetchData = async () => {
@@ -79,6 +81,10 @@ export default function Booking({
     } catch (err) {
       console.log(err);
     }
+  };
+
+  const handleViewInstallment = (id: string) => {
+    route.push(`realEstateProjects/bookingForm/installmentHistory/${id}`);
   };
 
   const handleDelete = async () => {
@@ -219,7 +225,7 @@ export default function Booking({
                             <Button
                               layout='outline'
                               onClick={() =>
-                                handleAddInstallment(data?.bookingId)
+                                handleViewInstallment(data?.bookingId)
                               }
                             >
                               View
