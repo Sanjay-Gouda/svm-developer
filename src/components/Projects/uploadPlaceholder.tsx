@@ -1,6 +1,6 @@
 import React from 'react';
 
-const UploadPlaceholder = ({ rootProps, inputProps }) => {
+const UploadPlaceholder = ({ rootProps, inputProps, acceptType }) => {
   return (
     <>
       <div
@@ -30,7 +30,9 @@ const UploadPlaceholder = ({ rootProps, inputProps }) => {
             <p className='mb-2 text-sm text-gray-500 dark:text-gray-400'>
               <span className='font-semibold'>Click to upload</span>
             </p>
-            <p className='text-xs text-gray-500 dark:text-gray-400'>PNG, JPG</p>
+            <p className='text-xs text-gray-500 dark:text-gray-400'>
+              {acceptType ? acceptType : 'PNG, JPG'}
+            </p>
           </div>
           <input {...inputProps()} className='hidden' />
         </label>

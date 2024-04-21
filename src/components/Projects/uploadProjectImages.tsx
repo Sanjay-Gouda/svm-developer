@@ -53,6 +53,7 @@ const UploadProjectImages = ({ setPlanImages, planImages }) => {
         </div>
       ) : (
         <UploadPlaceholder
+          acceptType='PDF'
           rootProps={getRootProps}
           inputProps={getInputProps}
         />

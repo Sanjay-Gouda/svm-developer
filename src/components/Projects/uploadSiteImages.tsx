@@ -20,17 +20,18 @@ const UploadSiteImages = ({
 }: TUploadImages) => {
   const inputRef = useRef<HTMLInputElement | null>(null);
 
-  const handleAddMoreClick = () => {
-    console.log(inputRef);
-    // Trigger file input click
-    if (inputRef.current) {
-      inputRef.current.click();
-    }
-  };
+  // const handleAddMoreClick = () => {
+  //   console.log(inputRef);
+  //   // Trigger file input click
+  //   if (inputRef.current) {
+  //     inputRef.current.click();
+  //   }
+  // };
 
   const handleDrop = (acceptedFiles: any) => {
-    if (acceptedFiles.length > 11) {
-      toast.info('You can upload a maximum of 10 images.');
+    if (acceptedFiles.length === 0) {
+      // console.log('You can upload a maximum of 4 images at a time.');
+      toast.info('You can upload a maximum of 4 images at a time.');
     } else {
       setProjectDevelopementImages((prevFiles: any) => [
         ...prevFiles,
@@ -44,7 +45,7 @@ const UploadSiteImages = ({
   const { getRootProps, getInputProps, isDragActive, open } = useDropzone({
     onDrop: handleDrop,
     accept: { 'image/png': ['.png', '.jpg', '.jpeg'] },
-    // maxFiles: 1,
+    maxFiles: 4,
   });
 
   const handleClearImages = () => {

@@ -231,7 +231,7 @@ const BookingForm = ({
 
         <div className='flex flex-col'>
           <TextInput
-            type='text'
+            type='number'
             name='area'
             label='Area'
             placeholder='area'
@@ -256,7 +256,7 @@ const BookingForm = ({
 
         <div className='flex flex-col'>
           <TextInput
-            type='text'
+            type='number'
             name='totalAmt'
             label='Total Amount *'
             value={totalAmtValue}
@@ -271,7 +271,7 @@ const BookingForm = ({
           <TextInput
             // value={paidAmt}
             // onChange={handlePaidAmtChange}
-            type='text'
+            type='number'
             name='paidAmt'
             label='Paid Amount *'
             value={paidAmtValue}
@@ -286,7 +286,7 @@ const BookingForm = ({
           <TextInput
             readOnly
             // value={remainingAmt}
-            type='text'
+            type='number'
             name='remainingAmt'
             label='Remaining Amount'
             value={remainAmtValue}
@@ -301,7 +301,7 @@ const BookingForm = ({
 
         <div className='flex flex-col'>
           <TextInput
-            type='text'
+            type='number'
             name='amtPerInstallment'
             label='Amount Per Installment *'
             value={amtPerInstallmentValue}
@@ -412,7 +412,7 @@ const BookingForm = ({
             <div className='flex flex-col'>
               <div className='flex flex-col'>
                 <TextInput
-                  type='text'
+                  type='number'
                   name='cheuqeNo'
                   value={chequeNoValue}
                   onChange={handlechequeNo}
@@ -494,7 +494,7 @@ const BookingForm = ({
 
         <div className='flex flex-col'>
           <SelectOption
-            options={['COMPLETED', 'PENDING', 'IN PROGRESS']}
+            options={['PENDING', 'IN PROGRESS', 'COMPLETED']}
             title='Payment Status'
             containerClassName='flex-1 mt-1 w-full'
             name='paymentStatus'

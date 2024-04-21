@@ -83,16 +83,12 @@ function AddProjectForm({
   areaValue,
   descValue,
   distValue,
-  emiAmt,
-  handleEmi,
-  emiAmtError,
-  emiErrorMessage,
+
   handleAddress,
   handleArea,
   handleDesc,
   handleDist,
   handleOwnerName,
-  handleParentProject,
   handlePincode,
   handleSecondaryAddress,
   handleState,
@@ -106,15 +102,6 @@ function AddProjectForm({
   secondaryAddressValue,
   stateValue,
 
-  downPayment,
-  downPaymentError,
-  downPaymentErrorMessage,
-  handleDownPayment,
-
-  handleTotalAmount,
-  totalAmt,
-  totalAmtError,
-  totalAmtErrorMessage,
   loader,
   editId,
 }: projectProps) {
@@ -151,20 +138,12 @@ function AddProjectForm({
           name='area'
           containerClassName='w-full'
           label='Area'
+          type='number'
         />
         {areaError && <div className='text-red-400'>{areaErrorMessgage}</div>}
       </div>
 
       <div className='flex w-full items-center justify-between gap-4'>
-        {/* <div className='flex w-1/2 flex-col'>
-          <SelectOption
-            onChange={handleParentProject}
-            title='Parent Project'
-            options={ParentProjects}
-            containerClassName='flex-1 mt-1 w-full'
-            name='parentProject'
-          />
-        </div> */}
         <div className='w-full'>
           <SelectOption
             onChange={handleStatus}

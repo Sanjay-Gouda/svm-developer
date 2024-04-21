@@ -130,7 +130,7 @@ function AccountForm({ editInitialValues, editId }: editValueprops) {
           <div className='text-red-400'>{formik?.errors?.accHolderName}</div>
         )}
         <TextInput
-          type='text'
+          type='number'
           name='accNo'
           label='A/c No.'
           onChange={formik.handleChange}
@@ -144,14 +144,9 @@ function AccountForm({ editInitialValues, editId }: editValueprops) {
           {loader && <ClipLoader size={20} color='white' />}
         </Button>
 
-        {editId ? (
-          <Button
-            layout='outline'
-            onClick={() => route.push('/admin/accounts')}
-          >
-            Cancel
-          </Button>
-        ) : null}
+        <Button layout='outline' onClick={() => route.push('/admin/accounts')}>
+          Cancel
+        </Button>
       </div>
       <SvmProjectToast />
     </div>

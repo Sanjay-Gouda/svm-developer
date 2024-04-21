@@ -104,7 +104,7 @@ export default function Account({
           </>
         ) : (
           <>
-            {repo?.length === 0 ? (
+            {accountDetails?.length === 0 ? (
               <>
                 <EmptyState
                   btnLable='Add Accounts '
