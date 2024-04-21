@@ -117,7 +117,10 @@ function InstallmentForm({
     try {
       await httpInstance.post(`/installment/create`, payload);
       toast.success('Installment added Successfully');
-      router.push('/admin/booking');
+
+      setTimeout(() => {
+        router.push('/admin/booking');
+      }, 1000);
       setLoader(false);
     } catch (err) {
       setLoader(false);
@@ -156,7 +159,9 @@ function InstallmentForm({
       });
       setLoader(false);
       toast.success('Installment Updated Successfully..');
-      router.push('/admin/booking');
+      setTimeout(() => {
+        router.push('/admin/booking');
+      }, 1000);
     } catch (err) {
       setLoader(false);
       toast.error('Something went wrong');

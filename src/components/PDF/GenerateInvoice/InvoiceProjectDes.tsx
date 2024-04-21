@@ -65,7 +65,14 @@ const InovieProjectDes = ({ logo, address }) => {
         <Text style={styles.text}>Project:-</Text>
 
         <View style={styles.flexCenter}>
-          <Image style={styles.projectLogo} src={logo} alt='Logo' />
+          <Image
+            style={styles.projectLogo}
+            src={
+              logo ||
+              'https://svmdevelopers.in/static/media/svm-new-logo.7feceb34130b3cfbc944.png'
+            }
+            alt='Logo'
+          />
         </View>
         <View
           style={{
@@ -73,12 +80,12 @@ const InovieProjectDes = ({ logo, address }) => {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            // marginTop: '10px',
-
             padding: '10px',
           }}
         >
-          <Text style={{ fontWeight: 'bold' }}>Address : {address}</Text>
+          <Text style={{ fontWeight: 'bold' }}>
+            Address : {address || null}
+          </Text>
         </View>
         <View style={styles.line}></View>
         <View

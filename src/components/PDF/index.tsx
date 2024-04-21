@@ -89,18 +89,13 @@ type TCustomerPDFDetail = {
 
 export const Booking = ({ details }: any) => {
   const {
-    projectName,
     totalAmt,
     area,
-    address1,
     customer,
     plotNo,
     installmentAmt,
-    isMarried,
     paidAmt,
-    description,
     createdAt,
-    projectLogo,
     project,
   } = details;
 
@@ -191,7 +186,14 @@ export const Booking = ({ details }: any) => {
               }}
             >
               <View>
-                <Image style={styles.logo} src={project?.logo} alt='Logo' />
+                <Image
+                  style={styles.logo}
+                  src={
+                    project?.logo ||
+                    'https://svmdevelopers.in/static/media/svm-new-logo.7feceb34130b3cfbc944.png'
+                  }
+                  alt='Logo'
+                />
               </View>
             </View>
           </View>

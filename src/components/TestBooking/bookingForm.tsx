@@ -149,6 +149,7 @@ const BookingForm = ({
   handleSelectOption,
   clientErrorMessage,
 }: EditFormProps) => {
+  console.log(dateError, 'DATE ERROR');
   const routes = useRouter();
   const customerList = useCustomerDetails();
 
@@ -301,7 +302,21 @@ const BookingForm = ({
 
         <div className='flex flex-col'>
           <TextInput
+            type='text'
+            name='noOfInstallment'
+            label='No.Of Installment'
+            value={noOfInstallMentValue}
+            onChange={handleNoOfInstallment}
+          />
+
+          {installmentError && (
+            <div className='text-red-400'>{installmentErrorMessage}</div>
+          )}
+        </div>
+        <div className='flex flex-col'>
+          <TextInput
             type='number'
+            disabled
             name='amtPerInstallment'
             label='Amount Per Installment *'
             value={amtPerInstallmentValue}
@@ -309,22 +324,7 @@ const BookingForm = ({
           />
 
           {amtPerInstallError && (
-            <div className='text-red-400'>{amtPerInstallmentMessage}</div>
-          )}
-        </div>
-
-        <div className='flex flex-col'>
-          <TextInput
-            type='text'
-            name='noOfInstallment'
-            label='No.Of Installment'
-            disabled
-            value={noOfInstallMentValue}
-            onChange={handleNoOfInstallment}
-          />
-
-          {installmentError && (
-            <div className='text-red-400'>{installmentErrorMessage}</div>
+            <div className='text-red-400'>{+amtPerInstallmentMessage}</div>
           )}
         </div>
 
@@ -335,7 +335,9 @@ const BookingForm = ({
             selected={selectedDate}
             onChange={onDateChange}
           />
-          {dateError && <div className='text-red-400'>{dateErrorMessage}</div>}
+          {dateError && (
+            <div className='text-red-400'>Please Select EMI Date</div>
+          )}
         </div>
 
         <div className='flex flex-col'>

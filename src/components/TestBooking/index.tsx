@@ -22,7 +22,7 @@ const addInitialValues = {
   plotNo: undefined,
   totalAmt: 0,
   paidAmt: 0,
-  paymentMethod: 'CHEQUE',
+  paymentMethod: 'CASH',
   remainingAmt: 0,
   noOfInstallment: 0,
   amtPerInstallment: 0,
@@ -165,7 +165,7 @@ const TestBooking = ({ editInitialValues, editId }: editProps) => {
       remainAmt: remainingAmt,
       paymentType: paymentMethod,
       upiId: UPIId,
-      chequeNo: cheuqeNo,
+      chequeNo: cheuqeNo?.toString(),
       accountNo: BTAcNo,
       bankName: cBankName || BTBankName,
 
@@ -199,6 +199,7 @@ const TestBooking = ({ editInitialValues, editId }: editProps) => {
   };
 
   const formInitialValue = editId ? editInitialValues : addInitialValues;
+  console.log(formInitialValue, 'INITIAL VALUE UPDATE');
 
   const formik = useFormik({
     initialValues: formInitialValue,
@@ -279,14 +280,16 @@ const TestBooking = ({ editInitialValues, editId }: editProps) => {
 
   const calculateInstallmentCount = () => {
     const remainingAmt = +formik.values.remainingAmt;
-    const amtPerInstallment = +formik.values.amtPerInstallment;
-    const noOfInstallment = Math.ceil(remainingAmt / amtPerInstallment); // Round up to ensure all installments are covered
-    formik.setFieldValue('noOfInstallment', noOfInstallment);
+    const noOfInstallment = +formik.values.noOfInstallment;
+    // const noOfInstallment = (remainingAmt / amtPerInstallment); // Round up to ensure all installments are covered
+    const perInstallment = Math.ceil(remainingAmt / noOfInstallment);
+    // const noOfInstallment = Math.ceil(remainingAmt / amtPerInstallment); // Round up to ensure all installments are covered
+    formik.setFieldValue('amtPerInstallment', perInstallment);
   };
 
   useEffect(() => {
     calculateInstallmentCount();
-  }, [formik.values.amtPerInstallment]);
+  }, [formik.values.noOfInstallment, formik.values.totalAmt]);
 
   useEffect(() => {
     calculateRemainingAmt(formik.values.totalAmt, formik.values.paidAmt);

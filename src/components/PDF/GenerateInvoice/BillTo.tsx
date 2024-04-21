@@ -65,7 +65,7 @@ const BillTo = ({
   chequePayment,
   bankPayment,
 }: TReceipt) => {
-  console.log(chequePayment);
+  // console.log(upiPayment, chequePayment, 'UPI PAYMENT');
   return (
     <>
       <View style={styles.headerContainer}>

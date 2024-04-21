@@ -61,7 +61,10 @@ const Reciept = ({ installmentData }: any) => {
         <Page size='A4' style={styles.page}>
           <InvoiceHeader />
           <InvoiceNameDate receiptNo={installmentNo} date={reciptdate} />
-          <InovieProjectDes logo={project?.logo} address={project?.address2} />
+          <InovieProjectDes
+            logo={project?.logo}
+            address={project?.address2 || '_ADDRESS_'}
+          />
           <BillTo
             customer={customer}
             amount={amount}

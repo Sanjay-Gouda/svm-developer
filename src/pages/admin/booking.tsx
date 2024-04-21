@@ -186,7 +186,9 @@ export default function Booking({
                               .join(', ')}
                           </TableCell>
 
-                          <TableCell>{data?.projectName}</TableCell>
+                          <TableCell>
+                            {truncateText(data?.projectName)}
+                          </TableCell>
                           <TableCell>{data?.area}sq.ft</TableCell>
                           <TableCell>{data?.paidAmt}</TableCell>
                           <TableCell>

@@ -15,6 +15,7 @@ export async function getServerSideProps(params: any) {
 }
 
 export const EditBookingDetails = ({ EditId, bookingDetails }) => {
+  console.log({ bookingDetails });
   const {
     projectId,
     plotNo,
@@ -31,6 +32,7 @@ export const EditBookingDetails = ({ EditId, bookingDetails }) => {
     adminBankName,
     bankName,
     chequeNumber,
+    project,
     upiId,
     accountNumber,
     paymentId,
@@ -38,6 +40,8 @@ export const EditBookingDetails = ({ EditId, bookingDetails }) => {
 
     customer,
   } = bookingDetails;
+
+  console.log(projectName, 'PROJECT NAME');
 
   const editcustomer = customer.map((customer) => {
     return {
@@ -48,7 +52,7 @@ export const EditBookingDetails = ({ EditId, bookingDetails }) => {
 
   const editProject = {
     id: projectId,
-    name: projectName,
+    name: project?.name,
   };
 
   const editBankAccount = {
