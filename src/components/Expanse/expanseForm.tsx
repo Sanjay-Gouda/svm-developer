@@ -1,7 +1,7 @@
 import { Button, Label } from '@windmill/react-ui';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ClipLoader } from 'react-spinners';
 import { toast } from 'react-toastify';
 
@@ -67,7 +67,6 @@ const ExpanseForm = ({
   const route = useRouter();
   const [loader, setLoader] = useState(false);
   const [showExapnseForm, setShowExapnseForm] = useState(true);
-
   const [miscForm, setMiscForm] = useState<miscProps>([
     {
       id: Math.floor(Math.random() * 1000),
@@ -76,9 +75,19 @@ const ExpanseForm = ({
     },
   ]);
 
+  useEffect(() => {
+    setMiscForm(
+      miscExpenseList?.map((exp) => ({
+        id: Math.floor(Math.random() * 1000),
+        expenseName: exp.expenseName,
+        cost: exp.cost,
+      }))
+    );
+    setShowExapnseForm(false);
+  }, [miscExpenseList]);
+
   const projectList = useProjectDetails();
   const [query, setQuery] = useState('');
-
   const hadnleSearchQuery = (e: any) => {
     setQuery(e.target.value);
   };
@@ -114,13 +123,6 @@ const ExpanseForm = ({
       setShowExapnseForm(!showExapnseForm);
     }
   };
-
-  // useEffect(() => {
-  //   setMiscForm(miscExpenseList);
-  //   if (miscExpenseList?.length > 0) {
-  //     setShowExapnseForm(true);
-  //   }
-  // }, [editId]);
 
   const handleChange = (e: any, ind: number) => {
     const { name, value } = e.target;
@@ -171,7 +173,11 @@ const ExpanseForm = ({
         route.push('/admin/expanses');
       }, 1000);
     } catch (err) {
-      toast.error('Something Went Wrong');
+      toast.error(err?.response?.data?.message);
+      setLoader(false);
+      setTimeout(() => {
+        route.push('/admin/expanses');
+      }, 1000);
     }
   };
 
@@ -316,7 +322,6 @@ const ExpanseForm = ({
           placeholder='cost '
         />
       </div>
-      {console.log(miscForm, 'inside JSx')}
 
       <div className='flex flex-col gap-2'>
         {showExapnseForm ? (
