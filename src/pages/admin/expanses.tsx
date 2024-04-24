@@ -71,10 +71,10 @@ export default function Expanses({
   return (
     <>
       <Layout
-        pageTitle='Exapanses'
+        pageTitle='Exapenses'
         right={
           <Link href='realEstateProjects/expanseForm/expanseListForm'>
-            <Button>Add Expanses</Button>
+            <Button>Add Expenses</Button>
           </Link>
         }
         isShowSearchBar={true}
@@ -88,8 +88,8 @@ export default function Expanses({
             {data.length === 0 ? (
               <>
                 <EmptyState
-                  btnLable='Add Expanses '
-                  heading='Add your Project expanses '
+                  btnLable='Add Expenses '
+                  heading='Add your Project expenses '
                   redirectLink='realEstateProjects/expanseForm/expanseListForm'
                 />
               </>
@@ -107,7 +107,7 @@ export default function Expanses({
                       <TableCell className='text-[14px]'>
                         Non-Agriculture
                       </TableCell>
-                      <TableCell className='text-[14px]'>Brokrage</TableCell>
+                      <TableCell className='text-[14px]'>Brokerage</TableCell>
                       <TableCell className='text-[14px]'>
                         Planning & Layout
                       </TableCell>

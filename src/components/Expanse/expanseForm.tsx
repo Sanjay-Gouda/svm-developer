@@ -83,7 +83,6 @@ const ExpanseForm = ({
         cost: exp.cost,
       }))
     );
-    setShowExapnseForm(false);
   }, [miscExpenseList]);
 
   const projectList = useProjectDetails();
@@ -156,7 +155,7 @@ const ExpanseForm = ({
       brokerage: +brokrage,
       landVisitCharge: +landVisit,
       projectId: id,
-      miscExpense: miscExpense,
+      miscExpense: miscExpense || [],
     };
 
     try {
@@ -222,7 +221,10 @@ const ExpanseForm = ({
       }, 1000);
     } catch (err) {
       setLoader(false);
-      toast.error('Something Went Wrong');
+      toast.error(err?.response?.data?.message);
+      setTimeout(() => {
+        route.push('/admin/expanses');
+      }, 1000);
     }
   };
 
@@ -286,7 +288,7 @@ const ExpanseForm = ({
         <TextInput
           type='text'
           name='brokrage'
-          label='Brokrage'
+          label=' Brokerage'
           placeholder='cost '
           onChange={formik.handleChange}
           value={formik.values.brokrage}
@@ -333,7 +335,7 @@ const ExpanseForm = ({
                 setShowExapnseForm(false);
               }}
             >
-              Add Miscellaneous Exapnse
+              Add Miscellaneous Expenses
             </Button>
           </>
         ) : (
