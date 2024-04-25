@@ -74,17 +74,18 @@ const ExpanseForm = ({
       cost: 0,
     },
   ]);
+  const [editMiscForm, setEditMiscForm] = useState([]);
 
   useEffect(() => {
-    setMiscForm(
+    setEditMiscForm(
       miscExpenseList?.map((exp) => ({
         id: Math.floor(Math.random() * 1000),
         expenseName: exp.expenseName,
         cost: exp.cost,
       }))
     );
-  }, [miscExpenseList]);
-
+  }, [editId]);
+  const miscFormData = editId ? editMiscForm : miscForm;
   const projectList = useProjectDetails();
   const [query, setQuery] = useState('');
   const hadnleSearchQuery = (e: any) => {
@@ -326,7 +327,39 @@ const ExpanseForm = ({
       </div>
 
       <div className='flex flex-col gap-2'>
-        {showExapnseForm ? (
+        {/* <Button
+          className='my-1'
+          layout='outline'
+          onClick={() => {
+            setShowExapnseForm(false);
+          }}
+        >
+          Add Miscellaneous Expenses
+        </Button> */}
+
+        {miscFormData?.map((box, ind) => {
+          return (
+            <MiscellaneouForm
+              index={ind}
+              key={box.id}
+              expanse={box.expenseName}
+              cost={box.cost}
+              handleHideForm={() => {
+                setShowExapnseForm(true);
+                // setMiscForm([{ expenseName: '', cost: undefined }]);
+              }}
+              handleChange={(e) => {
+                handleChange(e, ind);
+              }}
+              handleAddFields={handleAddFields}
+              handleRemoveFields={() => {
+                handleRemoveFields(box.id);
+              }}
+            />
+          );
+        })}
+
+        {/* {showExapnseForm ? (
           <>
             <Button
               className='my-1'
@@ -362,7 +395,7 @@ const ExpanseForm = ({
               );
             })}
           </>
-        )}
+        )} */}
       </div>
 
       <Button className='' onClick={() => formik.handleSubmit()}>
