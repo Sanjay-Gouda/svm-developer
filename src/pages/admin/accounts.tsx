@@ -51,7 +51,6 @@ export default function Account({
   const [accountDetails, setAccountDetails] =
     useState<accounrDetailProps[]>(repo);
 
-  console.log(repo, 'REPO');
   const [searchQuery, setSearchQuery] = useState('');
 
   const router = useRouter();

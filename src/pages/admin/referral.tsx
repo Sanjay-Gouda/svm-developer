@@ -7,32 +7,24 @@ import {
   TableHeader,
   TableRow,
 } from '@windmill/react-ui';
-import axios from 'axios';
+import { debounce } from 'lodash';
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { MdDelete, MdModeEditOutline } from 'react-icons/md';
+import { MdModeEditOutline } from 'react-icons/md';
 
 import EmptyState from '@/components/Empty';
 import ServerError from '@/components/Error/500Error';
 import Layout from '@/containers/Layout';
 
-import { API_ENDPOINT } from '@/const/APIRoutes';
-
-type referrerListProps = {
-  firstName: string;
-  referralId: string;
-  phone: string;
-  lastName: string;
-  email: string;
-  address: string;
-};
+import { httpInstance } from '@/constants/httpInstances';
 
 export const getServerSideProps: GetServerSideProps = async () => {
   try {
-    const res = await axios.get(`${API_ENDPOINT.END_POINT}/referral/list`);
+    const res = await httpInstance.get(`/referral/list`);
     const repo = res.data.result.list;
+
     return { props: { repo } };
   } catch (err) {
     console.log(err);
@@ -49,39 +41,38 @@ export default function Refferral({
   error,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [refferList, setRefferList] = useState(repo);
+  const [searchQuery, setSearchQuery] = useState('');
 
-  const handleSearch = async (e: any) => {
-    const value = e.target.value;
-
-    const timer = setTimeout(async () => {
+  useEffect(() => {
+    const fetchData = async () => {
       try {
-        const res = await axios.get(
-          `${API_ENDPOINT.END_POINT}/referral/list?searchString=${value}`
+        const res = await httpInstance.get(
+          `/referral/list?searchString=${searchQuery}`
         );
-        const data = res.data.result.list;
 
+        const data = res.data.result.list;
         setRefferList(data);
       } catch (err) {
         console.log(err);
       }
-    }, 200);
-
-    return () => {
-      clearTimeout(timer);
     };
-  };
+
+    if (searchQuery) {
+      fetchData();
+    } else {
+      setRefferList(repo);
+    }
+  }, [searchQuery]);
+
+  const handleSearch = debounce((searchQuery: string) => {
+    setSearchQuery(searchQuery);
+  }, 300);
 
   const router = useRouter();
 
   const handleFormEdit = (id: string) => {
     router.push(`realEstateProjects/referrerForm/${id}`);
   };
-
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
 
   return (
     <Layout
@@ -92,7 +83,7 @@ export default function Refferral({
         </Link>
       }
       isShowSearchBar={true}
-      handleSearch={handleSearch}
+      handleSearch={(e) => handleSearch(e.target.value)}
     >
       {error ? (
         <>
@@ -100,9 +91,13 @@ export default function Refferral({
         </>
       ) : (
         <>
-          {repo.length === 0 ? (
+          {refferList?.length === 0 ? (
             <>
-              <EmptyState />
+              <EmptyState
+                btnLable='Add Referral'
+                redirectLink='realEstateProjects/referrerForm/addReferral/'
+                heading='Add New Referrals'
+              />
             </>
           ) : (
             <TableContainer>
@@ -117,7 +112,7 @@ export default function Refferral({
                   </tr>
                 </TableHeader>
                 <TableBody>
-                  {refferList?.map((list) => {
+                  {repo?.map((list) => {
                     return (
                       <TableRow key={list?.referralId}>
                         <TableCell>{list?.firstName}</TableCell>
@@ -125,7 +120,6 @@ export default function Refferral({
                         <TableCell>{list?.email}</TableCell>
                         <TableCell>{list?.address}</TableCell>
                         <TableCell className='flex gap-5'>
-                          {/* <EditIcon className='h-5 w-5 cursor-pointer' /> */}
                           <MdModeEditOutline
                             size='24'
                             className='cursor-pointer'
@@ -134,11 +128,11 @@ export default function Refferral({
                               handleFormEdit(list?.referralId);
                             }}
                           />
-                          <MdDelete
+                          {/* <MdDelete
                             size='24'
                             className='cursor-pointer'
                             style={{ color: ' #F38C7F' }}
-                          />
+                          /> */}
                         </TableCell>
                       </TableRow>
                     );
