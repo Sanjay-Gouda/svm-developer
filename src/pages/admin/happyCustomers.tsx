@@ -1,4 +1,5 @@
 import {
+  Button,
   Table,
   TableBody,
   TableCell,
@@ -6,13 +7,21 @@ import {
   TableHeader,
   TableRow,
 } from '@windmill/react-ui';
+import Link from 'next/link';
 import { MdDelete, MdModeEditOutline } from 'react-icons/md';
 
 import Layout from '@/containers/Layout';
 
 function ProjectHappyCustomer() {
   return (
-    <Layout>
+    <Layout
+      pageTitle='Happy Customer'
+      right={
+        <Link href='realEstateProjects/happyCustomer/addHappyCustomer'>
+          <Button>Add Happycustomer</Button>
+        </Link>
+      }
+    >
       <TableContainer>
         <Table>
           <TableHeader>
@@ -42,6 +51,8 @@ function ProjectHappyCustomer() {
           </TableBody>
         </Table>
       </TableContainer>
+
+      {/* <HappyCustomer /> */}
     </Layout>
   );
 }

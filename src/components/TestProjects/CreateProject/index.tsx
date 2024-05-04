@@ -16,17 +16,9 @@ import { API_ENDPOINT } from '@/const/APIRoutes';
 import { httpInstance } from '@/constants/httpInstances';
 const validationSchema = Yup.object().shape({
   name: Yup.string().required('Project Name is required'),
-  // parentProject: Yup.string().required('Parent Project is required'),
-  // status: Yup.string().required('status is required'),
   ownerName: Yup.string().required('Owner Name is required'),
   area: Yup.number().required('Area must be in number'),
-  // emiAmt: Yup.number().typeError('Amount must be in number'),
-  // downPayment: Yup.number().typeError(' Amount must be in number'),
-  // totalAmt: Yup.number().typeError('Amount must be in number'),
-  // projectStatus: Yup.string().required('Project Status is required'),
   pincode: Yup.string().required('Pincode is required'),
-  // state: Yup.string().required('state is required'),
-  // dist: Yup.string().required('district is required'),
   address1: Yup.string().required('address is required'),
 });
 
@@ -42,9 +34,6 @@ const addInitialValues: TDetailValues = {
   description: '',
   status: 'ACTIVE',
   address1: undefined,
-  downPayment: undefined,
-  totalAmt: undefined,
-  emiAmt: undefined,
   location: '',
 };
 
@@ -77,9 +66,6 @@ const TestProjects = ({
       pincode,
       status,
       unit,
-      downPayment,
-      totalAmt,
-      emiAmt,
     } = values;
 
     const payLoads: TCreateProject = {
@@ -93,9 +79,6 @@ const TestProjects = ({
       unit: unit,
       address2: address2,
       location: 'location',
-      // downPayment: downPayment,
-      // emiAmt: emiAmt,
-      // totalAmt: totalAmt,
     };
 
     try {
@@ -112,7 +95,7 @@ const TestProjects = ({
     } catch (error) {
       setLoader(false);
 
-      toast.error('Something went wrong');
+      toast.error(error?.response?.data?.message || 'Something went wrong');
     }
   };
 
@@ -128,9 +111,6 @@ const TestProjects = ({
       pincode,
       status,
       unit,
-      downPayment,
-      totalAmt,
-      emiAmt,
     } = values;
 
     const payload = {
@@ -144,9 +124,6 @@ const TestProjects = ({
       unit: unit,
       address2: address2,
       location: 'location',
-      downPayment: +downPayment,
-      emiAmt: +emiAmt,
-      totalAmt: +totalAmt,
     };
 
     try {
@@ -160,7 +137,7 @@ const TestProjects = ({
       handleTabChange();
       setLoader(false);
     } catch (error) {
-      toast.error('Something went wrong');
+      toast.error(error?.response?.data?.message || 'Something went wrong');
     }
   };
 

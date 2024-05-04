@@ -108,7 +108,7 @@ function InstallmentForm({
           bankName: BTBankName || cBankName,
           chequeNumber: cheuqeNo,
           upiId: UPIId,
-          penalty: penalty,
+          penalty: +penalty,
         },
       ],
       bookingId: bookingId,

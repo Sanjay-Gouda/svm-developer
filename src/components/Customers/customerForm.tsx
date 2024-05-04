@@ -18,16 +18,11 @@ import { API_ENDPOINT } from '@/const/APIRoutes';
 import { httpInstance } from '@/constants/httpInstances';
 
 const validationSchema = Yup.object().shape({
-  // firstName: Yup.string().required('First Name is required '),
-  // lastName: Yup.string().required('Last Name is required '),
   name: Yup.string().required('Last Name is required '),
   phone: Yup.string()
     .matches(/^[0-9]{10}$/, 'Invalid Mobile number')
     .required('Customer Mobile Number is required'),
   alternativeNo: Yup.string().matches(/^[0-9]{10}$/, 'Invalid Mobile number'),
-  // aadharNo: Yup.string()
-  //   .matches(/^\d{12}$/, 'Aadhaar number must be exactly 12 digits')
-  //   .required('Aadhaar number is required'),
   pincode: Yup.string()
     .required('Pincode is required')
     .matches(/^\d{6}$/, 'Invalid PIN code. It must be a 6-digit number.'),

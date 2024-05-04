@@ -13,9 +13,7 @@ export type TDetailValues = {
   description?: string | undefined;
   planningImageFormData?: string[];
   siteImageFromData?: string[];
-  emiAmt: number;
-  downPayment: number;
-  totalAmt: number;
+
   location: string;
 };
 

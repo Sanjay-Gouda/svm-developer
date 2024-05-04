@@ -1,6 +1,8 @@
 import { Button, Label } from '@windmill/react-ui';
 import { useFormik } from 'formik';
+import { isEmpty } from 'lodash';
 import React, { useState } from 'react';
+import { toast } from 'react-toastify';
 
 import { useProjectDetails } from '@/hooks/useProjectDetails';
 
@@ -20,6 +22,7 @@ const initialValues = {
 
 const HappyCustomer = () => {
   const projects = useProjectDetails();
+  const [loading, setLoading] = useState(false);
   const [customerImages, setCustomerImages] = useState<any>([]);
   const [query, setQuery] = useState('');
 
@@ -34,17 +37,24 @@ const HappyCustomer = () => {
     setQuery('');
   };
 
-  const hadnleSearchQuery = (e: any) => {
+  const handleSearchQuery = (e: any) => {
     setQuery(e.target.value);
   };
   const formik = useFormik({
     initialValues: initialValues,
     onSubmit: (values) => {
-      addHappyCustomer(values);
+      if (isEmpty(values.project)) {
+        toast.info('Please Select Project');
+      } else if (customerImages?.length === 0) {
+        toast.info('Please Upload Images');
+      } else {
+        addHappyCustomer(values);
+      }
     },
   });
 
   const addHappyCustomer = async (values: any) => {
+    setLoading(true);
     const { project } = values;
     const { id } = project;
 
@@ -58,9 +68,11 @@ const HappyCustomer = () => {
         `project/upload/happy-customers/${id}`,
         formData
       );
-      console.log(res);
+      setLoading(false);
+      // console.log(res?.data?.message);
+      toast.success(res.data?.message);
     } catch (err) {
-      console.log(err);
+      toast.error(err?.response?.data?.message);
     }
   };
 
@@ -77,7 +89,7 @@ const HappyCustomer = () => {
             data={filterProjects}
             query={query}
             afterLeave={afterLeave}
-            handleSearchQuery={hadnleSearchQuery}
+            handleSearchQuery={handleSearchQuery}
             selected={formik.values.project}
             setSelected={(project: selectProjectProps) => {
               formik.setFieldValue('project', project);
@@ -93,7 +105,7 @@ const HappyCustomer = () => {
 
         <div className='flex w-full justify-end'>
           <Button size='regular' onClick={() => formik.handleSubmit()}>
-            Submit
+            {loading ? 'Submitting...' : 'Submit'}
           </Button>
         </div>
       </div>

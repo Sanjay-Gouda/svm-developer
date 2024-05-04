@@ -43,7 +43,7 @@ function AccountForm({ editInitialValues, editId }: editValueprops) {
     const payload = {
       name: accHolderName,
       bankName: bankName,
-      accNo: accNo,
+      accNo: accNo.toString(),
     };
 
     try {
@@ -58,9 +58,9 @@ function AccountForm({ editInitialValues, editId }: editValueprops) {
         route.push('/admin/accounts');
       }, 1000);
     } catch (err) {
-      // console.log(err);
-      toast.error('Something went wrong');
-      route.push('/admin/accounts');
+      // route.push('/admin/accounts');
+      setLoader(false);
+      toast.error(err?.response?.data?.message || 'Something went wrong');
     }
   };
 
@@ -86,7 +86,9 @@ function AccountForm({ editInitialValues, editId }: editValueprops) {
         route.push('/admin/accounts');
       }, 1000);
     } catch (err) {
-      toast.error('Something went wrong');
+      setLoader(false);
+      // toast.error('Something went wrong');
+      toast.error(err?.response?.data?.message || 'Something went wrong');
     }
   };
 

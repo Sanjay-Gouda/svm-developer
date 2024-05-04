@@ -9,13 +9,28 @@ const httpInstance = axios.create({
 });
 
 // httpInstance.interceptors.request.use(function (config) {
-//   const token = cookies.get('token');
-//   if (config) {
-//     if (config['headers']) {
-//       config['headers']['ngrok-skip-browser-warning'] = '69420';
-//     }
-//   }
+//   console.log(token, 'TOKEN');
+//   // if (config) {
+//   //   if (config['headers']) {
+//   //     config['headers']['ngrok-skip-browser-warning'] = '69420';
+//   //   }
+//   // }
 //   return config;
 // });
+
+// httpInstance.interceptors.request.use(
+//   (config) => {
+//     const token = localStorage.getItem('loginToken');
+
+//     if (token) {
+//       config.headers.Authorization = `Bearer ${token}`;
+//     }
+//     return config;
+//   },
+//   (err) => {
+//     console.log(err);
+//     return Promise.reject(err);
+//   }
+// );
 
 export { httpInstance };

@@ -74,7 +74,9 @@ const PancardContainer = ({ customerId }: Tdocument) => {
       console.log(res);
     } catch (err) {
       setLoader(false);
-      toast.error('Something went wrong');
+      toast.error(
+        err.response.message || 'Please Upload PanCard less than 1mb'
+      );
     }
   };
 
