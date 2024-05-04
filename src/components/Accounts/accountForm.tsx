@@ -71,7 +71,7 @@ function AccountForm({ editInitialValues, editId }: editValueprops) {
     const payload = {
       name: accHolderName,
       bankName: bankName,
-      accNo: accNo,
+      accNo: accNo.toString(),
     };
 
     try {
