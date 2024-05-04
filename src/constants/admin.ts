@@ -7,8 +7,6 @@ import {
   TbFileInvoice,
 } from 'react-icons/tb';
 
-import { MoneyIcon } from '@/icons';
-
 interface AdminTabsProps {
   name: string;
   icon: React.FC<any>;
@@ -54,11 +52,11 @@ export const AdminSidebarTabs: AdminTabsProps[] = [
   //   icon: TbFileInvoice,
   // },
 
-  {
-    name: 'Referral',
-    to: 'referral',
-    icon: MoneyIcon,
-  },
+  // {
+  //   name: 'Referral',
+  //   to: 'referral',
+  //   icon: MoneyIcon,
+  // },
 
   {
     name: 'Expenses',
