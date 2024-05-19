@@ -26,6 +26,7 @@ const addInitialValues = {
   remainingAmt: 0,
   noOfInstallment: 0,
   amtPerInstallment: 0,
+  dastavejAmt: 0,
   paymentStatus: 'COMPLETED',
   UPIId: '',
   cheuqeNo: undefined,
@@ -33,6 +34,7 @@ const addInitialValues = {
   BTAcNo: undefined,
   BTBankName: '',
   emiDate: null,
+  reminderDate: null,
 };
 
 type editProps = {
@@ -56,7 +58,6 @@ const TestBooking = ({ editInitialValues, editId }: editProps) => {
     setLoader(true);
 
     const {
-      address,
       bankAccount,
       customerName,
       area,
@@ -64,6 +65,7 @@ const TestBooking = ({ editInitialValues, editId }: editProps) => {
       noOfInstallment,
       paidAmt,
       paymentStatus,
+      reminderDate,
       // landmark,
       // pincode,
       projectName,
@@ -77,6 +79,7 @@ const TestBooking = ({ editInitialValues, editId }: editProps) => {
       BTBankName,
       plotNo,
       emiDate,
+      dastavejAmt,
     } = values;
 
     const projectId = projectName.id;
@@ -89,6 +92,7 @@ const TestBooking = ({ editInitialValues, editId }: editProps) => {
     const payload = {
       projectId: projectId,
       installmentDate: emiDate,
+      reminderDate: reminderDate,
       plotNo: plotNo,
       area: +area,
       paidAmt: +paidAmt,
@@ -104,6 +108,7 @@ const TestBooking = ({ editInitialValues, editId }: editProps) => {
       customerIds: customerIds,
       adminAccountId: accountId,
       installmentCount: noOfInstallment,
+      dastavejAmt: dastavejAmt,
     };
 
     try {
@@ -145,6 +150,9 @@ const TestBooking = ({ editInitialValues, editId }: editProps) => {
       BTAcNo,
       BTBankName,
       paymentId,
+      dastavejAmt,
+      emiDate,
+      reminderDate,
     } = values;
 
     const projectId = projectName.id;
@@ -157,7 +165,8 @@ const TestBooking = ({ editInitialValues, editId }: editProps) => {
 
     const payload = {
       projectId: projectId,
-
+      installmentDate: emiDate,
+      reminderDate: reminderDate,
       area: +area,
       paidAmt: paidAmt.toString(),
       totalAmt: totalAmt.toString(),
@@ -175,6 +184,7 @@ const TestBooking = ({ editInitialValues, editId }: editProps) => {
       adminAccountId: accountId,
       installmentCount: noOfInstallment,
       paymentId: paymentId,
+      dastavejAmt: dastavejAmt,
     };
 
     try {
@@ -303,6 +313,10 @@ const TestBooking = ({ editInitialValues, editId }: editProps) => {
     <>
       <BookingForm
         selectedDate={formik.values.emiDate}
+        reminderDate={formik.values.reminderDate}
+        onReminderDateChange={(date: Date) =>
+          formik.setFieldValue('reminderDate', date)
+        }
         onDateChange={(date: Date) => formik.setFieldValue('emiDate', date)}
         editId={editId}
         loader={loader}
@@ -312,6 +326,8 @@ const TestBooking = ({ editInitialValues, editId }: editProps) => {
             ? true
             : false
         }
+        dastavejAmt={formik.values.dastavejAmt}
+        handleDastavejAmt={formik.handleChange}
         clientErrorMessage={formik.errors.customerName}
         clientSelect={formik.values.customerName}
         setClientSelect={handleClientSelect}
@@ -332,14 +348,9 @@ const TestBooking = ({ editInitialValues, editId }: editProps) => {
         plotNoErrorMessage={
           formik.touched.plotNo && formik.errors.plotNo ? true : false
         }
-        // pincodeValue={pincodeQuery}
-        // handlePincode={handlePinCodeApi}
         pincodeError={
           formik.touched.pincode && formik.errors.pincode ? true : false
         }
-        // pincodeErrorMessage={formik.errors.pincode}
-        // state={formik.values.state}
-        // city={formik.values.city}
         landmarkValue={formik.values.landmark}
         handleLandmark={formik.handleChange}
         landmarkError={

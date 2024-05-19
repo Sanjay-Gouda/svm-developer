@@ -12,10 +12,15 @@ import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { MdModeEditOutline } from 'react-icons/md';
+import { MdDelete, MdModeEditOutline } from 'react-icons/md';
+import { toast } from 'react-toastify';
+
+import { useModal } from '@/hooks/useModal';
 
 import EmptyState from '@/components/Empty';
 import ServerError from '@/components/Error/500Error';
+import DeleteModal from '@/components/Modal';
+import { SvmProjectToast } from '@/components/Toast/Toast';
 import Layout from '@/containers/Layout';
 
 import { httpInstance } from '@/constants/httpInstances';
@@ -54,6 +59,7 @@ export default function Account({
   const [searchQuery, setSearchQuery] = useState('');
 
   const router = useRouter();
+  const { closeModal, deleteId, handleModalOpen, isModalOpen } = useModal();
 
   const handleEdit = (id: any) => {
     router.push(`realEstateProjects/accountForm/${id}`);
@@ -84,6 +90,27 @@ export default function Account({
   const handleSearch = debounce((searchQuery: string) => {
     setSearchQuery(searchQuery);
   }, 300);
+
+  const fetchAccountDetails = async () => {
+    try {
+      const res = await httpInstance.get(`/account/basic-list`);
+      setAccountDetails(res.data.result);
+    } catch (err) {
+      toast.error('Something went wrong while fetching Account Details');
+    }
+  };
+
+  const handleDelete = async () => {
+    try {
+      const res = await httpInstance.delete(`/account/delete/${deleteId}`);
+      toast.success(res?.data?.message);
+      fetchAccountDetails();
+      closeModal();
+    } catch (err) {
+      closeModal();
+      toast.error('Something went wrong');
+    }
+  };
 
   return (
     <>
@@ -140,11 +167,14 @@ export default function Account({
                                 handleEdit(details?.adminAccountId);
                               }}
                             />
-                            {/* <MdDelete
+                            <MdDelete
                               size='24'
                               className='cursor-pointer'
                               style={{ color: ' #F38C7F' }}
-                            /> */}
+                              onClick={() =>
+                                handleModalOpen(details?.adminAccountId)
+                              }
+                            />
                           </TableCell>
                         </TableRow>
                       );
@@ -156,6 +186,12 @@ export default function Account({
           </>
         )}
       </Layout>
+      <SvmProjectToast />
+      <DeleteModal
+        isModalOpen={isModalOpen}
+        closeModal={closeModal}
+        handleDelete={handleDelete}
+      />
     </>
   );
 }

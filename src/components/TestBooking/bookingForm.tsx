@@ -73,7 +73,8 @@ type EditFormProps = {
   btBankNameValue: string | undefined;
   handleBtBankName: (e: any) => void;
   btBankNameError: boolean;
-
+  dastavejAmt: number;
+  handleDastavejAmt: () => void;
   noOfInstallMentValue: number;
 
   handleNoOfInstallment: (e: any) => void;
@@ -85,11 +86,17 @@ type EditFormProps = {
   amtPerInstallError: boolean;
   amtPerInstallmentMessage: string | undefined;
   handleSelectOption: (e: any) => void;
+  reminderDate: any;
+  onReminderDateChange: (date: Date) => void;
 };
 
 const BookingForm = ({
   editId,
   loader,
+  dastavejAmt,
+  handleDastavejAmt,
+  reminderDate,
+  onReminderDateChange,
   selectedDate,
   onDateChange,
   clientSelect,
@@ -201,18 +208,6 @@ const BookingForm = ({
             afterLeave={afterLeave}
             placeholder='Search Client'
           />
-          {/* <ComboBox
-            data={filteredCustomer}
-            query={query}
-            afterLeave={afterLeave}
-            handleSearchQuery={hadnleSearchQuery}
-            // selected={clientSelect}
-            // setSelected={setClientSelect}
-          /> */}
-
-          {/* {!clientSelect && (
-            <div className='text-red-400'>{clientErrorMessage}</div>
-          )} */}
         </div>
         <div className='flex flex-col'>
           <Label>Project Name *</Label>
@@ -328,6 +323,20 @@ const BookingForm = ({
           )}
         </div>
 
+        <div className='flex flex-col'>
+          <TextInput
+            type='number'
+            name='dastavejAmt'
+            label='Dastavej Amount'
+            value={dastavejAmt}
+            onChange={handleDastavejAmt}
+          />
+
+          {/* {amtPerInstallError && (
+            <div className='text-red-400'>{+amtPerInstallmentMessage}</div>
+          )} */}
+        </div>
+
         <div className='flex w-full flex-col'>
           <Label>Select EMI Date</Label>
           <DateSelector
@@ -338,6 +347,15 @@ const BookingForm = ({
           {dateError && (
             <div className='text-red-400'>Please Select EMI Date</div>
           )}
+        </div>
+
+        <div className='flex w-full flex-col'>
+          <Label>Select Reminder Date</Label>
+          <DateSelector
+            name='reminderDate'
+            selected={reminderDate}
+            onChange={onReminderDateChange}
+          />
         </div>
 
         <div className='flex flex-col'>

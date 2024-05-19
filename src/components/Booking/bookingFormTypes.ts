@@ -24,12 +24,14 @@ export type TBookingProps = {
 
   paymentMethod: 'CASH' | 'BANK_TRANSFER' | 'CHEQUE' | 'UPI';
   paymentStatus: 'PENDING' | 'IN PROGRESS' | 'COMPLETED';
-
+  dastavejAmt: number;
   cheuqeNo: undefined | number;
   /* C->Cheque */
   cBankName: string;
 
   UPIId: string;
+  emiDate: Date;
+  reminderDate: Date;
 
   /* BT -BankTransfer */
   BTAcNo: undefined | number;

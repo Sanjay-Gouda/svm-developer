@@ -37,11 +37,12 @@ export const EditBookingDetails = ({ EditId, bookingDetails }) => {
     accountNumber,
     paymentId,
     installmentDate,
-
+    dastavejAmt,
     customer,
+    reminderDate,
   } = bookingDetails;
 
-  console.log(projectName, 'PROJECT NAME');
+  console.log(bookingDetails, 'PROJECT NAME');
 
   const editcustomer = customer.map((customer) => {
     return {
@@ -80,6 +81,9 @@ export const EditBookingDetails = ({ EditId, bookingDetails }) => {
     BTBankName: bankName,
     paymentId: paymentId,
     emiDate: installmentDate,
+    dastavejAmt: dastavejAmt,
+    reminderDate: reminderDate,
+
     // customerName: customer,
   };
 
