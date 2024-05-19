@@ -1,5 +1,4 @@
 import {
-  Badge,
   Button,
   Table,
   TableBody,
@@ -161,9 +160,9 @@ export default function Booking({
                       <TableCell className='text-[14px]'>Project</TableCell>
                       <TableCell className='text-[14px]'>Area</TableCell>
                       <TableCell className='text-[14px]'>Paid Amount</TableCell>
-                      <TableCell className='text-[14px]'>
+                      {/* <TableCell className='text-[14px]'>
                         Payment Mode
-                      </TableCell>
+                      </TableCell> */}
                       <TableCell className='text-[14px]'>
                         Payment Status
                       </TableCell>
@@ -193,24 +192,6 @@ export default function Booking({
                           <TableCell>{data?.paidAmt}</TableCell>
                           <TableCell>
                             {data?.paymentType.toLowerCase()}
-                          </TableCell>
-
-                          <TableCell>
-                            <Badge
-                              className='flex w-[60%] items-center justify-center py-1 text-[16px]'
-                              type={
-                                data?.paymentStatus === 'COMPLETED'
-                                  ? 'success'
-                                  : data?.paymentStatus === 'PENDING'
-                                  ? 'warning'
-                                  : 'primary'
-                              }
-                            >
-                              {data?.paymentStatus === 'PARTIAL'
-                                ? 'In Progress'
-                                : data?.paymentStatus?.toLowerCase()}
-                              {/* {data?.paymentStatus?.toLowerCase()} */}
-                            </Badge>
                           </TableCell>
 
                           <TableCell>
