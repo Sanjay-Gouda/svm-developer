@@ -124,7 +124,9 @@ const BillTo = ({
               bottom: 3,
             }}
           >
-            <Text style={{ marginLeft: '20px' }}>{numberToWords(amount)}</Text>
+            <Text style={{ marginLeft: '20px', textTransform: 'capitalize' }}>
+              {numberToWords(amount)}
+            </Text>
           </View>
         </View>
       </View>
@@ -148,8 +150,8 @@ const BillTo = ({
               bottom: 3,
             }}
           >
-            <Text style={{ marginLeft: '20px' }}>
-              {paymentType?.toLowerCase()}
+            <Text style={{ marginLeft: '20px', textTransform: 'capitalize' }}>
+              {paymentType}
             </Text>
           </View>
 
@@ -169,7 +171,10 @@ const BillTo = ({
               <Text>Bank Name</Text>
               <View style={styles.paymentType}>
                 {bankPayment?.map((dt, ind) => (
-                  <Text key={ind} style={{ marginLeft: '20px' }}>
+                  <Text
+                    key={ind}
+                    style={{ marginLeft: '20px', textTransform: 'capitalize' }}
+                  >
                     {dt?.bankName}
                   </Text>
                 ))}
@@ -180,7 +185,10 @@ const BillTo = ({
               <Text>Bank Name</Text>
               <View style={styles.paymentType}>
                 {chequePayment?.map((dt, ind) => (
-                  <Text key={ind} style={{ marginLeft: '20px' }}>
+                  <Text
+                    key={ind}
+                    style={{ marginLeft: '20px', textTransform: 'capitalize' }}
+                  >
                     {dt?.bankName}
                   </Text>
                 ))}

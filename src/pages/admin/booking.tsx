@@ -48,6 +48,7 @@ export default function Booking({
   error,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [bookingList, setBookingList] = useState(list);
+  console.log(list, 'BOOKING LIST');
   const [searchQuery, setSearchQuery] = useState('');
   const route = useRouter();
   const { isModalOpen, closeModal, openModal, deleteId, handleModalOpen } =
@@ -159,16 +160,19 @@ export default function Booking({
                       </TableCell>
                       <TableCell className='text-[14px]'>Project</TableCell>
                       <TableCell className='text-[14px]'>Area</TableCell>
-                      <TableCell className='text-[14px]'>Paid Amount</TableCell>
-                      {/* <TableCell className='text-[14px]'>
-                        Payment Mode
-                      </TableCell> */}
                       <TableCell className='text-[14px]'>
-                        Payment Status
+                        Total Amount
+                      </TableCell>
+                      <TableCell className='text-[14px]'>Paid Amount</TableCell>
+                      <TableCell className='text-[14px]'>
+                        Remaining Amount
                       </TableCell>
                       <TableCell className='text-[14px]'>Installment</TableCell>
                       <TableCell className='text-[14px]'>
                         Installment History
+                      </TableCell>
+                      <TableCell className='text-[14px]'>
+                        Penalty History
                       </TableCell>
                       <TableCell className='text-[14px]'>Download</TableCell>
                       <TableCell className='text-[14px]'>Action </TableCell>
@@ -189,10 +193,9 @@ export default function Booking({
                             {truncateText(data?.projectName)}
                           </TableCell>
                           <TableCell>{data?.area}sq.ft</TableCell>
+                          <TableCell>{data?.totalAmt}</TableCell>
                           <TableCell>{data?.paidAmt}</TableCell>
-                          <TableCell>
-                            {data?.paymentType.toLowerCase()}
-                          </TableCell>
+                          <TableCell>{data?.remainAmt}</TableCell>
 
                           <TableCell>
                             <Button
@@ -212,6 +215,16 @@ export default function Booking({
                               }
                             >
                               View
+                            </Button>
+                          </TableCell>
+                          <TableCell>
+                            <Button
+                              layout='outline'
+                              onClick={() =>
+                                handleViewInstallment(data?.bookingId)
+                              }
+                            >
+                              Penalty
                             </Button>
                           </TableCell>
                           <TableCell>

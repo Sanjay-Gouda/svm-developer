@@ -50,6 +50,7 @@ const Reciept = ({ installmentData }: any) => {
     chequePayment,
     upiPayment,
 
+    penalty,
     bankPayment,
   } = installmentData;
   console.log(installmentData, 'DATA');
@@ -75,7 +76,7 @@ const Reciept = ({ installmentData }: any) => {
             bankPayment={bankPayment}
           />
           <InvoiceTermCond />
-          <InvoiceFooter />
+          <InvoiceFooter remarks={penalty} />
           <View
             style={{
               marginTop: '30px',

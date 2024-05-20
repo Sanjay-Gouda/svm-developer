@@ -56,6 +56,7 @@ export const styles = StyleSheet.create({
     fontSize: '12px',
     fontWeight: 'medium',
     marginLeft: '10px',
+    textTransform: 'capitalize',
   },
   marriedText: {
     fontSize: '12px',

@@ -5,7 +5,7 @@ const cookies = new Cookies();
 
 const httpInstance = axios.create({
   // baseURL: 'https://svmdevelopers.in/xq12opmpas/api/',
-  baseURL: 'https://5004-150-107-191-12.ngrok-free.app/xq12opmpas/api/',
+  baseURL: 'https://bfe2-150-107-191-12.ngrok-free.app/xq12opmpas/api/',
 });
 
 httpInstance.interceptors.request.use(function (config) {

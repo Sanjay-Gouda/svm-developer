@@ -1,11 +1,11 @@
-import { View, Text } from "@react-pdf/renderer";
+import { Text, View } from '@react-pdf/renderer';
 
-const InvoiceFooter = () => {
+const InvoiceFooter = ({ remarks }: number) => {
   return (
     <>
       <Text
         style={{
-          position: "relative",
+          position: 'relative',
           top: 40,
           bottom: 0,
           left: 90,
@@ -18,22 +18,28 @@ const InvoiceFooter = () => {
       <View
         style={{
           marginTop: 40,
-          display: "flex",
-          flexDirection: "row",
-          position: "relative",
-          justifyContent: "space-between",
-          alignItems: "flex-end",
+          display: 'flex',
+          flexDirection: 'row',
+          position: 'relative',
+          justifyContent: 'space-between',
+          alignItems: 'flex-end',
         }}
       >
         <View
           style={{
-            width: "50%",
+            width: '50%',
             height: 100,
-            backgroundColor: "#FFFF",
-            position: "relative",
-            border: "2px solid black",
+            backgroundColor: '#FFFF',
+            position: 'relative',
+            border: '2px solid black',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            textAlign: 'center',
           }}
-        ></View>
+        >
+          {remarks && <Text>Penalty : {remarks} </Text>}
+        </View>
         <Text>for,S.V.M. Builders & Developers</Text>
       </View>
     </>

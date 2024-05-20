@@ -71,7 +71,7 @@ export default function Expanses({
   return (
     <>
       <Layout
-        pageTitle='Exapenses'
+        pageTitle='Expenses'
         right={
           <Link href='realEstateProjects/expanseForm/expanseListForm'>
             <Button>Add Expenses</Button>
