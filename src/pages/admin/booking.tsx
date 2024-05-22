@@ -69,6 +69,7 @@ export default function Booking({
     route.push(`realEstateProjects/bookingForm/pdf/${id}`);
   };
   const handleAddInstallment = (id: string) => {
+    // console.log(id, 'ID');
     route.push(
       `realEstateProjects/bookingForm/installmentHistory/addInstallment/${id}`
     );
@@ -125,6 +126,10 @@ export default function Booking({
   const handleSearch = debounce((searchQuery: string) => {
     setSearchQuery(searchQuery);
   }, 300);
+
+  const handlePanltyHistory = (id: string) => {
+    route.push(`realEstateProjects/bookingForm/penaltyHistory/${id}`);
+  };
 
   return (
     <>
@@ -221,7 +226,7 @@ export default function Booking({
                             <Button
                               layout='outline'
                               onClick={() =>
-                                handleViewInstallment(data?.bookingId)
+                                handlePanltyHistory(data?.bookingId)
                               }
                             >
                               Penalty

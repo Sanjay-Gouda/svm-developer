@@ -197,43 +197,6 @@ function AddProjectForm({
           )} */}
         </div>
       </div>
-      {/* <div className='flex w-full  gap-4'>
-        <div className='flex w-full flex-col'>
-          <TextInput
-            onChange={handleEmi}
-            // onChange={handlePincode}
-            value={emiAmt}
-            name='emiAmt'
-            containerClassName='w-full'
-            label='EMI'
-          />
-          {emiAmtError && <div className='text-red-400'>{emiErrorMessage}</div>}
-        </div>
-        <div className='flex w-full flex-col'>
-          <TextInput
-            onChange={handleDownPayment}
-            value={downPayment}
-            name='downPayment'
-            containerClassName=' w-full'
-            label='Down Payment'
-          />
-          {downPaymentError && (
-            <div className='text-red-400'>{downPaymentErrorMessage}</div>
-          )}
-        </div>
-        <div className='flex w-full flex-col'>
-          <TextInput
-            onChange={handleTotalAmount}
-            value={totalAmt}
-            name='totalAmt'
-            containerClassName=' w-full'
-            label='Total Price'
-          />
-          {totalAmtError && (
-            <div className='text-red-400'>{totalAmtErrorMessage}</div>
-          )}
-        </div>
-      </div> */}
 
       <TextInputArea
         value={addressValue}

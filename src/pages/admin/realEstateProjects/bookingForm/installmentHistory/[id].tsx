@@ -135,13 +135,7 @@ const InstallmentHistory = ({ installmentHistoryList, error, bookingId }) => {
                 <TableBody>
                   {installmentList?.map((item: TinstallmentList) => (
                     <TableRow key={item.bookingId}>
-                      <TableCell>
-                        {/* {item?.customer
-                      ?.map((customer) => customer?.name)
-                      .join(', ')} */}
-
-                        {item?.installmentNo}
-                      </TableCell>
+                      <TableCell>{item?.installmentNo}</TableCell>
                       <TableCell>{item?.amount}</TableCell>
                       <TableCell>{item?.paymentType}</TableCell>
                       <TableCell>
