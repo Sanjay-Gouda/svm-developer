@@ -3,17 +3,16 @@ import React from 'react';
 
 import Penalty from '@/components/Penalty';
 
+import { httpInstance } from '@/constants/httpInstances';
+
 export const getServerSideProps: GetServerSideProps = async (params) => {
   try {
     const bookingId = params?.params?.id;
-    console.log(bookingId);
-    // const res = await httpInstance.get(
-    //   `/installment/list?bookingId=${bookingId}`
-    // );
-    // const installmentHistoryList = res.data.result.list;
+    const res = await httpInstance.get(`booking/penalty-list/${bookingId}`);
+    const penaltyHistory = res.data.result;
     return {
       props: {
-        // installmentHistoryList,
+        penaltyHistory,
         bookingId,
       },
     };
@@ -30,12 +29,13 @@ export const getServerSideProps: GetServerSideProps = async (params) => {
 
 export type Tpenalty = {
   bookingId: string;
+  penaltyHistory: any;
 };
 
-const PenaltyHistory = ({ bookingId }: Tpenalty) => {
+const PenaltyHistory = ({ bookingId, penaltyHistory }: Tpenalty) => {
   return (
     <>
-      <Penalty bookingId={bookingId} />
+      <Penalty bookingId={bookingId} penaltyHistory={penaltyHistory} />
     </>
   );
 };

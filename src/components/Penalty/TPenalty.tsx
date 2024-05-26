@@ -7,4 +7,5 @@ export type TPenaltyValues = {
 };
 export type TPenaltyProps = {
   bookingId: string;
+  penaltyHistory: any;
 };

@@ -1,11 +1,7 @@
 import { BsBank2 } from 'react-icons/bs';
 import { FaUsers } from 'react-icons/fa';
 import { MdHomeFilled } from 'react-icons/md';
-import {
-  TbBrandBooking,
-  TbBuildingEstate,
-  TbFileInvoice,
-} from 'react-icons/tb';
+import { TbBrandBooking, TbBuildingEstate } from 'react-icons/tb';
 
 interface AdminTabsProps {
   name: string;
@@ -58,11 +54,11 @@ export const AdminSidebarTabs: AdminTabsProps[] = [
   //   icon: MoneyIcon,
   // },
 
-  {
-    name: 'Expenses',
-    to: 'expanses',
-    icon: TbFileInvoice,
-  },
+  // {
+  //   name: 'Expenses',
+  //   to: 'expanses',
+  //   icon: TbFileInvoice,
+  // },
   // {
   //   name: 'Festival',
   //   to: 'festival',

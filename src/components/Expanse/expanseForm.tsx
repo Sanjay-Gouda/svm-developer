@@ -288,16 +288,6 @@ const ExpanseForm = ({
       <div className='flex flex-col'>
         <TextInput
           type='text'
-          name='brokrage'
-          label=' Brokerage'
-          placeholder='cost '
-          onChange={formik.handleChange}
-          value={formik.values.brokrage}
-        />
-      </div>
-      <div className='flex flex-col'>
-        <TextInput
-          type='text'
           name='planningLayout'
           label='Planning & Layout'
           placeholder='cost '
@@ -308,21 +298,32 @@ const ExpanseForm = ({
       <div className='flex flex-col'>
         <TextInput
           type='text'
-          name='landVisit'
-          label='Land Visit'
-          placeholder='cost '
-          onChange={formik.handleChange}
-          value={formik.values.landVisit}
-        />
-      </div>
-      <div className='flex flex-col'>
-        <TextInput
-          type='text'
           name='landDevelopment'
           label='Land Developement'
           onChange={formik.handleChange}
           value={formik.values.landDevelopment}
           placeholder='cost '
+        />
+      </div>
+      <div className='flex flex-col'>
+        <TextInput
+          type='text'
+          name='brokrage'
+          label=' Brokerage'
+          placeholder='cost '
+          onChange={formik.handleChange}
+          value={formik.values.brokrage}
+        />
+      </div>
+
+      <div className='flex flex-col'>
+        <TextInput
+          type='text'
+          name='landVisit'
+          label='Land Visit'
+          placeholder='cost '
+          onChange={formik.handleChange}
+          value={formik.values.landVisit}
         />
       </div>
 

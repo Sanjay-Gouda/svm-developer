@@ -137,6 +137,7 @@ const TestProjects = ({
       handleTabChange();
       setLoader(false);
     } catch (error) {
+      setLoader(false);
       toast.error(error?.response?.data?.message || 'Something went wrong');
     }
   };
