@@ -37,6 +37,7 @@ type TCustomerPDFDetail = {
 type TInstallment = {
   bookingCustomer: string[];
   amt: number | string;
+  remainngAmt: number;
   UPIId: '';
   cheuqeNo: '';
   cBankName: '';
@@ -62,7 +63,8 @@ const BookingInstallment = ({
   bookingId,
   bookingDetails,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  const { customer } = bookingDetails;
+  console.log(bookingDetails);
+  const { customer, remainAmt } = bookingDetails;
 
   const customerNames = customer
     ?.map((customer: TCustomerPDFDetail) => customer.name)
@@ -70,6 +72,7 @@ const BookingInstallment = ({
 
   const installmentInitialValues: TInstallment = {
     bookingCustomer: customerNames,
+    remainngAmt: remainAmt,
     amt: '',
     paymentMethod: 'CASH',
     BTAcNo: '',

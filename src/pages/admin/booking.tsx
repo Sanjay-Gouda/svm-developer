@@ -173,12 +173,10 @@ export default function Booking({
                         Remaining Amount
                       </TableCell>
                       <TableCell className='text-[14px]'>Installment</TableCell>
-                      <TableCell className='text-[14px]'>
-                        Installment History
-                      </TableCell>
-                      <TableCell className='text-[14px]'>
+                      <TableCell className='text-[14px]'>Penalty</TableCell>
+                      {/* <TableCell className='text-[14px]'>
                         Penalty History
-                      </TableCell>
+                      </TableCell> */}
                       <TableCell className='text-[14px]'>Download</TableCell>
                       <TableCell className='text-[14px]'>Action </TableCell>
                     </tr>
@@ -202,7 +200,7 @@ export default function Booking({
                           <TableCell>{data?.paidAmt}</TableCell>
                           <TableCell>{data?.remainAmt}</TableCell>
 
-                          <TableCell>
+                          <TableCell style={{ display: 'flex', gap: '8px' }}>
                             <Button
                               layout='outline'
                               onClick={() =>
@@ -211,8 +209,6 @@ export default function Booking({
                             >
                               Add
                             </Button>
-                          </TableCell>
-                          <TableCell>
                             <Button
                               layout='outline'
                               onClick={() =>
@@ -222,6 +218,16 @@ export default function Booking({
                               View
                             </Button>
                           </TableCell>
+                          {/* <TableCell>
+                            <Button
+                              layout='outline'
+                              onClick={() =>
+                                handleViewInstallment(data?.bookingId)
+                              }
+                            >
+                              View
+                            </Button>
+                          </TableCell> */}
                           <TableCell>
                             <Button
                               layout='outline'

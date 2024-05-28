@@ -24,6 +24,7 @@ const validationSchema = Yup.object().shape({
 const addInitialValues: TInstallment = {
   bookingCustomer: '',
   amt: '',
+  remainngAmt: 0,
   paymentMethod: 'CASH',
   BTAcNo: '',
   BTBankName: '',
@@ -46,6 +47,7 @@ export type TIBankDetails = {
 type TInstallment = {
   bookingCustomer: string;
   amt: number | string;
+  remainngAmt: number;
   UPIId: '';
   cheuqeNo: '';
   cBankName: '';
@@ -124,8 +126,11 @@ function InstallmentForm({
       setLoader(false);
     } catch (err) {
       setLoader(false);
-      toast.error('Something went wrong');
-      router.push('/admin/booking');
+      toast.error(
+        err?.response?.data?.message ||
+          'The installment exceeds the actual amount'
+      );
+      // router.push('/admin/booking');
     }
   };
 
@@ -165,7 +170,7 @@ function InstallmentForm({
     } catch (err) {
       setLoader(false);
       toast.error('Something went wrong');
-      router.push('/admin/booking');
+      // router.push('/admin/booking');
     }
   };
 
@@ -229,6 +234,19 @@ function InstallmentForm({
           />
         </div>
 
+        {!installmentId && (
+          <div className='flex flex-col'>
+            <TextInput
+              type='text'
+              name='remainngAmt'
+              label='Remaining Amt'
+              value={formik.values.remainngAmt}
+              disabled
+              // onChange={formik.handleChange}
+            />
+          </div>
+        )}
+
         <div className='flex flex-col'>
           <TextInput
             type='text'
@@ -266,7 +284,7 @@ function InstallmentForm({
                 name='paymentMehod'
                 checked={formik.values.paymentMethod === 'CHEQUE'}
               />
-              <span className='ml-2'>Cheuqe</span>
+              <span className='ml-2'>Cheque</span>
             </Label>
             <Label radio>
               <Input
@@ -302,7 +320,7 @@ function InstallmentForm({
                   name='cheuqeNo'
                   value={formik.values.cheuqeNo}
                   onChange={formik.handleChange}
-                  label='Cheuqe No'
+                  label='Cheque No'
                 />
 
                 {paymentTypeError.chequeNo && (

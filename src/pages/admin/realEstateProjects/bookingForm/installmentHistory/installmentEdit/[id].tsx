@@ -24,6 +24,9 @@ type TEditInstallment = {
   chequePayment: TChequePayment[];
   installmentId: string;
   installmentNo: number;
+
+  remainAmt: number;
+
   isDelete: boolean;
   paymentType: TPaymentMethod;
   penalty: number;
@@ -35,6 +38,7 @@ type TInstallment = {
   amt: number;
   UPIId: string;
   cheuqeNo: string;
+  remainngAmt: number;
   cBankName: string;
   BTAcNo: string;
   BTBankName: string;
@@ -74,7 +78,7 @@ const EditInstallment = ({
   installmentDetails,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const [installmentRes] = useState<TEditInstallment>(installmentDetails);
-
+  console.log(installmentDetails, 'DETAIL');
   const {
     amount,
     bookingId,
@@ -84,6 +88,7 @@ const EditInstallment = ({
     paymentType,
     penalty,
     customer,
+    remainAmt,
   } = installmentRes;
 
   const chequePaymentDetail = chequePayment?.map((detail: TChequePayment) => {
@@ -115,6 +120,7 @@ const EditInstallment = ({
     bookingCustomer: customerNames,
     paymentMethod: paymentType,
     penalty: penalty,
+    remainngAmt: remainAmt,
     BTAcNo: bankPaymentDetail[0]?.accountNumber,
     BTBankName: bankPaymentDetail[0]?.bankName,
     cBankName: chequePaymentDetail[0]?.bankName,

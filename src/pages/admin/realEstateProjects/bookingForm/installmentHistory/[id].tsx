@@ -28,6 +28,7 @@ type TinstallmentList = {
   installmentNo: number;
   isDelete: boolean;
   paymentType: string;
+  createdAt: string;
   penalty: number;
   customer: unknown[];
 };
@@ -75,7 +76,6 @@ const InstallmentHistory = ({ installmentHistoryList, error, bookingId }) => {
 
   const handlePreviewReceipt = (id: string) => {
     router.push(`receipt/${id}`);
-    console.log(router.pathname);
   };
 
   const fetchData = async () => {
@@ -96,6 +96,10 @@ const InstallmentHistory = ({ installmentHistoryList, error, bookingId }) => {
       console.log(err);
       toast.error('Something Went wrong');
     }
+  };
+
+  const headingStyle = {
+    fontSize: '14px',
   };
   return (
     <>
@@ -125,17 +129,25 @@ const InstallmentHistory = ({ installmentHistoryList, error, bookingId }) => {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableCell>Installment No</TableCell>
-                    <TableCell>Paid Amount</TableCell>
-                    <TableCell>Payment Type</TableCell>
-                    <TableCell>Receipt</TableCell>
-                    <TableCell>Action</TableCell>
+                    <TableCell style={headingStyle}>Sr. No</TableCell>
+                    <TableCell style={headingStyle}>Date</TableCell>
+                    <TableCell style={headingStyle}>Amount</TableCell>
+                    <TableCell style={headingStyle}>Mode</TableCell>
+                    <TableCell style={headingStyle}>Receipt</TableCell>
+                    <TableCell style={headingStyle}>Action</TableCell>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {installmentList?.map((item: TinstallmentList) => (
                     <TableRow key={item.bookingId}>
                       <TableCell>{item?.installmentNo}</TableCell>
+                      <TableCell>
+                        {item?.createdAt
+                          ?.split('T')[0]
+                          ?.split('-')
+                          ?.reverse()
+                          ?.join('-')}
+                      </TableCell>
                       <TableCell>{item?.amount}</TableCell>
                       <TableCell>{item?.paymentType}</TableCell>
                       <TableCell>
