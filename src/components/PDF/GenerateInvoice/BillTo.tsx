@@ -124,8 +124,8 @@ const BillTo = ({
               bottom: 3,
             }}
           >
-            <Text style={{ marginLeft: '20px', textTransform: 'capitalize' }}>
-              {numberToWords(amount)}
+            <Text style={{ marginLeft: '10px', textTransform: 'capitalize' }}>
+              {numberToWords(amount)} Rupees Only
             </Text>
           </View>
         </View>

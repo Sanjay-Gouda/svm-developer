@@ -63,7 +63,6 @@ const BookingInstallment = ({
   bookingId,
   bookingDetails,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  console.log(bookingDetails);
   const { customer, remainAmt } = bookingDetails;
 
   const customerNames = customer

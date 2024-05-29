@@ -14,6 +14,7 @@ import React, { useState } from 'react';
 import { MdModeEditOutline } from 'react-icons/md';
 import { toast } from 'react-toastify';
 
+import EmptyState from '@/components/Empty';
 import { TPenaltyProps, TPenaltyValues } from '@/components/Penalty/TPenalty';
 import { SvmProjectToast } from '@/components/Toast/Toast';
 import { TextInput } from '@/components/ui-blocks';
@@ -148,43 +149,53 @@ const Penalty = ({ bookingId, penaltyHistory }: TPenaltyProps) => {
   return (
     <>
       <Layout right={<Button onClick={handleModalChange}>Add Penalty</Button>}>
-        <TableContainer>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableCell style={{ fontSize: '14px' }}>Paid Amount</TableCell>
-                <TableCell style={{ fontSize: '14px' }}>Status</TableCell>
-                <TableCell style={{ fontSize: '14px' }}>Created At</TableCell>
-                <TableCell style={{ fontSize: '14px' }}>Action</TableCell>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {penaltyList?.map((item) => (
-                <TableRow key={item.penlatyId}>
-                  <TableCell>{item?.amount}</TableCell>
-                  <TableCell>
-                    {item?.isComplete ? 'Completed' : 'Pending'}
+        {penaltyList?.length === 0 ? (
+          <EmptyState
+            btnLable='Add Penlaty'
+            heading='Admin did not added Penalties yet'
+            // redirectLink='realEstateProjects/accountForm/addAccounts'
+          />
+        ) : (
+          <TableContainer>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableCell style={{ fontSize: '14px' }}>
+                    Paid Amount
                   </TableCell>
-                  <TableCell>
-                    {item?.createdAt
-                      ?.split('T')[0]
-                      ?.split('-')
-                      ?.reverse()
-                      ?.join('-')}
-                  </TableCell>
-                  <TableCell>
-                    <MdModeEditOutline
-                      size='24'
-                      onClick={() => handleEditModalOpen(item?.penaltyId)}
-                      className='cursor-pointer'
-                      style={{ color: ' #30bcc2' }}
-                    />
-                  </TableCell>
+                  <TableCell style={{ fontSize: '14px' }}>Status</TableCell>
+                  <TableCell style={{ fontSize: '14px' }}>Created At</TableCell>
+                  <TableCell style={{ fontSize: '14px' }}>Action</TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+              </TableHeader>
+              <TableBody>
+                {penaltyList?.map((item) => (
+                  <TableRow key={item.penlatyId}>
+                    <TableCell>{item?.amount}</TableCell>
+                    <TableCell>
+                      {item?.isComplete ? 'Completed' : 'Pending'}
+                    </TableCell>
+                    <TableCell>
+                      {item?.createdAt
+                        ?.split('T')[0]
+                        ?.split('-')
+                        ?.reverse()
+                        ?.join('-')}
+                    </TableCell>
+                    <TableCell>
+                      <MdModeEditOutline
+                        size='24'
+                        onClick={() => handleEditModalOpen(item?.penaltyId)}
+                        className='cursor-pointer'
+                        style={{ color: ' #30bcc2' }}
+                      />
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        )}
       </Layout>
 
       <Modal isOpen={openModal} onClose={() => setOpenModal(false)}>
