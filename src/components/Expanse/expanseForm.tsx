@@ -74,7 +74,7 @@ const ExpanseForm = ({
       cost: 0,
     },
   ]);
-  const [editMiscForm, setEditMiscForm] = useState([]);
+  const [editMiscForm, setEditMiscForm] = useState<any>([]);
 
   useEffect(() => {
     setEditMiscForm(
@@ -104,21 +104,33 @@ const ExpanseForm = ({
         });
 
   const handleAddFields = () => {
-    setMiscForm([
-      ...miscForm,
-      {
-        id: Math.floor(Math.random() * 1000),
-        expenseName: '',
-        cost: 0,
-      },
-    ]);
+    if (editId) {
+      setEditMiscForm([
+        ...editMiscForm,
+        {
+          id: Math.floor(Math.random() * 1000),
+          expenseName: '',
+          cost: 0,
+        },
+      ]);
+    } else {
+      setMiscForm([
+        ...miscForm,
+        {
+          id: Math.floor(Math.random() * 1000),
+          expenseName: '',
+          cost: 0,
+        },
+      ]);
+    }
   };
 
   const handleRemoveFields = (id: number) => {
-    const remainedForm = miscForm.filter((box) => {
+    const remainedForm = miscExpenseList?.filter((box) => {
       return box.id !== id;
     });
-    setMiscForm(remainedForm);
+
+    editId ? setEditMiscForm(remainedForm) : setMiscForm(remainedForm);
     if (remainedForm.length === 0) {
       setShowExapnseForm(!showExapnseForm);
     }
@@ -126,11 +138,12 @@ const ExpanseForm = ({
 
   const handleChange = (e: any, ind: number) => {
     const { name, value } = e.target;
-    const miscFormData: any = [...miscForm];
+    const prevFormData = editId ? [...miscFormData] : [...miscForm];
+    const miscData: any = prevFormData;
 
-    if (miscFormData) miscFormData[ind][name] = value;
+    if (miscData) miscData[ind][name] = value;
 
-    setMiscForm(miscFormData);
+    setMiscForm(miscData);
   };
 
   const addExpnases = async (values: payloadProps) => {
@@ -182,6 +195,7 @@ const ExpanseForm = ({
   };
 
   const updateExpenses = async (values: payloadProps) => {
+    console.log(values);
     setLoader(true);
     const {
       brokrage,
@@ -207,26 +221,26 @@ const ExpanseForm = ({
       miscExpense: miscExpense,
     };
 
-    try {
-      const res = await httpInstance.put(`expense/update/${editId}`, payload);
+    // try {
+    //   const res = await httpInstance.put(`expense/update/${editId}`, payload);
 
-      const isNotify = res.data.isNotify;
-      const successMessage = isNotify
-        ? res?.data?.message
-        : 'Expense List updated successfully';
+    //   const isNotify = res.data.isNotify;
+    //   const successMessage = isNotify
+    //     ? res?.data?.message
+    //     : 'Expense List updated successfully';
 
-      toast.success(successMessage);
-      setLoader(false);
-      setTimeout(() => {
-        route.push('/admin/expanses');
-      }, 1000);
-    } catch (err) {
-      setLoader(false);
-      toast.error(err?.response?.data?.message);
-      setTimeout(() => {
-        route.push('/admin/expanses');
-      }, 1000);
-    }
+    //   toast.success(successMessage);
+    //   setLoader(false);
+    //   setTimeout(() => {
+    //     route.push('/admin/expanses');
+    //   }, 1000);
+    // } catch (err) {
+    //   setLoader(false);
+    //   toast.error(err?.response?.data?.message);
+    //   setTimeout(() => {
+    //     route.push('/admin/expanses');
+    //   }, 1000);
+    // }
   };
 
   const formikInitialvalues = editId ? EditInitialValues : initialValues;

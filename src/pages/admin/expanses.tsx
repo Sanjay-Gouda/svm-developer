@@ -19,10 +19,11 @@ import ServerError from '@/components/Error/500Error';
 import Layout from '@/containers/Layout';
 
 import { API_ENDPOINT } from '@/const/APIRoutes';
+import { httpInstance } from '@/constants/httpInstances';
 
 export const getServerSideProps: GetServerSideProps = async () => {
   try {
-    const res = await axios.get(`${API_ENDPOINT.END_POINT}/expense/list`);
+    const res = await httpInstance.get('/expense/list');
     const data = res.data.result.list;
     return { props: { data } };
   } catch (err) {
