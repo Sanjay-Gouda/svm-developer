@@ -32,8 +32,8 @@ const MiscellaneouForm = ({
           name='expenseName'
           onChange={(e) => handleChange(e)}
           value={expanse}
-          label='Expanse Name'
-          placeholder='expanse name'
+          label='Expense Name'
+          placeholder='expense name'
           className='w-[50%]'
         />
         <TextInput
@@ -49,7 +49,11 @@ const MiscellaneouForm = ({
           +
         </Button>
 
-        {index === 0 ? (
+        <Button className='' onClick={() => handleRemoveFields()}>
+          -
+        </Button>
+
+        {/* {index === 0 ? (
           <Button className='' onClick={() => handleHideForm()}>
             -
           </Button>
@@ -57,7 +61,7 @@ const MiscellaneouForm = ({
           <Button className='' onClick={() => handleRemoveFields()}>
             -
           </Button>
-        )}
+        )} */}
       </div>
     </>
   );

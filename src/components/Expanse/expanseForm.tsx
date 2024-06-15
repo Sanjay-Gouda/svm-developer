@@ -126,13 +126,23 @@ const ExpanseForm = ({
   };
 
   const handleRemoveFields = (id: number) => {
-    const remainedForm = miscExpenseList?.filter((box) => {
-      return box.id !== id;
-    });
-
-    editId ? setEditMiscForm(remainedForm) : setMiscForm(remainedForm);
-    if (remainedForm.length === 0) {
-      setShowExapnseForm(!showExapnseForm);
+    if (editId) {
+      const remainedForm = editMiscForm?.filter((box) => {
+        return box.id !== id;
+      });
+      setEditMiscForm(remainedForm);
+      if (remainedForm?.length === 0) {
+        setShowExapnseForm(!showExapnseForm);
+      }
+    } else {
+      const remainedForm = miscForm?.filter((box) => {
+        return box.id !== id;
+      });
+      setMiscForm(remainedForm);
+      setEditMiscForm(remainedForm);
+      if (remainedForm?.length === 0) {
+        setShowExapnseForm(true);
+      }
     }
   };
 
@@ -195,7 +205,6 @@ const ExpanseForm = ({
   };
 
   const updateExpenses = async (values: payloadProps) => {
-    console.log(values);
     setLoader(true);
     const {
       brokrage,
@@ -221,26 +230,26 @@ const ExpanseForm = ({
       miscExpense: miscExpense,
     };
 
-    // try {
-    //   const res = await httpInstance.put(`expense/update/${editId}`, payload);
+    try {
+      const res = await httpInstance.put(`expense/update/${editId}`, payload);
 
-    //   const isNotify = res.data.isNotify;
-    //   const successMessage = isNotify
-    //     ? res?.data?.message
-    //     : 'Expense List updated successfully';
+      const isNotify = res.data.isNotify;
+      const successMessage = isNotify
+        ? res?.data?.message
+        : 'Expense List updated successfully';
 
-    //   toast.success(successMessage);
-    //   setLoader(false);
-    //   setTimeout(() => {
-    //     route.push('/admin/expanses');
-    //   }, 1000);
-    // } catch (err) {
-    //   setLoader(false);
-    //   toast.error(err?.response?.data?.message);
-    //   setTimeout(() => {
-    //     route.push('/admin/expanses');
-    //   }, 1000);
-    // }
+      toast.success(successMessage);
+      setLoader(false);
+      setTimeout(() => {
+        route.push('/admin/expanses');
+      }, 1000);
+    } catch (err) {
+      setLoader(false);
+      toast.error(err?.response?.data?.message);
+      setTimeout(() => {
+        route.push('/admin/expanses');
+      }, 1000);
+    }
   };
 
   const formikInitialvalues = editId ? EditInitialValues : initialValues;
@@ -248,7 +257,7 @@ const ExpanseForm = ({
   const formik = useFormik({
     initialValues: formikInitialvalues,
     onSubmit: (values) => {
-      const miscExpense = miscForm?.map(({ expenseName, cost }) => ({
+      const miscExpense = miscFormData?.map(({ expenseName, cost }) => ({
         expenseName,
         cost: cost ? +cost : 0,
       }));
@@ -342,16 +351,6 @@ const ExpanseForm = ({
       </div>
 
       <div className='flex flex-col gap-2'>
-        {/* <Button
-          className='my-1'
-          layout='outline'
-          onClick={() => {
-            setShowExapnseForm(false);
-          }}
-        >
-          Add Miscellaneous Expenses
-        </Button> */}
-
         {miscFormData?.map((box, ind) => {
           return (
             <MiscellaneouForm
@@ -361,7 +360,6 @@ const ExpanseForm = ({
               cost={box.cost}
               handleHideForm={() => {
                 setShowExapnseForm(true);
-                // setMiscForm([{ expenseName: '', cost: undefined }]);
               }}
               handleChange={(e) => {
                 handleChange(e, ind);
@@ -374,43 +372,11 @@ const ExpanseForm = ({
           );
         })}
 
-        {/* {showExapnseForm ? (
-          <>
-            <Button
-              className='my-1'
-              layout='outline'
-              onClick={() => {
-                setShowExapnseForm(false);
-              }}
-            >
-              Add Miscellaneous Expenses
-            </Button>
-          </>
-        ) : (
-          <>
-            {miscForm?.map((box, ind) => {
-              return (
-                <MiscellaneouForm
-                  index={ind}
-                  key={box.id}
-                  expanse={box.expenseName}
-                  cost={box.cost}
-                  handleHideForm={() => {
-                    setShowExapnseForm(true);
-                    // setMiscForm([{ expenseName: '', cost: undefined }]);
-                  }}
-                  handleChange={(e) => {
-                    handleChange(e, ind);
-                  }}
-                  handleAddFields={handleAddFields}
-                  handleRemoveFields={() => {
-                    handleRemoveFields(box.id);
-                  }}
-                />
-              );
-            })}
-          </>
-        )} */}
+        {miscForm?.length === 0 || editMiscForm?.length === 0 ? (
+          <Button className='my-1' layout='outline' onClick={handleAddFields}>
+            Add Miscellaneous Expenses
+          </Button>
+        ) : null}
       </div>
 
       <Button className='' onClick={() => formik.handleSubmit()}>
