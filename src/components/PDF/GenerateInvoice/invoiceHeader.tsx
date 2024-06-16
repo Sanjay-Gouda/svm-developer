@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import { Image, StyleSheet, Text, View } from '@react-pdf/renderer';
-import React from 'react';
+import React, { FC } from 'react';
 
 const styles = StyleSheet.create({
   invoiceContainer: {
@@ -47,11 +47,15 @@ const styles = StyleSheet.create({
   },
 });
 
-const InvoiceHeader = () => {
+type THeaderProps = {
+  heading: string;
+};
+
+const InvoiceHeader: FC<THeaderProps> = ({ heading }) => {
   return (
     <>
       <View>
-        <Text style={styles.bookingHeading}>RECEIPT</Text>
+        <Text style={styles.bookingHeading}>{heading}</Text>
       </View>
       <View style={styles.header}>
         <View>

@@ -43,13 +43,8 @@ function Layout({
       <div className='flex w-full flex-1 flex-col'>
         <Header />
         <Main>
-          {/* <div className='flex flex-c'>
-
-          </div> */}
           <div className='flex items-center justify-between'>
             <PageTitle>{pageTitle}</PageTitle>
-
-            {/* {right && right} */}
           </div>
           <div className=' mb-6 flex items-center justify-between'>
             <div className='flex w-[25%] justify-start '>
@@ -64,8 +59,7 @@ function Layout({
                 />
               )}
             </div>
-
-            {right && right}
+            <div className='flex gap-2'>{right && right}</div>
           </div>
           {children}
         </Main>

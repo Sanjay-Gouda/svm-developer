@@ -101,14 +101,24 @@ const InstallmentHistory = ({ installmentHistoryList, error, bookingId }) => {
   const headingStyle = {
     fontSize: '14px',
   };
+
+  const downloadInstallmentHistory = () => {
+    router.push(`history/${bookingId}`);
+  };
+
   return (
     <>
       <Layout
         pageTitle={`Installment of ${customerNames}`}
         right={
-          <Link href='/admin/booking'>
-            <Button>Back to Booking</Button>
-          </Link>
+          <>
+            <Button onClick={downloadInstallmentHistory}>
+              Download History
+            </Button>
+            <Link href='/admin/booking'>
+              <Button layout='outline'>Back to Booking</Button>
+            </Link>
+          </>
         }
       >
         {error ? (

@@ -52,16 +52,6 @@ const MiscellaneouForm = ({
         <Button className='' onClick={() => handleRemoveFields()}>
           -
         </Button>
-
-        {/* {index === 0 ? (
-          <Button className='' onClick={() => handleHideForm()}>
-            -
-          </Button>
-        ) : (
-          <Button className='' onClick={() => handleRemoveFields()}>
-            -
-          </Button>
-        )} */}
       </div>
     </>
   );

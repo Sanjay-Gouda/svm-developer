@@ -48,7 +48,7 @@ export default function Booking({
   error,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [bookingList, setBookingList] = useState(list);
-  console.log(list, 'BOOKING LIST');
+
   const [searchQuery, setSearchQuery] = useState('');
   const route = useRouter();
   const { isModalOpen, closeModal, openModal, deleteId, handleModalOpen } =
