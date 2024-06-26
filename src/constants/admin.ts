@@ -63,6 +63,11 @@ export const AdminSidebarTabs: AdminTabsProps[] = [
     to: 'expanses',
     icon: TbFileInvoice,
   },
+  {
+    name: 'Monthly Expenses',
+    to: 'monthlyExpenses',
+    icon: TbFileInvoice,
+  },
   // {
   //   name: 'Festival',
   //   to: 'festival',
