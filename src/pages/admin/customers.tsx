@@ -4,6 +4,7 @@ import {
   TableBody,
   TableCell,
   TableContainer,
+  TableFooter,
   TableHeader,
   TableRow,
 } from '@windmill/react-ui';
@@ -20,6 +21,7 @@ import { useModal } from '@/hooks/useModal';
 import EmptyState from '@/components/Empty';
 import ServerError from '@/components/Error/500Error';
 import DeleteModal from '@/components/Modal';
+import SvmPagination from '@/components/Pagination';
 import { SvmProjectToast } from '@/components/Toast/Toast';
 import Layout from '@/containers/Layout';
 
@@ -40,9 +42,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     httpInstance.defaults.headers.common['Authorization'] = 'Bearer ' + token;
 
     const res = await httpInstance.get(`/customer/advance-list`);
+    const meta = res.data.result.meta;
     const data = res.data.result.list;
 
-    return { props: { data, token } };
+    return { props: { data, token, meta } };
   } catch (err) {
     console.log(err);
   }
@@ -56,12 +59,30 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 export default function Customers({
   data,
   error,
-  token,
+  meta,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  console.log(meta);
   const route = useRouter();
   const { isModalOpen, closeModal, openModal, deleteId, handleModalOpen } =
     useModal();
   const [searchQuery, setSearchQuery] = useState('');
+
+  const pageSize = meta?.pageSize;
+  const totalResults = meta?.totalCount;
+
+  const [currentPage, setCurrentPage] = useState(meta?.page);
+
+  const handlePageChange = async (pageNumber: number) => {
+    try {
+      const res = await httpInstance.get(
+        `/customer/advance-list?page=${pageNumber}`
+      );
+      setCurrentPage(res?.data?.result?.meta?.page);
+      setCustomerData(res?.data?.result?.list);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const [customerData, setCustomerData] = useState<any>(data);
 
@@ -69,9 +90,11 @@ export default function Customers({
     route.push(`realEstateProjects/customerForm/${id}`);
   };
 
-  const fetchData = async () => {
+  const reFetchData = async () => {
     try {
-      const data = await httpInstance.get(`/customer/advance-list`);
+      const data = await httpInstance.get(
+        `/customer/advance-list?page=${currentPage}`
+      );
       setCustomerData(data?.data?.result?.list);
     } catch (err) {
       console.log(err);
@@ -82,7 +105,7 @@ export default function Customers({
     try {
       const res = await httpInstance.delete(`/customer/delete/${deleteId}`);
       toast.success(res?.data?.message || 'Customer Deleted Successfully');
-      fetchData();
+      reFetchData();
       closeModal();
     } catch (err) {
       // console.log(err);
@@ -108,7 +131,9 @@ export default function Customers({
     if (searchQuery) {
       fetchData();
     } else {
-      setCustomerData(data);
+      console.log('Hey You Called Me');
+      // setCustomerData(data);
+      reFetchData();
     }
   }, [searchQuery]);
 
@@ -181,6 +206,13 @@ export default function Customers({
                     })}
                   </TableBody>
                 </Table>
+                <TableFooter className='text-[14px]'>
+                  <SvmPagination
+                    onChange={handlePageChange}
+                    resultsPerPage={pageSize}
+                    totalResults={totalResults}
+                  />
+                </TableFooter>
               </TableContainer>
             )}
           </>
