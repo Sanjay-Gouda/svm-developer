@@ -23,12 +23,12 @@ export const useCustomerDetails = () => {
       // const token = cookies.get('token');
       // httpInstance.defaults.headers.common['Authorization'] = 'Bearer ' + token;
 
-      const res = await httpInstance.get(`customer/advance-list`, {
+      const res = await httpInstance.get(`customer/basic-list`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      const list = res?.data?.result?.list;
+      const list = res?.data?.result;
 
       if (list && list?.length > 0) {
         const data = list?.map((payload) => ({

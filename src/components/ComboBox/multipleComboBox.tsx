@@ -37,19 +37,6 @@ export default function MultipleSelect({
   hadnleSearchQuery,
   placeholder,
 }: TMultiSelectprops) {
-  console.log({ selected }, 'CUSTOMER');
-  // console.log(selected, 'SELECTED ITEMS', filteredCustomer);
-
-  // const filteredPeople =
-  //   query === ''
-  //     ? filteredCustomer
-  //     : filteredCustomer.filter((person) =>
-  //         person.name
-  //           .toLowerCase()
-
-  //           .includes(query.toLowerCase())
-  //       );
-
   return (
     <>
       <div className=''>
@@ -58,7 +45,9 @@ export default function MultipleSelect({
             <div className=''>
               <Combobox.Input
                 className='mt-1 block w-full rounded-md border-gray-300 bg-slate-50 text-sm leading-5 focus:border-purple-400 focus:outline-none focus:ring focus:ring-purple-300  dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:focus:border-gray-600 dark:focus:ring-gray-300'
-                value={selected?.map((person) => person.name).join(', ')}
+                displayValue={() =>
+                  selected?.map((person) => person.name).join(', ')
+                }
                 onChange={hadnleSearchQuery}
                 placeholder={placeholder}
               />
@@ -78,7 +67,7 @@ export default function MultipleSelect({
             >
               <Combobox.Options className='absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-slate-50 py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm dark:bg-gray-700 dark:text-gray-300'>
                 {filteredCustomer.length === 0 && query !== '' ? (
-                  <div className='relative cursor-default select-none px-4 py-2 text-gray-700'>
+                  <div className='relative cursor-default select-none px-4 py-2 text-gray-700 dark:text-white'>
                     Nothing found.
                   </div>
                 ) : (
