@@ -58,7 +58,9 @@ export default function MultipleSelect({
             <div className=''>
               <Combobox.Input
                 className='mt-1 block w-full rounded-md border-gray-300 bg-slate-50 text-sm leading-5 focus:border-purple-400 focus:outline-none focus:ring focus:ring-purple-300  dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:focus:border-gray-600 dark:focus:ring-gray-300'
-                value={selected?.map((person) => person.name).join(', ')}
+                displayValue={() =>
+                  selected?.map((person) => person.name).join(', ')
+                }
                 onChange={hadnleSearchQuery}
                 placeholder={placeholder}
               />
