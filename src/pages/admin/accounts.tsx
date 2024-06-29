@@ -4,6 +4,7 @@ import {
   TableBody,
   TableCell,
   TableContainer,
+  TableFooter,
   TableHeader,
   TableRow,
 } from '@windmill/react-ui';
@@ -20,6 +21,7 @@ import { useModal } from '@/hooks/useModal';
 import EmptyState from '@/components/Empty';
 import ServerError from '@/components/Error/500Error';
 import DeleteModal from '@/components/Modal';
+import SvmPagination from '@/components/Pagination';
 import { SvmProjectToast } from '@/components/Toast/Toast';
 import Layout from '@/containers/Layout';
 
@@ -35,9 +37,10 @@ type accounrDetailProps = {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   try {
-    const res = await httpInstance.get('/account/basic-list');
-    const repo = res.data.result;
-    return { props: { repo } };
+    const res = await httpInstance.get('/account/advance-list');
+    const repo = res.data.result.list;
+    const meta = res.data.result.meta;
+    return { props: { repo, meta } };
   } catch (err) {
     console.log(err);
   }
@@ -52,6 +55,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 export default function Account({
   repo,
   error,
+  meta,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [accountDetails, setAccountDetails] =
     useState<accounrDetailProps[]>(repo);
@@ -60,6 +64,23 @@ export default function Account({
 
   const router = useRouter();
   const { closeModal, deleteId, handleModalOpen, isModalOpen } = useModal();
+
+  const pageSize = meta?.pageSize;
+  const totalResults = meta?.totalCount;
+
+  const [currentPage, setCurrentPage] = useState(meta?.page);
+
+  const handlePageChange = async (pageNumber: number) => {
+    try {
+      const res = await httpInstance.get(
+        `/account/advance-list?page=${pageNumber}`
+      );
+      setCurrentPage(res?.data?.result?.meta?.page);
+      setAccountDetails(res?.data?.result?.list);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const handleEdit = (id: any) => {
     router.push(`realEstateProjects/accountForm/${id}`);
@@ -93,8 +114,10 @@ export default function Account({
 
   const fetchAccountDetails = async () => {
     try {
-      const res = await httpInstance.get(`/account/basic-list`);
-      setAccountDetails(res.data.result);
+      const res = await httpInstance.get(
+        `/account/advance-list?${currentPage}`
+      );
+      setAccountDetails(res?.data?.result?.list);
     } catch (err) {
       toast.error('Something went wrong while fetching Account Details');
     }
@@ -181,6 +204,13 @@ export default function Account({
                     })}
                   </TableBody>
                 </Table>
+                <TableFooter>
+                  <SvmPagination
+                    totalResults={totalResults}
+                    resultsPerPage={pageSize}
+                    onChange={handlePageChange}
+                  />
+                </TableFooter>
               </TableContainer>
             )}
           </>

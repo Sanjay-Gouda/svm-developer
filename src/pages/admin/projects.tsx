@@ -5,6 +5,7 @@ import {
   TableBody,
   TableCell,
   TableContainer,
+  TableFooter,
   TableHeader,
   TableRow,
 } from '@windmill/react-ui';
@@ -21,16 +22,25 @@ import { useModal } from '@/hooks/useModal';
 import EmptyState from '@/components/Empty';
 import ServerError from '@/components/Error/500Error';
 import DeleteModal from '@/components/Modal';
+import SvmPagination from '@/components/Pagination';
 import { SvmProjectToast } from '@/components/Toast/Toast';
 import Layout from '@/containers/Layout';
 
 import { httpInstance } from '@/constants/httpInstances';
 
+type TMetaProps = {
+  totalCount: number;
+  page: number;
+  pageSize: number;
+  totalQueryCount: number;
+};
+
 export const getServerSideProps: GetServerSideProps = async () => {
   try {
     const res = await httpInstance.get(`/project/list`);
+    const meta: TMetaProps = res.data.result.meta;
     const repo = res.data.result.list;
-    return { props: { repo } };
+    return { props: { repo, meta } };
   } catch (err) {
     console.log(err);
   }
@@ -45,6 +55,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
 export default function Projects({
   repo,
   error,
+  meta,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const routes = useRouter();
   const { closeModal, deleteId, handleModalOpen, isModalOpen } = useModal();
@@ -52,14 +63,27 @@ export default function Projects({
   const [searchQuery, setSearchQuery] = useState('');
 
   const handleEdit = (id: string) => {
-    // console.log(id, 'edit Id Project');
-
     routes.push(`realEstateProjects/projectForm/${id}`);
+  };
+
+  const pageSize = meta?.pageSize;
+  const totalResults = meta?.totalCount;
+
+  const [currentPage, setCurrentPage] = useState(meta?.page);
+
+  const handlePageChange = async (pageNumber: number) => {
+    try {
+      const res = await httpInstance.get(`/project/list?page=${pageNumber}`);
+      setCurrentPage(res?.data?.result?.meta?.page);
+      setProjects(res?.data?.result?.list);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const fetchProjects = async () => {
     try {
-      const res = await httpInstance.get('/project/list');
+      const res = await httpInstance.get(`/project/list?page=${currentPage}`);
       setProjects(res?.data?.result?.list);
     } catch (err) {
       console.log(err);
@@ -188,16 +212,13 @@ export default function Projects({
                     })}
                   </TableBody>
                 </Table>
-                {/* <TableFooter>
-          <Pagination
-            totalResults={10}
-            resultsPerPage={4}
-            onChange={() => {
-              console.log('hello');
-            }}
-            label='Table navigation'
-          />
-        </TableFooter> */}
+                <TableFooter>
+                  <SvmPagination
+                    totalResults={totalResults}
+                    resultsPerPage={pageSize}
+                    onChange={handlePageChange}
+                  />
+                </TableFooter>
               </TableContainer>
             )}
           </>
