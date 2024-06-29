@@ -1,22 +1,20 @@
 import axios from 'axios';
+import { GetServerSidePropsContext } from 'next';
 import { Cookies } from 'react-cookie';
 
 const cookies = new Cookies();
 const AUTH_TOKEN = cookies.get('token');
 
 const httpInstance = axios.create({
-  // baseURL: 'https://svmdevelopers.in/xq12opmpas/api/',
   baseURL: 'https://svm-r2y4.onrender.com/xq12opmpas/api/',
 });
 
-// httpInstance.interceptors.request.use(function (config) {
-//   // console.log(token, 'TOKEN');
-//   if (config?.['headers']) {
-//     config['headers']['ngrok-skip-browser-warning'] = '69420';
-//   }
-
-//   return config;
-// });
+export const setAuthHeader = (context: GetServerSidePropsContext) => {
+  const token = context.req.headers.cookie?.split('=')[1];
+  if (token) {
+    httpInstance.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+  }
+};
 
 httpInstance.interceptors.request.use(
   (config) => {
