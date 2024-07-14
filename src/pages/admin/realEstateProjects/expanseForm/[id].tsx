@@ -50,9 +50,12 @@ const EditExapnseDetails = ({ editId, details }) => {
     projectId,
   } = expense;
 
+  console.log(miscExpense);
+
   const miscExpenseList = miscExpense.map(({ expenseName, cost }) => ({
     expenseName,
     cost,
+    id: miscExpense?.miscExpenseId,
   }));
 
   const editProject = {

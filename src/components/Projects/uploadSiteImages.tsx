@@ -1,5 +1,5 @@
 import { Button } from '@windmill/react-ui';
-import React, { useRef } from 'react';
+import React from 'react';
 import { useDropzone } from 'react-dropzone';
 import { toast } from 'react-toastify';
 
@@ -18,16 +18,6 @@ const UploadSiteImages = ({
   setProjectDevelopementImages,
   projectDevelopementImages,
 }: TUploadImages) => {
-  const inputRef = useRef<HTMLInputElement | null>(null);
-
-  // const handleAddMoreClick = () => {
-  //   console.log(inputRef);
-  //   // Trigger file input click
-  //   if (inputRef.current) {
-  //     inputRef.current.click();
-  //   }
-  // };
-
   const handleDrop = (acceptedFiles: any) => {
     if (acceptedFiles.length === 0) {
       // console.log('You can upload a maximum of 4 images at a time.');
@@ -42,7 +32,7 @@ const UploadSiteImages = ({
     }
   };
 
-  const { getRootProps, getInputProps, isDragActive, open } = useDropzone({
+  const { getRootProps, getInputProps } = useDropzone({
     onDrop: handleDrop,
     accept: { 'image/png': ['.png', '.jpg', '.jpeg'] },
     maxFiles: 4,

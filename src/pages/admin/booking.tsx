@@ -26,11 +26,12 @@ import SvmPagination from '@/components/Pagination';
 import { SvmProjectToast } from '@/components/Toast/Toast';
 import Layout from '@/containers/Layout';
 
-import { httpInstance } from '@/constants/httpInstances';
+import { httpInstance, setAuthHeader } from '@/constants/httpInstances';
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  // const res = await axios.get(`${API_ENDPOINT.END_POINT}/booking/list`);
   try {
-    // const res = await axios.get(`${API_ENDPOINT.END_POINT}/booking/list`);
+    setAuthHeader(context);
     const res = await httpInstance.get('/booking/list');
     const list = res.data.result.list;
     const meta = res.data.result.meta;

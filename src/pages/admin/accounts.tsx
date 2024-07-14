@@ -42,7 +42,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     const meta = res.data.result.meta;
     return { props: { repo, meta } };
   } catch (err) {
-    console.log(err);
+    console.log(err, 'ERR');
   }
 
   return {
