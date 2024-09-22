@@ -6,7 +6,9 @@ const cookies = new Cookies();
 const AUTH_TOKEN = cookies.get('token');
 
 const httpInstance = axios.create({
-  baseURL: 'https://svm-r2y4.onrender.com/xq12opmpas/api/',
+  // baseURL: 'https://svm-711o.onrender.com/xq12opmpas/api/',
+  baseURL: 'https://c5be-2409-40c1-6032-641c-fdd7-6b17-5776-6160.ngrok-free.app/xq12opmpas/api/',
+
 });
 
 export const setAuthHeader = (context: GetServerSidePropsContext) => {
@@ -21,6 +23,7 @@ httpInstance.interceptors.request.use(
     if (AUTH_TOKEN) {
       config.headers.Authorization = `Bearer ${AUTH_TOKEN}`;
     }
+    config['headers']['ngrok-skip-browser-warning'] = '69420';
     return config;
   },
   (err) => {

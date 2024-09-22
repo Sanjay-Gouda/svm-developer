@@ -7,6 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useBankDetails } from '@/hooks/useBankDetails';
 import { useCustomerDetails } from '@/hooks/useClientDetails';
 import { useProjectDetails } from '@/hooks/useProjectDetails';
+import { toast } from 'react-toastify';
 
 import { customerNameProps } from '@/components/Booking/bookingFormTypes';
 import ComboBox from '@/components/ComboBox/comboBox';
@@ -15,6 +16,9 @@ import { SvmProjectToast } from '@/components/Toast/Toast';
 import DateSelector from '@/components/UI/DatePicker';
 import { TextInput } from '@/components/ui-blocks';
 import { SelectOption } from '@/components/ui-blocks/input';
+import CancelModal from './cancelModal';
+import { httpInstance } from '@/constants/httpInstances';
+
 
 type EditFormProps = {
   loader: boolean;
@@ -156,13 +160,38 @@ const BookingForm = ({
   handleSelectOption,
   clientErrorMessage,
 }: EditFormProps) => {
-  console.log(dateError, 'DATE ERROR');
+  
   const routes = useRouter();
   const customerList = useCustomerDetails();
 
   const projectList = useProjectDetails();
   const accountList = useBankDetails();
 
+  const [refundAmt,setRefundAmt] = useState<number>(0);
+  const [cancelLoader,setCancelLoader] = useState<boolean>(false);
+
+  const handleRefundAmt = (e:any) => {
+    setRefundAmt(e.target.value);
+  }
+
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleCancelBooking = async () => {
+    setCancelLoader(true);
+    try {
+      const res = await httpInstance.patch(`booking/cancel/${editId}`,{refundAmt:refundAmt});
+      toast.success(res?.data?.message || 'This booking has been cancelled successfully');
+      handleCloseModal();
+      setCancelLoader(false);
+    } catch (err) {
+      setCancelLoader(false);
+      handleCloseModal();
+      toast.error('Something Went wrong');
+    }}
   const [query, setQuery] = useState('');
 
   const hadnleSearchQuery = (e: any) => {
@@ -196,6 +225,13 @@ const BookingForm = ({
 
   return (
     <>
+    {
+      editId && 
+      <div className='flex justify-end w-full'>
+        <Button onClick={()=>setIsModalOpen(true)}>Cancel Booking</Button>
+      </div>
+    }
+
       <div className='mx-auto flex w-1/3 flex-col gap-2'>
         <div className='flex flex-col'>
           <Label>Client Name *</Label>
@@ -550,6 +586,7 @@ const BookingForm = ({
 
         <SvmProjectToast />
       </div>
+        <CancelModal loader={cancelLoader}  handleRefundAmt={handleRefundAmt} refundAmt={refundAmt}  paidAmtValue={paidAmtValue} open={isModalOpen} onClose={handleCloseModal} handleCancel={handleCancelBooking} />
     </>
   );
 };
