@@ -25,7 +25,7 @@ import SvmPagination from '@/components/Pagination';
 import { SvmProjectToast } from '@/components/Toast/Toast';
 import Layout from '@/containers/Layout';
 
-import { httpInstance } from '@/constants/httpInstances';
+import { httpInstance, setAuthHeader } from '@/constants/httpInstances';
 
 type customerListProps = {
   city: string;
@@ -37,9 +37,7 @@ type customerListProps = {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   try {
-    const token = context.req.headers.cookie?.split('=')[1];
-
-    httpInstance.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+    setAuthHeader(context);
 
     const res = await httpInstance.get(`/customer/advance-list`);
     const meta = res.data.result.meta;

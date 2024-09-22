@@ -29,7 +29,7 @@ type TinstallmentList = {
   customer: unknown[];
 };
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
   try {
     const res = await httpInstance.get(`/installment/list`);
     const list = res.data.result.list;

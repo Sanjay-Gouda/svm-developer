@@ -1,4 +1,5 @@
 import {
+  Badge,
   Button,
   Table,
   TableBody,
@@ -26,11 +27,12 @@ import SvmPagination from '@/components/Pagination';
 import { SvmProjectToast } from '@/components/Toast/Toast';
 import Layout from '@/containers/Layout';
 
-import { httpInstance } from '@/constants/httpInstances';
+import { httpInstance, setAuthHeader } from '@/constants/httpInstances';
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  // const res = await axios.get(`${API_ENDPOINT.END_POINT}/booking/list`);
   try {
-    // const res = await axios.get(`${API_ENDPOINT.END_POINT}/booking/list`);
+    setAuthHeader(context);
     const res = await httpInstance.get('/booking/list');
     const list = res.data.result.list;
     const meta = res.data.result.meta;
@@ -185,15 +187,15 @@ export default function Booking({
                       <TableCell className='text-[14px]'>
                         Total Amount
                       </TableCell>
-                      <TableCell className='text-[14px]'>Paid Amount</TableCell>
-                      <TableCell className='text-[14px]'>
+                      {/* <TableCell className='text-[14px]'>Paid Amount</TableCell> */}
+                      {/* <TableCell className='text-[14px]'>
                         Remaining Amount
-                      </TableCell>
+                      </TableCell> */}
                       <TableCell className='text-[14px]'>Installment</TableCell>
                       <TableCell className='text-[14px]'>Penalty</TableCell>
-                      {/* <TableCell className='text-[14px]'>
-                        Penalty History
-                      </TableCell> */}
+                      <TableCell className='text-[14px]'>
+                        Status
+                      </TableCell>
                       <TableCell className='text-[14px]'>Download</TableCell>
                       <TableCell className='text-[14px]'>Action </TableCell>
                     </tr>
@@ -214,8 +216,8 @@ export default function Booking({
                           </TableCell>
                           <TableCell>{data?.area}sq.ft</TableCell>
                           <TableCell>{data?.totalAmt}</TableCell>
-                          <TableCell>{data?.paidAmt}</TableCell>
-                          <TableCell>{data?.remainAmt}</TableCell>
+                          {/* <TableCell>{data?.paidAmt}</TableCell> */}
+                          {/* <TableCell>{data?.remainAmt}</TableCell> */}
 
                           <TableCell style={{ display: 'flex', gap: '8px' }}>
                             <Button
@@ -254,6 +256,23 @@ export default function Booking({
                             >
                               Penalty
                             </Button>
+                          </TableCell>
+                          <TableCell>
+                            <Badge
+                              className='flex w-full items-center justify-center py-1 text-[16px]'
+                              type={
+                                data.status === 'ACTIVE'
+                                  ? 'primary'
+                                  : data.status === 'UPCOMING'
+                                  ? 'warning'
+                                  : data.status === 'CANCEL'
+                                  ? 'danger'
+                                  : 'success'
+                              }
+                            >
+                            
+                            {data.status ==='PARTIAL'?'IN-PROGRESS':data.status}
+                            </Badge>
                           </TableCell>
                           <TableCell>
                             <FaFileDownload

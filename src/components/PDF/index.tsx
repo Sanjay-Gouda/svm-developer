@@ -120,6 +120,7 @@ export const Booking = ({ details }: any) => {
             style={styles.topWaveImage}
             src='/images/bottom-wave.png'
             alt='Logo'
+            width='100%'
           />
         </View>
         <View>

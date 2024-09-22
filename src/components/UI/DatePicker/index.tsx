@@ -25,6 +25,7 @@ const DateSelector = ({ selected, onChange, name }: TDate) => {
           placeholderText='DD-MM-YYYY'
           showYearDropdown
           scrollableYearDropdown
+          popperPlacement='bottom'
         />
       </div>
     </>

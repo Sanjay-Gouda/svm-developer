@@ -74,7 +74,7 @@ const ExpanseForm = ({
       cost: 0,
     },
   ]);
-  const [editMiscForm, setEditMiscForm] = useState([]);
+  const [editMiscForm, setEditMiscForm] = useState<any>([]);
 
   useEffect(() => {
     setEditMiscForm(
@@ -104,33 +104,56 @@ const ExpanseForm = ({
         });
 
   const handleAddFields = () => {
-    setMiscForm([
-      ...miscForm,
-      {
-        id: Math.floor(Math.random() * 1000),
-        expenseName: '',
-        cost: 0,
-      },
-    ]);
+    if (editId) {
+      setEditMiscForm([
+        ...editMiscForm,
+        {
+          id: Math.floor(Math.random() * 1000),
+          expenseName: '',
+          cost: 0,
+        },
+      ]);
+    } else {
+      setMiscForm([
+        ...miscForm,
+        {
+          id: Math.floor(Math.random() * 1000),
+          expenseName: '',
+          cost: 0,
+        },
+      ]);
+    }
   };
 
   const handleRemoveFields = (id: number) => {
-    const remainedForm = miscForm.filter((box) => {
-      return box.id !== id;
-    });
-    setMiscForm(remainedForm);
-    if (remainedForm.length === 0) {
-      setShowExapnseForm(!showExapnseForm);
+    if (editId) {
+      const remainedForm = editMiscForm?.filter((box) => {
+        return box.id !== id;
+      });
+      setEditMiscForm(remainedForm);
+      if (remainedForm?.length === 0) {
+        setShowExapnseForm(!showExapnseForm);
+      }
+    } else {
+      const remainedForm = miscForm?.filter((box) => {
+        return box.id !== id;
+      });
+      setMiscForm(remainedForm);
+      setEditMiscForm(remainedForm);
+      if (remainedForm?.length === 0) {
+        setShowExapnseForm(true);
+      }
     }
   };
 
   const handleChange = (e: any, ind: number) => {
     const { name, value } = e.target;
-    const miscFormData: any = [...miscForm];
+    const prevFormData = editId ? [...miscFormData] : [...miscForm];
+    const miscData: any = prevFormData;
 
-    if (miscFormData) miscFormData[ind][name] = value;
+    if (miscData) miscData[ind][name] = value;
 
-    setMiscForm(miscFormData);
+    setMiscForm(miscData);
   };
 
   const addExpnases = async (values: payloadProps) => {
@@ -234,7 +257,7 @@ const ExpanseForm = ({
   const formik = useFormik({
     initialValues: formikInitialvalues,
     onSubmit: (values) => {
-      const miscExpense = miscForm?.map(({ expenseName, cost }) => ({
+      const miscExpense = miscFormData?.map(({ expenseName, cost }) => ({
         expenseName,
         cost: cost ? +cost : 0,
       }));
@@ -328,16 +351,6 @@ const ExpanseForm = ({
       </div>
 
       <div className='flex flex-col gap-2'>
-        {/* <Button
-          className='my-1'
-          layout='outline'
-          onClick={() => {
-            setShowExapnseForm(false);
-          }}
-        >
-          Add Miscellaneous Expenses
-        </Button> */}
-
         {miscFormData?.map((box, ind) => {
           return (
             <MiscellaneouForm
@@ -347,7 +360,6 @@ const ExpanseForm = ({
               cost={box.cost}
               handleHideForm={() => {
                 setShowExapnseForm(true);
-                // setMiscForm([{ expenseName: '', cost: undefined }]);
               }}
               handleChange={(e) => {
                 handleChange(e, ind);
@@ -360,43 +372,11 @@ const ExpanseForm = ({
           );
         })}
 
-        {/* {showExapnseForm ? (
-          <>
-            <Button
-              className='my-1'
-              layout='outline'
-              onClick={() => {
-                setShowExapnseForm(false);
-              }}
-            >
-              Add Miscellaneous Expenses
-            </Button>
-          </>
-        ) : (
-          <>
-            {miscForm?.map((box, ind) => {
-              return (
-                <MiscellaneouForm
-                  index={ind}
-                  key={box.id}
-                  expanse={box.expenseName}
-                  cost={box.cost}
-                  handleHideForm={() => {
-                    setShowExapnseForm(true);
-                    // setMiscForm([{ expenseName: '', cost: undefined }]);
-                  }}
-                  handleChange={(e) => {
-                    handleChange(e, ind);
-                  }}
-                  handleAddFields={handleAddFields}
-                  handleRemoveFields={() => {
-                    handleRemoveFields(box.id);
-                  }}
-                />
-              );
-            })}
-          </>
-        )} */}
+        {miscForm?.length === 0 || editMiscForm?.length === 0 ? (
+          <Button className='my-1' layout='outline' onClick={handleAddFields}>
+            Add Miscellaneous Expenses
+          </Button>
+        ) : null}
       </div>
 
       <Button className='' onClick={() => formik.handleSubmit()}>

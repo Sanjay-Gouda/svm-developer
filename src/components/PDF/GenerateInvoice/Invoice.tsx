@@ -60,7 +60,7 @@ const Reciept = ({ installmentData }: any) => {
     <PDFViewer style={{ width: '100%', height: '100vh' }} showToolbar={true}>
       <Document>
         <Page size='A4' style={styles.page}>
-          <InvoiceHeader />
+          <InvoiceHeader heading='RECEIPT' />
           <InvoiceNameDate receiptNo={installmentNo} date={reciptdate} />
           <InovieProjectDes
             logo={project?.logo}
