@@ -43,7 +43,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     const meta = res.data.result.meta;
     const data = res.data.result.list;
 
-    return { props: { data, token, meta } };
+    return { props: { data, meta } };
   } catch (err) {
     console.log(err);
   }
