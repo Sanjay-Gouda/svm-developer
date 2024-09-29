@@ -261,9 +261,9 @@ export default function Booking({
                             <Badge
                               className='flex w-full items-center justify-center py-1 text-[16px]'
                               type={
-                                data.status === 'ACTIVE'
+                                data.status === 'PARTIAL'
                                   ? 'primary'
-                                  : data.status === 'UPCOMING'
+                                  : data.status === 'PENDING'
                                   ? 'warning'
                                   : data.status === 'CANCEL'
                                   ? 'danger'
