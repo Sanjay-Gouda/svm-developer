@@ -6,8 +6,8 @@ const cookies = new Cookies();
 const AUTH_TOKEN = cookies.get('token');
 
 const httpInstance = axios.create({
-  // baseURL: 'https://svm-711o.onrender.com/xq12opmpas/api/',
-  baseURL: 'https://c5be-2409-40c1-6032-641c-fdd7-6b17-5776-6160.ngrok-free.app/xq12opmpas/api/',
+  baseURL: 'https://svm-711o.onrender.com/xq12opmpas/api/',
+  // baseURL: 'https://c5be-2409-40c1-6032-641c-fdd7-6b17-5776-6160.ngrok-free.app/xq12opmpas/api/',
 
 });
 
