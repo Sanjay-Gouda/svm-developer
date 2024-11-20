@@ -26,7 +26,7 @@ import SvmPagination from '@/components/Pagination';
 import { SvmProjectToast } from '@/components/Toast/Toast';
 import Layout from '@/containers/Layout';
 
-import { httpInstance } from '@/constants/httpInstances';
+import { httpInstance, setAuthHeader } from '@/constants/httpInstances';
 
 type TMetaProps = {
   totalCount: number;
@@ -35,8 +35,9 @@ type TMetaProps = {
   totalQueryCount: number;
 };
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
   try {
+    setAuthHeader(context);
     const res = await httpInstance.get(`/project/list`);
     const meta: TMetaProps = res.data.result.meta;
     const repo = res.data.result.list;
