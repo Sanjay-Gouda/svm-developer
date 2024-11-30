@@ -19,7 +19,7 @@ import EmptyState from '@/components/Empty';
 import ServerError from '@/components/Error/500Error';
 import Layout from '@/containers/Layout';
 
-import { httpInstance } from '@/constants/httpInstances';
+import { httpInstance, setAuthHeader } from '@/constants/httpInstances';
 
 type TinstallmentList = {
   amount: string;
@@ -35,6 +35,7 @@ type TinstallmentList = {
 
 export const getServerSideProps: GetServerSideProps = async (params) => {
   try {
+    setAuthHeader(params);
     const bookingId = params?.params?.id;
     const res = await httpInstance.get(
       `/installment/list?bookingId=${bookingId}`

@@ -193,9 +193,7 @@ export default function Booking({
                       </TableCell> */}
                       <TableCell className='text-[14px]'>Installment</TableCell>
                       <TableCell className='text-[14px]'>Penalty</TableCell>
-                      <TableCell className='text-[14px]'>
-                        Status
-                      </TableCell>
+                      <TableCell className='text-[14px]'>Status</TableCell>
                       <TableCell className='text-[14px]'>Download</TableCell>
                       <TableCell className='text-[14px]'>Action </TableCell>
                     </tr>
@@ -270,8 +268,9 @@ export default function Booking({
                                   : 'success'
                               }
                             >
-                            
-                            {data.status ==='PARTIAL'?'IN-PROGRESS':data.status}
+                              {data.status === 'PARTIAL'
+                                ? 'IN-PROGRESS'
+                                : data.status}
                             </Badge>
                           </TableCell>
                           <TableCell>

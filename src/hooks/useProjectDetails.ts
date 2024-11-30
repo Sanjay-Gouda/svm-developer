@@ -2,6 +2,11 @@ import { useEffect, useState } from 'react';
 
 import { httpInstance } from '@/constants/httpInstances';
 
+import { Cookies } from 'react-cookie';
+
+const cookies = new Cookies();
+const AUTH_TOKEN = cookies.get('token');
+
 type projectProps = {
   id: string;
   name: string;
@@ -16,7 +21,11 @@ export const useProjectDetails = () => {
 
   const getProjectList = async () => {
     try {
-      const res = await httpInstance.get(`project/list`);
+      const res = await httpInstance.get(`project/list`, {
+        headers: {
+          Authorization: `Bearer ${AUTH_TOKEN}`,
+        },
+      });
       const list = res?.data?.result?.list;
       console.log(list, 'Project');
 

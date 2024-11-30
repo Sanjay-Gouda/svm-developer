@@ -196,11 +196,11 @@ const ExpanseForm = ({
         route.push('/admin/expanses');
       }, 1000);
     } catch (err) {
-      toast.error(err?.response?.data?.message);
+      toast.error(err?.response?.data?.message || 'Something went wrong');
       setLoader(false);
-      setTimeout(() => {
-        route.push('/admin/expanses');
-      }, 1000);
+      // setTimeout(() => {
+      //   route.push('/admin/expanses');
+      // }, 1000);
     }
   };
 

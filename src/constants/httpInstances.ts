@@ -12,7 +12,11 @@ const httpInstance = axios.create({
 });
 
 export const setAuthHeader = (context: GetServerSidePropsContext) => {
-  const token = context.req.headers.cookie?.split('=')[1];
+  const token = context.req.headers.cookie
+    ?.split('; ')
+    .find((row) => row.startsWith('token='))
+    ?.split('=')[1];
+
   if (token) {
     httpInstance.defaults.headers.common['Authorization'] = 'Bearer ' + token;
   }

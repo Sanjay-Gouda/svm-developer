@@ -5,7 +5,7 @@ import React from 'react';
 import InstallmentForm from '@/components/Installment/installmentFrom';
 import Layout from '@/containers/Layout';
 
-import { httpInstance } from '@/constants/httpInstances';
+import { httpInstance, setAuthHeader } from '@/constants/httpInstances';
 
 type TImageType = 'FRONT_REAR' | 'FRONT_BACK' | 'PHOTO';
 
@@ -49,10 +49,9 @@ type TInstallment = {
 
 export const getServerSideProps: GetServerSideProps = async (params) => {
   const bookingId = params?.params?.id;
-  console.log(bookingId, 'BOOKING ID');
+  setAuthHeader(params);
   const res = await httpInstance.get(`booking/get/${bookingId}`);
   const bookingDetails = res.data.result;
-  console.log({ res }, 'BOOKING RESPONSE');
 
   return {
     props: { bookingId, bookingDetails },

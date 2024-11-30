@@ -221,7 +221,7 @@ const Penalty = ({ bookingId, penaltyHistory }: TPenaltyProps) => {
           </div>
           <div className='flex flex-col'>
             <SelectOption
-              title='Project Status'
+              title='Payment Status'
               options={['pending', 'complete']}
               containerClassName='mt-1'
               labelClassName='w-full'
