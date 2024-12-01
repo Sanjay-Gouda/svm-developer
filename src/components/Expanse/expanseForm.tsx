@@ -179,7 +179,7 @@ const ExpanseForm = ({
       brokerage: +brokrage,
       landVisitCharge: +landVisit,
       projectId: id,
-      miscExpense: miscExpense || [],
+      miscExpense: miscExpense[0].expenseName === '' ? undefined : miscExpense,
     };
 
     try {
@@ -227,7 +227,7 @@ const ExpanseForm = ({
       brokerage: +brokrage,
       landVisitCharge: +landVisit,
       projectId: id,
-      miscExpense: miscExpense,
+      miscExpense: miscExpense[0].expenseName === '' ? undefined : miscExpense,
     };
 
     try {

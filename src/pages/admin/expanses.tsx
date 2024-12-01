@@ -78,7 +78,7 @@ export default function Expanses({
             <Button>Add Expenses</Button>
           </Link>
         }
-        isShowSearchBar={true}
+        isShowSearchBar={false}
       >
         {error ? (
           <>
@@ -133,11 +133,11 @@ export default function Expanses({
                               className='cursor-pointer'
                               style={{ color: ' #30bcc2' }}
                             />
-                            <MdDelete
+                            {/* <MdDelete
                               size='24'
                               className='cursor-pointer'
                               style={{ color: ' #F38C7F' }}
-                            />
+                            /> */}
                           </TableCell>
                         </TableRow>
                       );
