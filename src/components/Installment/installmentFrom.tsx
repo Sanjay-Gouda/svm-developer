@@ -122,7 +122,7 @@ function InstallmentForm({
 
       setTimeout(() => {
         router.push('/admin/booking');
-      }, 1000);
+      }, 3000);
       setLoader(false);
     } catch (err) {
       setLoader(false);
@@ -166,7 +166,7 @@ function InstallmentForm({
       toast.success('Installment Updated Successfully..');
       setTimeout(() => {
         router.push('/admin/booking');
-      }, 1000);
+      }, 3000);
     } catch (err) {
       setLoader(false);
       toast.error('Something went wrong');

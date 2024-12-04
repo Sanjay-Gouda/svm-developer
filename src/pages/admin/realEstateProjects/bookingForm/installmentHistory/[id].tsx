@@ -126,10 +126,10 @@ const InstallmentHistory = ({ installmentHistoryList, error, bookingId }) => {
           <>
             <ServerError />
           </>
-        ) : installmentHistoryList?.length === 0 ? (
+        ) : installmentList?.length === 0 ? (
           <>
             <EmptyState
-              btnLable='Add Installment '
+              btnLable='Add Installment'
               heading='Customer has not paid any installment yet'
               redirectLink={`addInstallment/${bookingId}`}
             />

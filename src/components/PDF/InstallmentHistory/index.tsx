@@ -4,6 +4,7 @@ import {
   PDFViewer,
   StyleSheet,
   View,
+  Text,
 } from '@react-pdf/renderer';
 import React, { FC } from 'react';
 
@@ -41,8 +42,20 @@ const InstallmentHistoryPDF: FC<installmentListProps> = ({
         <Document>
           <Page size='A4' style={styles.page}>
             <InvoiceHeader heading='INSTALLMENT HISTORY' />
+
+            <View
+              style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}
+            >
+              <Text>
+                Customer Name : {installmentList[0]?.customer[0]?.name}
+              </Text>
+              <Text>
+                Contact Number : {installmentList[0]?.customer[0]?.phone1}
+              </Text>
+            </View>
             <View style={styles.tableContainer}>
               <InvoiceTableHeader />
+
               <InvoiceTableRow installmentList={installmentList} />
             </View>
           </Page>

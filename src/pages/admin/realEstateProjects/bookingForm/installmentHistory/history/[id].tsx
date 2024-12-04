@@ -29,8 +29,6 @@ const InstallmentHistory = () => {
     []
   );
 
-  console.log(params?.id);
-
   const getInstallmentHistory = async () => {
     try {
       const res = await httpInstance.get(
