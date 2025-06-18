@@ -58,19 +58,14 @@ export const Header = () => {
         >
           <MenuIcon className='h-6 w-6' aria-hidden='true' />
         </button>
-        {/* <!-- Search input --> */}
-        <div className='flex flex-1 justify-center lg:mr-32'>
-          <div className='relative mr-6 w-full max-w-xl focus-within:text-purple-500'>
-            <div className='absolute inset-y-0 flex items-center pl-2'>
-              {/* <SearchIcon className='h-4 w-4' aria-hidden='true' /> */}
-            </div>
-            {/* <Input
-              className='pl-8 text-gray-700'
-              placeholder='Search for projects'
-              aria-label='Search'
-            /> */}
-          </div>
+
+        <div className='flex w-full items-center justify-center'>
+          <p className='text-lg font-bold text-gray-800 dark:text-gray-200'>
+            SVM BUILDERS & DEVELOPERS
+          </p>
         </div>
+        {/* <!-- Search input --> */}
+        <div className='flex flex-1 justify-center lg:mr-32'></div>
         <ul className='flex flex-shrink-0 items-center space-x-6'>
           {/* <!-- Theme toggler --> */}
           <li className='flex'>
@@ -130,7 +125,7 @@ export const Header = () => {
             >
               <Avatar
                 className='align-middle'
-                src='https://images.unsplash.com/photo-1502378735452-bc7d86632805?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=200&fit=max&s=aa3a807e1bbdfd4364d1f449eaa96d82'
+                src='	https://svmdevelopers.in/static/media/MD.6d3197bf5533ddda4252.jpg'
                 alt=''
                 aria-hidden='true'
               />

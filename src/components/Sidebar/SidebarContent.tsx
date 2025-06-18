@@ -17,9 +17,7 @@ function SidebarContent() {
       <a
         className='ml-6 text-lg font-bold text-gray-800 dark:text-gray-200'
         href='#'
-      >
-        SVM DEVELOPERS
-      </a>
+      ></a>
       <ul className='mt-6'>
         {AdminSidebarTabs.map((tab, index) => (
           <>
