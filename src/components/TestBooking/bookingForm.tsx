@@ -19,7 +19,6 @@ import { SelectOption } from '@/components/ui-blocks/input';
 import CancelModal from './cancelModal';
 import { httpInstance } from '@/constants/httpInstances';
 
-
 type EditFormProps = {
   loader: boolean;
   clientError: boolean;
@@ -160,19 +159,18 @@ const BookingForm = ({
   handleSelectOption,
   clientErrorMessage,
 }: EditFormProps) => {
-  
   const routes = useRouter();
   const customerList = useCustomerDetails();
 
   const projectList = useProjectDetails();
   const accountList = useBankDetails();
 
-  const [refundAmt,setRefundAmt] = useState<number>(0);
-  const [cancelLoader,setCancelLoader] = useState<boolean>(false);
+  const [refundAmt, setRefundAmt] = useState<number>(0);
+  const [cancelLoader, setCancelLoader] = useState<boolean>(false);
 
-  const handleRefundAmt = (e:any) => {
-    setRefundAmt(e.target.value);
-  }
+  const handleRefundAmt = (e: any) => {
+    setRefundAmt(Number(e.target.value));
+  };
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
@@ -183,15 +181,20 @@ const BookingForm = ({
   const handleCancelBooking = async () => {
     setCancelLoader(true);
     try {
-      const res = await httpInstance.patch(`booking/cancel/${editId}`,{refundAmt:refundAmt});
-      toast.success(res?.data?.message || 'This booking has been cancelled successfully');
+      const res = await httpInstance.patch(`booking/cancel/${editId}`, {
+        refundAmt: refundAmt,
+      });
+      toast.success(
+        res?.data?.message || 'This booking has been cancelled successfully'
+      );
       handleCloseModal();
       setCancelLoader(false);
     } catch (err) {
       setCancelLoader(false);
       handleCloseModal();
       toast.error('Something Went wrong');
-    }}
+    }
+  };
   const [query, setQuery] = useState('');
 
   const hadnleSearchQuery = (e: any) => {
@@ -225,16 +228,17 @@ const BookingForm = ({
 
   return (
     <>
-    {
-      editId && 
-      <div className='flex justify-end w-full'>
-        <Button onClick={()=>setIsModalOpen(true)}>Cancel Booking</Button>
-      </div>
-    }
+      {editId && (
+        <div className='flex w-full justify-end'>
+          <Button onClick={() => setIsModalOpen(true)}>Cancel Booking</Button>
+        </div>
+      )}
 
       <div className='mx-auto flex w-1/3 flex-col gap-2'>
         <div className='flex flex-col'>
-          <Label>Client Name *</Label>
+          <Label className='font-semibold text-black dark:text-gray-200'>
+            Client Name *
+          </Label>
           <MultipleSelect
             filteredCustomer={filteredCustomer}
             selected={clientSelect}
@@ -246,7 +250,9 @@ const BookingForm = ({
           />
         </div>
         <div className='flex flex-col'>
-          <Label>Project Name *</Label>
+          <Label className='font-semibold text-black dark:text-gray-200'>
+            Project Name *
+          </Label>
           <ComboBox
             placeholder='Search Project'
             data={filterProjects}
@@ -374,7 +380,9 @@ const BookingForm = ({
         </div>
 
         <div className='flex w-full flex-col'>
-          <Label>Select EMI Date</Label>
+          <Label className='font-semibold text-black dark:text-gray-200'>
+            Select EMI Date
+          </Label>
           <DateSelector
             name='emiDate'
             selected={selectedDate}
@@ -386,7 +394,9 @@ const BookingForm = ({
         </div>
 
         <div className='flex w-full flex-col'>
-          <Label>Select Reminder Date</Label>
+          <Label className='font-semibold text-black dark:text-gray-200'>
+            Select Reminder Date
+          </Label>
           <DateSelector
             name='reminderDate'
             selected={reminderDate}
@@ -395,7 +405,9 @@ const BookingForm = ({
         </div>
 
         <div className='flex flex-col'>
-          <Label className='mb-2'>Payment Type</Label>
+          <Label className='mb-2 font-semibold text-black dark:text-gray-200'>
+            Payment Type
+          </Label>
           <div className='flex justify-between gap-2'>
             <Label radio>
               <Input
@@ -552,7 +564,7 @@ const BookingForm = ({
           <SelectOption
             options={['PENDING', 'IN PROGRESS', 'COMPLETED']}
             title='Payment Status'
-            containerClassName='flex-1 mt-1 w-full'
+            containerClassName='flex-1 mt-1 w-full '
             name='paymentStatus'
             // value={formik.values.remainingAmt}
             onChange={handleSelectOption}
@@ -586,7 +598,15 @@ const BookingForm = ({
 
         <SvmProjectToast />
       </div>
-        <CancelModal loader={cancelLoader}  handleRefundAmt={handleRefundAmt} refundAmt={refundAmt}  paidAmtValue={paidAmtValue} open={isModalOpen} onClose={handleCloseModal} handleCancel={handleCancelBooking} />
+      <CancelModal
+        loader={cancelLoader}
+        handleRefundAmt={handleRefundAmt}
+        refundAmt={refundAmt}
+        paidAmtValue={paidAmtValue}
+        open={isModalOpen}
+        onClose={handleCloseModal}
+        handleCancel={handleCancelBooking}
+      />
     </>
   );
 };

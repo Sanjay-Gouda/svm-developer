@@ -159,16 +159,22 @@ export default function Projects({
                 <Table>
                   <TableHeader>
                     <tr>
-                      <TableCell className='text-[14px]'>
+                      <TableCell className='text-[14px] font-semibold text-black dark:text-gray-200'>
                         Project Name
                       </TableCell>
                       {/* <TableCell className='text-[14px]'>City</TableCell> */}
-                      <TableCell className='text-[14px]'>
+                      <TableCell className='text-[14px] font-semibold text-black dark:text-gray-200'>
                         Project Owner{' '}
                       </TableCell>
-                      <TableCell className='text-[14px]'>Area</TableCell>
-                      <TableCell className='text-[14px]'>Status</TableCell>
-                      <TableCell className='text-[14px]'>Action</TableCell>
+                      <TableCell className='text-[14px] font-semibold text-black dark:text-gray-200'>
+                        Area
+                      </TableCell>
+                      <TableCell className='text-[14px] font-semibold text-black dark:text-gray-200'>
+                        Status
+                      </TableCell>
+                      <TableCell className='text-[14px] font-semibold text-black dark:text-gray-200'>
+                        Action
+                      </TableCell>
                     </tr>
                   </TableHeader>
                   <TableBody>

@@ -99,21 +99,27 @@ export default function Expanses({
                 <Table>
                   <TableHeader>
                     <tr>
-                      <TableCell className='text-[14px]'>
+                      <TableCell className='text-[14px] font-semibold text-black dark:text-gray-200'>
                         Project Name
                       </TableCell>
-                      <TableCell className='text-[14px]'>
+                      <TableCell className='text-[14px] font-semibold text-black dark:text-gray-200'>
                         Land Purchase
                       </TableCell>
-                      <TableCell className='text-[14px]'>
+                      <TableCell className='text-[14px] font-semibold text-black dark:text-gray-200'>
                         Non-Agriculture
                       </TableCell>
-                      <TableCell className='text-[14px]'>Brokerage</TableCell>
-                      <TableCell className='text-[14px]'>
+                      <TableCell className='text-[14px] font-semibold text-black dark:text-gray-200'>
+                        Brokerage
+                      </TableCell>
+                      <TableCell className='text-[14px] font-semibold text-black dark:text-gray-200'>
                         Planning & Layout
                       </TableCell>
-                      <TableCell className='text-[14px]'>Landvisit </TableCell>
-                      <TableCell className='text-[14px]'>Action </TableCell>
+                      <TableCell className='text-[14px] font-semibold text-black dark:text-gray-200'>
+                        Landvisit{' '}
+                      </TableCell>
+                      <TableCell className='text-[14px] font-semibold text-black dark:text-gray-200'>
+                        Action{' '}
+                      </TableCell>
                     </tr>
                   </TableHeader>
                   <TableBody>

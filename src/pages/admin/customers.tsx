@@ -170,11 +170,21 @@ export default function Customers({
                 <Table>
                   <TableHeader>
                     <tr>
-                      <TableCell className='text-[14px]'>Name</TableCell>
-                      <TableCell className='text-[14px]'>Mobile No</TableCell>
-                      <TableCell className='text-[14px]'>State</TableCell>
-                      <TableCell className='text-[14px]'>City </TableCell>
-                      <TableCell className='text-[14px]'>Action </TableCell>
+                      <TableCell className='text-[14px] font-semibold text-black dark:text-gray-200'>
+                        Name
+                      </TableCell>
+                      <TableCell className='text-[14px] font-semibold text-black dark:text-gray-200'>
+                        Mobile No
+                      </TableCell>
+                      <TableCell className='text-[14px] font-semibold text-black dark:text-gray-200'>
+                        State
+                      </TableCell>
+                      <TableCell className='text-[14px] font-semibold text-black dark:text-gray-200'>
+                        City{' '}
+                      </TableCell>
+                      <TableCell className='text-[14px] font-semibold text-black dark:text-gray-200'>
+                        Action{' '}
+                      </TableCell>
                     </tr>
                   </TableHeader>
                   <TableBody>

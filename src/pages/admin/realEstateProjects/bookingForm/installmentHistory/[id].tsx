@@ -81,7 +81,9 @@ const InstallmentHistory = ({ installmentHistoryList, error, bookingId }) => {
 
   const fetchData = async () => {
     try {
-      const data = await httpInstance.get(`/installment/list`);
+      const data = await httpInstance.get(
+        `/installment/list?bookingId=${bookingId}`
+      );
       setInstallmentList(data?.data?.result?.list);
     } catch (err) {
       console.log(err);

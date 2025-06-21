@@ -38,7 +38,9 @@ export const SelectOption = ({
 }: SelectProps) => {
   return (
     <Label className={labelClassName}>
-      <span>{title}</span>
+      <span className='font-semibold text-black dark:text-gray-200'>
+        {title}
+      </span>
       <Select
         css={{}}
         name={name}
@@ -75,12 +77,16 @@ export const TextInput: FC<TextInputProps> = ({
   ...props
 }) => {
   return (
-    <Label className={containerClassName}>
+    <Label
+      className={
+        containerClassName + 'font-semibold text-black dark:text-gray-200'
+      }
+    >
       <span>{label}</span>
       <Input
         {...props}
         css={{}}
-        className='mt-1'
+        className='mt-1 '
         value={value}
         name={name}
         onChange={onChange}

@@ -179,23 +179,35 @@ export default function Booking({
                 <Table>
                   <TableHeader>
                     <tr>
-                      <TableCell className='text-[14px]'>
+                      <TableCell className='text-[14px] font-semibold text-black dark:text-gray-200'>
                         Customer Name
                       </TableCell>
-                      <TableCell className='text-[14px]'>Project</TableCell>
-                      <TableCell className='text-[14px]'>Area</TableCell>
-                      <TableCell className='text-[14px]'>
+                      <TableCell className='text-[14px] font-semibold text-black dark:text-gray-200'>
+                        Project
+                      </TableCell>
+                      <TableCell className='text-[14px] font-semibold text-black dark:text-gray-200'>
+                        Area
+                      </TableCell>
+                      <TableCell className='text-[14px] font-semibold text-black dark:text-gray-200'>
                         Total Amount
                       </TableCell>
                       {/* <TableCell className='text-[14px]'>Paid Amount</TableCell> */}
                       {/* <TableCell className='text-[14px]'>
                         Remaining Amount
                       </TableCell> */}
-                      <TableCell className='text-[14px]'>Installment</TableCell>
-                      <TableCell className='text-[14px]'>Penalty</TableCell>
-                      <TableCell className='text-[14px]'>Status</TableCell>
-                      <TableCell className='text-[14px]'>Download</TableCell>
-                      <TableCell className='text-[14px]'>Action </TableCell>
+                      <TableCell className='text-[14px] font-semibold text-black dark:text-gray-200 '>
+                        Installment
+                      </TableCell>
+                      <TableCell className='text-[14px] font-semibold text-black dark:text-gray-200 '>
+                        Penalty
+                      </TableCell>
+                      <TableCell className='text-[14px] font-semibold text-black dark:text-gray-200 '>
+                        Status
+                      </TableCell>
+                      {/* <TableCell className='text-[14px] font-semibold text-black dark:text-gray-200 '>Download</TableCell> */}
+                      <TableCell className='text-[14px] font-semibold text-black dark:text-gray-200 '>
+                        Action{' '}
+                      </TableCell>
                     </tr>
                   </TableHeader>
                   <TableBody>
@@ -273,14 +285,14 @@ export default function Booking({
                                 : data.status}
                             </Badge>
                           </TableCell>
-                          <TableCell>
+                          {/* <TableCell>
                             <FaFileDownload
                               size='24'
                               style={{ color: ' #17A34B' }}
                               onClick={() => handlePdfView(data?.bookingId)}
                               className='cursor-pointer'
                             />
-                          </TableCell>
+                          </TableCell> */}
 
                           <TableCell className='flex gap-5'>
                             <MdModeEditOutline
@@ -294,6 +306,12 @@ export default function Booking({
                               size='24'
                               className='cursor-pointer'
                               style={{ color: ' #F38C7F' }}
+                            />
+                            <FaFileDownload
+                              size='24'
+                              style={{ color: ' #17A34B' }}
+                              onClick={() => handlePdfView(data?.bookingId)}
+                              className='cursor-pointer'
                             />
                           </TableCell>
                         </TableRow>

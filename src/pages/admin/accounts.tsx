@@ -166,12 +166,18 @@ export default function Account({
                 <Table>
                   <TableHeader>
                     <tr>
-                      <TableCell className='text-[14px]'>Bank Name</TableCell>
-                      <TableCell className='text-[14px]'>
+                      <TableCell className='text-[14px] font-semibold text-black dark:text-gray-200 '>
+                        Bank Name
+                      </TableCell>
+                      <TableCell className='text-[14px] font-semibold text-black dark:text-gray-200 '>
                         Account Holdername
                       </TableCell>
-                      <TableCell className='text-[14px]'>Account No.</TableCell>
-                      <TableCell className='text-[14px]'>Action </TableCell>
+                      <TableCell className='text-[14px] font-semibold text-black dark:text-gray-200 '>
+                        Account No.
+                      </TableCell>
+                      <TableCell className='text-[14px] font-semibold text-black dark:text-gray-200 '>
+                        Action{' '}
+                      </TableCell>
                     </tr>
                   </TableHeader>
                   <TableBody>
