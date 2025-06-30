@@ -33,6 +33,7 @@ export default function LoginPage() {
   const dispatch = useDispatch();
   const routes = useRouter();
   const [cookies, setCookie] = useCookies(['token']);
+
   const LoginUser = async (values: TLogin) => {
     setLoader(true);
 
@@ -40,7 +41,6 @@ export default function LoginPage() {
       const res = await httpInstance.post(`/auth/login`, values);
       setLoader(false);
       const loginToken = res.data.result.accessToken;
-      localStorage.setItem('loginToken', loginToken);
 
       toast.success('Welcome to the Dashboard', { position: 'top-center' });
 

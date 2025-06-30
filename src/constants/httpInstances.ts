@@ -16,7 +16,6 @@ export const setAuthHeader = (context: GetServerSidePropsContext) => {
     ?.split('; ')
     .find((row) => row.startsWith('token='))
     ?.split('=')[1];
-
   if (token) {
     httpInstance.defaults.headers.common['Authorization'] = 'Bearer ' + token;
   }
@@ -24,6 +23,7 @@ export const setAuthHeader = (context: GetServerSidePropsContext) => {
 
 httpInstance.interceptors.request.use(
   (config) => {
+    const AUTH_TOKEN = cookies.get('token');
     if (AUTH_TOKEN) {
       config.headers.Authorization = `Bearer ${AUTH_TOKEN}`;
     }
